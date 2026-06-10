@@ -1,21 +1,25 @@
 ---
 /**
- * Minimal Finnish chrome for Content Engine article pages (/uutiset/) on
+ * Arctic Night chrome for Content Engine article pages (/uutiset/) on
  * Kasinot ilman rekisteröitymistä (kasinotilmanrekisteroitymista.com).
  *
- * The real site's header/footer haven't been scraped into fragments yet, so
- * this is a clean, self-contained placeholder layout. Once the home fragments
- * exist, replace the marked header/footer blocks.
+ * The site's REAL header, slide menu, footer and affiliate-disclosure bar
+ * are sliced out of the scraped homepage fragment at build time, so article
+ * pages always match the rest of the site — including after a re-scrape
+ * (`npm run sync:content`). ShortPixel lazy-load placeholders are decoded
+ * to real image URLs at build time so no spai script is needed here.
  *
  * COMPLIANCE (do not remove):
- * - Affiliate-disclosure line in the header area. The live site was penalised
- *   partly for a MISSING affiliate disclosure — it is mandatory on every page
- *   that contains affiliate links.
- * - Responsible-gambling notice (18+ / Peluuri.fi) in the footer.
+ * - The sliced footer + .kir-affiliate-disclosure bar carry the mandatory
+ *   affiliate disclosure and responsible-gambling notice (18+ / Peluuri.fi).
+ *   The live site was penalised partly for a MISSING disclosure.
  * - Article HTML is rendered verbatim via <slot /> — affiliate links keep
  *   their rel="sponsored nofollow" attributes; never strip or rewrite them.
  * - Never add "I tested / first-hand experience" claims to any copy here.
  */
+import homeBody from "../fragments/home/body.html?raw";
+import homeHead from "../fragments/home/head.html?raw";
+
 interface Props {
   title: string;
   description: string;
@@ -57,6 +61,43 @@ const jsonLd =
         publisher: { "@type": "Organization", name: siteName, url: siteUrl },
       })
     : null;
+
+/* ---- Site chrome, sliced from the scraped homepage fragment ---- */
+function sliceBetween(src: string, startMarker: string, endMarker: string, includeEnd = false): string {
+  const a = src.indexOf(startMarker);
+  if (a === -1) throw new Error(`ArticleLayout: marker not found: ${startMarker}`);
+  const b = src.indexOf(endMarker, a);
+  if (b === -1) throw new Error(`ArticleLayout: marker not found: ${endMarker}`);
+  return src.slice(a, includeEnd ? b + endMarker.length : b);
+}
+
+/* ShortPixel adaptive images use base64 SVG placeholders; the real image URL
+   sits URL-encoded in a data-u attribute INSIDE the encoded SVG. Decode at
+   build time → plain <img>, no spai script needed on article pages. */
+function decodeSpai(html: string): string {
+  return html.replace(
+    /<img\b[^>]*src="data:image\/svg\+xml;base64,([^"]+)"[^>]*>/g,
+    (tag, b64) => {
+      const svg = Buffer.from(b64, "base64").toString("utf8");
+      const dataU = svg.match(/data-u="([^"]+)"/)?.[1];
+      if (!dataU) return tag;
+      const real = decodeURIComponent(dataU).replace(siteUrl, "");
+      return tag
+        .replace(/src="data:[^"]*"/, `src="${real}"`)
+        .replace(/\s+data-spai="[^"]*"/g, "");
+    },
+  );
+}
+
+// header + mobile slide menu (everything between the header tag and the hero)
+const headerHtml = decodeSpai(
+  sliceBetween(homeBody, '<header id="site-header"', '<section class="container-fluid kir-hero"'),
+);
+const footerHtml = decodeSpai(sliceBetween(homeBody, "<footer", "</footer>", true));
+const disclosureHtml = sliceBetween(homeBody, '<div class="kir-affiliate-disclosure"', "</style>", true);
+
+// the theme/bootstrap stylesheet stack the chrome depends on
+const styleLinks = (homeHead.match(/<link[^>]*rel=['"]stylesheet['"][^>]*>/g) ?? []).join("\n");
 ---
 
 <!doctype html>
@@ -75,6 +116,8 @@ const jsonLd =
     <meta property="og:locale" content="fi_FI" />
     {heroImage && <meta property="og:image" content={heroImage} />}
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+    <script is:inline id="jquery-js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js?ver=3.4.1"></script>
+    <Fragment set:html={styleLinks} />
     {/* Arctic Night design system (shared with the migrated pages). */}
     <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/redesign.css" />
@@ -82,88 +125,112 @@ const jsonLd =
     <script src="/vendor/gsap.min.js" defer></script>
     <script src="/vendor/ScrollTrigger.min.js" defer></script>
     <script src="/arctic.js" defer></script>
-    <style>
-      :root {
-        --bg: #ffffff;
-        --text: #1c1c1c;
-        --muted: #5a5f66;
-        --border: #e3e6ea;
-        --accent: #0b5fa5;
-        --notice-bg: #f4f6f8;
-      }
-      * { box-sizing: border-box; }
-      body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif; }
-      .container { max-width: 760px; margin: 0 auto; padding: 0 20px; }
-      a { color: var(--accent); }
-      .site-header { border-bottom: 1px solid var(--border); padding: 16px 0; }
-      .site-header .container { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
-      .site-name { font-weight: 700; font-size: 1.1rem; color: var(--text); text-decoration: none; }
-      .site-nav a { margin-right: 16px; font-size: 0.95rem; text-decoration: none; }
-      .site-nav a:hover { text-decoration: underline; }
-      .disclosure { background: var(--notice-bg); border-bottom: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); padding: 8px 0; }
-      main { padding: 32px 0 48px; }
-      .article-date { font-size: 0.85rem; color: var(--muted); margin: 0 0 20px; }
-      .article-hero-img { width: 100%; max-height: 380px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 24px; }
-      h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 10px; }
-      .prose :global(img) { max-width: 100%; height: auto; border-radius: 8px; margin: 18px 0; }
-      .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0 0 16px; }
-      .prose :global(th), .prose :global(td) { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
-      .prose :global(th) { background: var(--notice-bg); }
-      .rg-notice { background: var(--notice-bg); border-top: 1px solid var(--border); text-align: center; font-size: 0.9rem; padding: 16px 0; }
-      .rg-notice strong { color: var(--text); }
-      .site-footer { border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); padding: 20px 0 28px; }
-    </style>
   </head>
-  <body>
-    <!-- TODO: replace with scraped site header/footer from src/fragments/home/body.html -->
-    <header class="site-header">
-      <div class="container">
-        <a href="/" class="site-name">{siteName}</a>
-        <nav class="site-nav" aria-label="Päävalikko">
-          <!-- Placeholder nav until the real header is ported -->
-          <a href="/">Etusivu</a>
+  <body class="kir-article-page">
+    <Fragment set:html={headerHtml} />
+
+    <section class="container-fluid kir-hero">
+      <div class="container px-0 px-lg-3">
+        <h1 class="mb-0">{title}</h1>
+        <span class="custom-breadcrumb mb-5">
+          <a href="/">{siteName}</a>
+          {" | "}
           <a href="/uutiset/">Uutiset</a>
-        </nav>
-      </div>
-    </header>
-
-    <!-- Affiliate disclosure — MANDATORY, the site was penalised partly for lacking it. -->
-    <div class="disclosure">
-      <div class="container">
-        Mainossisältöä: tämä sivusto sisältää affiliate-linkkejä. Voimme saada
-        komission, jos siirryt kasinolle linkkiemme kautta — tämä ei vaikuta
-        arvioihimme eikä aiheuta sinulle kuluja.
-      </div>
-    </div>
-
-    <main>
-      <article class="container">
-        <h1>{title}</h1>
+          {kind === "article" && <> {" | "} <span>{title}</span></>}
+        </span>
         {publishedAt && (
-          <p class="article-date">
-            Julkaistu: <time datetime={publishedAt}>{fmtDate.format(new Date(publishedAt))}</time>
+          <p class="article-meta mb-0 mt-3">
+            <time datetime={publishedAt}>{fmtDate.format(new Date(publishedAt))}</time>
           </p>
         )}
-        <div class="prose">
-          {heroImage && <img class="article-hero-img" src={heroImage} alt={title} />}
-          <slot />
-        </div>
+      </div>
+    </section>
+
+    <main class="container article-shell">
+      <article class="article-body">
+        <slot />
       </article>
     </main>
 
-    <div class="rg-notice">
-      <div class="container">
-        <strong>Pelaa vastuullisesti. 18+</strong> — Jos pelaaminen huolestuttaa,
-        apua saat maksutta: <a href="https://www.peluuri.fi/" rel="noopener">Peluuri.fi</a>
-      </div>
-    </div>
+    <Fragment set:html={footerHtml} />
+    <Fragment set:html={disclosureHtml} />
 
-    <!-- TODO: replace with scraped site header/footer from src/fragments/home/body.html -->
-    <footer class="site-footer">
-      <div class="container">
-        &copy; 2026 {siteName} — Vain täysi-ikäisille (18+). Sivusto sisältää
-        affiliate-linkkejä.
-      </div>
-    </footer>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js?ver=1.15.0"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js?ver=4.3.1"></script>
+    <script is:inline src="/wp-content/themes/affiliateKIR/theme/js/affiliateKIR.js?ver=1.0.0"></script>
   </body>
 </html>
+
+<style is:global>
+  /* Article content, Arctic Night (tokens come from /redesign.css :root) */
+  .article-meta {
+    color: var(--ink-3);
+    font-size: 0.9rem;
+  }
+  .article-shell {
+    max-width: 860px;
+    padding-bottom: 48px;
+  }
+  .article-body {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    padding: clamp(20px, 4vw, 44px);
+    color: var(--ink-2);
+    line-height: 1.75;
+  }
+  .article-body h2,
+  .article-body h3 {
+    color: var(--ink);
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  .article-body p {
+    margin-bottom: 1.1rem;
+  }
+  .article-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+  .article-body ul,
+  .article-body ol {
+    padding-left: 1.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .article-body table {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    margin: 1.25rem 0;
+  }
+  .article-body th,
+  .article-body td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+  .article-body th {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .article-body tr:last-child td {
+    border-bottom: none;
+  }
+  .article-body blockquote {
+    border-left: 3px solid var(--teal);
+    background: var(--teal-soft);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 18px;
+  }
+  @media (max-width: 767px) {
+    .article-shell {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+  }
+</style>
