@@ -72,12 +72,12 @@
     },
     {
       "source": "/go/taika-spin",
-      "destination": "https://Media1.casimbacuraff.com/redirect.aspx?pid=55082&lpid=331&bid=1759",
+      "destination": "https://media1.casimbacuraff.com/redirect.aspx?pid=55082&lpid=331&bid=1759",
       "permanent": false
     },
     {
       "source": "/go/taika-spin/",
-      "destination": "https://Media1.casimbacuraff.com/redirect.aspx?pid=55082&lpid=331&bid=1759",
+      "destination": "https://media1.casimbacuraff.com/redirect.aspx?pid=55082&lpid=331&bid=1759",
       "permanent": false
     },
     {
@@ -1262,12 +1262,12 @@
     },
     {
       "source": "/go/bet1000",
-      "destination": "https://bet1000.com?faff=433&sub=FI",
+      "destination": "https://bet1000.com/?faff=433&sub=FI",
       "permanent": false
     },
     {
       "source": "/go/bet1000/",
-      "destination": "https://bet1000.com?faff=433&sub=FI",
+      "destination": "https://bet1000.com/?faff=433&sub=FI",
       "permanent": false
     },
     {
@@ -2432,12 +2432,12 @@
     },
     {
       "source": "/go/test",
-      "destination": "https://inbanner.com/hc/91/tkb4ca9ea4//locale:fi_FI/currency:EUR/aff:aHR0cHM6Ly9rYXNpbm90aWxtYW5yZWtpc3Rlcm9pdHltaXN0YS5jb20vZ28vZXhwZWt0Lw==",
+      "destination": "https://inbanner.com/hc/91/tkb4ca9ea4//locale%3Afi_FI/currency%3AEUR/aff%3AaHR0cHM6Ly9rYXNpbm90aWxtYW5yZWtpc3Rlcm9pdHltaXN0YS5jb20vZ28vZXhwZWt0Lw==",
       "permanent": false
     },
     {
       "source": "/go/test/",
-      "destination": "https://inbanner.com/hc/91/tkb4ca9ea4//locale:fi_FI/currency:EUR/aff:aHR0cHM6Ly9rYXNpbm90aWxtYW5yZWtpc3Rlcm9pdHltaXN0YS5jb20vZ28vZXhwZWt0Lw==",
+      "destination": "https://inbanner.com/hc/91/tkb4ca9ea4//locale%3Afi_FI/currency%3AEUR/aff%3AaHR0cHM6Ly9rYXNpbm90aWxtYW5yZWtpc3Rlcm9pdHltaXN0YS5jb20vZ28vZXhwZWt0Lw==",
       "permanent": false
     },
     {
@@ -2572,12 +2572,12 @@
     },
     {
       "source": "/go/vegasoo",
-      "destination": "https://Vegasoo.tracking-genesisaffiliates.com/redirect.aspx?pid=227986&bid=9270",
+      "destination": "https://vegasoo.tracking-genesisaffiliates.com/redirect.aspx?pid=227986&bid=9270",
       "permanent": false
     },
     {
       "source": "/go/vegasoo/",
-      "destination": "https://Vegasoo.tracking-genesisaffiliates.com/redirect.aspx?pid=227986&bid=9270",
+      "destination": "https://vegasoo.tracking-genesisaffiliates.com/redirect.aspx?pid=227986&bid=9270",
       "permanent": false
     },
     {
@@ -3642,22 +3642,22 @@
     },
     {
       "source": "/go/yako-2",
-      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com/en/index&userid=655511&tracker=84465",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https%3A//www.yakocasino.com/en/index&userid=655511&tracker=84465",
       "permanent": false
     },
     {
       "source": "/go/yako-2/",
-      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com/en/index&userid=655511&tracker=84465",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https%3A//www.yakocasino.com/en/index&userid=655511&tracker=84465",
       "permanent": false
     },
     {
       "source": "/go/funcasino",
-      "destination": "http://www.funcasinoaffiliates.com/redirector?url=https://www.funcasino.com/en/landing20fs&userid=49&tracker=33033",
+      "destination": "http://www.funcasinoaffiliates.com/redirector?url=https%3A//www.funcasino.com/en/landing20fs&userid=49&tracker=33033",
       "permanent": false
     },
     {
       "source": "/go/funcasino/",
-      "destination": "http://www.funcasinoaffiliates.com/redirector?url=https://www.funcasino.com/en/landing20fs&userid=49&tracker=33033",
+      "destination": "http://www.funcasinoaffiliates.com/redirector?url=https%3A//www.funcasino.com/en/landing20fs&userid=49&tracker=33033",
       "permanent": false
     },
     {
@@ -3692,12 +3692,12 @@
     },
     {
       "source": "/go/yako",
-      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com&userid=655511&tracker=114254",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https%3A//www.yakocasino.com&userid=655511&tracker=114254",
       "permanent": false
     },
     {
       "source": "/go/yako/",
-      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com&userid=655511&tracker=114254",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https%3A//www.yakocasino.com&userid=655511&tracker=114254",
       "permanent": false
     },
     {
@@ -4202,12 +4202,12 @@
     },
     {
       "source": "/go/hyper",
-      "destination": "http://affiliates.hypercasino.com/redirector?url=https://www.hypercasino.com/fi/index&userid=27&tracker=80",
+      "destination": "http://affiliates.hypercasino.com/redirector?url=https%3A//www.hypercasino.com/fi/index&userid=27&tracker=80",
       "permanent": false
     },
     {
       "source": "/go/hyper/",
-      "destination": "http://affiliates.hypercasino.com/redirector?url=https://www.hypercasino.com/fi/index&userid=27&tracker=80",
+      "destination": "http://affiliates.hypercasino.com/redirector?url=https%3A//www.hypercasino.com/fi/index&userid=27&tracker=80",
       "permanent": false
     },
     {
@@ -4472,12 +4472,12 @@
     },
     {
       "source": "/go/playzee",
-      "destination": "https://Media.Zeepartners.com/redirect.aspx?pid=2507&bid=1530",
+      "destination": "https://media.zeepartners.com/redirect.aspx?pid=2507&bid=1530",
       "permanent": false
     },
     {
       "source": "/go/playzee/",
-      "destination": "https://Media.Zeepartners.com/redirect.aspx?pid=2507&bid=1530",
+      "destination": "https://media.zeepartners.com/redirect.aspx?pid=2507&bid=1530",
       "permanent": false
     },
     {

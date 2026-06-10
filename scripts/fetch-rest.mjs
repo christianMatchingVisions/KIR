@@ -49,10 +49,24 @@ for (const { rest, file } of TYPES) {
 }
 
 // --- Generate /go/ redirects from ThirstyAffiliates links ---
+// Vercel parses `:name` in destinations as path-to-regexp placeholders, so
+// literal colons in the path/query (e.g. inbanner's "locale:fi_FI") must be
+// percent-encoded. Ports and the scheme separator must stay untouched.
+function sanitizeDestination(url) {
+  try {
+    const u = new URL(url);
+    u.pathname = u.pathname.split(':').join('%3A');
+    u.search = u.search.split(':').join('%3A');
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 const links = JSON.parse(await readFile(path.join(OUT, 'thirstylink.json'), 'utf8'));
 const redirects = [];
 for (const l of links) {
-  const dest = l._ta_destination_url;
+  const dest = l._ta_destination_url && sanitizeDestination(l._ta_destination_url);
   if (!dest || l.status !== 'publish') continue;
   // ThirstyAffiliates serves 302s; keep them temporary (affiliate URLs change).
   redirects.push({ source: `/go/${l.slug}`, destination: dest, permanent: false });
