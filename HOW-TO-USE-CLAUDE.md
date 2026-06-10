@@ -102,11 +102,14 @@ Flow (same as OCL): engine planner → research → draft → humanize → SEO �
 compliance gate → delivered to feed → webhook → Vercel deploy hook → rebuild →
 articles appear under `/uutiset/<slug>/` and on `/uutiset/`.
 
-Setup status: **loader + pages wired, site NOT onboarded in the engine.**
-When ready, follow `docs/content-engine-onboarding.md` (market `fi`,
-language `fi`, mode `feed`, `--per-week 2`). Env vars `CE_API_URL` /
-`CE_API_KEY` go in `.env` and Vercel (see `.env.example`). Without them the
-build succeeds and `/uutiset/` renders exactly like the original page.
+Setup status: **ONBOARDED & ACTIVE (2026-06-10)** — daily cadence (7/week),
+market `fi`, language `fi`, mode `feed`, 45 topics seeded, planner slot
+05:00 UTC. Site slug in the engine: `kasinot-ilman-rekister-itymist`.
+Credentials are in `.env` (gitignored) and must mirror into Vercel env vars;
+one manual step remains (Vercel deploy hook → engine `delivery_webhook_url`).
+Details + maintenance commands: `docs/content-engine-onboarding.md`.
+Without env vars the build still succeeds and `/uutiset/` renders exactly
+like the original page.
 
 ## Known gaps / TODO
 
