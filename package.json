@@ -1,0 +1,19 @@
+{
+  "name": "kir-kasinotilmanrekisteroitymista",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync:content": "node scripts/fetch-rest.mjs && node scripts/scrape-pages.mjs && node scripts/download-assets.mjs && node scripts/capture-rlaaf.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.4.0",
+    "astro": "^5.8.0"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.1.0"
+  }
+}

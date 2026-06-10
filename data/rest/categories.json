@@ -1,0 +1,94 @@
+[
+ {
+  "id": 393,
+  "count": 5,
+  "description": "",
+  "link": "https://kasinotilmanrekisteroitymista.com/category/featured/",
+  "name": "Featured",
+  "slug": "featured",
+  "taxonomy": "category",
+  "parent": 0,
+  "meta": [],
+  "acf": [],
+  "_links": {
+   "self": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/categories/393",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/categories"
+    }
+   ],
+   "about": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/taxonomies/category"
+    }
+   ],
+   "wp:post_type": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/posts?categories=393"
+    }
+   ],
+   "curies": [
+    {
+     "name": "wp",
+     "href": "https://api.w.org/{rel}",
+     "templated": true
+    }
+   ]
+  }
+ },
+ {
+  "id": 1,
+  "count": 218,
+  "description": "",
+  "link": "https://kasinotilmanrekisteroitymista.com/category/uncategorised/",
+  "name": "Uncategorised",
+  "slug": "uncategorised",
+  "taxonomy": "category",
+  "parent": 0,
+  "meta": [],
+  "acf": [],
+  "_links": {
+   "self": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/categories/1",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/categories"
+    }
+   ],
+   "about": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/taxonomies/category"
+    }
+   ],
+   "wp:post_type": [
+    {
+     "href": "https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2/posts?categories=1"
+    }
+   ],
+   "curies": [
+    {
+     "name": "wp",
+     "href": "https://api.w.org/{rel}",
+     "templated": true
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,17 @@
+{
+	"post_type":"casino",
+	"filters":{
+		"taxonomy":[
+			{
+				"name":"casino-services",
+				"terms":["No Account"]
+			}
+		]
+	},
+	"sort":[
+		{
+			"field": "post_date",
+			"direction":"desc"
+		}
+	]
+}

@@ -1,0 +1,52 @@
+---
+/**
+ * Minimal document shell for pages migrated 1:1 from the WordPress site.
+ * Renders raw scraped fragments (see src/fragments/) byte-for-byte:
+ * no extra elements are injected into <head> or <body> — byte-fidelity
+ * matters for SEO (RankMath meta, canonical, JSON-LD, theme CSS).
+ *
+ * `htmlAttrs` / `bodyAttrs` are the raw attribute strings lifted from the
+ * original <html> and <body> tags (WP body classes are load-bearing for
+ * theme CSS). Astro can't spread a raw attribute string onto a tag, so we
+ * parse it into an object and spread that.
+ */
+interface Props {
+  headHtml: string;
+  bodyHtml: string;
+  htmlAttrs: string;
+  bodyAttrs: string;
+}
+
+const { headHtml, bodyHtml, htmlAttrs = "", bodyAttrs = "" } = Astro.props;
+
+/** Parse a raw HTML attribute string into an object: `key="value"`, `key='value'`, and bare keys. */
+function parseAttrs(raw: string): Record<string, string | boolean> {
+  const attrs: Record<string, string | boolean> = {};
+  const re = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'))?/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(raw)) !== null) {
+    if (!m[1]) continue;
+    attrs[m[1]] = m[2] ?? m[3] ?? true;
+  }
+  return attrs;
+}
+
+const htmlAttrsObj = parseAttrs(htmlAttrs);
+const bodyAttrsObj = parseAttrs(bodyAttrs);
+---
+
+<!doctype html>
+<html {...htmlAttrsObj}>
+  <head>
+    <Fragment set:html={headHtml} />
+    {/* Arctic Night redesign: loaded last so it overrides the legacy theme CSS. */}
+    <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/redesign.css" />
+    {/* Aurora sky + scroll choreography (self-hosted; defer keeps order). */}
+    <script src="/vendor/lenis.min.js" defer></script>
+    <script src="/vendor/gsap.min.js" defer></script>
+    <script src="/vendor/ScrollTrigger.min.js" defer></script>
+    <script src="/arctic.js" defer></script>
+  </head>
+  <body {...bodyAttrsObj}><Fragment set:html={bodyHtml} /></body>
+</html>

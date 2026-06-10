@@ -1,0 +1,51 @@
+---
+// @custom — hand-edited page; converters/scrapers must not overwrite it.
+//
+// /uutiset/ — the live WordPress site already has this news page, so we render
+// its scraped fragment 1:1 and inject Content-Engine articles at the top of
+// the existing article grid, using the theme's own card markup
+// (.col-lg-4 > a.article-box). Same pattern as OCL's /noticias/.
+//
+// Cadence note: KIR is in Google-penalty recovery, so the engine schedule is
+// deliberately conservative (2-3 articles/week). An empty engine list here is
+// expected early on — the page then renders exactly like the original.
+import { getCollection } from "astro:content";
+import Shell from "../../layouts/Shell.astro";
+import headHtml from "../../fragments/uutiset/head.html?raw";
+import bodyHtml from "../../fragments/uutiset/body.html?raw";
+import meta from "../../fragments/uutiset/meta.json";
+
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const articles = (await getCollection("articles")).sort((a, b) =>
+  (b.data.publishedAt ?? "").localeCompare(a.data.publishedAt ?? ""),
+);
+
+// Theme-native article cards (markup mirrors the existing grid items).
+const cards = articles
+  .map((a) => {
+    const img = a.data.heroImage
+      ? `<img src="${escapeHtml(a.data.heroImage)}" alt="${escapeHtml(a.data.title)}" class="article-preview-img radius-corners mr-3 w-100 wp-post-image" loading="lazy" decoding="async" />`
+      : "";
+    return `<div class="col-lg-4 col-md-6">
+\t<a href="/uutiset/${escapeHtml(a.id)}/" class="article-box">
+\t\t${img}
+\t\t<p class="h4 mb-0 py-3 px-2 text-grey">${escapeHtml(a.data.title)}</p>
+\t</a>
+</div>`;
+  })
+  .join("\n");
+
+// Inject engine cards at the top of the first article grid row.
+const finalBody = cards
+  ? bodyHtml.replace('<div class="row mb-5">', `<div class="row mb-5">\n${cards}`)
+  : bodyHtml;
+---
+
+<Shell
+  headHtml={headHtml}
+  bodyHtml={finalBody}
+  htmlAttrs={meta.htmlAttrs ?? ""}
+  bodyAttrs={meta.bodyAttrs ?? ""}
+/>

@@ -1,0 +1,4794 @@
+{
+  "redirects": [
+    {
+      "source": "/go/superonni",
+      "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/superonni/",
+      "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinnair",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35310&brand=spinnair&utm_campaign=FIAIR",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinnair/",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35310&brand=spinnair&utm_campaign=FIAIR",
+      "permanent": false
+    },
+    {
+      "source": "/go/tikkari",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTWk07jEtR6iDWNd7ZgqdRLk/10729/",
+      "permanent": false
+    },
+    {
+      "source": "/go/tikkari/",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTWk07jEtR6iDWNd7ZgqdRLk/10729/",
+      "permanent": false
+    },
+    {
+      "source": "/go/quickz",
+      "destination": "https://record.79affiliates.com/_5pbjE2Iq9O254KdCJd2jyWNd7ZgqdRLk/9948/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/quickz/",
+      "destination": "https://record.79affiliates.com/_5pbjE2Iq9O254KdCJd2jyWNd7ZgqdRLk/9948/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/hupislots",
+      "destination": "https://hupislots.co/jlsq6abe2",
+      "permanent": false
+    },
+    {
+      "source": "/go/hupislots/",
+      "destination": "https://hupislots.co/jlsq6abe2",
+      "permanent": false
+    },
+    {
+      "source": "/go/kumobet",
+      "destination": "https://record.grandeaffiliates.com/_vhcIcY1eV0kFNn8E4Dsb0WNd7ZgqdRLk/3/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/kumobet/",
+      "destination": "https://record.grandeaffiliates.com/_vhcIcY1eV0kFNn8E4Dsb0WNd7ZgqdRLk/3/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/urho",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_5539b_147c_&affid=650&siteid=5539&adid=147&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/urho/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_5539b_147c_&affid=650&siteid=5539&adid=147&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/taika-spin",
+      "destination": "https://Media1.casimbacuraff.com/redirect.aspx?pid=55082&lpid=331&bid=1759",
+      "permanent": false
+    },
+    {
+      "source": "/go/taika-spin/",
+      "destination": "https://Media1.casimbacuraff.com/redirect.aspx?pid=55082&lpid=331&bid=1759",
+      "permanent": false
+    },
+    {
+      "source": "/go/vegazone",
+      "destination": "https://hub.buzzaffiliates.com/visit/?bta=35335&nci=5434&utm_campaign=VGZ",
+      "permanent": false
+    },
+    {
+      "source": "/go/vegazone/",
+      "destination": "https://hub.buzzaffiliates.com/visit/?bta=35335&nci=5434&utm_campaign=VGZ",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaleo",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=36131&nci=5723&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaleo/",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=36131&nci=5723&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spiidi",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35310&brand=spiidi&utm_campaign=SPIIDIFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spiidi/",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35310&brand=spiidi&utm_campaign=SPIIDIFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/munkki",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_5298b_144c_&affid=650&siteid=5298&adid=144&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/munkki/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_5298b_144c_&affid=650&siteid=5298&adid=144&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/wetsson",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=8970&utm_campaign=WETFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/wetsson/",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=8970&utm_campaign=WETFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/mainiokasino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_137c_&affid=650&siteid=3477&adid=137&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mainiokasino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_137c_&affid=650&siteid=3477&adid=137&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/kiekka",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35240&brand=kiekka&utm_campaign=KIEFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/kiekka/",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35240&brand=kiekka&utm_campaign=KIEFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/jackburst",
+      "destination": "https://node1.spincdnjb.com/_QwIa9al6N4QOMRDMpvVHzmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/jackburst/",
+      "destination": "https://node1.spincdnjb.com/_QwIa9al6N4QOMRDMpvVHzmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoloots",
+      "destination": "https://pinnizollo.com/api/v3/offer/41?aff_sub2=FI&affiliate_id=222&url_id=41",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoloots/",
+      "destination": "https://pinnizollo.com/api/v3/offer/41?aff_sub2=FI&affiliate_id=222&url_id=41",
+      "permanent": false
+    },
+    {
+      "source": "/go/berriez",
+      "destination": "https://record.ganadugaming.com/_z_dv37hDMhb6PBA04iUMN2Nd7ZgqdRLk/3/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/berriez/",
+      "destination": "https://record.ganadugaming.com/_z_dv37hDMhb6PBA04iUMN2Nd7ZgqdRLk/3/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/joki",
+      "destination": "https://record.grandeaffiliates.com/_vhcIcY1eV0mhZjmDHKSSgmNd7ZgqdRLk/1/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/joki/",
+      "destination": "https://record.grandeaffiliates.com/_vhcIcY1eV0mhZjmDHKSSgmNd7ZgqdRLk/1/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/hurmio",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTXHQA4dbHstT2Nd7ZgqdRLk/1/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/hurmio/",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTXHQA4dbHstT2Nd7ZgqdRLk/1/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/speedz",
+      "destination": "https://record.ganadugaming.com/_z_dv37hDMhaVAv0U_Fv2nWNd7ZgqdRLk/2/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/speedz/",
+      "destination": "https://record.ganadugaming.com/_z_dv37hDMhaVAv0U_Fv2nWNd7ZgqdRLk/2/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/247bet",
+      "destination": "https://media1.casimbaaff.com/redirect.aspx?pid=53165&lpid=301&bid=1728",
+      "permanent": false
+    },
+    {
+      "source": "/go/247bet/",
+      "destination": "https://media1.casimbaaff.com/redirect.aspx?pid=53165&lpid=301&bid=1728",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-fruits",
+      "destination": "https://affitrck2.com/C.ashx?btag=a_181b_9c_&affid=94&siteid=181&adid=9&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-fruits/",
+      "destination": "https://affitrck2.com/C.ashx?btag=a_181b_9c_&affid=94&siteid=181&adid=9&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoist",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=36015&nci=5694&utm_campaign=FINOIST",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoist/",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=36015&nci=5694&utm_campaign=FINOIST",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelipito",
+      "destination": "https://go.funnz.partners/visit/?bta=37839&nci=5832&utm_campaign=FIPEL",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelipito/",
+      "destination": "https://go.funnz.partners/visit/?bta=37839&nci=5832&utm_campaign=FIPEL",
+      "permanent": false
+    },
+    {
+      "source": "/go/tuuri-kasino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_131c_&affid=650&siteid=3477&adid=131&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/tuuri-kasino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_131c_&affid=650&siteid=3477&adid=131&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/flamez",
+      "destination": "https://record.ganadugaming.com/_z_dv37hDMhYOMRDMpvVHzmNd7ZgqdRLk/1/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/flamez/",
+      "destination": "https://record.ganadugaming.com/_z_dv37hDMhYOMRDMpvVHzmNd7ZgqdRLk/1/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/huippu-2",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_128c_&affid=650&siteid=3477&adid=128&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/huippu-2/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_128c_&affid=650&siteid=3477&adid=128&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/rullat-2",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTWVsedWAtSr02Nd7ZgqdRLk/10728/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/rullat-2/",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTWVsedWAtSr02Nd7ZgqdRLk/10728/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/cipherwins",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=8475&utm_campaign=CIPHERFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/cipherwins/",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=8475&utm_campaign=CIPHERFI",
+      "permanent": false
+    },
+    {
+      "source": "/go/orionsbet",
+      "destination": "https://pinnizollo.com/api/v3/offer/19?aff_sub2=FI&affiliate_id=12&url_id=19",
+      "permanent": false
+    },
+    {
+      "source": "/go/orionsbet/",
+      "destination": "https://pinnizollo.com/api/v3/offer/19?aff_sub2=FI&affiliate_id=12&url_id=19",
+      "permanent": false
+    },
+    {
+      "source": "/go/sagaspins",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=35908&nci=5660&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/sagaspins/",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=35908&nci=5660&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinnaus",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35163&brand=spinnaus&utm_campaign=spinnausfi",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinnaus/",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35163&brand=spinnaus&utm_campaign=spinnausfi",
+      "permanent": false
+    },
+    {
+      "source": "/go/king-palace",
+      "destination": "https://kingpalace.com/pnp/?partner=p3569p1368p444e",
+      "permanent": false
+    },
+    {
+      "source": "/go/king-palace/",
+      "destination": "https://kingpalace.com/pnp/?partner=p3569p1368p444e",
+      "permanent": false
+    },
+    {
+      "source": "/go/betreels-2",
+      "destination": "https://partners.betreelsaffiliates.com/affiliate/redirect?cid=12972&aid=9132&lang=&tracker=FI&track=FI&utm_source=seo",
+      "permanent": false
+    },
+    {
+      "source": "/go/betreels-2/",
+      "destination": "https://partners.betreelsaffiliates.com/affiliate/redirect?cid=12972&aid=9132&lang=&tracker=FI&track=FI&utm_source=seo",
+      "permanent": false
+    },
+    {
+      "source": "/go/the-online-casino",
+      "destination": "https://ads.galaxyaffiliates.com/redirect.aspx?mid=4179&sid=13887&cid=&pid=&affid=7986",
+      "permanent": false
+    },
+    {
+      "source": "/go/the-online-casino/",
+      "destination": "https://ads.galaxyaffiliates.com/redirect.aspx?mid=4179&sid=13887&cid=&pid=&affid=7986",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelaanyt",
+      "destination": "https://plnt.xarvilo.com/?mid=282463_1664208",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelaanyt/",
+      "destination": "https://plnt.xarvilo.com/?mid=282463_1664208",
+      "permanent": false
+    },
+    {
+      "source": "/go/rioace",
+      "destination": "https://record.joinaff.com/_WEJAGRo653ozjHRCZYOiSmNd7ZgqdRLk/2/",
+      "permanent": false
+    },
+    {
+      "source": "/go/rioace/",
+      "destination": "https://record.joinaff.com/_WEJAGRo653ozjHRCZYOiSmNd7ZgqdRLk/2/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lonkero",
+      "destination": "https://go.blixxaffiliates.com/visit/?bta=37282&nci=5753&utm_campaign=lonkerofi",
+      "permanent": false
+    },
+    {
+      "source": "/go/lonkero/",
+      "destination": "https://go.blixxaffiliates.com/visit/?bta=37282&nci=5753&utm_campaign=lonkerofi",
+      "permanent": false
+    },
+    {
+      "source": "/go/betsbunny",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=8344&utm_campaign=betsbunny",
+      "permanent": false
+    },
+    {
+      "source": "/go/betsbunny/",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=8344&utm_campaign=betsbunny",
+      "permanent": false
+    },
+    {
+      "source": "/go/big-lucky",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=16576&bid=2495",
+      "permanent": false
+    },
+    {
+      "source": "/go/big-lucky/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=16576&bid=2495",
+      "permanent": false
+    },
+    {
+      "source": "/go/jellona",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTXjiPWJ9pQO92Nd7ZgqdRLk/10727/",
+      "permanent": false
+    },
+    {
+      "source": "/go/jellona/",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTXjiPWJ9pQO92Nd7ZgqdRLk/10727/",
+      "permanent": false
+    },
+    {
+      "source": "/go/icebet",
+      "destination": "https://record.joinaff.com/_WEJAGRo653qL9cv1fqjdPGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/icebet/",
+      "destination": "https://record.joinaff.com/_WEJAGRo653qL9cv1fqjdPGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/frostybet",
+      "destination": "https://popularrdb.com/api/v3/offer/23?aff_sub2=FI&affiliate_id=118&url_id=23",
+      "permanent": false
+    },
+    {
+      "source": "/go/frostybet/",
+      "destination": "https://popularrdb.com/api/v3/offer/23?aff_sub2=FI&affiliate_id=118&url_id=23",
+      "permanent": false
+    },
+    {
+      "source": "/go/lapland",
+      "destination": "https://record.vanalauriaffiliates.com/_uYFkGNE6EU62u08qNo8obWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lapland/",
+      "destination": "https://record.vanalauriaffiliates.com/_uYFkGNE6EU62u08qNo8obWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/valtti",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_119c_&affid=650&siteid=3477&adid=119&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/valtti/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_119c_&affid=650&siteid=3477&adid=119&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/tuohi",
+      "destination": "https://record.tuohiaffiliates.com/_fsVr7A1WgifUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/tuohi/",
+      "destination": "https://record.tuohiaffiliates.com/_fsVr7A1WgifUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-trunk",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8990&utm_campaign=FILUTR",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-trunk/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8990&utm_campaign=FILUTR",
+      "permanent": false
+    },
+    {
+      "source": "/go/moana",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=7974&utm_campaign=FIMO",
+      "permanent": false
+    },
+    {
+      "source": "/go/moana/",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=7974&utm_campaign=FIMO",
+      "permanent": false
+    },
+    {
+      "source": "/go/klikki",
+      "destination": "https://record.discasinoaffiliates.com/_NjxrRSiN732itX36G815rmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/klikki/",
+      "destination": "https://record.discasinoaffiliates.com/_NjxrRSiN732itX36G815rmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/winz",
+      "destination": "https://winzmedia.top/aa83d9059",
+      "permanent": false
+    },
+    {
+      "source": "/go/winz/",
+      "destination": "https://winzmedia.top/aa83d9059",
+      "permanent": false
+    },
+    {
+      "source": "/go/betizy",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8848&utm_campaign=betizyfi",
+      "permanent": false
+    },
+    {
+      "source": "/go/betizy/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8848&utm_campaign=betizyfi",
+      "permanent": false
+    },
+    {
+      "source": "/go/taikawin",
+      "destination": "https://affitrck2.com/C.ashx?btag=a_191b_3c_&affid=94&siteid=191&adid=3&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/taikawin/",
+      "destination": "https://affitrck2.com/C.ashx?btag=a_191b_3c_&affid=94&siteid=191&adid=3&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelikioski",
+      "destination": "https://go.moonrocketaffiliates.com/visit/?bta=35489&brand=pelikioski&utm_campaign=FI2",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelikioski/",
+      "destination": "https://go.moonrocketaffiliates.com/visit/?bta=35489&brand=pelikioski&utm_campaign=FI2",
+      "permanent": false
+    },
+    {
+      "source": "/go/reipas",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_4208b_113c_&affid=650&siteid=&adid=113&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/reipas/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_4208b_113c_&affid=650&siteid=&adid=113&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaahaus",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35074&brand=kaahaus&utm_campaign=FIKAA",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaahaus/",
+      "destination": "https://go.fruitypartners.com/visit/?bta=35074&brand=kaahaus&utm_campaign=FIKAA",
+      "permanent": false
+    },
+    {
+      "source": "/go/bassbet",
+      "destination": "https://bsbt.xarvilo.com/?mid=248501_1462263",
+      "permanent": false
+    },
+    {
+      "source": "/go/bassbet/",
+      "destination": "https://bsbt.xarvilo.com/?mid=248501_1462263",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-nordic",
+      "destination": "https://go.blixxaffiliates.com/visit/?bta=37282&brand=luckynordic&utm_campaign=luckynordic",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-nordic/",
+      "destination": "https://go.blixxaffiliates.com/visit/?bta=37282&brand=luckynordic&utm_campaign=luckynordic",
+      "permanent": false
+    },
+    {
+      "source": "/go/casiku",
+      "destination": "https://media.zeepartners.com/redirect.aspx?pid=180494&bid=1681",
+      "permanent": false
+    },
+    {
+      "source": "/go/casiku/",
+      "destination": "https://media.zeepartners.com/redirect.aspx?pid=180494&bid=1681",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-vice",
+      "destination": "https://record.magiplayaffiliates.com/_fZZCa15xJCDUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-vice/",
+      "destination": "https://record.magiplayaffiliates.com/_fZZCa15xJCDUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinight",
+      "destination": "https://hub.buzzaffiliates.com/visit/?bta=35335&nci=5388&utm_campaign=FIspinig",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinight/",
+      "destination": "https://hub.buzzaffiliates.com/visit/?bta=35335&nci=5388&utm_campaign=FIspinig",
+      "permanent": false
+    },
+    {
+      "source": "/go/taikaspins",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8684&utm_campaign=taikaspins",
+      "permanent": false
+    },
+    {
+      "source": "/go/taikaspins/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8684&utm_campaign=taikaspins",
+      "permanent": false
+    },
+    {
+      "source": "/go/shotz",
+      "destination": "https://go.funnz.partners/visit/?bta=37839&nci=5808&utm_campaign=FIShotz",
+      "permanent": false
+    },
+    {
+      "source": "/go/shotz/",
+      "destination": "https://go.funnz.partners/visit/?bta=37839&nci=5808&utm_campaign=FIShotz",
+      "permanent": false
+    },
+    {
+      "source": "/go/slottimonsteri",
+      "destination": "https://record.epcaffiliates.com/_wxhMivgEh_Qd2bMnnkYwymNd7ZgqdRLk/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/slottimonsteri/",
+      "destination": "https://record.epcaffiliates.com/_wxhMivgEh_Qd2bMnnkYwymNd7ZgqdRLk/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/shokki",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTUpNEAOykpOiGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/shokki/",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTUpNEAOykpOiGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/paratiisi",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=15185&bid=2429",
+      "permanent": false
+    },
+    {
+      "source": "/go/paratiisi/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=15185&bid=2429",
+      "permanent": false
+    },
+    {
+      "source": "/go/lumo-casino",
+      "destination": "https://media1.casimbaaff.com/redirect.aspx?pid=28408&lpid=93&bid=1499",
+      "permanent": false
+    },
+    {
+      "source": "/go/lumo-casino/",
+      "destination": "https://media1.casimbaaff.com/redirect.aspx?pid=28408&lpid=93&bid=1499",
+      "permanent": false
+    },
+    {
+      "source": "/go/saletti",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_107c_&affid=650&siteid=3477&adid=107&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/saletti/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_107c_&affid=650&siteid=3477&adid=107&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/scibet",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8556&utm_campaign=scibet",
+      "permanent": false
+    },
+    {
+      "source": "/go/scibet/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8556&utm_campaign=scibet",
+      "permanent": false
+    },
+    {
+      "source": "/go/chalkwins",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8247&utm_campaign=chalkwinsfi",
+      "permanent": false
+    },
+    {
+      "source": "/go/chalkwins/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=8247&utm_campaign=chalkwinsfi",
+      "permanent": false
+    },
+    {
+      "source": "/go/dreamvegas-3",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_36785b_876c_&affid=5850&siteid=36785&adid=876&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/dreamvegas-3/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_36785b_876c_&affid=5850&siteid=36785&adid=876&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/beteum",
+      "destination": "https://media.vegaslegends.com/visit/?bta=35122&nci=5463&utm_campaign=FIbeteum",
+      "permanent": false
+    },
+    {
+      "source": "/go/beteum/",
+      "destination": "https://media.vegaslegends.com/visit/?bta=35122&nci=5463&utm_campaign=FIbeteum",
+      "permanent": false
+    },
+    {
+      "source": "/go/kruuna",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTWWLGrCaiaBQGNd7ZgqdRLk/9543/",
+      "permanent": false
+    },
+    {
+      "source": "/go/kruuna/",
+      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTWWLGrCaiaBQGNd7ZgqdRLk/9543/",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelikaani",
+      "destination": "https://go.moonrocketaffiliates.com/visit/?bta=35489&brand=pelikaani&utm_campaign=FI2",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelikaani/",
+      "destination": "https://go.moonrocketaffiliates.com/visit/?bta=35489&brand=pelikaani&utm_campaign=FI2",
+      "permanent": false
+    },
+    {
+      "source": "/go/jokeri",
+      "destination": "https://record.vanalauriaffiliates.com/_QwIa9al6N4SuqxJ1W5ErsWNd7ZgqdRLk/3/",
+      "permanent": false
+    },
+    {
+      "source": "/go/jokeri/",
+      "destination": "https://record.vanalauriaffiliates.com/_QwIa9al6N4SuqxJ1W5ErsWNd7ZgqdRLk/3/",
+      "permanent": false
+    },
+    {
+      "source": "/go/4kasino",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=37571&nci=6599&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/4kasino/",
+      "destination": "https://go.infinitystarspartners.com/visit/?bta=37571&nci=6599&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/rise-of-bets",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=7428&utm_campaign=FIROB",
+      "permanent": false
+    },
+    {
+      "source": "/go/rise-of-bets/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=7428&utm_campaign=FIROB",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotuna",
+      "destination": "https://sltna.servclick1move.com/?mid=225419_1340401",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotuna/",
+      "destination": "https://sltna.servclick1move.com/?mid=225419_1340401",
+      "permanent": false
+    },
+    {
+      "source": "/go/swiper",
+      "destination": "https://swp.servclick1move.com/?mid=225582_1341584",
+      "permanent": false
+    },
+    {
+      "source": "/go/swiper/",
+      "destination": "https://swp.servclick1move.com/?mid=225582_1341584",
+      "permanent": false
+    },
+    {
+      "source": "/go/allspins",
+      "destination": "https://record.winmaniacs.com/_kDgtZmIhqxgUMlNTKjmrhmNd7ZgqdRLk/9258/",
+      "permanent": false
+    },
+    {
+      "source": "/go/allspins/",
+      "destination": "https://record.winmaniacs.com/_kDgtZmIhqxgUMlNTKjmrhmNd7ZgqdRLk/9258/",
+      "permanent": false
+    },
+    {
+      "source": "/go/mammona-kasino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_91c_&affid=650&siteid=3477&adid=91&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mammona-kasino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3477b_91c_&affid=650&siteid=3477&adid=91&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/yo-yo-casino",
+      "destination": "https://yyc.servclick1move.com/?mid=16765_678525",
+      "permanent": false
+    },
+    {
+      "source": "/go/yo-yo-casino/",
+      "destination": "https://yyc.servclick1move.com/?mid=16765_678525",
+      "permanent": false
+    },
+    {
+      "source": "/go/winsroyal",
+      "destination": "https://wgroyal.net/df4f84522",
+      "permanent": false
+    },
+    {
+      "source": "/go/winsroyal/",
+      "destination": "https://wgroyal.net/df4f84522",
+      "permanent": false
+    },
+    {
+      "source": "/go/possu",
+      "destination": "https://record.njordaffiliates.com/_dwQ4dqzwJ6niXFlEjLmlfWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/possu/",
+      "destination": "https://record.njordaffiliates.com/_dwQ4dqzwJ6niXFlEjLmlfWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/sportuna",
+      "destination": "https://sprt.servclick1move.com/?mid=154261_1075525",
+      "permanent": false
+    },
+    {
+      "source": "/go/sportuna/",
+      "destination": "https://sprt.servclick1move.com/?mid=154261_1075525",
+      "permanent": false
+    },
+    {
+      "source": "/go/rtbet",
+      "destination": "https://rtb.servclick1move.com/?mid=153057_1067749",
+      "permanent": false
+    },
+    {
+      "source": "/go/rtbet/",
+      "destination": "https://rtb.servclick1move.com/?mid=153057_1067749",
+      "permanent": false
+    },
+    {
+      "source": "/go/raketti",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=13542&bid=2236",
+      "permanent": false
+    },
+    {
+      "source": "/go/raketti/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=13542&bid=2236",
+      "permanent": false
+    },
+    {
+      "source": "/go/talismania",
+      "destination": "https://media.vegaslegends.com/visit/?bta=35122&nci=5348&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/talismania/",
+      "destination": "https://media.vegaslegends.com/visit/?bta=35122&nci=5348&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinson",
+      "destination": "https://record.betfusionpartners.com/_1CNmeug6owlBaa7vkYgbGmNd7ZgqdRLk/8648/",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinson/",
+      "destination": "https://record.betfusionpartners.com/_1CNmeug6owlBaa7vkYgbGmNd7ZgqdRLk/8648/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slots-jerry",
+      "destination": "https://record.betfusionpartners.com/_1CNmeug6own4hGKNo0G9o2Nd7ZgqdRLk/8649/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slots-jerry/",
+      "destination": "https://record.betfusionpartners.com/_1CNmeug6own4hGKNo0G9o2Nd7ZgqdRLk/8649/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lysti",
+      "destination": "https://record.njordaffiliates.com/_o6WLnmQHzo8tI0PEkohphWNd7ZgqdRLk/8657/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lysti/",
+      "destination": "https://record.njordaffiliates.com/_o6WLnmQHzo8tI0PEkohphWNd7ZgqdRLk/8657/",
+      "permanent": false
+    },
+    {
+      "source": "/go/scarabet",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=7228&afp=FI2",
+      "permanent": false
+    },
+    {
+      "source": "/go/scarabet/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=7228&afp=FI2",
+      "permanent": false
+    },
+    {
+      "source": "/go/nitrospins",
+      "destination": "https://offers.nitrospins.com/?src=11&offer=59&uid=018e381e-b4a2-7630-982a-54f001dba893&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/nitrospins/",
+      "destination": "https://offers.nitrospins.com/?src=11&offer=59&uid=018e381e-b4a2-7630-982a-54f001dba893&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/kunkku",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3529b_84c_&affid=650&siteid=3529&adid=84&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/kunkku/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3529b_84c_&affid=650&siteid=3529&adid=84&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/fruta",
+      "destination": "https://track.affroller.com/visit/?bta=36098&nci=5378&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/fruta/",
+      "destination": "https://track.affroller.com/visit/?bta=36098&nci=5378&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/sushi-casino",
+      "destination": "https://media1.bosspartners.com/redirect.aspx?pid=4733&bid=1614",
+      "permanent": false
+    },
+    {
+      "source": "/go/sushi-casino/",
+      "destination": "https://media1.bosspartners.com/redirect.aspx?pid=4733&bid=1614",
+      "permanent": false
+    },
+    {
+      "source": "/go/puzzle-casino",
+      "destination": "https://charmyx.com/d9706cbc7",
+      "permanent": false
+    },
+    {
+      "source": "/go/puzzle-casino/",
+      "destination": "https://charmyx.com/d9706cbc7",
+      "permanent": false
+    },
+    {
+      "source": "/go/space-casino",
+      "destination": "https://trk.spacecasino.com/o/MmZXwB?site_id=10068",
+      "permanent": false
+    },
+    {
+      "source": "/go/space-casino/",
+      "destination": "https://trk.spacecasino.com/o/MmZXwB?site_id=10068",
+      "permanent": false
+    },
+    {
+      "source": "/go/slot-hammer",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=7033&utm_campaign=FI1",
+      "permanent": false
+    },
+    {
+      "source": "/go/slot-hammer/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=7033&utm_campaign=FI1",
+      "permanent": false
+    },
+    {
+      "source": "/go/nubet",
+      "destination": "https://record.vanalauriaffiliates.com/_QwIa9al6N4TT2Fu8bIPGIGNd7ZgqdRLk/2/",
+      "permanent": false
+    },
+    {
+      "source": "/go/nubet/",
+      "destination": "https://record.vanalauriaffiliates.com/_QwIa9al6N4TT2Fu8bIPGIGNd7ZgqdRLk/2/",
+      "permanent": false
+    },
+    {
+      "source": "/go/nova-jackpot",
+      "destination": "https://hub.buzzaffiliates.com/visit/?bta=35335&nci=5356&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/nova-jackpot/",
+      "destination": "https://hub.buzzaffiliates.com/visit/?bta=35335&nci=5356&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bluvegas",
+      "destination": "https://record.crazeaffiliates.com/_HDzD4zWh_9zUOsjNOfgKeWNd7ZgqdRLk/5032/",
+      "permanent": false
+    },
+    {
+      "source": "/go/bluvegas/",
+      "destination": "https://record.crazeaffiliates.com/_HDzD4zWh_9zUOsjNOfgKeWNd7ZgqdRLk/5032/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotti",
+      "destination": "https://record.njordaffiliates.com/_-iH2JKfUutQzBQega5ktsGNd7ZgqdRLk/8079/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotti/",
+      "destination": "https://record.njordaffiliates.com/_-iH2JKfUutQzBQega5ktsGNd7ZgqdRLk/8079/",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinanga",
+      "destination": "https://spng.servclick1move.com/?mid=90709_691381",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinanga/",
+      "destination": "https://spng.servclick1move.com/?mid=90709_691381",
+      "permanent": false
+    },
+    {
+      "source": "/go/smokace",
+      "destination": "https://record.joinaff.com/_CLLOLKDUurEQii3_-zHRAGNd7ZgqdRLk/7774/",
+      "permanent": false
+    },
+    {
+      "source": "/go/smokace/",
+      "destination": "https://record.joinaff.com/_CLLOLKDUurEQii3_-zHRAGNd7ZgqdRLk/7774/",
+      "permanent": false
+    },
+    {
+      "source": "/go/superkasino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3293b_66c_&affid=576&siteid=3293&adid=66&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/superkasino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_3293b_66c_&affid=576&siteid=3293&adid=66&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/reddice",
+      "destination": "https://record.grandeaffiliates.com/_2W0RU1SDZvs8TL4kmJ7MEGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/reddice/",
+      "destination": "https://record.grandeaffiliates.com/_2W0RU1SDZvs8TL4kmJ7MEGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-start",
+      "destination": "https://trk.kongsaffiliates.com/trk.php?t=2180&c=2467",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-start/",
+      "destination": "https://trk.kongsaffiliates.com/trk.php?t=2180&c=2467",
+      "permanent": false
+    },
+    {
+      "source": "/go/samiland",
+      "destination": "https://trk.kongsaffiliates.com/trk.php?t=4146&c=4966",
+      "permanent": false
+    },
+    {
+      "source": "/go/samiland/",
+      "destination": "https://trk.kongsaffiliates.com/trk.php?t=4146&c=4966",
+      "permanent": false
+    },
+    {
+      "source": "/go/rebellion",
+      "destination": "https://rebellionplay.com/je39faa74",
+      "permanent": false
+    },
+    {
+      "source": "/go/rebellion/",
+      "destination": "https://rebellionplay.com/je39faa74",
+      "permanent": false
+    },
+    {
+      "source": "/go/igni",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_31945b_800c_&affid=6116&siteid=31945&adid=800&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/igni/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_31945b_800c_&affid=6116&siteid=31945&adid=800&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/nords-casino",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=6797&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/nords-casino/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=36058&nci=6797&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/rooster-bet",
+      "destination": "https://roosterpartner.media/n1b138de95",
+      "permanent": false
+    },
+    {
+      "source": "/go/rooster-bet/",
+      "destination": "https://roosterpartner.media/n1b138de95",
+      "permanent": false
+    },
+    {
+      "source": "/go/twin-casino",
+      "destination": "https://wltwin.adsrv.eacdn.com/C.ashx?btag=a_9098268b_402c_&affid=100007&siteid=9098268&adid=402&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/twin-casino/",
+      "destination": "https://wltwin.adsrv.eacdn.com/C.ashx?btag=a_9098268b_402c_&affid=100007&siteid=9098268&adid=402&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsite",
+      "destination": "https://m.bettingaffiliate.com/Redirect.aspx?mid=58&sid=3088&cid=&pid=&affid=3043",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsite/",
+      "destination": "https://m.bettingaffiliate.com/Redirect.aspx?mid=58&sid=3088&cid=&pid=&affid=3043",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinowinbig",
+      "destination": "https://wlcasinowinbig.adsrv.eacdn.com/C.ashx?btag=a_9837b_1441c_&affid=4671&siteid=9837&adid=1441&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinowinbig/",
+      "destination": "https://wlcasinowinbig.adsrv.eacdn.com/C.ashx?btag=a_9837b_1441c_&affid=4671&siteid=9837&adid=1441&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/arctic",
+      "destination": "https://record.ibetaffiliates.com/__HS1EKM7FeI2uW858WQIo2Nd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/arctic/",
+      "destination": "https://record.ibetaffiliates.com/__HS1EKM7FeI2uW858WQIo2Nd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/playdingo",
+      "destination": "https://record.crystalwgpartners.com/_8Ti0hDmwfgvX172zxPL8HmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/playdingo/",
+      "destination": "https://record.crystalwgpartners.com/_8Ti0hDmwfgvX172zxPL8HmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/hilo",
+      "destination": "https://record.njordaffiliates.com/_n9J6eOXbAQAjbnplS_UGpGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/hilo/",
+      "destination": "https://record.njordaffiliates.com/_n9J6eOXbAQAjbnplS_UGpGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lempi",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_2007b_65c_&affid=521&siteid=2007&adid=65&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lempi/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_2007b_65c_&affid=521&siteid=2007&adid=65&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/21red",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=35747&nci=6191&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/21red/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=35747&nci=6191&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/royal-stars",
+      "destination": "https://record.affiliates-royalstarscasino.com/_q8zUnsZIGDLUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/royal-stars/",
+      "destination": "https://record.affiliates-royalstarscasino.com/_q8zUnsZIGDLUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betreels",
+      "destination": "https://partners.betreelsaffiliates.com/affiliate/redirect?cid=12972&aid=9132&lang=&tracker=FI&track=FI&utm_source=seo",
+      "permanent": false
+    },
+    {
+      "source": "/go/betreels/",
+      "destination": "https://partners.betreelsaffiliates.com/affiliate/redirect?cid=12972&aid=9132&lang=&tracker=FI&track=FI&utm_source=seo",
+      "permanent": false
+    },
+    {
+      "source": "/go/big-boost",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=9905&lpid=329&bid=2077",
+      "permanent": false
+    },
+    {
+      "source": "/go/big-boost/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=9905&lpid=329&bid=2077",
+      "permanent": false
+    },
+    {
+      "source": "/go/payoutz",
+      "destination": "https://media.payoutz.com/redirect.aspx?pid=4124&bid=1522",
+      "permanent": false
+    },
+    {
+      "source": "/go/payoutz/",
+      "destination": "https://media.payoutz.com/redirect.aspx?pid=4124&bid=1522",
+      "permanent": false
+    },
+    {
+      "source": "/go/falcon-vegas",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_30530b_778c_&affid=6116&siteid=30530&adid=778&c=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/falcon-vegas/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_30530b_778c_&affid=6116&siteid=30530&adid=778&c=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bet1000",
+      "destination": "https://bet1000.com?faff=433&sub=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bet1000/",
+      "destination": "https://bet1000.com?faff=433&sub=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/77spin",
+      "destination": "https://record.crystalwgpartners.com/_3lvjGcgnb9pFAHnL-YJqP2Nd7ZgqdRLk/6378/",
+      "permanent": false
+    },
+    {
+      "source": "/go/77spin/",
+      "destination": "https://record.crystalwgpartners.com/_3lvjGcgnb9pFAHnL-YJqP2Nd7ZgqdRLk/6378/",
+      "permanent": false
+    },
+    {
+      "source": "/go/blackjack-city",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_19296b_752c_&affid=4002&siteid=19296&adid=752&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/blackjack-city/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_19296b_752c_&affid=4002&siteid=19296&adid=752&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lynxbet",
+      "destination": "https://record.lynxbetaffiliates.com/_Kzs8y2FxFkeU9J4xpxpxGmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lynxbet/",
+      "destination": "https://record.lynxbetaffiliates.com/_Kzs8y2FxFkeU9J4xpxpxGmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/hejgo",
+      "destination": "https://hejgoplay.com/j5166ea4e",
+      "permanent": false
+    },
+    {
+      "source": "/go/hejgo/",
+      "destination": "https://hejgoplay.com/j5166ea4e",
+      "permanent": false
+    },
+    {
+      "source": "/go/betstro",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=35480&nci=5461&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/betstro/",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=35480&nci=5461&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/foggybet",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=35480&nci=5507&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/foggybet/",
+      "destination": "https://go.ohmygaming.partners/visit/?bta=35480&nci=5507&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/firespin",
+      "destination": "https://record.njordaffiliates.com/_JxNhUPsl1ILk9mx2SfmU_WNd7ZgqdRLk/7305/",
+      "permanent": false
+    },
+    {
+      "source": "/go/firespin/",
+      "destination": "https://record.njordaffiliates.com/_JxNhUPsl1ILk9mx2SfmU_WNd7ZgqdRLk/7305/",
+      "permanent": false
+    },
+    {
+      "source": "/go/yugibet",
+      "destination": "https://go.kamikazeaffiliates.com/visit/?bta=35105&nci=5385&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/yugibet/",
+      "destination": "https://go.kamikazeaffiliates.com/visit/?bta=35105&nci=5385&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/happyslots",
+      "destination": "https://record.grandeaffiliates.com/_AUs5GsDGWQGG_Kf4W2Qpg2Nd7ZgqdRLk/7214/",
+      "permanent": false
+    },
+    {
+      "source": "/go/happyslots/",
+      "destination": "https://record.grandeaffiliates.com/_AUs5GsDGWQGG_Kf4W2Qpg2Nd7ZgqdRLk/7214/",
+      "permanent": false
+    },
+    {
+      "source": "/go/coolcasino",
+      "destination": "https://media.coolcasino.io/redirect.aspx?pid=3982&lpid=39&bid=1539",
+      "permanent": false
+    },
+    {
+      "source": "/go/coolcasino/",
+      "destination": "https://media.coolcasino.io/redirect.aspx?pid=3982&lpid=39&bid=1539",
+      "permanent": false
+    },
+    {
+      "source": "/go/mahti-kasino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1759b_4c_&affid=430&siteid=1759&adid=4&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mahti-kasino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1759b_4c_&affid=430&siteid=1759&adid=4&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsi",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1760b_37c_&affid=431&siteid=1760&adid=37&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsi/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1760b_37c_&affid=431&siteid=1760&adid=37&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/betoriginal",
+      "destination": "https://record.betoriginalpartners.com/_ZsWMKucwva0OMRDMpvVHzmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betoriginal/",
+      "destination": "https://record.betoriginalpartners.com/_ZsWMKucwva0OMRDMpvVHzmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lataamo",
+      "destination": "https://record.vanalauriaffiliates.com/_QwIa9al6N4TUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/lataamo/",
+      "destination": "https://record.vanalauriaffiliates.com/_QwIa9al6N4TUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betnflix",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=35349&nci=5910&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/betnflix/",
+      "destination": "https://go.campeonaffiliatesdirect.com/visit/?bta=35349&nci=5910&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/biamobet",
+      "destination": "https://uhaf836f42uh.mndslkgndsf.cc/?rid=-7EBNQCgQAADC-EAAGAQEREQoRCQoRDTIRDRIAAR9iaWFtbwEx&subacc2=pid&subacc4=click_id&utm_source=social&subpub=matchingvisions",
+      "permanent": false
+    },
+    {
+      "source": "/go/biamobet/",
+      "destination": "https://uhaf836f42uh.mndslkgndsf.cc/?rid=-7EBNQCgQAADC-EAAGAQEREQoRCQoRDTIRDRIAAR9iaWFtbwEx&subacc2=pid&subacc4=click_id&utm_source=social&subpub=matchingvisions",
+      "permanent": false
+    },
+    {
+      "source": "/go/lumi-casino",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_28408b_746c_&affid=5850&siteid=28408&adid=746&c=745",
+      "permanent": false
+    },
+    {
+      "source": "/go/lumi-casino/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_28408b_746c_&affid=5850&siteid=28408&adid=746&c=745",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinfever-casino",
+      "destination": "https://deeplogic.media/ab18aa828",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinfever-casino/",
+      "destination": "https://deeplogic.media/ab18aa828",
+      "permanent": false
+    },
+    {
+      "source": "/go/nopein-casino",
+      "destination": "https://record.njordaffiliates.com/_7vNnQ2dx5nJyi6yi6t2SVmNd7ZgqdRLk/7016/",
+      "permanent": false
+    },
+    {
+      "source": "/go/nopein-casino/",
+      "destination": "https://record.njordaffiliates.com/_7vNnQ2dx5nJyi6yi6t2SVmNd7ZgqdRLk/7016/",
+      "permanent": false
+    },
+    {
+      "source": "/go/wallacebet",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_12408b_3542c_&affid=2871&siteid=12408&adid=3542&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/wallacebet/",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_12408b_3542c_&affid=2871&siteid=12408&adid=3542&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/together-casino",
+      "destination": "https://record.nolimitpartners.com/_dvSloAVZwx-VAv0U_Fv2nWNd7ZgqdRLk/6872/",
+      "permanent": false
+    },
+    {
+      "source": "/go/together-casino/",
+      "destination": "https://record.nolimitpartners.com/_dvSloAVZwx-VAv0U_Fv2nWNd7ZgqdRLk/6872/",
+      "permanent": false
+    },
+    {
+      "source": "/go/olympusbet-casino",
+      "destination": "https://online.olympusbet.com/promoRedirect?key=ej0xMzg0MjgxOSZsPTEzODQyNjMzJnA9MTU4OTk%3D",
+      "permanent": false
+    },
+    {
+      "source": "/go/olympusbet-casino/",
+      "destination": "https://online.olympusbet.com/promoRedirect?key=ej0xMzg0MjgxOSZsPTEzODQyNjMzJnA9MTU4OTk%3D",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-night",
+      "destination": "https://track.casinorevenues.com/__0hI7wcxLVBZSuvhn4yj1mNd7ZgqdRLk/6890/",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-night/",
+      "destination": "https://track.casinorevenues.com/__0hI7wcxLVBZSuvhn4yj1mNd7ZgqdRLk/6890/",
+      "permanent": false
+    },
+    {
+      "source": "/go/wikibet",
+      "destination": "https://record.wikipartners.com/_pfpsr8F8w7TUOsjNOfgKeWNd7ZgqdRLk/6881/",
+      "permanent": false
+    },
+    {
+      "source": "/go/wikibet/",
+      "destination": "https://record.wikipartners.com/_pfpsr8F8w7TUOsjNOfgKeWNd7ZgqdRLk/6881/",
+      "permanent": false
+    },
+    {
+      "source": "/go/flaksi-casino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1489b_54c_&affid=374&siteid=1489&adid=54&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/flaksi-casino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1489b_54c_&affid=374&siteid=1489&adid=54&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/zet-planet",
+      "destination": "https://go.affilmaster.com/scripts/cdvy4d2?a_aid=mv4&a_bid=1691bf72&chan=code2",
+      "permanent": false
+    },
+    {
+      "source": "/go/zet-planet/",
+      "destination": "https://go.affilmaster.com/scripts/cdvy4d2?a_aid=mv4&a_bid=1691bf72&chan=code2",
+      "permanent": false
+    },
+    {
+      "source": "/go/wisho",
+      "destination": "https://click.wisho.partners/afs/come.php?cid=10749&ctgid=100&atype=1&brandid=11",
+      "permanent": false
+    },
+    {
+      "source": "/go/wisho/",
+      "destination": "https://click.wisho.partners/afs/come.php?cid=10749&ctgid=100&atype=1&brandid=11",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrfortune-casino",
+      "destination": "https://go.ohmypartners.com/visit/?bta=38113&brand=mrfortune&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrfortune-casino/",
+      "destination": "https://go.ohmypartners.com/visit/?bta=38113&brand=mrfortune&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/gomblingo",
+      "destination": "https://track.affilirise.com/visit/?bta=35157&nci=5358&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/gomblingo/",
+      "destination": "https://track.affilirise.com/visit/?bta=35157&nci=5358&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/snatch-casino",
+      "destination": "https://snatchcasinos.com/d10c82e56",
+      "permanent": false
+    },
+    {
+      "source": "/go/snatch-casino/",
+      "destination": "https://snatchcasinos.com/d10c82e56",
+      "permanent": false
+    },
+    {
+      "source": "/go/mobilebet-2",
+      "destination": "https://media.mobilebet.com/tracking.php?tracking_code&aid=107051&mid=2349&sid=363569&pid=744",
+      "permanent": false
+    },
+    {
+      "source": "/go/mobilebet-2/",
+      "destination": "https://media.mobilebet.com/tracking.php?tracking_code&aid=107051&mid=2349&sid=363569&pid=744",
+      "permanent": false
+    },
+    {
+      "source": "/go/lightning-casino",
+      "destination": "https://media.lightningcasino.io/redirect.aspx?pid=4482&lpid=40&bid=1540",
+      "permanent": false
+    },
+    {
+      "source": "/go/lightning-casino/",
+      "destination": "https://media.lightningcasino.io/redirect.aspx?pid=4482&lpid=40&bid=1540",
+      "permanent": false
+    },
+    {
+      "source": "/go/vegadream",
+      "destination": "https://record.vegaffiliates.com/_AAhevloBXaDUOsjNOfgKeWNd7ZgqdRLk/4490/",
+      "permanent": false
+    },
+    {
+      "source": "/go/vegadream/",
+      "destination": "https://record.vegaffiliates.com/_AAhevloBXaDUOsjNOfgKeWNd7ZgqdRLk/4490/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slot-paradise",
+      "destination": "https://record.grandeaffiliates.com/_V9mibdBPNQFqkvbhkiKqDGNd7ZgqdRLk/6532/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slot-paradise/",
+      "destination": "https://record.grandeaffiliates.com/_V9mibdBPNQFqkvbhkiKqDGNd7ZgqdRLk/6532/",
+      "permanent": false
+    },
+    {
+      "source": "/go/foggystar",
+      "destination": "https://foggylink.com/d8164b3a4",
+      "permanent": false
+    },
+    {
+      "source": "/go/foggystar/",
+      "destination": "https://foggylink.com/d8164b3a4",
+      "permanent": false
+    },
+    {
+      "source": "/go/streambetz",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=932321aa&bid=0a8c3114&chan=code1",
+      "permanent": false
+    },
+    {
+      "source": "/go/streambetz/",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=932321aa&bid=0a8c3114&chan=code1",
+      "permanent": false
+    },
+    {
+      "source": "/go/1clickwin",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=c616df30&bid=fd9fe28d&chan=code1",
+      "permanent": false
+    },
+    {
+      "source": "/go/1clickwin/",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=c616df30&bid=fd9fe28d&chan=code1",
+      "permanent": false
+    },
+    {
+      "source": "/go/jupi-casino",
+      "destination": "https://go.yourgalaxypartners.com/visit/?bta=35395&nci=5349&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/jupi-casino/",
+      "destination": "https://go.yourgalaxypartners.com/visit/?bta=35395&nci=5349&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bonusbet",
+      "destination": "https://go.bonusbetpartners.com/visit/?bta=35196&nci=5383&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bonusbet/",
+      "destination": "https://go.bonusbetpartners.com/visit/?bta=35196&nci=5383&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/palmslots",
+      "destination": "https://track.trafficflowpartners.com/visit/?bta=35601&nci=5360&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/palmslots/",
+      "destination": "https://track.trafficflowpartners.com/visit/?bta=35601&nci=5360&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bitbet24",
+      "destination": "https://m.gamingpoint.co/Redirect.aspx?mid=23&sid=744&cid=&pid=&affid=277",
+      "permanent": false
+    },
+    {
+      "source": "/go/bitbet24/",
+      "destination": "https://m.gamingpoint.co/Redirect.aspx?mid=23&sid=744&cid=&pid=&affid=277",
+      "permanent": false
+    },
+    {
+      "source": "/go/21luckybet",
+      "destination": "https://m.gamingpoint.co/Redirect.aspx?mid=8&sid=745&cid=&pid=&affid=276",
+      "permanent": false
+    },
+    {
+      "source": "/go/21luckybet/",
+      "destination": "https://m.gamingpoint.co/Redirect.aspx?mid=8&sid=745&cid=&pid=&affid=276",
+      "permanent": false
+    },
+    {
+      "source": "/go/luckywilds",
+      "destination": "https://ads.luckywilds.com/C.ashx?btag=a_1101b_22c_&affid=381&siteid=1101&adid=22&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/luckywilds/",
+      "destination": "https://ads.luckywilds.com/C.ashx?btag=a_1101b_22c_&affid=381&siteid=1101&adid=22&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/31bet",
+      "destination": "https://go.affision.com/visit/?bta=35738&nci=5435&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/31bet/",
+      "destination": "https://go.affision.com/visit/?bta=35738&nci=5435&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/winners-bet",
+      "destination": "https://record.partners-winners.bet/_QwIa9al6N4TUOsjNOfgKeWNd7ZgqdRLk/6217/",
+      "permanent": false
+    },
+    {
+      "source": "/go/winners-bet/",
+      "destination": "https://record.partners-winners.bet/_QwIa9al6N4TUOsjNOfgKeWNd7ZgqdRLk/6217/",
+      "permanent": false
+    },
+    {
+      "source": "/go/big5casino",
+      "destination": "https://big5casino.com/deep/player--register/mediaCode/big5/affiliate/22956",
+      "permanent": false
+    },
+    {
+      "source": "/go/big5casino/",
+      "destination": "https://big5casino.com/deep/player--register/mediaCode/big5/affiliate/22956",
+      "permanent": false
+    },
+    {
+      "source": "/go/solospins",
+      "destination": "https://m.highrevenuepartners.com/Redirect.aspx?mid=27&sid=263&cid=&pid=&affid=114",
+      "permanent": false
+    },
+    {
+      "source": "/go/solospins/",
+      "destination": "https://m.highrevenuepartners.com/Redirect.aspx?mid=27&sid=263&cid=&pid=&affid=114",
+      "permanent": false
+    },
+    {
+      "source": "/go/vasy-casino",
+      "destination": "https://aff-ads.vasycasino.com/text/a1e4d6cb005840000063000016000005000001000002",
+      "permanent": false
+    },
+    {
+      "source": "/go/vasy-casino/",
+      "destination": "https://aff-ads.vasycasino.com/text/a1e4d6cb005840000063000016000005000001000002",
+      "permanent": false
+    },
+    {
+      "source": "/go/polestarcasino",
+      "destination": "https://m.affiliatesdiv.com/Redirect.aspx?mid=9&sid=187&cid=&pid=&affid=97",
+      "permanent": false
+    },
+    {
+      "source": "/go/polestarcasino/",
+      "destination": "https://m.affiliatesdiv.com/Redirect.aspx?mid=9&sid=187&cid=&pid=&affid=97",
+      "permanent": false
+    },
+    {
+      "source": "/go/power-up",
+      "destination": "https://media1.powerup-partners.com/redirect.aspx?pid=2294&bid=1579",
+      "permanent": false
+    },
+    {
+      "source": "/go/power-up/",
+      "destination": "https://media1.powerup-partners.com/redirect.aspx?pid=2294&bid=1579",
+      "permanent": false
+    },
+    {
+      "source": "/go/berry-casino",
+      "destination": "https://berrycasinomedia.com/a7fbaaccc",
+      "permanent": false
+    },
+    {
+      "source": "/go/berry-casino/",
+      "destination": "https://berrycasinomedia.com/a7fbaaccc",
+      "permanent": false
+    },
+    {
+      "source": "/go/quick-slot",
+      "destination": "https://record.grandeaffiliates.com/_wRw6f5oFFFFD3TEmsPWI0WNd7ZgqdRLk/5923/",
+      "permanent": false
+    },
+    {
+      "source": "/go/quick-slot/",
+      "destination": "https://record.grandeaffiliates.com/_wRw6f5oFFFFD3TEmsPWI0WNd7ZgqdRLk/5923/",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinodep",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=f75b084c&bid=c1157d33&chan=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinodep/",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=f75b084c&bid=c1157d33&chan=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/topkasino",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1091b_46c_&affid=287&siteid=1091&adid=46&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/topkasino/",
+      "destination": "https://oneupengine.com/C.ashx?btag=a_1091b_46c_&affid=287&siteid=1091&adid=46&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinofest-2",
+      "destination": "https://afftrackcf.21.partners/C.ashx?btag=a_15705b_1099c_&affid=3651&siteid=15705&adid=1099&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinofest-2/",
+      "destination": "https://afftrackcf.21.partners/C.ashx?btag=a_15705b_1099c_&affid=3651&siteid=15705&adid=1099&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/wunderwins",
+      "destination": "https://record.wunderaffiliates.com/_MOjr18JvkXbUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/wunderwins/",
+      "destination": "https://record.wunderaffiliates.com/_MOjr18JvkXbUOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/one-step-casino",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_10605b_3505c_&affid=2539&siteid=10605&adid=3505&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/one-step-casino/",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_10605b_3505c_&affid=2539&siteid=10605&adid=3505&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/trickz",
+      "destination": "https://go.spinwise.partners/visit/?bta=35177&brand=trickz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/trickz/",
+      "destination": "https://go.spinwise.partners/visit/?bta=35177&brand=trickz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinofest",
+      "destination": "https://afftrackcf.21.partners/C.ashx?btag=a_15705b_1099c_&affid=3651&siteid=15705&adid=1099&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinofest/",
+      "destination": "https://afftrackcf.21.partners/C.ashx?btag=a_15705b_1099c_&affid=3651&siteid=15705&adid=1099&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/scatters",
+      "destination": "https://record.featureaffiliates.com/_f3hi6FkypLHrlxqzB3jwBmNd7ZgqdRLk/4351/",
+      "permanent": false
+    },
+    {
+      "source": "/go/scatters/",
+      "destination": "https://record.featureaffiliates.com/_f3hi6FkypLHrlxqzB3jwBmNd7ZgqdRLk/4351/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotbox",
+      "destination": "https://record.coastlineaffiliates.com/_2BSkOQpKavmUcyqUL4Bc9GNd7ZgqdRLk/5542/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotbox/",
+      "destination": "https://record.coastlineaffiliates.com/_2BSkOQpKavmUcyqUL4Bc9GNd7ZgqdRLk/5542/",
+      "permanent": false
+    },
+    {
+      "source": "/go/boom-casino",
+      "destination": "https://media.heroaffiliates.com/redirect.aspx?pid=281083&bid=3856",
+      "permanent": false
+    },
+    {
+      "source": "/go/boom-casino/",
+      "destination": "https://media.heroaffiliates.com/redirect.aspx?pid=281083&bid=3856",
+      "permanent": false
+    },
+    {
+      "source": "/go/norppa-kasino",
+      "destination": "https://go.doubledoubleup.com/visit/?bta=35702&brand=norppakasino&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/norppa-kasino/",
+      "destination": "https://go.doubledoubleup.com/visit/?bta=35702&brand=norppakasino&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/bingobonga",
+      "destination": "https://bingotraff.com/g5f899ab4",
+      "permanent": false
+    },
+    {
+      "source": "/go/bingobonga/",
+      "destination": "https://bingotraff.com/g5f899ab4",
+      "permanent": false
+    },
+    {
+      "source": "/go/casilime-2",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_25225b_717c_&affid=5068&siteid=25225&adid=717&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casilime-2/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_25225b_717c_&affid=5068&siteid=25225&adid=717&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casilime",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_25225b_717c_&affid=5068&siteid=25225&adid=717&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casilime/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_25225b_717c_&affid=5068&siteid=25225&adid=717&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/highroller-kasino",
+      "destination": "https://track.affroller.com/visit/?bta=35897&nci=5345&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/highroller-kasino/",
+      "destination": "https://track.affroller.com/visit/?bta=35897&nci=5345&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/gamblii",
+      "destination": "https://gamblii.com/?affid=31051&campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/gamblii/",
+      "destination": "https://gamblii.com/?affid=31051&campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsflix",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_24795b_709c_&affid=4986&siteid=24795&adid=709&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsflix/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_24795b_709c_&affid=4986&siteid=24795&adid=709&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsnplay",
+      "destination": "https://m.slotsnplay.com/Redirect.aspx?mid=1&sid=351&cid=&pid=&affid=215",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotsnplay/",
+      "destination": "https://m.slotsnplay.com/Redirect.aspx?mid=1&sid=351&cid=&pid=&affid=215",
+      "permanent": false
+    },
+    {
+      "source": "/go/chipz",
+      "destination": "https://go.rootzaffiliates.com/visit/?bta=901676&brand=chipz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/chipz/",
+      "destination": "https://go.rootzaffiliates.com/visit/?bta=901676&brand=chipz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/tournaverse",
+      "destination": "https://www.tournaverse.com/deep/player--register/mediaCode/textlink/affiliate/41958",
+      "permanent": false
+    },
+    {
+      "source": "/go/tournaverse/",
+      "destination": "https://www.tournaverse.com/deep/player--register/mediaCode/textlink/affiliate/41958",
+      "permanent": false
+    },
+    {
+      "source": "/go/bb-casino",
+      "destination": "https://winningpartner.com:26134/links/redirect/5d9e014c-2cf6-4052-bdc3-ac9b83880ac8",
+      "permanent": false
+    },
+    {
+      "source": "/go/bb-casino/",
+      "destination": "https://winningpartner.com:26134/links/redirect/5d9e014c-2cf6-4052-bdc3-ac9b83880ac8",
+      "permanent": false
+    },
+    {
+      "source": "/go/dolcevita",
+      "destination": "https://dolcevitacasino.link/dee5ac64d",
+      "permanent": false
+    },
+    {
+      "source": "/go/dolcevita/",
+      "destination": "https://dolcevitacasino.link/dee5ac64d",
+      "permanent": false
+    },
+    {
+      "source": "/go/beem-casino",
+      "destination": "https://beemaffiliates3.com/a86a81624",
+      "permanent": false
+    },
+    {
+      "source": "/go/beem-casino/",
+      "destination": "https://beemaffiliates3.com/a86a81624",
+      "permanent": false
+    },
+    {
+      "source": "/go/joker-io",
+      "destination": "https://record.njordaffiliates.com/_i47O9z8E3ZtiHMh1Fo8vcmNd7ZgqdRLk/5681/",
+      "permanent": false
+    },
+    {
+      "source": "/go/joker-io/",
+      "destination": "https://record.njordaffiliates.com/_i47O9z8E3ZtiHMh1Fo8vcmNd7ZgqdRLk/5681/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betti",
+      "destination": "https://record.bettiaffiliates.com/_Kiv3jMGo2AYOMRDMpvVHzmNd7ZgqdRLk/4309/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betti/",
+      "destination": "https://record.bettiaffiliates.com/_Kiv3jMGo2AYOMRDMpvVHzmNd7ZgqdRLk/4309/",
+      "permanent": false
+    },
+    {
+      "source": "/go/posido",
+      "destination": "https://ps.lp247p.com/C.ashx?btag=a_6802b_1464c_&affid=1668&siteid=6802&adid=1464&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/posido/",
+      "destination": "https://ps.lp247p.com/C.ashx?btag=a_6802b_1464c_&affid=1668&siteid=6802&adid=1464&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/stakezon",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=cb8a0a57&bid=7e1df018&chan=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/stakezon/",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=cb8a0a57&bid=7e1df018&chan=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/millonaria",
+      "destination": "https://play2m.com/a0da1e066",
+      "permanent": false
+    },
+    {
+      "source": "/go/millonaria/",
+      "destination": "https://play2m.com/a0da1e066",
+      "permanent": false
+    },
+    {
+      "source": "/go/wombet",
+      "destination": "https://wombet.com/?faff=199&sub=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/wombet/",
+      "destination": "https://wombet.com/?faff=199&sub=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/simsino",
+      "destination": "https://record.simsinopartners.com/_H52_5jMDmfDUOsjNOfgKeWNd7ZgqdRLk/5470/",
+      "permanent": false
+    },
+    {
+      "source": "/go/simsino/",
+      "destination": "https://record.simsinopartners.com/_H52_5jMDmfDUOsjNOfgKeWNd7ZgqdRLk/5470/",
+      "permanent": false
+    },
+    {
+      "source": "/go/greatwin",
+      "destination": "https://awbba.zetcasino.com/redirect.aspx?pid=1357966&bid=7081",
+      "permanent": false
+    },
+    {
+      "source": "/go/greatwin/",
+      "destination": "https://awbba.zetcasino.com/redirect.aspx?pid=1357966&bid=7081",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-spins",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=5878&bid=1884&lpid=142",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-spins/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=5878&bid=1884&lpid=142",
+      "permanent": false
+    },
+    {
+      "source": "/go/winhalla",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=43f00311&bid=888b2104&chan=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/winhalla/",
+      "destination": "https://www.btagmaster.com/scripts/2897dc7dqy?btag=43f00311&bid=888b2104&chan=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/winnerz",
+      "destination": "https://click.winnerz.partners/afs/come.php?id=1213&cid=8333&atype=1&ctgid=100",
+      "permanent": false
+    },
+    {
+      "source": "/go/winnerz/",
+      "destination": "https://click.winnerz.partners/afs/come.php?id=1213&cid=8333&atype=1&ctgid=100",
+      "permanent": false
+    },
+    {
+      "source": "/go/doggo",
+      "destination": "https://go.doubledoubleup.com/visit/?bta=35314&nci=5369&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/doggo/",
+      "destination": "https://go.doubledoubleup.com/visit/?bta=35314&nci=5369&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinni",
+      "destination": "https://ivytracking.com/track/cafbf021-7c45-4391-bf4f-3204e4b420d0?type=social&s2=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinni/",
+      "destination": "https://ivytracking.com/track/cafbf021-7c45-4391-bf4f-3204e4b420d0?type=social&s2=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinz",
+      "destination": "https://go.rootzaffiliates.com/visit/?bta=901212&brand=spinz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinz/",
+      "destination": "https://go.rootzaffiliates.com/visit/?bta=901212&brand=spinz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/flaming-casino",
+      "destination": "https://record.rantaffiliates.com/_CnQQkTMQLl9ZSuvhn4yj1mNd7ZgqdRLk/5099/",
+      "permanent": false
+    },
+    {
+      "source": "/go/flaming-casino/",
+      "destination": "https://record.rantaffiliates.com/_CnQQkTMQLl9ZSuvhn4yj1mNd7ZgqdRLk/5099/",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrluck",
+      "destination": "https://casino.mrluck.com/Redirect.aspx?mid=2&sid=166&cid=&pid=&affid=102",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrluck/",
+      "destination": "https://casino.mrluck.com/Redirect.aspx?mid=2&sid=166&cid=&pid=&affid=102",
+      "permanent": false
+    },
+    {
+      "source": "/go/dbosses",
+      "destination": "https://record.crazeaffiliates.com/_bUA72oUz2a_kvWkMXluei2Nd7ZgqdRLk/5056/",
+      "permanent": false
+    },
+    {
+      "source": "/go/dbosses/",
+      "destination": "https://record.crazeaffiliates.com/_bUA72oUz2a_kvWkMXluei2Nd7ZgqdRLk/5056/",
+      "permanent": false
+    },
+    {
+      "source": "/go/buumi",
+      "destination": "https://record.njordaffiliates.com/_1pVWa1C9MLIOMRDMpvVHzmNd7ZgqdRLk/5030/",
+      "permanent": false
+    },
+    {
+      "source": "/go/buumi/",
+      "destination": "https://record.njordaffiliates.com/_1pVWa1C9MLIOMRDMpvVHzmNd7ZgqdRLk/5030/",
+      "permanent": false
+    },
+    {
+      "source": "/go/zinkra",
+      "destination": "https://record.zinkra.com/_dJ7k_p857JbUOsjNOfgKeWNd7ZgqdRLk/5014/",
+      "permanent": false
+    },
+    {
+      "source": "/go/zinkra/",
+      "destination": "https://record.zinkra.com/_dJ7k_p857JbUOsjNOfgKeWNd7ZgqdRLk/5014/",
+      "permanent": false
+    },
+    {
+      "source": "/go/finlandia-casino",
+      "destination": "https://site.finlandiacasino.com/index.php?aname=matchfin002&zone_id=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/finlandia-casino/",
+      "destination": "https://site.finlandiacasino.com/index.php?aname=matchfin002&zone_id=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/helmicasino",
+      "destination": "https://marketing.helmicasino.com/C.ashx?btag=a_491b_12c_&affid=156&siteid=491&adid=12&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/helmicasino/",
+      "destination": "https://marketing.helmicasino.com/C.ashx?btag=a_491b_12c_&affid=156&siteid=491&adid=12&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/icecasino",
+      "destination": "https://icepromo.info/l/61f7ab9dcf24d572400903f2",
+      "permanent": false
+    },
+    {
+      "source": "/go/icecasino/",
+      "destination": "https://icepromo.info/l/61f7ab9dcf24d572400903f2",
+      "permanent": false
+    },
+    {
+      "source": "/go/vulkan-vegas",
+      "destination": "https://happywithvegas.com/l/60c2140138903c4d01615133",
+      "permanent": false
+    },
+    {
+      "source": "/go/vulkan-vegas/",
+      "destination": "https://happywithvegas.com/l/60c2140138903c4d01615133",
+      "permanent": false
+    },
+    {
+      "source": "/go/spin-casino",
+      "destination": "https://www.spincasino.com/fi/?s=bfp23652&a=bfpadid135018",
+      "permanent": false
+    },
+    {
+      "source": "/go/spin-casino/",
+      "destination": "https://www.spincasino.com/fi/?s=bfp23652&a=bfpadid135018",
+      "permanent": false
+    },
+    {
+      "source": "/go/galaksino-2",
+      "destination": "https://media.galaksino.com/tracking.php?tracking_code&aid=111375&mid=3331&sid=408091&pid=1069",
+      "permanent": false
+    },
+    {
+      "source": "/go/galaksino-2/",
+      "destination": "https://media.galaksino.com/tracking.php?tracking_code&aid=111375&mid=3331&sid=408091&pid=1069",
+      "permanent": false
+    },
+    {
+      "source": "/go/slothunter",
+      "destination": "https://slothunterpartners.com/ae911af09",
+      "permanent": false
+    },
+    {
+      "source": "/go/slothunter/",
+      "destination": "https://slothunterpartners.com/ae911af09",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinouniverse",
+      "destination": "https://junicpartners.net/a9c29fcfc",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinouniverse/",
+      "destination": "https://junicpartners.net/a9c29fcfc",
+      "permanent": false
+    },
+    {
+      "source": "/go/dolly",
+      "destination": "https://media.kongaffiliates.com/redirect.aspx?pid=2293&bid=1482",
+      "permanent": false
+    },
+    {
+      "source": "/go/dolly/",
+      "destination": "https://media.kongaffiliates.com/redirect.aspx?pid=2293&bid=1482",
+      "permanent": false
+    },
+    {
+      "source": "/go/buusti",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=4466&bid=1815",
+      "permanent": false
+    },
+    {
+      "source": "/go/buusti/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=4466&bid=1815",
+      "permanent": false
+    },
+    {
+      "source": "/go/reload-casino",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_21573b_674c_&affid=3241&siteid=21573&adid=674&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/reload-casino/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_21573b_674c_&affid=3241&siteid=21573&adid=674&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/cashback-kasino",
+      "destination": "https://wlcashbackkasino.adsrv.eacdn.com/C.ashx?btag=a_25443b_2618c_&affid=8798&siteid=25443&adid=2618&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/cashback-kasino/",
+      "destination": "https://wlcashbackkasino.adsrv.eacdn.com/C.ashx?btag=a_25443b_2618c_&affid=8798&siteid=25443&adid=2618&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/playerz",
+      "destination": "https://playerz.tracking-genesisaffiliates.com/redirect.aspx?pid=231951&bid=9467",
+      "permanent": false
+    },
+    {
+      "source": "/go/playerz/",
+      "destination": "https://playerz.tracking-genesisaffiliates.com/redirect.aspx?pid=231951&bid=9467",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinodays-2",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=2260&bid=1484",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinodays-2/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=2260&bid=1484",
+      "permanent": false
+    },
+    {
+      "source": "/go/luckybull",
+      "destination": "https://www.luckybull.com/deep/player--register/mediaCode/textlink/affiliate/42692",
+      "permanent": false
+    },
+    {
+      "source": "/go/luckybull/",
+      "destination": "https://www.luckybull.com/deep/player--register/mediaCode/textlink/affiliate/42692",
+      "permanent": false
+    },
+    {
+      "source": "/go/millionpot",
+      "destination": "https://rewrdtracker.com/trk/click?aid=522F&cid=25508&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/millionpot/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=522F&cid=25508&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/playouwin",
+      "destination": "https://rewrdtracker.com/trk/click?aid=522E&cid=25697&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/playouwin/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=522E&cid=25697&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/allin",
+      "destination": "https://marketing.allincasino.com/C.ashx?btag=a_91b_5c_&affid=17&siteid=91&adid=5&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/allin/",
+      "destination": "https://marketing.allincasino.com/C.ashx?btag=a_91b_5c_&affid=17&siteid=91&adid=5&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/n1-casino",
+      "destination": "https://partnerscontents.com/ab873ddc6",
+      "permanent": false
+    },
+    {
+      "source": "/go/n1-casino/",
+      "destination": "https://partnerscontents.com/ab873ddc6",
+      "permanent": false
+    },
+    {
+      "source": "/go/refuel",
+      "destination": "https://record.79affiliates.com/_19WjMxG4QvTKto_EPcZApGNd7ZgqdRLk/4/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/refuel/",
+      "destination": "https://record.79affiliates.com/_19WjMxG4QvTKto_EPcZApGNd7ZgqdRLk/4/?pg=0",
+      "permanent": false
+    },
+    {
+      "source": "/go/ohmyspins",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5Zq&cid=27482&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/ohmyspins/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5Zq&cid=27482&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/amok",
+      "destination": "https://record.79affiliates.com/_ZI3ywsThnVG2bnhOaaLAUmNd7ZgqdRLk/4684/",
+      "permanent": false
+    },
+    {
+      "source": "/go/amok/",
+      "destination": "https://record.79affiliates.com/_ZI3ywsThnVG2bnhOaaLAUmNd7ZgqdRLk/4684/",
+      "permanent": false
+    },
+    {
+      "source": "/go/test",
+      "destination": "https://inbanner.com/hc/91/tkb4ca9ea4//locale:fi_FI/currency:EUR/aff:aHR0cHM6Ly9rYXNpbm90aWxtYW5yZWtpc3Rlcm9pdHltaXN0YS5jb20vZ28vZXhwZWt0Lw==",
+      "permanent": false
+    },
+    {
+      "source": "/go/test/",
+      "destination": "https://inbanner.com/hc/91/tkb4ca9ea4//locale:fi_FI/currency:EUR/aff:aHR0cHM6Ly9rYXNpbm90aWxtYW5yZWtpc3Rlcm9pdHltaXN0YS5jb20vZ28vZXhwZWt0Lw==",
+      "permanent": false
+    },
+    {
+      "source": "/go/mozzart",
+      "destination": "https://media.mozzartaffiliates.com/redirect.aspx?pid=2753&lpid=32&bid=1662",
+      "permanent": false
+    },
+    {
+      "source": "/go/mozzart/",
+      "destination": "https://media.mozzartaffiliates.com/redirect.aspx?pid=2753&lpid=32&bid=1662",
+      "permanent": false
+    },
+    {
+      "source": "/go/stake",
+      "destination": "https://stake.com/registration?c=kir&entry=welcome200",
+      "permanent": false
+    },
+    {
+      "source": "/go/stake/",
+      "destination": "https://stake.com/registration?c=kir&entry=welcome200",
+      "permanent": false
+    },
+    {
+      "source": "/go/betmaster",
+      "destination": "https://record.affiliatesbm2.com/_qXVg0Ls6O4f2Bt63Rqn6jGNd7ZgqdRLk/4673/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betmaster/",
+      "destination": "https://record.affiliatesbm2.com/_qXVg0Ls6O4f2Bt63Rqn6jGNd7ZgqdRLk/4673/",
+      "permanent": false
+    },
+    {
+      "source": "/go/livecasino",
+      "destination": "https://ads.leovegas.com/redirect.aspx?pid=3703165&bid=16392",
+      "permanent": false
+    },
+    {
+      "source": "/go/livecasino/",
+      "destination": "https://ads.leovegas.com/redirect.aspx?pid=3703165&bid=16392",
+      "permanent": false
+    },
+    {
+      "source": "/go/rapid-casino",
+      "destination": "https://afftrackrc.21.partners/C.ashx?btag=a_12927b_793c_&affid=2909&siteid=12927&adid=793&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/rapid-casino/",
+      "destination": "https://afftrackrc.21.partners/C.ashx?btag=a_12927b_793c_&affid=2909&siteid=12927&adid=793&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrgreen-3",
+      "destination": "http://ads.mrgreen.com/redirect.aspx?pid=4080127&bid=2534",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrgreen-3/",
+      "destination": "http://ads.mrgreen.com/redirect.aspx?pid=4080127&bid=2534",
+      "permanent": false
+    },
+    {
+      "source": "/go/pipe-casino",
+      "destination": "https://affops.media/aa6d1c42a",
+      "permanent": false
+    },
+    {
+      "source": "/go/pipe-casino/",
+      "destination": "https://affops.media/aa6d1c42a",
+      "permanent": false
+    },
+    {
+      "source": "/go/neon54",
+      "destination": "https://media.neon54.com/redirect.aspx?pid=2040055&bid=8338",
+      "permanent": false
+    },
+    {
+      "source": "/go/neon54/",
+      "destination": "https://media.neon54.com/redirect.aspx?pid=2040055&bid=8338",
+      "permanent": false
+    },
+    {
+      "source": "/go/samosa",
+      "destination": "https://samosamedia.net/a62a06adb",
+      "permanent": false
+    },
+    {
+      "source": "/go/samosa/",
+      "destination": "https://samosamedia.net/a62a06adb",
+      "permanent": false
+    },
+    {
+      "source": "/go/campeonbet",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_4147b_1548c_&affid=1621&siteid=4147&adid=1548&c=fi",
+      "permanent": false
+    },
+    {
+      "source": "/go/campeonbet/",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_4147b_1548c_&affid=1621&siteid=4147&adid=1548&c=fi",
+      "permanent": false
+    },
+    {
+      "source": "/go/stelario",
+      "destination": "https://record.joinaff.com/_1qYzEcEUiT67thU_yms0JGNd7ZgqdRLk/4558/",
+      "permanent": false
+    },
+    {
+      "source": "/go/stelario/",
+      "destination": "https://record.joinaff.com/_1qYzEcEUiT67thU_yms0JGNd7ZgqdRLk/4558/",
+      "permanent": false
+    },
+    {
+      "source": "/go/koicasino",
+      "destination": "https://record.njordaffiliates.com/_dvSloAVZwx_UOsjNOfgKeWNd7ZgqdRLk/4513/",
+      "permanent": false
+    },
+    {
+      "source": "/go/koicasino/",
+      "destination": "https://record.njordaffiliates.com/_dvSloAVZwx_UOsjNOfgKeWNd7ZgqdRLk/4513/",
+      "permanent": false
+    },
+    {
+      "source": "/go/premier-casino",
+      "destination": "https://media.highaffiliates.com/redirect.aspx?pid=5569&bid=1641",
+      "permanent": false
+    },
+    {
+      "source": "/go/premier-casino/",
+      "destination": "https://media.highaffiliates.com/redirect.aspx?pid=5569&bid=1641",
+      "permanent": false
+    },
+    {
+      "source": "/go/vegasoo",
+      "destination": "https://Vegasoo.tracking-genesisaffiliates.com/redirect.aspx?pid=227986&bid=9270",
+      "permanent": false
+    },
+    {
+      "source": "/go/vegasoo/",
+      "destination": "https://Vegasoo.tracking-genesisaffiliates.com/redirect.aspx?pid=227986&bid=9270",
+      "permanent": false
+    },
+    {
+      "source": "/go/kanuuana",
+      "destination": "https://go.affiliatexe.com/visit/?bta=35642&nci=5699&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/kanuuana/",
+      "destination": "https://go.affiliatexe.com/visit/?bta=35642&nci=5699&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/barz",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_20072b_632c_&affid=4156&siteid=20072&adid=632&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/barz/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_20072b_632c_&affid=4156&siteid=20072&adid=632&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-elektra",
+      "destination": "https://wlholapartners.adsrv.eacdn.com/C.ashx?btag=a_242b_62c_&affid=50&siteid=242&adid=62&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-elektra/",
+      "destination": "https://wlholapartners.adsrv.eacdn.com/C.ashx?btag=a_242b_62c_&affid=50&siteid=242&adid=62&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/jaak",
+      "destination": "http://wlsecretslots.adsrv.eacdn.com/C.ashx?btag=a_1755b_904c_&affid=654&siteid=1755&adid=904&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/jaak/",
+      "destination": "http://wlsecretslots.adsrv.eacdn.com/C.ashx?btag=a_1755b_904c_&affid=654&siteid=1755&adid=904&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/vesper-casino",
+      "destination": "https://n.clm.best/id/60e6e155cde9a/7e411f2c.html",
+      "permanent": false
+    },
+    {
+      "source": "/go/vesper-casino/",
+      "destination": "https://n.clm.best/id/60e6e155cde9a/7e411f2c.html",
+      "permanent": false
+    },
+    {
+      "source": "/go/kosmonaut",
+      "destination": "https://kosmonautcasinopartners.org/a0bb98d97",
+      "permanent": false
+    },
+    {
+      "source": "/go/kosmonaut/",
+      "destination": "https://kosmonautcasinopartners.org/a0bb98d97",
+      "permanent": false
+    },
+    {
+      "source": "/go/burningbet",
+      "destination": "https://record.joinaff.com/_0wZuVaCNRDY9nxoLbfIufGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/burningbet/",
+      "destination": "https://record.joinaff.com/_0wZuVaCNRDY9nxoLbfIufGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotkingcasino",
+      "destination": "https://mithiaffiliates.click/o/klOVZm?lpage=BAZ6CX",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotkingcasino/",
+      "destination": "https://mithiaffiliates.click/o/klOVZm?lpage=BAZ6CX",
+      "permanent": false
+    },
+    {
+      "source": "/go/wolfy",
+      "destination": "https://record.bogaffiliates.com/v2/text/39/75/1b65cc33-9d2f-11eb-8c9b-9e68b3064bb6/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/wolfy/",
+      "destination": "https://record.bogaffiliates.com/v2/text/39/75/1b65cc33-9d2f-11eb-8c9b-9e68b3064bb6/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/cosmicslot",
+      "destination": "https://m.peaky.partners/redirect.aspx?mid=17&sid=442&cid=&pid=&affid=234",
+      "permanent": false
+    },
+    {
+      "source": "/go/cosmicslot/",
+      "destination": "https://m.peaky.partners/redirect.aspx?mid=17&sid=442&cid=&pid=&affid=234",
+      "permanent": false
+    },
+    {
+      "source": "/go/expekt",
+      "destination": "https://ads.expekt.se/redirect.aspx?pid=3705332&lpid=1255&bid=17147",
+      "permanent": false
+    },
+    {
+      "source": "/go/expekt/",
+      "destination": "https://ads.expekt.se/redirect.aspx?pid=3705332&lpid=1255&bid=17147",
+      "permanent": false
+    },
+    {
+      "source": "/go/supremo",
+      "destination": "https://record.supremoaffiliates.com/_vGfqLT0Xwv3Kto_EPcZApGNd7ZgqdRLk/4241/",
+      "permanent": false
+    },
+    {
+      "source": "/go/supremo/",
+      "destination": "https://record.supremoaffiliates.com/_vGfqLT0Xwv3Kto_EPcZApGNd7ZgqdRLk/4241/",
+      "permanent": false
+    },
+    {
+      "source": "/go/kakadu",
+      "destination": "https://casinokakadu.org/a97a70e88",
+      "permanent": false
+    },
+    {
+      "source": "/go/kakadu/",
+      "destination": "https://casinokakadu.org/a97a70e88",
+      "permanent": false
+    },
+    {
+      "source": "/go/twicedice",
+      "destination": "https://www.twicedice.com/affiliates/?btag=495993_l132715",
+      "permanent": false
+    },
+    {
+      "source": "/go/twicedice/",
+      "destination": "https://www.twicedice.com/affiliates/?btag=495993_l132715",
+      "permanent": false
+    },
+    {
+      "source": "/go/high5casino",
+      "destination": "https://wlhigh5affiliates.adsrv.eacdn.com/C.ashx?btag=a_212b_190c_&affid=111&siteid=212&adid=190&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/high5casino/",
+      "destination": "https://wlhigh5affiliates.adsrv.eacdn.com/C.ashx?btag=a_212b_190c_&affid=111&siteid=212&adid=190&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-masters",
+      "destination": "https://casinomasters.tracking-genesisaffiliates.com/redirect.aspx?pid=225438&bid=9079",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-masters/",
+      "destination": "https://casinomasters.tracking-genesisaffiliates.com/redirect.aspx?pid=225438&bid=9079",
+      "permanent": false
+    },
+    {
+      "source": "/go/crazyfox",
+      "destination": "https://atraff.com/?serial=11839&creative_id=934&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/crazyfox/",
+      "destination": "https://atraff.com/?serial=11839&creative_id=934&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/betive",
+      "destination": "https://wlbetive2.adsrv.eacdn.com/C.ashx?btag=a_24353b_2099c_&affid=8373&siteid=24353&adid=2099&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/betive/",
+      "destination": "https://wlbetive2.adsrv.eacdn.com/C.ashx?btag=a_24353b_2099c_&affid=8373&siteid=24353&adid=2099&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/sts",
+      "destination": "https://record.stsaffiliates.com/__u0mvkuwHT8i9yoH_R9r0mNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/sts/",
+      "destination": "https://record.stsaffiliates.com/__u0mvkuwHT8i9yoH_R9r0mNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/playclub",
+      "destination": "https://go.playclub.com/promoRedirect?key=ej0xMzU2NzgzMCZsPTEzNTY3ODI3JnA9MzY3OTE%3D",
+      "permanent": false
+    },
+    {
+      "source": "/go/playclub/",
+      "destination": "https://go.playclub.com/promoRedirect?key=ej0xMzU2NzgzMCZsPTEzNTY3ODI3JnA9MzY3OTE%3D",
+      "permanent": false
+    },
+    {
+      "source": "/go/aurum-palace",
+      "destination": "https://tracker-pm2.affpalace.com/link?btag=5579739_128981",
+      "permanent": false
+    },
+    {
+      "source": "/go/aurum-palace/",
+      "destination": "https://tracker-pm2.affpalace.com/link?btag=5579739_128981",
+      "permanent": false
+    },
+    {
+      "source": "/go/nitro-casino",
+      "destination": "https://afftracknc.21.partners/C.ashx?btag=a_5996b_595c_&affid=1564&siteid=5996&adid=595&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/nitro-casino/",
+      "destination": "https://afftracknc.21.partners/C.ashx?btag=a_5996b_595c_&affid=1564&siteid=5996&adid=595&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinobuck",
+      "destination": "https://casinobuckpartners.net/aad957e97",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinobuck/",
+      "destination": "https://casinobuckpartners.net/aad957e97",
+      "permanent": false
+    },
+    {
+      "source": "/go/skol",
+      "destination": "https://welcome.fullcreamaffiliates.com/afs/come.php?id=6331&cid=34225&atype=1&ctgid=1008",
+      "permanent": false
+    },
+    {
+      "source": "/go/skol/",
+      "destination": "https://welcome.fullcreamaffiliates.com/afs/come.php?id=6331&cid=34225&atype=1&ctgid=1008",
+      "permanent": false
+    },
+    {
+      "source": "/go/huikee",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_19306b_619c_&affid=3976&siteid=19306&adid=619&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/huikee/",
+      "destination": "https://ivyaffsolutions.com/C.ashx?btag=a_19306b_619c_&affid=3976&siteid=19306&adid=619&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/betinia",
+      "destination": "https://media.betinia.com/redirect.aspx?pid=1734864&bid=7098",
+      "permanent": false
+    },
+    {
+      "source": "/go/betinia/",
+      "destination": "https://media.betinia.com/redirect.aspx?pid=1734864&bid=7098",
+      "permanent": false
+    },
+    {
+      "source": "/go/gambola",
+      "destination": "https://go.spinwise.partners/visit/?bta=35177&brand=trickz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/gambola/",
+      "destination": "https://go.spinwise.partners/visit/?bta=35177&brand=trickz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinurai",
+      "destination": "https://media.gvgpartners.com/redirect.aspx?pid=3647&bid=1527",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinurai/",
+      "destination": "https://media.gvgpartners.com/redirect.aspx?pid=3647&bid=1527",
+      "permanent": false
+    },
+    {
+      "source": "/go/wildtokyo",
+      "destination": "https://wildredirect.com/d5e66f0e4",
+      "permanent": false
+    },
+    {
+      "source": "/go/wildtokyo/",
+      "destination": "https://wildredirect.com/d5e66f0e4",
+      "permanent": false
+    },
+    {
+      "source": "/go/wildz",
+      "destination": "https://go.rootzaffiliates.com/visit/?bta=100023&nci=5775&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/wildz/",
+      "destination": "https://go.rootzaffiliates.com/visit/?bta=100023&nci=5775&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/winners-magic",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5pw&cid=8571",
+      "permanent": false
+    },
+    {
+      "source": "/go/winners-magic/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5pw&cid=8571",
+      "permanent": false
+    },
+    {
+      "source": "/go/jackie-jackpot",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5pw&cid=2093",
+      "permanent": false
+    },
+    {
+      "source": "/go/jackie-jackpot/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5pw&cid=2093",
+      "permanent": false
+    },
+    {
+      "source": "/go/emucasino",
+      "destination": "https://record.platpartners.com/_aDGhaTZGamN0NlUPBLg0t2Nd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/emucasino/",
+      "destination": "https://record.platpartners.com/_aDGhaTZGamN0NlUPBLg0t2Nd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/jet",
+      "destination": "https://jetcasino.life/cb1bd0853",
+      "permanent": false
+    },
+    {
+      "source": "/go/jet/",
+      "destination": "https://jetcasino.life/cb1bd0853",
+      "permanent": false
+    },
+    {
+      "source": "/go/sol",
+      "destination": "https://solcasino.life/caaa0a9a8",
+      "permanent": false
+    },
+    {
+      "source": "/go/sol/",
+      "destination": "https://solcasino.life/caaa0a9a8",
+      "permanent": false
+    },
+    {
+      "source": "/go/super-seven",
+      "destination": "https://track.supersevenaffiliates.com/track/6e3aae21-80d2-4d5d-954c-56c6fc565272?type=ppc&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/super-seven/",
+      "destination": "https://track.supersevenaffiliates.com/track/6e3aae21-80d2-4d5d-954c-56c6fc565272?type=ppc&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/boka",
+      "destination": "https://boomerang1.com/?serial=558&creative_id=99&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/boka/",
+      "destination": "https://boomerang1.com/?serial=558&creative_id=99&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/wheelz",
+      "destination": "https://api.wheelzaffiliates.com/tracking.php?tracking_code&aid=102657&mid=4153&sid=21007&pid=22",
+      "permanent": false
+    },
+    {
+      "source": "/go/wheelz/",
+      "destination": "https://api.wheelzaffiliates.com/tracking.php?tracking_code&aid=102657&mid=4153&sid=21007&pid=22",
+      "permanent": false
+    },
+    {
+      "source": "/go/praise",
+      "destination": "https://media.praiseaffiliates.com/redirect.aspx?pid=2528&bid=1501",
+      "permanent": false
+    },
+    {
+      "source": "/go/praise/",
+      "destination": "https://media.praiseaffiliates.com/redirect.aspx?pid=2528&bid=1501",
+      "permanent": false
+    },
+    {
+      "source": "/go/casiqo",
+      "destination": "https://siqo.partners/a0f0efc58",
+      "permanent": false
+    },
+    {
+      "source": "/go/casiqo/",
+      "destination": "https://siqo.partners/a0f0efc58",
+      "permanent": false
+    },
+    {
+      "source": "/go/mr-vegas",
+      "destination": "https://affiliates.mrvegas.com/click/?aid=mrvegas-Matchvegas037&turl=https%3A%2F%2Fwww.mrvegas.com%2Ffi%3Freferral_id%3DMatchvegas037_FI&bid=no-banner&label=Matchvegas037_FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/mr-vegas/",
+      "destination": "https://affiliates.mrvegas.com/click/?aid=mrvegas-Matchvegas037&turl=https%3A%2F%2Fwww.mrvegas.com%2Ffi%3Freferral_id%3DMatchvegas037_FI&bid=no-banner&label=Matchvegas037_FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/winota",
+      "destination": "https://awbba.zetcasino.com/redirect.aspx?pid=1351065&bid=6783",
+      "permanent": false
+    },
+    {
+      "source": "/go/winota/",
+      "destination": "https://awbba.zetcasino.com/redirect.aspx?pid=1351065&bid=6783",
+      "permanent": false
+    },
+    {
+      "source": "/go/gate777",
+      "destination": "https://ads.gate777.com/redirect.aspx?pid=3508&bid=1692&lpid=42",
+      "permanent": false
+    },
+    {
+      "source": "/go/gate777/",
+      "destination": "https://ads.gate777.com/redirect.aspx?pid=3508&bid=1692&lpid=42",
+      "permanent": false
+    },
+    {
+      "source": "/go/locowin",
+      "destination": "https://aff-ads.locowin.com/v2/text/121/7/d4faf981-7d73-11ee-9fad-a299aa2f2057/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/locowin/",
+      "destination": "https://aff-ads.locowin.com/v2/text/121/7/d4faf981-7d73-11ee-9fad-a299aa2f2057/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/sugar-casino",
+      "destination": "http://aff-ads.sugarcasino.com/v2/text/123/3/d1d2e338-768c-11eb-8e43-0ef05b228359/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/sugar-casino/",
+      "destination": "http://aff-ads.sugarcasino.com/v2/text/123/3/d1d2e338-768c-11eb-8e43-0ef05b228359/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/evolve-2",
+      "destination": "https://aff-ads.evolvecasino.com/text/c4a9db35000461000005000001000001000001000001",
+      "permanent": false
+    },
+    {
+      "source": "/go/evolve-2/",
+      "destination": "https://aff-ads.evolvecasino.com/text/c4a9db35000461000005000001000001000001000001",
+      "permanent": false
+    },
+    {
+      "source": "/go/evolve",
+      "destination": "https://aff-ads.evolvecasino.com/text/c4a9db35000461000005000001000001000001000001",
+      "permanent": false
+    },
+    {
+      "source": "/go/evolve/",
+      "destination": "https://aff-ads.evolvecasino.com/text/c4a9db35000461000005000001000001000001000001",
+      "permanent": false
+    },
+    {
+      "source": "/go/wild-fortune",
+      "destination": "https://trackerfortune.com/aaae88859",
+      "permanent": false
+    },
+    {
+      "source": "/go/wild-fortune/",
+      "destination": "https://trackerfortune.com/aaae88859",
+      "permanent": false
+    },
+    {
+      "source": "/go/playluck",
+      "destination": "https://m.playluck.com/Redirect.aspx?mid=22&sid=1409&cid=&pid=&affid=459",
+      "permanent": false
+    },
+    {
+      "source": "/go/playluck/",
+      "destination": "https://m.playluck.com/Redirect.aspx?mid=22&sid=1409&cid=&pid=&affid=459",
+      "permanent": false
+    },
+    {
+      "source": "/go/luckyvegas",
+      "destination": "https://m.vegasfolks.com/Redirect.aspx?mid=33&sid=467&cid=FI&pid=&affid=199",
+      "permanent": false
+    },
+    {
+      "source": "/go/luckyvegas/",
+      "destination": "https://m.vegasfolks.com/Redirect.aspx?mid=33&sid=467&cid=FI&pid=&affid=199",
+      "permanent": false
+    },
+    {
+      "source": "/go/leovegas-banner",
+      "destination": "https://ads.leovegas.com/redirect.aspx?pid=3607800&bid=13186",
+      "permanent": false
+    },
+    {
+      "source": "/go/leovegas-banner/",
+      "destination": "https://ads.leovegas.com/redirect.aspx?pid=3607800&bid=13186",
+      "permanent": false
+    },
+    {
+      "source": "/go/klirr-banner",
+      "destination": "https://record.epic.partners/_98l10WquwEeYNevImT-MDGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/klirr-banner/",
+      "destination": "https://record.epic.partners/_98l10WquwEeYNevImT-MDGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/wazamba",
+      "destination": "https://media.wazamba.com/redirect.aspx?pid=1602313&bid=5393",
+      "permanent": false
+    },
+    {
+      "source": "/go/wazamba/",
+      "destination": "https://media.wazamba.com/redirect.aspx?pid=1602313&bid=5393",
+      "permanent": false
+    },
+    {
+      "source": "/go/kassu",
+      "destination": "https://kassu.tracking-genesisaffiliates.com/redirect.aspx?pid=188677&bid=7209",
+      "permanent": false
+    },
+    {
+      "source": "/go/kassu/",
+      "destination": "https://kassu.tracking-genesisaffiliates.com/redirect.aspx?pid=188677&bid=7209",
+      "permanent": false
+    },
+    {
+      "source": "/go/uberlucky",
+      "destination": "http://wltogethergaming.adsrv.eacdn.com/C.ashx?btag=a_22474b_2101c_&affid=6994&siteid=22474&adid=2101&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/uberlucky/",
+      "destination": "http://wltogethergaming.adsrv.eacdn.com/C.ashx?btag=a_22474b_2101c_&affid=6994&siteid=22474&adid=2101&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casombie",
+      "destination": "https://media.casombie.partners/redirect.aspx?pid=2279&bid=1477",
+      "permanent": false
+    },
+    {
+      "source": "/go/casombie/",
+      "destination": "https://media.casombie.partners/redirect.aspx?pid=2279&bid=1477",
+      "permanent": false
+    },
+    {
+      "source": "/go/hazcasino",
+      "destination": "https://www.hazcasino.com/?a_aid=wisegamb&data1=site1",
+      "permanent": false
+    },
+    {
+      "source": "/go/hazcasino/",
+      "destination": "https://www.hazcasino.com/?a_aid=wisegamb&data1=site1",
+      "permanent": false
+    },
+    {
+      "source": "/go/playtoro",
+      "destination": "https://go.playtoropartners.com/visit/?bta=35136&brand=playtoro&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/playtoro/",
+      "destination": "https://go.playtoropartners.com/visit/?bta=35136&brand=playtoro&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/dozenspins",
+      "destination": "https://record.joinaff.com/_0wZuVaCNRDbGs5YK48Vb6WNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/dozenspins/",
+      "destination": "https://record.joinaff.com/_0wZuVaCNRDbGs5YK48Vb6WNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/casiplay",
+      "destination": "https://m.casiplay.com/Redirect.aspx?mid=147&sid=2019&cid=&pid=&affid=801",
+      "permanent": false
+    },
+    {
+      "source": "/go/casiplay/",
+      "destination": "https://m.casiplay.com/Redirect.aspx?mid=147&sid=2019&cid=&pid=&affid=801",
+      "permanent": false
+    },
+    {
+      "source": "/go/cookie-casino",
+      "destination": "https://media.playamopartners.com/redirect.aspx?pid=77797&bid=1965&lpid=181",
+      "permanent": false
+    },
+    {
+      "source": "/go/cookie-casino/",
+      "destination": "https://media.playamopartners.com/redirect.aspx?pid=77797&bid=1965&lpid=181",
+      "permanent": false
+    },
+    {
+      "source": "/go/vauhti",
+      "destination": "https://wlivyaffiliates.adsrv.eacdn.com/C.ashx?btag=a_18293b_583c_&affid=732&siteid=18293&adid=583&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/vauhti/",
+      "destination": "https://wlivyaffiliates.adsrv.eacdn.com/C.ashx?btag=a_18293b_583c_&affid=732&siteid=18293&adid=583&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/max-casino",
+      "destination": "https://www.maxcazino.net/fi/offers/welcome-finland?faff=268&sub=kir",
+      "permanent": false
+    },
+    {
+      "source": "/go/max-casino/",
+      "destination": "https://www.maxcazino.net/fi/offers/welcome-finland?faff=268&sub=kir",
+      "permanent": false
+    },
+    {
+      "source": "/go/jvspin",
+      "destination": "https://jvspinpartners.net/L?tag=d_778941m_35365c_&site=778941&ad=35365",
+      "permanent": false
+    },
+    {
+      "source": "/go/jvspin/",
+      "destination": "https://jvspinpartners.net/L?tag=d_778941m_35365c_&site=778941&ad=35365",
+      "permanent": false
+    },
+    {
+      "source": "/go/otto",
+      "destination": "https://b1.trickyrock.com/redirect.aspx?pid=33198494&bid=35805",
+      "permanent": false
+    },
+    {
+      "source": "/go/otto/",
+      "destination": "https://b1.trickyrock.com/redirect.aspx?pid=33198494&bid=35805",
+      "permanent": false
+    },
+    {
+      "source": "/go/gogo",
+      "destination": "https://ads.gogocasino.com/redirect.aspx?pid=3703482&bid=17297",
+      "permanent": false
+    },
+    {
+      "source": "/go/gogo/",
+      "destination": "https://ads.gogocasino.com/redirect.aspx?pid=3703482&bid=17297",
+      "permanent": false
+    },
+    {
+      "source": "/go/mount-gold-casino",
+      "destination": "https://record.79affiliates.com/_YOPwDmVb-bGZM7hnoUx_dWNd7ZgqdRLk/1/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/mount-gold-casino/",
+      "destination": "https://record.79affiliates.com/_YOPwDmVb-bGZM7hnoUx_dWNd7ZgqdRLk/1/?pg=1",
+      "permanent": false
+    },
+    {
+      "source": "/go/gslot",
+      "destination": "https://click.gypsyaff.com/?serial=367&creative_id=2&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/gslot/",
+      "destination": "https://click.gypsyaff.com/?serial=367&creative_id=2&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/levelup",
+      "destination": "https://levelupromo.com/a39527f3e",
+      "permanent": false
+    },
+    {
+      "source": "/go/levelup/",
+      "destination": "https://levelupromo.com/a39527f3e",
+      "permanent": false
+    },
+    {
+      "source": "/go/rant",
+      "destination": "https://record.rantaffiliates.com/_fqDzgAqOdnbUOsjNOfgKeWNd7ZgqdRLk/3584/",
+      "permanent": false
+    },
+    {
+      "source": "/go/rant/",
+      "destination": "https://record.rantaffiliates.com/_fqDzgAqOdnbUOsjNOfgKeWNd7ZgqdRLk/3584/",
+      "permanent": false
+    },
+    {
+      "source": "/go/fastbet",
+      "destination": "http://wleuroearners.adsrv.eacdn.com/C.ashx?btag=a_160571b_2240c_&affid=11871&siteid=160571&adid=2240&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/fastbet/",
+      "destination": "http://wleuroearners.adsrv.eacdn.com/C.ashx?btag=a_160571b_2240c_&affid=11871&siteid=160571&adid=2240&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casilando",
+      "destination": "http://welcome.branders.partners/afs/come.php?id=3901&cid=12470&atype=1&ctgid=1001",
+      "permanent": false
+    },
+    {
+      "source": "/go/casilando/",
+      "destination": "http://welcome.branders.partners/afs/come.php?id=3901&cid=12470&atype=1&ctgid=1001",
+      "permanent": false
+    },
+    {
+      "source": "/go/svenplay",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_2621b_1418c_&affid=1197&siteid=2621&adid=1418&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/svenplay/",
+      "destination": "https://wlcg-partners.adsrv.eacdn.com/C.ashx?btag=a_2621b_1418c_&affid=1197&siteid=2621&adid=1418&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slothino",
+      "destination": "https://wlpremierlivecasino.adsrv.eacdn.com/C.ashx?btag=a_3742b_117c_&affid=808&siteid=3742&adid=117&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slothino/",
+      "destination": "https://wlpremierlivecasino.adsrv.eacdn.com/C.ashx?btag=a_3742b_117c_&affid=808&siteid=3742&adid=117&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/betfinal",
+      "destination": "https://record.gotobetfinal.com/v2/text/58/26/a53c4d37-0f88-11eb-ade8-2eb982ce984b/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/betfinal/",
+      "destination": "https://record.gotobetfinal.com/v2/text/58/26/a53c4d37-0f88-11eb-ade8-2eb982ce984b/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/dux",
+      "destination": "https://duxnow.com/aca5bb7df",
+      "permanent": false
+    },
+    {
+      "source": "/go/dux/",
+      "destination": "https://duxnow.com/aca5bb7df",
+      "permanent": false
+    },
+    {
+      "source": "/go/scandibet",
+      "destination": "http://wlscandibet.adsrv.eacdn.com/C.ashx?btag=a_2802b_141c_&affid=853&siteid=2802&adid=141&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/scandibet/",
+      "destination": "http://wlscandibet.adsrv.eacdn.com/C.ashx?btag=a_2802b_141c_&affid=853&siteid=2802&adid=141&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinodays",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=2260&bid=1484",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinodays/",
+      "destination": "https://media.rhinoaffiliates.com/redirect.aspx?pid=2260&bid=1484",
+      "permanent": false
+    },
+    {
+      "source": "/go/racecasino",
+      "destination": "https://affiliates.racecasino.com/redirector?trackerId=5fa3bfbc9eb1726382c900e8",
+      "permanent": false
+    },
+    {
+      "source": "/go/racecasino/",
+      "destination": "https://affiliates.racecasino.com/redirector?trackerId=5fa3bfbc9eb1726382c900e8",
+      "permanent": false
+    },
+    {
+      "source": "/go/vipscasino",
+      "destination": "https://m.vipscasino.com/Redirect.aspx?mid=2&sid=401&cid=FI&pid=&affid=120",
+      "permanent": false
+    },
+    {
+      "source": "/go/vipscasino/",
+      "destination": "https://m.vipscasino.com/Redirect.aspx?mid=2&sid=401&cid=FI&pid=&affid=120",
+      "permanent": false
+    },
+    {
+      "source": "/go/cadabrus",
+      "destination": "https://media.cadabrus.com/redirect.aspx?pid=1602129&bid=6984",
+      "permanent": false
+    },
+    {
+      "source": "/go/cadabrus/",
+      "destination": "https://media.cadabrus.com/redirect.aspx?pid=1602129&bid=6984",
+      "permanent": false
+    },
+    {
+      "source": "/go/kazoom",
+      "destination": "https://media.kazoomcasinoaffiliates.com/redirect.aspx?pid=3264&lpid=7&bid=1484",
+      "permanent": false
+    },
+    {
+      "source": "/go/kazoom/",
+      "destination": "https://media.kazoomcasinoaffiliates.com/redirect.aspx?pid=3264&lpid=7&bid=1484",
+      "permanent": false
+    },
+    {
+      "source": "/go/guts-3",
+      "destination": "https://record.guts.com/_Nk6ViV9naZGE3Na3RXer-mNd7ZgqdRLk/3655/",
+      "permanent": false
+    },
+    {
+      "source": "/go/guts-3/",
+      "destination": "https://record.guts.com/_Nk6ViV9naZGE3Na3RXer-mNd7ZgqdRLk/3655/",
+      "permanent": false
+    },
+    {
+      "source": "/go/klirr",
+      "destination": "https://record.epic.partners/_98l10WquwEeYNevImT-MDGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/klirr/",
+      "destination": "https://record.epic.partners/_98l10WquwEeYNevImT-MDGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/captain-spins",
+      "destination": "https://media.dreamteamaffiliates.com/redirect.aspx?pid=4824&lpid=16&bid=1676",
+      "permanent": false
+    },
+    {
+      "source": "/go/captain-spins/",
+      "destination": "https://media.dreamteamaffiliates.com/redirect.aspx?pid=4824&lpid=16&bid=1676",
+      "permanent": false
+    },
+    {
+      "source": "/go/magicazz",
+      "destination": "https://go.affchoice.com/visit/?bta=35438&nci=5730",
+      "permanent": false
+    },
+    {
+      "source": "/go/magicazz/",
+      "destination": "https://go.affchoice.com/visit/?bta=35438&nci=5730",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-friday",
+      "destination": "https://go.affiliatexe.com/visit/?bta=35208&nci=5558&utm_campaign=GEO",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-friday/",
+      "destination": "https://go.affiliatexe.com/visit/?bta=35208&nci=5558&utm_campaign=GEO",
+      "permanent": false
+    },
+    {
+      "source": "/go/agent-spins",
+      "destination": "https://go.conversionaffiliates.com/visit/?bta=35704&nci=6137",
+      "permanent": false
+    },
+    {
+      "source": "/go/agent-spins/",
+      "destination": "https://go.conversionaffiliates.com/visit/?bta=35704&nci=6137",
+      "permanent": false
+    },
+    {
+      "source": "/go/shadowbet",
+      "destination": "https://wlshadowbet.adsrv.eacdn.com/C.ashx?btag=a_2538b_563c_&affid=963&siteid=2538&adid=563&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/shadowbet/",
+      "destination": "https://wlshadowbet.adsrv.eacdn.com/C.ashx?btag=a_2538b_563c_&affid=963&siteid=2538&adid=563&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotnite",
+      "destination": "https://welcome.fullcreamaffiliates.com/afs/come.php?cid=30907&ctgid=1001&atype=1&brandid=43",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotnite/",
+      "destination": "https://welcome.fullcreamaffiliates.com/afs/come.php?cid=30907&ctgid=1001&atype=1&brandid=43",
+      "permanent": false
+    },
+    {
+      "source": "/go/tsars",
+      "destination": "https://click.tsars.partners/afs/come.php?cid=2091&ctgid=100&atype=1&brandid=5",
+      "permanent": false
+    },
+    {
+      "source": "/go/tsars/",
+      "destination": "https://click.tsars.partners/afs/come.php?cid=2091&ctgid=100&atype=1&brandid=5",
+      "permanent": false
+    },
+    {
+      "source": "/go/casoo",
+      "destination": "https://click.casoo.partners/afs/come.php?cid=2091&ctgid=100&atype=1&brandid=3",
+      "permanent": false
+    },
+    {
+      "source": "/go/casoo/",
+      "destination": "https://click.casoo.partners/afs/come.php?cid=2091&ctgid=100&atype=1&brandid=3",
+      "permanent": false
+    },
+    {
+      "source": "/go/orientxpress",
+      "destination": "https://go.rocksolidaffiliates.com/visit/?bta=38179&nci=7865",
+      "permanent": false
+    },
+    {
+      "source": "/go/orientxpress/",
+      "destination": "https://go.rocksolidaffiliates.com/visit/?bta=38179&nci=7865",
+      "permanent": false
+    },
+    {
+      "source": "/go/betiton",
+      "destination": "https://go.betitonpartners.com/tracking.php?tracking_code&aid=100265&mid=20&sid=1816&pid=26",
+      "permanent": false
+    },
+    {
+      "source": "/go/betiton/",
+      "destination": "https://go.betitonpartners.com/tracking.php?tracking_code&aid=100265&mid=20&sid=1816&pid=26",
+      "permanent": false
+    },
+    {
+      "source": "/go/ultracasino",
+      "destination": "https://afftrackuc.21.partners/C.ashx?btag=a_8832b_645c_&affid=2150&siteid=8832&adid=645&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/ultracasino/",
+      "destination": "https://afftrackuc.21.partners/C.ashx?btag=a_8832b_645c_&affid=2150&siteid=8832&adid=645&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinsamurai",
+      "destination": "https://partnersredirect.com/afd10cb30",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinsamurai/",
+      "destination": "https://partnersredirect.com/afd10cb30",
+      "permanent": false
+    },
+    {
+      "source": "/go/explosino",
+      "destination": "https://rd1.ia.hhg21lhdhye74ixs.com/C.ashx?btag=a_8421b_633c_&affid=6933&siteid=8421&adid=633&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/explosino/",
+      "destination": "https://rd1.ia.hhg21lhdhye74ixs.com/C.ashx?btag=a_8421b_633c_&affid=6933&siteid=8421&adid=633&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/egocasino",
+      "destination": "https://rd1.ia.hhg21lhdhye74ixs.com/C.ashx?btag=a_8019b_568c_&affid=6933&siteid=8019&adid=568&c=ego",
+      "permanent": false
+    },
+    {
+      "source": "/go/egocasino/",
+      "destination": "https://rd1.ia.hhg21lhdhye74ixs.com/C.ashx?btag=a_8019b_568c_&affid=6933&siteid=8019&adid=568&c=ego",
+      "permanent": false
+    },
+    {
+      "source": "/go/21casino",
+      "destination": "http://wl21com.adsrv.eacdn.com/C.ashx?btag=a_359b_24c_&affid=28&siteid=359&adid=24&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/21casino/",
+      "destination": "http://wl21com.adsrv.eacdn.com/C.ashx?btag=a_359b_24c_&affid=28&siteid=359&adid=24&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/vipstakes",
+      "destination": "http://partners.vipaffs.com/scripts/c9yn02?btag=4319c253&bid=4094d78a",
+      "permanent": false
+    },
+    {
+      "source": "/go/vipstakes/",
+      "destination": "http://partners.vipaffs.com/scripts/c9yn02?btag=4319c253&bid=4094d78a",
+      "permanent": false
+    },
+    {
+      "source": "/go/paradisewin",
+      "destination": "http://partners.pwaffs.com/scripts/c4eoaoy53v?btag=8dbe0ed1&bid=4aef4678",
+      "permanent": false
+    },
+    {
+      "source": "/go/paradisewin/",
+      "destination": "http://partners.pwaffs.com/scripts/c4eoaoy53v?btag=8dbe0ed1&bid=4aef4678",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinaru",
+      "destination": "http://partners.spinaru.com/scripts/zcfxzeeqn?btag=68518a2c&bid=5d1fac31",
+      "permanent": false
+    },
+    {
+      "source": "/go/spinaru/",
+      "destination": "http://partners.spinaru.com/scripts/zcfxzeeqn?btag=68518a2c&bid=5d1fac31",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoisy",
+      "destination": "http://partners.casinoisy.com/scripts/71ozcqf?btag=af47b6b6&bid=9bdf4501",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoisy/",
+      "destination": "http://partners.casinoisy.com/scripts/71ozcqf?btag=af47b6b6&bid=9bdf4501",
+      "permanent": false
+    },
+    {
+      "source": "/go/heavychips",
+      "destination": "http://partners.heavychips.com/scripts/6c2xdqx052g?btag=31f73ebe&bid=7b2e047d",
+      "permanent": false
+    },
+    {
+      "source": "/go/heavychips/",
+      "destination": "http://partners.heavychips.com/scripts/6c2xdqx052g?btag=31f73ebe&bid=7b2e047d",
+      "permanent": false
+    },
+    {
+      "source": "/go/vipspel",
+      "destination": "http://partners.vipspel.com/scripts/ocddaf06?btag=052a46d7&bid=26e8f285",
+      "permanent": false
+    },
+    {
+      "source": "/go/vipspel/",
+      "destination": "http://partners.vipspel.com/scripts/ocddaf06?btag=052a46d7&bid=26e8f285",
+      "permanent": false
+    },
+    {
+      "source": "/go/casdep",
+      "destination": "http://affs.casdep.com/scripts/hhzyc9m11f?btag=a9add7cf&bid=5b069246",
+      "permanent": false
+    },
+    {
+      "source": "/go/casdep/",
+      "destination": "http://affs.casdep.com/scripts/hhzyc9m11f?btag=a9add7cf&bid=5b069246",
+      "permanent": false
+    },
+    {
+      "source": "/go/yako-2",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com/en/index&userid=655511&tracker=84465",
+      "permanent": false
+    },
+    {
+      "source": "/go/yako-2/",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com/en/index&userid=655511&tracker=84465",
+      "permanent": false
+    },
+    {
+      "source": "/go/funcasino",
+      "destination": "http://www.funcasinoaffiliates.com/redirector?url=https://www.funcasino.com/en/landing20fs&userid=49&tracker=33033",
+      "permanent": false
+    },
+    {
+      "source": "/go/funcasino/",
+      "destination": "http://www.funcasinoaffiliates.com/redirector?url=https://www.funcasino.com/en/landing20fs&userid=49&tracker=33033",
+      "permanent": false
+    },
+    {
+      "source": "/go/mywin24",
+      "destination": "http://partners.mywin24.com/scripts/guz4cz9?btag=b9e6d348&bid=548b1fd0",
+      "permanent": false
+    },
+    {
+      "source": "/go/mywin24/",
+      "destination": "http://partners.mywin24.com/scripts/guz4cz9?btag=b9e6d348&bid=548b1fd0",
+      "permanent": false
+    },
+    {
+      "source": "/go/grandwild",
+      "destination": "http://partners.grandwild.com/scripts/7cd7x9k?btag=3ab90876&bid=d5152c49",
+      "permanent": false
+    },
+    {
+      "source": "/go/grandwild/",
+      "destination": "http://partners.grandwild.com/scripts/7cd7x9k?btag=3ab90876&bid=d5152c49",
+      "permanent": false
+    },
+    {
+      "source": "/go/betnspin",
+      "destination": "http://partners.betnspin.com/scripts/umcu2wwv?btag=298926a1&bid=7b74c0b0",
+      "permanent": false
+    },
+    {
+      "source": "/go/betnspin/",
+      "destination": "http://partners.betnspin.com/scripts/umcu2wwv?btag=298926a1&bid=7b74c0b0",
+      "permanent": false
+    },
+    {
+      "source": "/go/yako",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com&userid=655511&tracker=114254",
+      "permanent": false
+    },
+    {
+      "source": "/go/yako/",
+      "destination": "http://yakocasinoaffiliates.com/redirector?url=https://www.yakocasino.com&userid=655511&tracker=114254",
+      "permanent": false
+    },
+    {
+      "source": "/go/flipperflip",
+      "destination": "https://tracker-pm2.affpalace.com/link?btag=5579739_128896",
+      "permanent": false
+    },
+    {
+      "source": "/go/flipperflip/",
+      "destination": "https://tracker-pm2.affpalace.com/link?btag=5579739_128896",
+      "permanent": false
+    },
+    {
+      "source": "/go/swift-casino",
+      "destination": "https://ads.galaxyaffiliates.com/Redirect.aspx?mid=3964&sid=5163&cid=&pid=&affid=2581",
+      "permanent": false
+    },
+    {
+      "source": "/go/swift-casino/",
+      "destination": "https://ads.galaxyaffiliates.com/Redirect.aspx?mid=3964&sid=5163&cid=&pid=&affid=2581",
+      "permanent": false
+    },
+    {
+      "source": "/go/casumo-3",
+      "destination": "https://ads.casumoaffiliates.com/redirect.aspx?pid=1212334&bid=1546",
+      "permanent": false
+    },
+    {
+      "source": "/go/casumo-3/",
+      "destination": "https://ads.casumoaffiliates.com/redirect.aspx?pid=1212334&bid=1546",
+      "permanent": false
+    },
+    {
+      "source": "/go/bet-rocker",
+      "destination": "http://www.btagmaster.com/scripts/2897dc7dqy?btag=fc3bc5bb&bid=b7de9927",
+      "permanent": false
+    },
+    {
+      "source": "/go/bet-rocker/",
+      "destination": "http://www.btagmaster.com/scripts/2897dc7dqy?btag=fc3bc5bb&bid=b7de9927",
+      "permanent": false
+    },
+    {
+      "source": "/go/ahti-games",
+      "destination": "https://site.ahtigames.com/index.php?aname=trafficpuma&zone_id=kasinotil",
+      "permanent": false
+    },
+    {
+      "source": "/go/ahti-games/",
+      "destination": "https://site.ahtigames.com/index.php?aname=trafficpuma&zone_id=kasinotil",
+      "permanent": false
+    },
+    {
+      "source": "/go/netbet",
+      "destination": "https://banners.livepartners.com/view.php?z=123743&src=xxx",
+      "permanent": false
+    },
+    {
+      "source": "/go/netbet/",
+      "destination": "https://banners.livepartners.com/view.php?z=123743&src=xxx",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-thrillz",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5pw&cid=13828",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-thrillz/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=5pw&cid=13828",
+      "permanent": false
+    },
+    {
+      "source": "/go/suprabets",
+      "destination": "https://www.suprabets.com/affiliates/?btag=290603_l102028",
+      "permanent": false
+    },
+    {
+      "source": "/go/suprabets/",
+      "destination": "https://www.suprabets.com/affiliates/?btag=290603_l102028",
+      "permanent": false
+    },
+    {
+      "source": "/go/trada-casino",
+      "destination": "https://rewrdtracker.com/trk/click?aid=522C&cid=24806&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/trada-casino/",
+      "destination": "https://rewrdtracker.com/trk/click?aid=522C&cid=24806&s1=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/snabbis",
+      "destination": "https://record.snabbisaffiliates.com/_NaVdz0AWzXzT2Fu8bIPGIGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/snabbis/",
+      "destination": "https://record.snabbisaffiliates.com/_NaVdz0AWzXzT2Fu8bIPGIGNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/loki",
+      "destination": "https://referencemen.com/ktVmDV?c=0138S3AWrh0rXv2d46a6261d49d766",
+      "permanent": false
+    },
+    {
+      "source": "/go/loki/",
+      "destination": "https://referencemen.com/ktVmDV?c=0138S3AWrh0rXv2d46a6261d49d766",
+      "permanent": false
+    },
+    {
+      "source": "/go/magical-spins",
+      "destination": "https://record.magicalspinaffiliates.com/_jyReQcTCbX_UOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/magical-spins/",
+      "destination": "https://record.magicalspinaffiliates.com/_jyReQcTCbX_UOsjNOfgKeWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/zet",
+      "destination": "https://media.zetcasino.com/redirect.aspx?pid=1646698&bid=5140",
+      "permanent": false
+    },
+    {
+      "source": "/go/zet/",
+      "destination": "https://media.zetcasino.com/redirect.aspx?pid=1646698&bid=5140",
+      "permanent": false
+    },
+    {
+      "source": "/go/fezbet",
+      "destination": "https://awbba.zetcasino.com/redirect.aspx?pid=1349923&bid=1658",
+      "permanent": false
+    },
+    {
+      "source": "/go/fezbet/",
+      "destination": "https://awbba.zetcasino.com/redirect.aspx?pid=1349923&bid=1658",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-luck",
+      "destination": "http://wlnextcasinoluck.adsrv.eacdn.com/C.ashx?btag=a_14275b_3978c_&affid=20167&siteid=14275&adid=3978&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-luck/",
+      "destination": "http://wlnextcasinoluck.adsrv.eacdn.com/C.ashx?btag=a_14275b_3978c_&affid=20167&siteid=14275&adid=3978&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/trueflip",
+      "destination": "https://click.trueflip.io/?serial=492&creative_id=1&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/trueflip/",
+      "destination": "https://click.trueflip.io/?serial=492&creative_id=1&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/amunra",
+      "destination": "http://wlamunra.adsrv.eacdn.com/C.ashx?btag=a_291b_225c_&affid=137&siteid=291&adid=225&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/amunra/",
+      "destination": "http://wlamunra.adsrv.eacdn.com/C.ashx?btag=a_291b_225c_&affid=137&siteid=291&adid=225&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-louis",
+      "destination": "http://site.gotoluckylouis.com/index.php?aname=wisegambler&zone_id=llhp&dyn_id=",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky-louis/",
+      "destination": "http://site.gotoluckylouis.com/index.php?aname=wisegambler&zone_id=llhp&dyn_id=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotum",
+      "destination": "https://slotummedia.com/ab8c22bb0",
+      "permanent": false
+    },
+    {
+      "source": "/go/slotum/",
+      "destination": "https://slotummedia.com/ab8c22bb0",
+      "permanent": false
+    },
+    {
+      "source": "/go/rembrandt",
+      "destination": "https://rembrandtcasino.com/deep/player--register/mediaCode/textlink/affiliate/19763",
+      "permanent": false
+    },
+    {
+      "source": "/go/rembrandt/",
+      "destination": "https://rembrandtcasino.com/deep/player--register/mediaCode/textlink/affiliate/19763",
+      "permanent": false
+    },
+    {
+      "source": "/go/arcanebet",
+      "destination": "https://tracker-pm2.arcanebet.com/link?btag=5369128_103584",
+      "permanent": false
+    },
+    {
+      "source": "/go/arcanebet/",
+      "destination": "https://tracker-pm2.arcanebet.com/link?btag=5369128_103584",
+      "permanent": false
+    },
+    {
+      "source": "/go/dream-palace",
+      "destination": "https://www.dreampalacecasino.com/kampanjat/jopa-500-e-asti-fi/?tracker=690081&lang=fi&utm_source=pap_affid_1513&utm_medium=am&utm_campaign=6a552d15&utm_content=pap_cid_6aabc43a&utm_term=200to500_30nwfs&pap_affid=1513&pap_cid=6aabc43a",
+      "permanent": false
+    },
+    {
+      "source": "/go/dream-palace/",
+      "destination": "https://www.dreampalacecasino.com/kampanjat/jopa-500-e-asti-fi/?tracker=690081&lang=fi&utm_source=pap_affid_1513&utm_medium=am&utm_campaign=6a552d15&utm_content=pap_cid_6aabc43a&utm_term=200to500_30nwfs&pap_affid=1513&pap_cid=6aabc43a",
+      "permanent": false
+    },
+    {
+      "source": "/go/videoslots-4",
+      "destination": "http://affiliates.videoslots.com/click/?aid=videoslots-matchhybrid084&turl=https%3A%2F%2Fwww.videoslots.com%2Ffi%2F%3Fsignup%3Dtrue%26referral_id%3Dmatchhybrid084_FI&bid=no-banner&label=matchhybrid084",
+      "permanent": false
+    },
+    {
+      "source": "/go/videoslots-4/",
+      "destination": "http://affiliates.videoslots.com/click/?aid=videoslots-matchhybrid084&turl=https%3A%2F%2Fwww.videoslots.com%2Ffi%2F%3Fsignup%3Dtrue%26referral_id%3Dmatchhybrid084_FI&bid=no-banner&label=matchhybrid084",
+      "permanent": false
+    },
+    {
+      "source": "/go/bao",
+      "destination": "https://click.baocasino.com/?serial=1401&creative_id=31&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/bao/",
+      "destination": "https://click.baocasino.com/?serial=1401&creative_id=31&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/viggoslots",
+      "destination": "https://aff-ads.viggoslots.com/v2/text/14/1/18c0547e-666d-11e9-a1ed-3a6ba60e16cc/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/viggoslots/",
+      "destination": "https://aff-ads.viggoslots.com/v2/text/14/1/18c0547e-666d-11e9-a1ed-3a6ba60e16cc/1",
+      "permanent": false
+    },
+    {
+      "source": "/go/schmitts",
+      "destination": "https://ads.ventureaffiliates.com/Redirect.aspx?mid=623&sid=685&cid=&pid=&affid=205",
+      "permanent": false
+    },
+    {
+      "source": "/go/schmitts/",
+      "destination": "https://ads.ventureaffiliates.com/Redirect.aspx?mid=623&sid=685&cid=&pid=&affid=205",
+      "permanent": false
+    },
+    {
+      "source": "/go/playuk",
+      "destination": "http://ads.ventureaffiliates.com/Redirect.aspx?mid=414&sid=327&cid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/playuk/",
+      "destination": "http://ads.ventureaffiliates.com/Redirect.aspx?mid=414&sid=327&cid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/playigo",
+      "destination": "https://playigo.click/o/Ww35VC",
+      "permanent": false
+    },
+    {
+      "source": "/go/playigo/",
+      "destination": "https://playigo.click/o/Ww35VC",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-planet",
+      "destination": "https://casinoplanet.tracking-genesisaffiliates.com/redirect.aspx?pid=198481&bid=8115",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-planet/",
+      "destination": "https://casinoplanet.tracking-genesisaffiliates.com/redirect.aspx?pid=198481&bid=8115",
+      "permanent": false
+    },
+    {
+      "source": "/go/7bit",
+      "destination": "https://7bit.partners/a475f4e35",
+      "permanent": false
+    },
+    {
+      "source": "/go/7bit/",
+      "destination": "https://7bit.partners/a475f4e35",
+      "permanent": false
+    },
+    {
+      "source": "/go/fantasino",
+      "destination": "https://tracker-pm2.fantasino.com/link?btag=5257744_101826",
+      "permanent": false
+    },
+    {
+      "source": "/go/fantasino/",
+      "destination": "https://tracker-pm2.fantasino.com/link?btag=5257744_101826",
+      "permanent": false
+    },
+    {
+      "source": "/go/propawin",
+      "destination": "http://partners.propawin.com/scripts/gz87cznfv8f?btag=992a29d1&bid=5cfbbb5e",
+      "permanent": false
+    },
+    {
+      "source": "/go/propawin/",
+      "destination": "http://partners.propawin.com/scripts/gz87cznfv8f?btag=992a29d1&bid=5cfbbb5e",
+      "permanent": false
+    },
+    {
+      "source": "/go/calvin-casino",
+      "destination": "https://calvincasino.com/?btag=4a0b1eb3&bid=5c7b9a2b&btagid=&chan=",
+      "permanent": false
+    },
+    {
+      "source": "/go/calvin-casino/",
+      "destination": "https://calvincasino.com/?btag=4a0b1eb3&bid=5c7b9a2b&btagid=&chan=",
+      "permanent": false
+    },
+    {
+      "source": "/go/freaky-aces",
+      "destination": "http://partners.freakyaces.com/scripts/xyncnff?btag=f0754b88&bid=e73904cd",
+      "permanent": false
+    },
+    {
+      "source": "/go/freaky-aces/",
+      "destination": "http://partners.freakyaces.com/scripts/xyncnff?btag=f0754b88&bid=e73904cd",
+      "permanent": false
+    },
+    {
+      "source": "/go/slottojam",
+      "destination": "https://media.lsbetmed.com/redirect.aspx?pid=1730969&bid=12358",
+      "permanent": false
+    },
+    {
+      "source": "/go/slottojam/",
+      "destination": "https://media.lsbetmed.com/redirect.aspx?pid=1730969&bid=12358",
+      "permanent": false
+    },
+    {
+      "source": "/go/westcasino",
+      "destination": "https://tracker-pm2.west-affiliates.com/link?btag=4926746_101698",
+      "permanent": false
+    },
+    {
+      "source": "/go/westcasino/",
+      "destination": "https://tracker-pm2.west-affiliates.com/link?btag=4926746_101698",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrvegas",
+      "destination": "https://partners.vcommission.co.uk/affiliate/redirect?cid=5635&aid=1760&lang=en&tracker=&track=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mrvegas/",
+      "destination": "https://partners.vcommission.co.uk/affiliate/redirect?cid=5635&aid=1760&lang=en&tracker=&track=",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaboo-4",
+      "destination": "http://ads.kabooaffiliates.com/redirect.aspx?pid=781808&bid=3505",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaboo-4/",
+      "destination": "http://ads.kabooaffiliates.com/redirect.aspx?pid=781808&bid=3505",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-heroes",
+      "destination": "http://media.heroaffiliates.com/redirect.aspx?pid=185968&bid=1858",
+      "permanent": false
+    },
+    {
+      "source": "/go/casino-heroes/",
+      "destination": "http://media.heroaffiliates.com/redirect.aspx?pid=185968&bid=1858",
+      "permanent": false
+    },
+    {
+      "source": "/go/betsafe",
+      "destination": "http://record.betsafe.com/_BDnQ-6vJ3TmYN68XleNp-GNd7ZgqdRLk/93/",
+      "permanent": false
+    },
+    {
+      "source": "/go/betsafe/",
+      "destination": "http://record.betsafe.com/_BDnQ-6vJ3TmYN68XleNp-GNd7ZgqdRLk/93/",
+      "permanent": false
+    },
+    {
+      "source": "/go/nordicbet-2",
+      "destination": "http://record.affiliatelounge.com/_yZtJOOvRClDyrih1qsEkKmNd7ZgqdRLk/3/",
+      "permanent": false
+    },
+    {
+      "source": "/go/nordicbet-2/",
+      "destination": "http://record.affiliatelounge.com/_yZtJOOvRClDyrih1qsEkKmNd7ZgqdRLk/3/",
+      "permanent": false
+    },
+    {
+      "source": "/go/frank-and-fred",
+      "destination": "https://record.epic.partners/_OfvLbn-tiPz6PBA04iUMN2Nd7ZgqdRLk/1181/",
+      "permanent": false
+    },
+    {
+      "source": "/go/frank-and-fred/",
+      "destination": "https://record.epic.partners/_OfvLbn-tiPz6PBA04iUMN2Nd7ZgqdRLk/1181/",
+      "permanent": false
+    },
+    {
+      "source": "/go/premierlive",
+      "destination": "http://wlpremierlivecasino.adsrv.eacdn.com/C.ashx?btag=a_450b_7c_&affid=126&siteid=450&adid=7&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/premierlive/",
+      "destination": "http://wlpremierlivecasino.adsrv.eacdn.com/C.ashx?btag=a_450b_7c_&affid=126&siteid=450&adid=7&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/turbovegas-4",
+      "destination": "http://wlturbovegas.adsrv.eacdn.com/C.ashx?btag=a_11230b_1428c_&affid=3048&siteid=11230&adid=1428&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/turbovegas-4/",
+      "destination": "http://wlturbovegas.adsrv.eacdn.com/C.ashx?btag=a_11230b_1428c_&affid=3048&siteid=11230&adid=1428&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/yoyo",
+      "destination": "https://go.affiliatexe.com/visit/?bta=35642&nci=5699&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/yoyo/",
+      "destination": "https://go.affiliatexe.com/visit/?bta=35642&nci=5699&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/cadoola",
+      "destination": "https://media.cadoola.com/redirect.aspx?pid=6167&bid=4719&lpid=1963",
+      "permanent": false
+    },
+    {
+      "source": "/go/cadoola/",
+      "destination": "https://media.cadoola.com/redirect.aspx?pid=6167&bid=4719&lpid=1963",
+      "permanent": false
+    },
+    {
+      "source": "/go/librabet",
+      "destination": "https://media.librabet.com/redirect.aspx?pid=6934&bid=4490",
+      "permanent": false
+    },
+    {
+      "source": "/go/librabet/",
+      "destination": "https://media.librabet.com/redirect.aspx?pid=6934&bid=4490",
+      "permanent": false
+    },
+    {
+      "source": "/go/pixelbet",
+      "destination": "https://ads.pixel.bet/redirect.aspx?pid=2702&bid=1603",
+      "permanent": false
+    },
+    {
+      "source": "/go/pixelbet/",
+      "destination": "https://ads.pixel.bet/redirect.aspx?pid=2702&bid=1603",
+      "permanent": false
+    },
+    {
+      "source": "/go/casonic",
+      "destination": "https://casonic.riveraffiliates.com/tracking.php?tracking_code&aid=100196&mid=2477&sid=337896&pid=311",
+      "permanent": false
+    },
+    {
+      "source": "/go/casonic/",
+      "destination": "https://casonic.riveraffiliates.com/tracking.php?tracking_code&aid=100196&mid=2477&sid=337896&pid=311",
+      "permanent": false
+    },
+    {
+      "source": "/go/gutsxpress",
+      "destination": "https://wlgutsxpress.adsrv.eacdn.com/C.ashx?btag=a_18202b_3509c_&affid=5195&siteid=18202&adid=3509&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/gutsxpress/",
+      "destination": "https://wlgutsxpress.adsrv.eacdn.com/C.ashx?btag=a_18202b_3509c_&affid=5195&siteid=18202&adid=3509&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/hyper",
+      "destination": "http://affiliates.hypercasino.com/redirector?url=https://www.hypercasino.com/fi/index&userid=27&tracker=80",
+      "permanent": false
+    },
+    {
+      "source": "/go/hyper/",
+      "destination": "http://affiliates.hypercasino.com/redirector?url=https://www.hypercasino.com/fi/index&userid=27&tracker=80",
+      "permanent": false
+    },
+    {
+      "source": "/go/wishmaker",
+      "destination": "https://media.wishmaker.partners/redirect.aspx?pid=3067&bid=1490",
+      "permanent": false
+    },
+    {
+      "source": "/go/wishmaker/",
+      "destination": "https://media.wishmaker.partners/redirect.aspx?pid=3067&bid=1490",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinowinner",
+      "destination": "https://record.casinowinner.com/_XDT5ZugKdItXZuVyxzVSXmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinowinner/",
+      "destination": "https://record.casinowinner.com/_XDT5ZugKdItXZuVyxzVSXmNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/live-lounge",
+      "destination": "http://wltogethergaming.adsrv.eacdn.com/C.ashx?btag=a_14806b_67c_&affid=4176&siteid=14806&adid=67&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/live-lounge/",
+      "destination": "http://wltogethergaming.adsrv.eacdn.com/C.ashx?btag=a_14806b_67c_&affid=4176&siteid=14806&adid=67&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/simppeli",
+      "destination": "http://wlivyaffiliates.adsrv.eacdn.com/C.ashx?btag=a_12568b_412c_&affid=2675&siteid=12568&adid=412&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/simppeli/",
+      "destination": "http://wlivyaffiliates.adsrv.eacdn.com/C.ashx?btag=a_12568b_412c_&affid=2675&siteid=12568&adid=412&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/supernopea",
+      "destination": "https://media.supernopea.com/C.ashx?btag=a_6030b_157c_&affid=1419&siteid=6030&adid=157&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/supernopea/",
+      "destination": "https://media.supernopea.com/C.ashx?btag=a_6030b_157c_&affid=1419&siteid=6030&adid=157&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/pikakasino",
+      "destination": "https://record.honeygameaffiliates.com/_nBB8jrTuRQWUcyqUL4Bc9GNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/pikakasino/",
+      "destination": "https://record.honeygameaffiliates.com/_nBB8jrTuRQWUcyqUL4Bc9GNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/mason-slots",
+      "destination": "https://click.masonslots.com/?serial=127&creative_id=23&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mason-slots/",
+      "destination": "https://click.masonslots.com/?serial=127&creative_id=23&anid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/zenspin",
+      "destination": "https://go.spinwise.partners/visit/?bta=35177&brand=trickz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/zenspin/",
+      "destination": "https://go.spinwise.partners/visit/?bta=35177&brand=trickz&utm_campaign=FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/in-and-out-casino",
+      "destination": "http://wlinandoutcasino.adsrv.eacdn.com/C.ashx?btag=a_17632b_1761c_&affid=4915&siteid=17632&adid=1761&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/in-and-out-casino/",
+      "destination": "http://wlinandoutcasino.adsrv.eacdn.com/C.ashx?btag=a_17632b_1761c_&affid=4915&siteid=17632&adid=1761&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/go-slotty",
+      "destination": "https://ads.maxaffiliates.com/redirect.aspx?pid=231389&bid=3539",
+      "permanent": false
+    },
+    {
+      "source": "/go/go-slotty/",
+      "destination": "https://ads.maxaffiliates.com/redirect.aspx?pid=231389&bid=3539",
+      "permanent": false
+    },
+    {
+      "source": "/go/greenplay",
+      "destination": "https://fi.greenplay.com/promotions/welcome-package?par=80CE19D8178FC80A184CB24860E50DF9&ar=15942",
+      "permanent": false
+    },
+    {
+      "source": "/go/greenplay/",
+      "destination": "https://fi.greenplay.com/promotions/welcome-package?par=80CE19D8178FC80A184CB24860E50DF9&ar=15942",
+      "permanent": false
+    },
+    {
+      "source": "/go/simple",
+      "destination": "https://media.heroaffiliates.com/redirect.aspx?pid=273924&bid=3325",
+      "permanent": false
+    },
+    {
+      "source": "/go/simple/",
+      "destination": "https://media.heroaffiliates.com/redirect.aspx?pid=273924&bid=3325",
+      "permanent": false
+    },
+    {
+      "source": "/go/nomini",
+      "destination": "https://media.nomini.com/redirect.aspx?pid=280362&bid=5144",
+      "permanent": false
+    },
+    {
+      "source": "/go/nomini/",
+      "destination": "https://media.nomini.com/redirect.aspx?pid=280362&bid=5144",
+      "permanent": false
+    },
+    {
+      "source": "/go/noaccount",
+      "destination": "https://affiliatemedia.noaccountcasino.com/redirect.aspx?pid=3391&bid=1504",
+      "permanent": false
+    },
+    {
+      "source": "/go/noaccount/",
+      "destination": "https://affiliatemedia.noaccountcasino.com/redirect.aspx?pid=3391&bid=1504",
+      "permanent": false
+    },
+    {
+      "source": "/go/boa",
+      "destination": "https://media.boaboa.com/redirect.aspx?pid=6092&bid=4717&lpid=1961",
+      "permanent": false
+    },
+    {
+      "source": "/go/boa/",
+      "destination": "https://media.boaboa.com/redirect.aspx?pid=6092&bid=4717&lpid=1961",
+      "permanent": false
+    },
+    {
+      "source": "/go/rolla",
+      "destination": "http://wlrolla.adsrv.eacdn.com/C.ashx?btag=a_1809b_130c_&affid=528&siteid=1809&adid=130&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/rolla/",
+      "destination": "http://wlrolla.adsrv.eacdn.com/C.ashx?btag=a_1809b_130c_&affid=528&siteid=1809&adid=130&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/slots",
+      "destination": "https://bevrooms-shangston.com/9ec76505-3336-40e0-924c-cbf934ed0ee1?ref=casinoselfie2",
+      "permanent": false
+    },
+    {
+      "source": "/go/slots/",
+      "destination": "https://bevrooms-shangston.com/9ec76505-3336-40e0-924c-cbf934ed0ee1?ref=casinoselfie2",
+      "permanent": false
+    },
+    {
+      "source": "/go/surprise",
+      "destination": "https://casinoselfie.com/fi/casinobonukset/",
+      "permanent": false
+    },
+    {
+      "source": "/go/surprise/",
+      "destination": "https://casinoselfie.com/fi/casinobonukset/",
+      "permanent": false
+    },
+    {
+      "source": "/go/loistokasino",
+      "destination": "https://affiliatesmedia.odinservices.com/redirect.aspx?pid=2211&bid=1499",
+      "permanent": false
+    },
+    {
+      "source": "/go/loistokasino/",
+      "destination": "https://affiliatesmedia.odinservices.com/redirect.aspx?pid=2211&bid=1499",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaboo",
+      "destination": "https://record.kaboo.com/_R7ZBuD0uqC53OtR88puS72Nd7ZgqdRLk/3669/",
+      "permanent": false
+    },
+    {
+      "source": "/go/kaboo/",
+      "destination": "https://record.kaboo.com/_R7ZBuD0uqC53OtR88puS72Nd7ZgqdRLk/3669/",
+      "permanent": false
+    },
+    {
+      "source": "/go/speedybet",
+      "destination": "https://media.heroaffiliates.com/redirect.aspx?pid=268747&bid=3258",
+      "permanent": false
+    },
+    {
+      "source": "/go/speedybet/",
+      "destination": "https://media.heroaffiliates.com/redirect.aspx?pid=268747&bid=3258",
+      "permanent": false
+    },
+    {
+      "source": "/go/nopeampi",
+      "destination": "https://media.nopeampi.com/tracking.php?tracking_code&aid=109853&mid=1963&sid=382258&pid=637",
+      "permanent": false
+    },
+    {
+      "source": "/go/nopeampi/",
+      "destination": "https://media.nopeampi.com/tracking.php?tracking_code&aid=109853&mid=1963&sid=382258&pid=637",
+      "permanent": false
+    },
+    {
+      "source": "/go/videoslots",
+      "destination": "http://affiliates.videoslots.com/click/?aid=videoslots-match0144&turl=https%3A%2F%2Fwww.videoslots.com%2Ffi%2F%3Fsignup%3Dtrue%26referral_id%3Dmatch0144_FI&bid=no-banner&label=match0144_FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/videoslots/",
+      "destination": "http://affiliates.videoslots.com/click/?aid=videoslots-match0144&turl=https%3A%2F%2Fwww.videoslots.com%2Ffi%2F%3Fsignup%3Dtrue%26referral_id%3Dmatch0144_FI&bid=no-banner&label=match0144_FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/suomikasino",
+      "destination": "https://media.suomikasino.com/tracking.php?tracking_code&aid=108066&mid=1735&sid=365953&pid=441",
+      "permanent": false
+    },
+    {
+      "source": "/go/suomikasino/",
+      "destination": "https://media.suomikasino.com/tracking.php?tracking_code&aid=108066&mid=1735&sid=365953&pid=441",
+      "permanent": false
+    },
+    {
+      "source": "/go/slottyvegas",
+      "destination": "http://ads.slottyvegas.com/redirect.aspx?pid=24360&bid=3286",
+      "permanent": false
+    },
+    {
+      "source": "/go/slottyvegas/",
+      "destination": "http://ads.slottyvegas.com/redirect.aspx?pid=24360&bid=3286",
+      "permanent": false
+    },
+    {
+      "source": "/go/royalpanda",
+      "destination": "https://partners.royalpanda.com/redirect.aspx?pid=3710175&lpid=1102&bid=16613",
+      "permanent": false
+    },
+    {
+      "source": "/go/royalpanda/",
+      "destination": "https://partners.royalpanda.com/redirect.aspx?pid=3710175&lpid=1102&bid=16613",
+      "permanent": false
+    },
+    {
+      "source": "/go/playzee",
+      "destination": "https://Media.Zeepartners.com/redirect.aspx?pid=2507&bid=1530",
+      "permanent": false
+    },
+    {
+      "source": "/go/playzee/",
+      "destination": "https://Media.Zeepartners.com/redirect.aspx?pid=2507&bid=1530",
+      "permanent": false
+    },
+    {
+      "source": "/go/multilotto",
+      "destination": "https://www.multilotto.com/fi/campaign/landing-deal/casino-1250-270fs?ml=MV2FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/multilotto/",
+      "destination": "https://www.multilotto.com/fi/campaign/landing-deal/casino-1250-270fs?ml=MV2FI",
+      "permanent": false
+    },
+    {
+      "source": "/go/igame",
+      "destination": "http://dspk.kindredplc.com/redirect.aspx?pid=29119692&bid=26525",
+      "permanent": false
+    },
+    {
+      "source": "/go/igame/",
+      "destination": "http://dspk.kindredplc.com/redirect.aspx?pid=29119692&bid=26525",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinia",
+      "destination": "https://media.casinia.com/redirect.aspx?pid=4664&lpid=78&bid=4951",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinia/",
+      "destination": "https://media.casinia.com/redirect.aspx?pid=4664&lpid=78&bid=4951",
+      "permanent": false
+    },
+    {
+      "source": "/go/888-casino",
+      "destination": "https://mmwebhandler.aff-online.com/c/43301?sr=1645597",
+      "permanent": false
+    },
+    {
+      "source": "/go/888-casino/",
+      "destination": "https://mmwebhandler.aff-online.com/c/43301?sr=1645597",
+      "permanent": false
+    },
+    {
+      "source": "/go/thrills-3",
+      "destination": "https://record.thrills.com/_BlP0OuzKTqi4Vx7846OqKmNd7ZgqdRLk/3654/",
+      "permanent": false
+    },
+    {
+      "source": "/go/thrills-3/",
+      "destination": "https://record.thrills.com/_BlP0OuzKTqi4Vx7846OqKmNd7ZgqdRLk/3654/",
+      "permanent": false
+    },
+    {
+      "source": "/go/voodoodreams",
+      "destination": "https://ads.suprnation.com/redirect.aspx?pid=3679&bid=2254",
+      "permanent": false
+    },
+    {
+      "source": "/go/voodoodreams/",
+      "destination": "https://ads.suprnation.com/redirect.aspx?pid=3679&bid=2254",
+      "permanent": false
+    },
+    {
+      "source": "/go/omnia",
+      "destination": "https://m.omniaaffiliates.com/creativedirect.aspx?mid=18&sid=859&cid=&pid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/omnia/",
+      "destination": "https://m.omniaaffiliates.com/creativedirect.aspx?mid=18&sid=859&cid=&pid=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mango",
+      "destination": "https://media.mangocasino.com/redirect.aspx?pid=2282&bid=1660",
+      "permanent": false
+    },
+    {
+      "source": "/go/mango/",
+      "destination": "https://media.mangocasino.com/redirect.aspx?pid=2282&bid=1660",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelaa",
+      "destination": "https://pelaa.tracking-genesisaffiliates.com/redirect.aspx?pid=136970&bid=5197",
+      "permanent": false
+    },
+    {
+      "source": "/go/pelaa/",
+      "destination": "https://pelaa.tracking-genesisaffiliates.com/redirect.aspx?pid=136970&bid=5197",
+      "permanent": false
+    },
+    {
+      "source": "/go/pronto",
+      "destination": "https://wlpremierlivecasino.adsrv.eacdn.com/C.ashx?btag=a_998b_14c_&affid=272&siteid=998&adid=14&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/pronto/",
+      "destination": "https://wlpremierlivecasino.adsrv.eacdn.com/C.ashx?btag=a_998b_14c_&affid=272&siteid=998&adid=14&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/kingbilly",
+      "destination": "http://wlkingbilly.adsrv.eacdn.com/C.ashx?btag=a_1313b_656c_&affid=560&siteid=1313&adid=656&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/kingbilly/",
+      "destination": "http://wlkingbilly.adsrv.eacdn.com/C.ashx?btag=a_1313b_656c_&affid=560&siteid=1313&adid=656&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mychance",
+      "destination": "http://wlmychance.adsrv.eacdn.com/C.ashx?btag=a_10120b_537c_&affid=2758&siteid=10120&adid=537&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/mychance/",
+      "destination": "http://wlmychance.adsrv.eacdn.com/C.ashx?btag=a_10120b_537c_&affid=2758&siteid=10120&adid=537&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/ninja",
+      "destination": "https://record.affiliates.globalgaming.com/_H52_5jMDmfAdHrf4TDP9mWNd7ZgqdRLk/3/",
+      "permanent": false
+    },
+    {
+      "source": "/go/ninja/",
+      "destination": "https://record.affiliates.globalgaming.com/_H52_5jMDmfAdHrf4TDP9mWNd7ZgqdRLk/3/",
+      "permanent": false
+    },
+    {
+      "source": "/go/goliath",
+      "destination": "https://media.goliathcasino.com/redirect.aspx?pid=2364&bid=1478",
+      "permanent": false
+    },
+    {
+      "source": "/go/goliath/",
+      "destination": "https://media.goliathcasino.com/redirect.aspx?pid=2364&bid=1478",
+      "permanent": false
+    },
+    {
+      "source": "/go/dreamz",
+      "destination": "http://wlarmstrongaffiliates.adsrv.eacdn.com/C.ashx?btag=a_629b_9c_&affid=27&siteid=629&adid=9&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/dreamz/",
+      "destination": "http://wlarmstrongaffiliates.adsrv.eacdn.com/C.ashx?btag=a_629b_9c_&affid=27&siteid=629&adid=9&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/spela",
+      "destination": "http://media.tracking-spela.com/redirect.aspx?pid=132501&bid=4603",
+      "permanent": false
+    },
+    {
+      "source": "/go/spela/",
+      "destination": "http://media.tracking-spela.com/redirect.aspx?pid=132501&bid=4603",
+      "permanent": false
+    },
+    {
+      "source": "/go/kalevala",
+      "destination": "https://affmore.com/click/2/2F8EAA20C82711EA9FA58F3E570B6580",
+      "permanent": false
+    },
+    {
+      "source": "/go/kalevala/",
+      "destination": "https://affmore.com/click/2/2F8EAA20C82711EA9FA58F3E570B6580",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinojefe",
+      "destination": "https://affmore.com/click/1/2A9545F3028211E8B61B059B3A6F8AE1",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinojefe/",
+      "destination": "https://affmore.com/click/1/2A9545F3028211E8B61B059B3A6F8AE1",
+      "permanent": false
+    },
+    {
+      "source": "/go/duelz-2",
+      "destination": "https://nvd.suprnation.com/redirect.aspx?pid=8465&bid=2382",
+      "permanent": false
+    },
+    {
+      "source": "/go/duelz-2/",
+      "destination": "https://nvd.suprnation.com/redirect.aspx?pid=8465&bid=2382",
+      "permanent": false
+    },
+    {
+      "source": "/go/comeon",
+      "destination": "https://media.comeon.com/tracking.php?tracking_code&aid=107044&mid=1785&sid=360968&pid=491",
+      "permanent": false
+    },
+    {
+      "source": "/go/comeon/",
+      "destination": "https://media.comeon.com/tracking.php?tracking_code&aid=107044&mid=1785&sid=360968&pid=491",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky",
+      "destination": "https://record.glitnoraffiliates.com/_hCVF5NDbiS9VDQsR8vgoqWNd7ZgqdRLk/3",
+      "permanent": false
+    },
+    {
+      "source": "/go/lucky/",
+      "destination": "https://record.glitnoraffiliates.com/_hCVF5NDbiS9VDQsR8vgoqWNd7ZgqdRLk/3",
+      "permanent": false
+    },
+    {
+      "source": "/go/leovegas",
+      "destination": "https://ads.leovegas.com/redirect.aspx?pid=3067364&bid=13186",
+      "permanent": false
+    },
+    {
+      "source": "/go/leovegas/",
+      "destination": "https://ads.leovegas.com/redirect.aspx?pid=3067364&bid=13186",
+      "permanent": false
+    },
+    {
+      "source": "/go/karjala",
+      "destination": "https://record.blueorangepartners.com/_meMfVeEK-g1hg6WO2I1rgWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/karjala/",
+      "destination": "https://record.blueorangepartners.com/_meMfVeEK-g1hg6WO2I1rgWNd7ZgqdRLk/1/",
+      "permanent": false
+    },
+    {
+      "source": "/go/speedy",
+      "destination": "http://media.heroaffiliates.com/redirect.aspx?pid=267772&bid=2937",
+      "permanent": false
+    },
+    {
+      "source": "/go/speedy/",
+      "destination": "http://media.heroaffiliates.com/redirect.aspx?pid=267772&bid=2937",
+      "permanent": false
+    },
+    {
+      "source": "/go/cashmio",
+      "destination": "https://media.cashmio.com/C.ashx?btag=a_158b_8c_&affid=53&siteid=158&adid=8&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/cashmio/",
+      "destination": "https://media.cashmio.com/C.ashx?btag=a_158b_8c_&affid=53&siteid=158&adid=8&c=",
+      "permanent": false
+    },
+    {
+      "source": "/go/dunder",
+      "destination": "https://media.dunderaffiliates.com/redirect.aspx?pid=3454&bid=1488",
+      "permanent": false
+    },
+    {
+      "source": "/go/dunder/",
+      "destination": "https://media.dunderaffiliates.com/redirect.aspx?pid=3454&bid=1488",
+      "permanent": false
+    },
+    {
+      "source": "/go/cherry",
+      "destination": "http://ads.cherrycasino.com/tracking.php?tracking_code&aid=103430&mid=469&sid=340680&pid=37&text=TEXT_GOES_HERE",
+      "permanent": false
+    },
+    {
+      "source": "/go/cherry/",
+      "destination": "http://ads.cherrycasino.com/tracking.php?tracking_code&aid=103430&mid=469&sid=340680&pid=37&text=TEXT_GOES_HERE",
+      "permanent": false
+    },
+    {
+      "source": "/go/maria",
+      "destination": "http://dspk.kindredplc.com/redirect.aspx?pid=1166297&bid=22870",
+      "permanent": false
+    },
+    {
+      "source": "/go/maria/",
+      "destination": "http://dspk.kindredplc.com/redirect.aspx?pid=1166297&bid=22870",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoheroes",
+      "destination": "http://media.heroaffiliates.com/redirect.aspx?pid=267403&bid=1858",
+      "permanent": false
+    },
+    {
+      "source": "/go/casinoheroes/",
+      "destination": "http://media.heroaffiliates.com/redirect.aspx?pid=267403&bid=1858",
+      "permanent": false
+    },
+    {
+      "source": "/go/rizk",
+      "destination": "https://record.rizk.com/_DpFnrC1fUVB_s5OT8363hGNd7ZgqdRLk/3555/",
+      "permanent": false
+    },
+    {
+      "source": "/go/rizk/",
+      "destination": "https://record.rizk.com/_DpFnrC1fUVB_s5OT8363hGNd7ZgqdRLk/3555/",
+      "permanent": false
+    },
+    {
+      "source": "/go/playojo",
+      "destination": "https://site.gotoplayojo.com/index.php?aname=klusionz&cg=finnish",
+      "permanent": false
+    },
+    {
+      "source": "/go/playojo/",
+      "destination": "https://site.gotoplayojo.com/index.php?aname=klusionz&cg=finnish",
+      "permanent": false
+    }
+  ]
+}

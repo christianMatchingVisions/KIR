@@ -1,0 +1,21 @@
+{
+	"post_type":"casino",
+	"filters":{
+		"taxonomy":[
+			{
+				"name":"casino-services",
+				"terms":["Casino"]
+			},
+			{
+				"name":"casino-services",
+				"terms":["200"]
+			}
+		]
+	},
+	"sort":[
+		{
+			"field": "post_date",
+			"direction":"desc"
+		}
+	]
+}

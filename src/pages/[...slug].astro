@@ -1,0 +1,61 @@
+---
+/**
+ * Catch-all route: renders every scraped page fragment in src/fragments/.
+ * Each fragment folder contains head.html, body.html and meta.json
+ * (produced by scripts/scrape-pages.mjs). The route is derived from
+ * meta.json's `path`, so URLs match the original WordPress site exactly.
+ * The homepage is the fragment whose path is "/" (slug = undefined).
+ */
+import Shell from "../layouts/Shell.astro";
+
+interface FragmentMeta {
+  htmlAttrs?: string;
+  bodyAttrs?: string;
+  path: string;
+}
+
+export function getStaticPaths() {
+  const heads = import.meta.glob<string>("../fragments/*/head.html", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  });
+  const bodies = import.meta.glob<string>("../fragments/*/body.html", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  });
+  const metas = import.meta.glob<{ default: FragmentMeta }>("../fragments/*/meta.json", {
+    eager: true,
+  });
+
+  // Fragments owned by dedicated routes (rendered there, not by this catch-all).
+  const OWNED_ELSEWHERE = new Set(["uutiset"]); // src/pages/uutiset/index.astro
+
+  return Object.entries(metas)
+    .filter(([metaPath]) => !OWNED_ELSEWHERE.has(metaPath.split("/").at(-2) ?? ""))
+    .map(([metaPath, metaModule]) => {
+    const dir = metaPath.replace(/\/meta\.json$/, "");
+    const meta = metaModule.default;
+    const headHtml = heads[`${dir}/head.html`];
+    const bodyHtml = bodies[`${dir}/body.html`];
+    if (headHtml === undefined || bodyHtml === undefined) {
+      throw new Error(`Fragment ${dir} is missing head.html or body.html`);
+    }
+    const slug = String(meta.path ?? "").replace(/^\/+|\/+$/g, "");
+    return {
+      params: { slug: slug === "" ? undefined : slug },
+      props: {
+        headHtml,
+        bodyHtml,
+        htmlAttrs: meta.htmlAttrs ?? "",
+        bodyAttrs: meta.bodyAttrs ?? "",
+      },
+    };
+    });
+}
+
+const { headHtml, bodyHtml, htmlAttrs, bodyAttrs } = Astro.props;
+---
+
+<Shell headHtml={headHtml} bodyHtml={bodyHtml} htmlAttrs={htmlAttrs} bodyAttrs={bodyAttrs} />

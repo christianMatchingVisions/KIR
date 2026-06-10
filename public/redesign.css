@@ -1,0 +1,685 @@
+/* ============================================================
+   KIR REDESIGN — "Arctic Night / Revontulet" design system
+   ------------------------------------------------------------
+   Dark northern-lights theme. Loaded AFTER the affiliateKIR
+   theme CSS (injected by src/layouts/Shell.astro), overriding
+   the legacy look across all pages without touching markup.
+   Companion script /arctic.js paints the aurora canvas and
+   drives the scroll choreography (Lenis + GSAP).
+   ============================================================ */
+
+/* ---------- Fonts (self-hosted, GDPR-safe) ---------- */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-var-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------- Design tokens ---------- */
+:root {
+  --bg: #060b16;            /* arctic night sky */
+  --bg-2: #0a1322;
+  --surface: #0e1828;       /* card surfaces */
+  --surface-2: #122036;
+  --ink: #e9eff9;           /* headings */
+  --ink-2: #b9c6da;         /* body text */
+  --ink-3: #8495ae;         /* muted */
+  --line: rgba(150, 182, 224, 0.14);
+  --line-2: rgba(150, 182, 224, 0.26);
+  --teal: #2dd4bf;          /* aurora teal — brand accent */
+  --teal-soft: rgba(45, 212, 191, 0.12);
+  --green: #10b981;         /* aurora green — CTAs */
+  --green-deep: #059669;
+  --violet: #8b5cf6;        /* aurora violet — secondary accent */
+  --gold: #fbbf24;
+  --gold-soft: rgba(251, 191, 36, 0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 16px 36px -12px rgba(0, 0, 0, 0.6), 0 0 24px -6px rgba(45, 212, 191, 0.18);
+  --font: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  font-family: var(--font) !important;
+  background-color: var(--bg) !important;
+}
+body {
+  background: transparent !important;   /* aurora canvas shows through */
+  color: var(--ink-2) !important;
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+/* Aurora / starfield canvas painted by /arctic.js */
+#arctic-sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(180deg, #04070f 0%, var(--bg) 45%, #081020 100%);
+}
+::selection {
+  background: rgba(45, 212, 191, 0.3);
+  color: #eafffb;
+}
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  font-family: var(--font) !important;
+  color: var(--ink) !important;
+  font-weight: 800;
+  letter-spacing: -0.022em;
+  line-height: 1.18;
+}
+h1, .h1 {
+  font-size: clamp(1.9rem, 1.1rem + 2.6vw, 3rem) !important;
+}
+h2, .h2 {
+  font-size: clamp(1.45rem, 1rem + 1.4vw, 2rem);
+}
+h3, .h3 {
+  font-size: clamp(1.2rem, 1rem + 0.8vw, 1.45rem);
+}
+p, a, li, small, td, th {
+  font-family: var(--font) !important;
+}
+a {
+  color: #6ee7d8;
+  transition: color 0.15s ease;
+}
+a:hover, a:active {
+  opacity: 1 !important;
+  color: #a7f3e9;
+}
+:focus-visible {
+  outline: 3px solid rgba(45, 212, 191, 0.55);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.text-grey {
+  color: var(--ink-2) !important;
+}
+.text-white {
+  color: var(--ink) !important;
+}
+.bg-grey {
+  background-color: var(--surface-2) !important;
+}
+.bg-light-grey, .bg-light-blue {
+  background-color: rgba(13, 22, 38, 0.82) !important;
+}
+.radius-corners {
+  border-radius: var(--radius-sm);
+}
+.box-shadow {
+  box-shadow: var(--shadow-1) !important;
+}
+.box-shadow:hover {
+  box-shadow: var(--shadow-2) !important;
+}
+.box-shadow-invert,
+.box-shadow-invert:hover {
+  box-shadow: var(--shadow-1) !important;
+}
+.inner-shadow {
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ---------- Header / navigation ---------- */
+#site-header {
+  background: rgba(6, 11, 22, 0.66);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom: 1px solid var(--line);
+  padding-top: 0 !important;
+  width: 100%;
+  z-index: 100;
+}
+#header-navigation {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+img#site-logo {
+  height: 54px !important;
+  /* the logo was drawn for a light header */
+  filter: brightness(0) invert(1);
+}
+#header-nav a {
+  color: var(--ink) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-right: 24px;
+  padding: 8px 2px;
+}
+#header-nav a:hover {
+  color: var(--teal) !important;
+}
+#header-nav .dropdown-menu {
+  background-color: rgba(14, 24, 40, 0.96) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-2);
+  padding: 8px;
+  top: 16px !important;
+}
+#header-nav .dropdown-menu a,
+.dropdown-menu .dropdown-item {
+  color: var(--ink-2) !important;
+  background: transparent !important;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 500;
+}
+#header-nav .dropdown-menu a:hover,
+.dropdown-menu .dropdown-item:hover {
+  background-color: var(--teal-soft) !important;
+  color: var(--teal) !important;
+}
+
+/* Mobile slide menu */
+@media only screen and (max-width: 1200px) {
+  #slide-menu {
+    background-color: var(--bg-2) !important;
+  }
+  #slide-menu-header {
+    background-color: #04070f !important;
+  }
+  #slide-menu-nav-links a {
+    font-family: var(--font) !important;
+    color: var(--ink) !important;
+    font-weight: 600;
+  }
+  #slide-menu-nav-links .dropdown-menu {
+    background-color: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 12px;
+  }
+  #slide-menu-nav-links .dropdown-menu a:hover {
+    background-color: var(--surface) !important;
+  }
+  #slide-menu img.plus-18 {
+    filter: brightness(0) invert(0.7) !important;
+  }
+}
+
+/* ---------- Hero (aurora sky shows through) ---------- */
+.kir-hero {
+  background-image: none !important;
+  background: transparent !important;
+  border-bottom: none;
+  padding-top: 130px !important;
+  padding-bottom: 64px !important;
+  position: relative;
+}
+.kir-hero,
+.kir-hero p {
+  color: var(--ink-2) !important;
+}
+.kir-hero h1 {
+  color: #f4f8ff !important;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 24px rgba(45, 212, 191, 0.25), 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Breadcrumbs */
+.custom-breadcrumb,
+.custom-breadcrumb a,
+.kir-hero .custom-breadcrumb,
+.kir-hero .custom-breadcrumb a {
+  color: var(--ink-3) !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem;
+}
+.custom-breadcrumb a:hover {
+  color: var(--teal) !important;
+}
+
+/* ---------- Buttons & CTAs ---------- */
+a.cta {
+  border-radius: 999px;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+a.cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+a.cta:active {
+  transform: translateY(0);
+}
+a.cta-light {
+  background: linear-gradient(180deg, #14c794 0%, var(--green) 55%, var(--green-deep) 100%) !important;
+  color: #03130c !important;
+  box-shadow: 0 4px 16px -2px rgba(16, 185, 129, 0.45), 0 0 22px -4px rgba(16, 185, 129, 0.5) !important;
+}
+a.cta-light:hover {
+  box-shadow: 0 8px 22px -4px rgba(16, 185, 129, 0.6), 0 0 30px -4px rgba(16, 185, 129, 0.6) !important;
+}
+a.cta-dark {
+  background: linear-gradient(180deg, #9d74f8 0%, var(--violet) 60%, #6d3fe0 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px -2px rgba(139, 92, 246, 0.45) !important;
+}
+.horizontal-card .cta {
+  height: auto !important;
+  min-height: 36px;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+.rlaaf-load-more {
+  background: var(--surface) !important;
+  border: 1.5px solid var(--line-2);
+  color: var(--ink) !important;
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: var(--shadow-1) !important;
+}
+.rlaaf-load-more:hover {
+  border-color: var(--teal);
+  color: var(--teal) !important;
+  box-shadow: var(--shadow-2) !important;
+}
+
+/* Filter chips + tab buttons */
+.filters a {
+  color: var(--ink-2);
+  border: 1.5px solid var(--line-2);
+  background: var(--surface);
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 6px 14px;
+}
+.filters a.active,
+.filters a:hover {
+  background-color: var(--teal) !important;
+  border-color: var(--teal) !important;
+  color: #04221d !important;
+}
+a.tab-button {
+  background-color: var(--surface) !important;
+  border: 1.5px solid var(--line);
+  box-shadow: none !important;
+}
+a.tab-button .h5 {
+  color: var(--ink-2);
+}
+a.tab-button.tab-button-active {
+  background-color: var(--teal) !important;
+  border-color: var(--teal);
+}
+a.tab-button.tab-button-active .h5 {
+  color: #04221d !important;
+}
+a.tab-button .tab-button-counter {
+  background-color: #04070f !important;
+}
+
+/* ---------- Top-3 podium cards ---------- */
+.top-card-box {
+  background: linear-gradient(180deg, rgba(20, 33, 54, 0.92), rgba(13, 22, 38, 0.92)) !important;
+  border: 1px solid var(--line);
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-1) !important;
+  backdrop-filter: blur(6px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.top-card-box:hover {
+  transform: translateY(-4px);
+  border-color: rgba(45, 212, 191, 0.4);
+  box-shadow: var(--shadow-2) !important;
+}
+.top-card-box p,
+.top-card-box small {
+  color: var(--ink-2) !important;
+}
+.top-card-box img.casino-logo {
+  box-shadow: none !important;
+  border-radius: var(--radius-sm);
+  outline: 1px solid var(--line);
+}
+.top-card-number {
+  width: 34px !important;
+  height: 34px !important;
+  border-top-left-radius: var(--radius) !important;
+  border-bottom-right-radius: var(--radius-sm) !important;
+  font-size: 0.85rem;
+  color: #081018 !important;
+  text-shadow: none;
+}
+.top-card-number.top-card-1 {
+  background: linear-gradient(160deg, #e2e8f0, #94a3b8) !important;
+}
+.top-card-number.top-card-2 {
+  background: linear-gradient(160deg, #fde68a, #f59e0b) !important;
+}
+.top-card-number.top-card-3 {
+  background: linear-gradient(160deg, #d97706, #92400e) !important;
+  color: #fff7ed !important;
+}
+
+/* ---------- Toplist rows ---------- */
+.horizontal-card {
+  background: linear-gradient(180deg, rgba(18, 30, 50, 0.92), rgba(13, 22, 38, 0.94)) !important;
+  border: 1px solid var(--line);
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-1) !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  margin-bottom: 22px !important;
+}
+.horizontal-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(45, 212, 191, 0.35);
+  box-shadow: var(--shadow-2) !important;
+}
+.horizontal-card img.casino-logo {
+  box-shadow: none !important;
+  border-radius: var(--radius-sm) !important;
+  outline: 1px solid var(--line);
+}
+.horizontal-card small,
+.horizontal-card p {
+  color: var(--ink-2);
+}
+.index-counter {
+  background-color: #04070f !important;
+  border: 2px solid var(--teal) !important;
+  color: var(--teal) !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+  height: 30px !important;
+  width: 30px !important;
+  top: -14px !important;
+  left: -8px !important;
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.35);
+}
+.banner-text {
+  background-color: var(--gold-soft) !important;
+  color: var(--gold) !important;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 999px !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.62rem !important;
+  height: 26px !important;
+  top: -13px !important;
+  left: 28px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  backdrop-filter: blur(4px);
+}
+.text-disclaimer {
+  color: var(--ink-3);
+}
+
+/* ---------- Content cards & article boxes ---------- */
+.article-box {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--line);
+  border-radius: var(--radius) !important;
+  overflow: hidden;
+  padding: 0 !important;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  height: 100%;
+}
+.article-box:hover {
+  transform: translateY(-4px);
+  border-color: rgba(45, 212, 191, 0.35);
+  box-shadow: var(--shadow-2);
+}
+.article-box .article-preview-img {
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+.article-box p {
+  color: var(--ink) !important;
+  font-weight: 600;
+  font-size: 1.02rem !important;
+  line-height: 1.4;
+  padding: 14px 16px 16px !important;
+}
+.featured-card,
+.featured-card .featured-card-overlay,
+.featured-card-area-hero .featured-card {
+  border-radius: var(--radius) !important;
+}
+.featured-card .featured-card-overlay {
+  background-color: rgba(4, 7, 15, 0.6) !important;
+}
+.featured-card .featured-card-overlay:hover {
+  background-color: rgba(4, 7, 15, 0.35) !important;
+}
+
+/* ---------- Casino cards / review elements ---------- */
+.casino-card,
+.review-card {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-1);
+  color: var(--ink-2);
+}
+img.review-img {
+  border-radius: var(--radius-sm) !important;
+  outline: 1px solid var(--line);
+}
+#sidebar {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-1);
+}
+.sidebar-casino img {
+  box-shadow: none !important;
+  border-radius: var(--radius-sm);
+  outline: 1px solid var(--line);
+}
+.casino-card .casino-card-buttons a,
+.cta-icon-desc,
+.casino-card-buttons.casino-review-button a {
+  background-color: var(--teal) !important;
+  border-color: transparent !important;
+}
+.casino-card .casino-card-buttons a img,
+.cta-icon-desc img,
+.casino-card-buttons.casino-review-button a img {
+  filter: brightness(0) !important;
+}
+.casino-card .casino-card-buttons a:hover,
+.casino-card-buttons.casino-review-button a:hover {
+  background-color: transparent !important;
+  border-color: var(--teal) !important;
+}
+.casino-card .casino-card-buttons a:hover img,
+.casino-card-buttons.casino-review-button a:hover img {
+  filter: brightness(0) invert(0.8) sepia(1) saturate(3) hue-rotate(120deg) !important;
+}
+#review-page-cta-bar {
+  background-color: rgba(4, 7, 15, 0.9) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+}
+#review-page-cta-bar:hover {
+  background-color: rgba(4, 7, 15, 0.98) !important;
+}
+
+/* ---------- Long-form content ---------- */
+.wp-content-area,
+.intro-content-area {
+  color: var(--ink-2);
+}
+.wp-content-area h2,
+.wp-content-area h3 {
+  margin-top: 2.2rem;
+  margin-bottom: 0.9rem;
+}
+.wp-content-area img,
+.intro-content-area img {
+  border-radius: var(--radius-sm);
+}
+.wp-content-area table,
+.intro-content-area table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  margin: 1.25rem 0;
+}
+.wp-content-area table th,
+.intro-content-area table th {
+  background: var(--surface-2);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.wp-content-area table td,
+.intro-content-area table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.wp-content-area table tr:last-child td,
+.intro-content-area table tr:last-child td {
+  border-bottom: none;
+}
+.wp-content-area table tr:nth-child(even) td,
+.intro-content-area table tr:nth-child(even) td {
+  background: rgba(18, 32, 54, 0.5);
+}
+.wp-content-area blockquote,
+.intro-content-area blockquote {
+  border-left: 3px solid var(--teal);
+  background: var(--teal-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 18px;
+  color: #c8f5ec;
+}
+
+/* ---------- FAQ (ht-faq plugin) ---------- */
+[class*="ht-faq"] {
+  font-family: var(--font) !important;
+  color: var(--ink-2);
+}
+.ht-faq-item,
+[class*="faq-item"],
+[class*="faq_item"] {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 10px;
+}
+
+/* ---------- Footer ---------- */
+footer,
+#footer {
+  background: linear-gradient(180deg, rgba(4, 7, 15, 0.4) 0%, #04070f 18%) !important;
+  color: var(--ink-3) !important;
+  border-top: 1px solid var(--line);
+  margin-top: 64px;
+}
+footer h1, footer h2, footer h3, footer h4, footer h5,
+footer .h1, footer .h2, footer .h3, footer .h4, footer .h5,
+#footer h1, #footer h2, #footer h3, #footer h4, #footer h5 {
+  color: var(--ink) !important;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+footer a,
+#footer a,
+#footer .footer-links a {
+  color: var(--ink-2) !important;
+  font-weight: 500;
+}
+footer a:hover,
+#footer a:hover,
+#footer .footer-links a:hover {
+  color: var(--teal) !important;
+}
+footer p, #footer p,
+footer small, #footer small {
+  color: var(--ink-3) !important;
+}
+footer strong, #footer strong {
+  color: var(--ink-2) !important;
+  font-weight: 500;
+}
+footer hr, #footer hr {
+  border-color: var(--line);
+}
+img.plus-18-footer {
+  filter: brightness(0) invert(0.65) !important;
+}
+.footer-logos img {
+  filter: grayscale(1) brightness(2.2);
+  opacity: 0.8;
+}
+
+/* Affiliate disclosure bar (kir-affiliate-disclosure carries its own
+   inline style; deepen it to match the theme) */
+.kir-affiliate-disclosure {
+  background: #04070f !important;
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background: #1d2c44;
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf66;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  #arctic-sky {
+    background: linear-gradient(180deg, #04070f 0%, var(--bg) 45%, #081020 100%),
+      radial-gradient(900px 300px at 70% 0%, rgba(45, 212, 191, 0.15), transparent 60%);
+  }
+}
