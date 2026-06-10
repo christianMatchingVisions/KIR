@@ -50,8 +50,11 @@ re-scraping fragments never breaks it):
   `public/wp-content/.../custom.css` is still loaded first; don't delete it
   (layout/positioning still comes from there).
 - `public/arctic.js` + `public/vendor/{lenis,gsap,ScrollTrigger}.min.js`
-  (self-hosted) — canvas aurora + starfield behind every page (`#arctic-sky`,
-  low-res buffer ~30fps, pauses on hidden tabs), Lenis momentum scroll,
+  (self-hosted) — two-layer sky behind every page: `#arctic-sky` (stars,
+  native-DPR canvas) + `#arctic-aurora` (low-res ribbon canvas softened by a
+  CSS `filter: blur()` on the element — canvas `ctx.filter` is NOT supported
+  on iOS Safari, so never blur inside the canvas; ~30fps, pauses on hidden
+  tabs), Lenis momentum scroll,
   hero entrance "card deal", pointer parallax, scroll reveals
   (`ScrollTrigger.batch`, arms RLAAF-rendered cards via MutationObserver),
   and a pinned scrubbed homepage hero scene (desktop ≥992px only).

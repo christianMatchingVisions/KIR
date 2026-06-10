@@ -21,46 +21,35 @@
   var isHome = document.body.classList.contains("home");
 
   /* ----------------------------------------------------------
-     1. AURORA SKY — canvas behind everything (#arctic-sky)
+     1. AURORA SKY — two layers behind everything:
+     - #arctic-sky: stars, rendered at full native DPR (sharp)
+     - #arctic-aurora: low-res ribbon canvas displayed as its own
+       element with a CSS `filter: blur()` — a true GPU Gaussian
+       that iOS Safari supports (unlike canvas ctx.filter, which it
+       ignores). The compositor re-blurs every frame for free, so
+       every browser gets the same soft curtains with zero
+       resampling artifacts.
      ---------------------------------------------------------- */
   var sky = document.createElement("canvas");
   sky.id = "arctic-sky";
   sky.setAttribute("aria-hidden", "true");
   document.body.prepend(sky);
 
+  var off = document.createElement("canvas"); // aurora element (low-res backing)
+  off.id = "arctic-aurora";
+  off.setAttribute("aria-hidden", "true");
+  off.style.cssText =
+    "position:fixed;top:0;left:0;width:100%;pointer-events:none;z-index:-1;" +
+    "will-change:transform,filter;";
+  // soft fade-out at the aurora's lower edge (no hard cutoff)
+  var auroraMask = "linear-gradient(180deg,#000 68%,transparent 100%)";
+  off.style.webkitMaskImage = auroraMask;
+  off.style.maskImage = auroraMask;
+  // after `sky` in the DOM so the curtains paint above the stars
+  sky.after(off);
+
   var ctx = sky.getContext("2d");
-  var off = document.createElement("canvas"); // low-res aurora buffer
   var octx = off.getContext("2d");
-
-  // --- Canvas filter support detection (iOS Safari has none) ---
-  // iOS Safari silently ignores assignments to ctx.filter (it stays
-  // "none"), so the blur composite no-ops and users see hard-edged
-  // vertical strips. Detect once; when unsupported we soften the
-  // buffer ourselves with a downscale/upscale box-blur (below).
-  // Verification hook: set `window.__forceNoCanvasFilter = true`
-  // before this script runs (or load with `?nofilter` in the query
-  // string) to force the fallback path in any browser.
-  var canvasFilterOK = (function () {
-    if (window.__forceNoCanvasFilter) return false;
-    try {
-      if (/[?&]nofilter\b/.test(location.search)) return false;
-      var probe = document.createElement("canvas").getContext("2d");
-      probe.filter = "blur(2px)";
-      var ok = probe.filter !== "none";
-      probe.filter = "none";
-      return ok;
-    } catch (e) {
-      return false;
-    }
-  })();
-  window.__kirCanvasFilter = canvasFilterOK; // exposed for testing
-
-  // Fallback-blur helper canvases (allocated in resize(), not per frame):
-  // mip-chain off → 1/2 → 1/4 → 1/2 → full buffer size, run twice.
-  // Bilinear filtering on each resample approximates a wide box blur;
-  // stepping through 1/2 avoids the block artifacts of a direct 4x jump.
-  var blurHalf = null, blurSmall = null, blurOut = null;
-  var bhctx = null, bsctx = null, boctx = null;
 
   var W = 0, H = 0, OW = 0, OH = 0;
   var stars = [];
@@ -77,44 +66,22 @@
   function resize() {
     W = innerWidth;
     H = innerHeight;
-    // Render the main canvas at device resolution (capped at 2× — enough
-    // for retina sharpness without tripling fill cost on DPR-3 phones).
-    // Without this the canvas is stretched 2-3× across physical pixels
-    // and the whole sky reads as pixelated on phones, regardless of how
-    // soft the aurora buffer is.
-    dpr = Math.min(2, window.devicePixelRatio || 1);
+    // Stars are tiny rects — render at full native density (cap 3) so
+    // nothing on the star layer is upscaled at all.
+    dpr = Math.min(3, window.devicePixelRatio || 1);
     sky.width = Math.ceil(W * dpr);
     sky.height = Math.ceil(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // keep drawing in CSS units
-    if ("imageSmoothingQuality" in ctx) ctx.imageSmoothingQuality = "high";
-    // Aurora buffer: sized against PHYSICAL pixels so the final upscale
-    // ratio stays sane on dense screens (phones were 0.34 of CSS width —
-    // a 132px buffer stretched ~9× across an iPhone's 1170 hardware px).
-    var scale = (isMobile ? 0.34 : 0.36) * dpr;
-    OW = off.width = Math.min(1100, Math.ceil(W * scale));
-    OH = off.height = Math.ceil(H * scale);
-    if (!canvasFilterOK) {
-      blurHalf = blurHalf || document.createElement("canvas");
-      blurSmall = blurSmall || document.createElement("canvas");
-      blurOut = blurOut || document.createElement("canvas");
-      blurHalf.width = Math.max(1, Math.round(OW / 2));
-      blurHalf.height = Math.max(1, Math.round(OH / 2));
-      blurSmall.width = Math.max(1, Math.round(OW / 4));
-      blurSmall.height = Math.max(1, Math.round(OH / 4));
-      blurOut.width = OW;
-      blurOut.height = OH;
-      bhctx = blurHalf.getContext("2d");
-      bsctx = blurSmall.getContext("2d");
-      boctx = blurOut.getContext("2d");
-      bhctx.imageSmoothingEnabled = true;
-      bsctx.imageSmoothingEnabled = true;
-      boctx.imageSmoothingEnabled = true;
-      if ("imageSmoothingQuality" in boctx) {
-        bhctx.imageSmoothingQuality = "high";
-        bsctx.imageSmoothingQuality = "high";
-        boctx.imageSmoothingQuality = "high";
-      }
-    }
+    // Aurora element: the curtains live in the upper sky (smaller share
+    // on tall phone viewports so they stay out from behind body text).
+    // Backing stays low-res — the CSS Gaussian blur erases any trace of
+    // the buffer resolution, on every browser.
+    var skyShare = isMobile ? 0.58 : 0.78;
+    off.style.height = Math.round(H * skyShare) + "px";
+    off.style.filter = "blur(" + Math.max(12, Math.round(W / 90)) + "px)";
+    var scale = isMobile ? 0.5 : 0.36;
+    OW = off.width = Math.min(820, Math.ceil(W * scale));
+    OH = off.height = Math.ceil(H * skyShare * scale);
     // starfield: density-capped, precomputed
     var n = Math.min(230, Math.floor((W * H) / 9000));
     stars = [];
@@ -187,35 +154,11 @@
       }
     }
     octx.globalCompositeOperation = "source-over";
-    if (!canvasFilterOK) softenBuffer();
-  }
-
-  // Fallback blur for browsers without ctx.filter (iOS Safari): two
-  // mip-chain passes (src → 1/2 → 1/4 → 1/2 → full). Bilinear
-  // resampling at each step smears the 3-4px columns into soft
-  // curtains — visually close to the blur() path, works everywhere.
-  // Runs only when the aurora buffer was redrawn (~30fps), and the
-  // result lives in blurOut, which drawFrame composites unfiltered.
-  function softenChain(src) {
-    var hw = blurHalf.width, hh = blurHalf.height;
-    var sw = blurSmall.width, sh = blurSmall.height;
-    bhctx.clearRect(0, 0, hw, hh);
-    bhctx.drawImage(src, 0, 0, hw, hh);          // down to 1/2
-    bsctx.clearRect(0, 0, sw, sh);
-    bsctx.drawImage(blurHalf, 0, 0, sw, sh);     // down to 1/4
-    bhctx.clearRect(0, 0, hw, hh);
-    bhctx.drawImage(blurSmall, 0, 0, hw, hh);    // up to 1/2
-    boctx.clearRect(0, 0, OW, OH);
-    boctx.drawImage(blurHalf, 0, 0, OW, OH);     // up to full
-  }
-  function softenBuffer() {
-    softenChain(off);     // pass 1
-    softenChain(blurOut); // pass 2
   }
 
   function drawFrame(t, auroraToo) {
     ctx.clearRect(0, 0, W, H);
-    // stars
+    // stars (their own sharp, native-DPR layer)
     ctx.fillStyle = "#cfe3ff";
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
@@ -223,21 +166,11 @@
       ctx.fillRect(s.x, s.y, s.r, s.r);
     }
     ctx.globalAlpha = 1;
+    // The aurora element displays itself — the compositor applies its
+    // CSS Gaussian blur whenever the backing changes (~30fps); the
+    // gentle scroll parallax rides a compositor-only transform.
     if (auroraToo) drawAurora();
-    // aurora sits in the upper sky, gently parallaxed by scroll drift;
-    // a single filtered composite softens the low-res buffer into
-    // ribbons. On mobile the composite is compressed vertically so the
-    // curtains stay in roughly the top 55-60% of the tall viewport.
-    var compH = H * (isMobile ? 0.58 : 0.78);
-    var compY = -H * 0.04 * aurora.drift;
-    if (canvasFilterOK) {
-      ctx.filter = "blur(" + Math.round(W / 110) + "px)";
-      ctx.drawImage(off, 0, compY, W, compH);
-      ctx.filter = "none";
-    } else {
-      // pre-softened buffer (see softenBuffer) — no ctx.filter needed
-      ctx.drawImage(blurOut, 0, compY, W, compH);
-    }
+    off.style.transform = "translateY(" + (-H * 0.04 * aurora.drift).toFixed(1) + "px)";
   }
 
   if (reduce) {
