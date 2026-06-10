@@ -73,13 +73,25 @@
   var animTime = 0;
   var lastT = 0;
 
+  var dpr = 1;
   function resize() {
-    W = sky.width = innerWidth;
-    H = sky.height = innerHeight;
-    // Mobile buffer slightly less coarse (0.28 → 0.34) to cut banding
-    // at the source; per-frame cost stays modest (2 ribbons on mobile).
-    var scale = isMobile ? 0.34 : 0.36;
-    OW = off.width = Math.min(820, Math.ceil(W * scale));
+    W = innerWidth;
+    H = innerHeight;
+    // Render the main canvas at device resolution (capped at 2× — enough
+    // for retina sharpness without tripling fill cost on DPR-3 phones).
+    // Without this the canvas is stretched 2-3× across physical pixels
+    // and the whole sky reads as pixelated on phones, regardless of how
+    // soft the aurora buffer is.
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    sky.width = Math.ceil(W * dpr);
+    sky.height = Math.ceil(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // keep drawing in CSS units
+    if ("imageSmoothingQuality" in ctx) ctx.imageSmoothingQuality = "high";
+    // Aurora buffer: sized against PHYSICAL pixels so the final upscale
+    // ratio stays sane on dense screens (phones were 0.34 of CSS width —
+    // a 132px buffer stretched ~9× across an iPhone's 1170 hardware px).
+    var scale = (isMobile ? 0.34 : 0.36) * dpr;
+    OW = off.width = Math.min(1100, Math.ceil(W * scale));
     OH = off.height = Math.ceil(H * scale);
     if (!canvasFilterOK) {
       blurHalf = blurHalf || document.createElement("canvas");
@@ -97,6 +109,11 @@
       bhctx.imageSmoothingEnabled = true;
       bsctx.imageSmoothingEnabled = true;
       boctx.imageSmoothingEnabled = true;
+      if ("imageSmoothingQuality" in boctx) {
+        bhctx.imageSmoothingQuality = "high";
+        bsctx.imageSmoothingQuality = "high";
+        boctx.imageSmoothingQuality = "high";
+      }
     }
     // starfield: density-capped, precomputed
     var n = Math.min(230, Math.floor((W * H) / 9000));
