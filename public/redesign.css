@@ -223,8 +223,17 @@ img#site-logo {
 
 /* ---------- Hero (aurora sky shows through) ---------- */
 .kir-hero {
+  /* Soft legibility scrim: darkens gently behind the text block while the
+     aurora stays visible at the top and edges. No hard box — an elliptical
+     radial fade centred slightly below middle (where the copy sits). */
   background-image: none !important;
-  background: transparent !important;
+  background: radial-gradient(
+      ellipse 150% 82% at 50% 60%,
+      rgba(4, 8, 16, 0.6) 0%,
+      rgba(4, 8, 16, 0.44) 42%,
+      rgba(4, 8, 16, 0.16) 72%,
+      rgba(4, 8, 16, 0) 100%
+    ) !important;
   border-bottom: none;
   padding-top: 130px !important;
   padding-bottom: 64px !important;
@@ -233,6 +242,10 @@ img#site-logo {
 .kir-hero,
 .kir-hero p {
   color: var(--ink-2) !important;
+}
+.kir-hero p {
+  /* extra edge over the animated sky where the scrim thins out */
+  text-shadow: 0 1px 10px rgba(4, 7, 15, 0.75);
 }
 .kir-hero h1 {
   color: #f4f8ff !important;
@@ -654,6 +667,46 @@ img.plus-18-footer {
 .kir-affiliate-disclosure {
   background: #04070f !important;
   border-top: 1px solid var(--line);
+}
+
+/* ---------- Mobile polish (phones) ---------- */
+@media only screen and (max-width: 767px) {
+  /* Compact dark-glass header: the 54px logo + paddings is oversized at 390px */
+  #header-navigation {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  img#site-logo {
+    height: 44px !important;
+  }
+
+  /* Hero: deeper scrim on phones — the fixed canvas fills the whole tall
+     viewport behind the text, so it needs more darkening than desktop */
+  .kir-hero {
+    background: radial-gradient(
+        ellipse 160% 88% at 50% 58%,
+        rgba(4, 8, 16, 0.74) 0%,
+        rgba(4, 8, 16, 0.56) 46%,
+        rgba(4, 8, 16, 0.24) 74%,
+        rgba(4, 8, 16, 0) 100%
+      ) !important;
+    padding-top: 88px !important;
+    padding-bottom: 40px !important;
+  }
+  .kir-hero h1 {
+    font-size: 1.65rem !important;
+    line-height: 1.24;
+    letter-spacing: -0.018em;
+  }
+  .kir-hero p {
+    font-size: 0.97rem !important;
+    line-height: 1.62;
+  }
+
+  /* Guard against accidental horizontal overflow from legacy fragments */
+  html, body {
+    overflow-x: hidden;
+  }
 }
 
 /* ---------- Scrollbar ---------- */

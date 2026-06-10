@@ -32,6 +32,36 @@
   var off = document.createElement("canvas"); // low-res aurora buffer
   var octx = off.getContext("2d");
 
+  // --- Canvas filter support detection (iOS Safari has none) ---
+  // iOS Safari silently ignores assignments to ctx.filter (it stays
+  // "none"), so the blur composite no-ops and users see hard-edged
+  // vertical strips. Detect once; when unsupported we soften the
+  // buffer ourselves with a downscale/upscale box-blur (below).
+  // Verification hook: set `window.__forceNoCanvasFilter = true`
+  // before this script runs (or load with `?nofilter` in the query
+  // string) to force the fallback path in any browser.
+  var canvasFilterOK = (function () {
+    if (window.__forceNoCanvasFilter) return false;
+    try {
+      if (/[?&]nofilter\b/.test(location.search)) return false;
+      var probe = document.createElement("canvas").getContext("2d");
+      probe.filter = "blur(2px)";
+      var ok = probe.filter !== "none";
+      probe.filter = "none";
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  })();
+  window.__kirCanvasFilter = canvasFilterOK; // exposed for testing
+
+  // Fallback-blur helper canvases (allocated in resize(), not per frame):
+  // mip-chain off → 1/2 → 1/4 → 1/2 → full buffer size, run twice.
+  // Bilinear filtering on each resample approximates a wide box blur;
+  // stepping through 1/2 avoids the block artifacts of a direct 4x jump.
+  var blurHalf = null, blurSmall = null, blurOut = null;
+  var bhctx = null, bsctx = null, boctx = null;
+
   var W = 0, H = 0, OW = 0, OH = 0;
   var stars = [];
   // The aurora "state" the scroll choreography can drive.
@@ -46,9 +76,28 @@
   function resize() {
     W = sky.width = innerWidth;
     H = sky.height = innerHeight;
-    var scale = isMobile ? 0.28 : 0.36;
+    // Mobile buffer slightly less coarse (0.28 → 0.34) to cut banding
+    // at the source; per-frame cost stays modest (2 ribbons on mobile).
+    var scale = isMobile ? 0.34 : 0.36;
     OW = off.width = Math.min(820, Math.ceil(W * scale));
     OH = off.height = Math.ceil(H * scale);
+    if (!canvasFilterOK) {
+      blurHalf = blurHalf || document.createElement("canvas");
+      blurSmall = blurSmall || document.createElement("canvas");
+      blurOut = blurOut || document.createElement("canvas");
+      blurHalf.width = Math.max(1, Math.round(OW / 2));
+      blurHalf.height = Math.max(1, Math.round(OH / 2));
+      blurSmall.width = Math.max(1, Math.round(OW / 4));
+      blurSmall.height = Math.max(1, Math.round(OH / 4));
+      blurOut.width = OW;
+      blurOut.height = OH;
+      bhctx = blurHalf.getContext("2d");
+      bsctx = blurSmall.getContext("2d");
+      boctx = blurOut.getContext("2d");
+      bhctx.imageSmoothingEnabled = true;
+      bsctx.imageSmoothingEnabled = true;
+      boctx.imageSmoothingEnabled = true;
+    }
     // starfield: density-capped, precomputed
     var n = Math.min(230, Math.floor((W * H) / 9000));
     stars = [];
@@ -79,7 +128,16 @@
     { hue: "52,211,153", base: 0.22, amp: 0.13, len: 0.40, speed: 0.62, alpha: 0.42 }, // green
     { hue: "139,92,246", base: 0.40, amp: 0.08, len: 0.34, speed: 0.81, alpha: 0.3 },  // violet
   ];
-  if (isMobile) RIBBONS = RIBBONS.slice(0, 2);
+  if (isMobile) {
+    // Tall narrow viewports: keep the aurora in the upper sky (it must
+    // not sit behind body text) and dim it ~20% so text stays readable.
+    RIBBONS = RIBBONS.slice(0, 2);
+    RIBBONS.forEach(function (rb) {
+      rb.base *= 0.8;
+      rb.len *= 0.85;
+      rb.alpha *= 0.8;
+    });
+  }
 
   function drawAurora() {
     var t = animTime;
@@ -93,7 +151,7 @@
       // scrolling visibly re-shapes the curtains (not just dims them)
       var stir = aurora.phase * (0.7 + r * 0.45);
       var widen = 1 + e * 0.6; // energy makes the waves swell
-      var step = 4;
+      var step = isMobile ? 3 : 4; // narrower columns on mobile = less banding
       for (var x = 0; x <= OW; x += step) {
         var nx = x / OW;
         var topY =
@@ -112,6 +170,30 @@
       }
     }
     octx.globalCompositeOperation = "source-over";
+    if (!canvasFilterOK) softenBuffer();
+  }
+
+  // Fallback blur for browsers without ctx.filter (iOS Safari): two
+  // mip-chain passes (src → 1/2 → 1/4 → 1/2 → full). Bilinear
+  // resampling at each step smears the 3-4px columns into soft
+  // curtains — visually close to the blur() path, works everywhere.
+  // Runs only when the aurora buffer was redrawn (~30fps), and the
+  // result lives in blurOut, which drawFrame composites unfiltered.
+  function softenChain(src) {
+    var hw = blurHalf.width, hh = blurHalf.height;
+    var sw = blurSmall.width, sh = blurSmall.height;
+    bhctx.clearRect(0, 0, hw, hh);
+    bhctx.drawImage(src, 0, 0, hw, hh);          // down to 1/2
+    bsctx.clearRect(0, 0, sw, sh);
+    bsctx.drawImage(blurHalf, 0, 0, sw, sh);     // down to 1/4
+    bhctx.clearRect(0, 0, hw, hh);
+    bhctx.drawImage(blurSmall, 0, 0, hw, hh);    // up to 1/2
+    boctx.clearRect(0, 0, OW, OH);
+    boctx.drawImage(blurHalf, 0, 0, OW, OH);     // up to full
+  }
+  function softenBuffer() {
+    softenChain(off);     // pass 1
+    softenChain(blurOut); // pass 2
   }
 
   function drawFrame(t, auroraToo) {
@@ -126,10 +208,19 @@
     ctx.globalAlpha = 1;
     if (auroraToo) drawAurora();
     // aurora sits in the upper sky, gently parallaxed by scroll drift;
-    // a single filtered composite softens the low-res buffer into ribbons
-    ctx.filter = "blur(" + Math.round(W / 110) + "px)";
-    ctx.drawImage(off, 0, -H * 0.04 * aurora.drift, W, H * 0.78);
-    ctx.filter = "none";
+    // a single filtered composite softens the low-res buffer into
+    // ribbons. On mobile the composite is compressed vertically so the
+    // curtains stay in roughly the top 55-60% of the tall viewport.
+    var compH = H * (isMobile ? 0.58 : 0.78);
+    var compY = -H * 0.04 * aurora.drift;
+    if (canvasFilterOK) {
+      ctx.filter = "blur(" + Math.round(W / 110) + "px)";
+      ctx.drawImage(off, 0, compY, W, compH);
+      ctx.filter = "none";
+    } else {
+      // pre-softened buffer (see softenBuffer) — no ctx.filter needed
+      ctx.drawImage(blurOut, 0, compY, W, compH);
+    }
   }
 
   if (reduce) {
