@@ -1,0 +1,136 @@
+<!doctype html>
+<!--
+  @custom — source for /og/mm-kisat-2026-tilastot.png (1200x630).
+  Arctic Night design language (tokens mirrored from public/redesign.css).
+  Render: Playwright chromium screenshot at exactly 1200x630, then optimize
+  with Pillow to keep the PNG under 300 KB. Finnish copy only, short lines.
+-->
+<html lang="fi">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face {
+    font-family: "Inter";
+    src: url("file:///C:/Users/chrni/Desktop/matching visions projects/KIR/public/fonts/inter-var-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background: #060b16; /* --bg: arctic night sky */
+    font-family: "Inter", sans-serif;
+    color: #e9eff9;       /* --ink */
+  }
+  /* Aurora glow washes (teal / green / violet — redesign.css accents) */
+  .glow { position: absolute; inset: 0; }
+  .glow::before, .glow::after { content: ""; position: absolute; border-radius: 50%; filter: blur(90px); }
+  .glow::before {
+    width: 760px; height: 420px; left: -180px; top: -220px;
+    background: radial-gradient(ellipse, rgba(45, 212, 191, 0.34), rgba(16, 185, 129, 0.16) 55%, transparent 75%);
+  }
+  .glow::after {
+    width: 820px; height: 520px; right: -260px; top: -120px;
+    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.30), rgba(139, 92, 246, 0.10) 55%, transparent 75%);
+  }
+  /* Aurora ribbon arcing across the upper third */
+  .ribbon {
+    position: absolute; left: -80px; right: -80px; top: 96px; height: 150px;
+    background: linear-gradient(100deg,
+      rgba(45, 212, 191, 0) 4%,
+      rgba(45, 212, 191, 0.5) 26%,
+      rgba(16, 185, 129, 0.42) 48%,
+      rgba(139, 92, 246, 0.46) 74%,
+      rgba(139, 92, 246, 0) 96%);
+    filter: blur(46px);
+    transform: rotate(-5deg);
+    opacity: 0.85;
+  }
+  /* Star pinpricks */
+  .stars { position: absolute; inset: 0; }
+  .stars i {
+    position: absolute; display: block; border-radius: 50%;
+    background: #e9eff9; opacity: 0.7;
+  }
+  /* Legibility scrim behind the copy (same idea as .kir-hero) */
+  .scrim {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 130% 90% at 42% 72%,
+      rgba(4, 8, 16, 0.78) 0%, rgba(4, 8, 16, 0.5) 48%, rgba(4, 8, 16, 0.06) 100%);
+  }
+  .frame {
+    position: absolute; inset: 22px;
+    border: 1px solid rgba(150, 182, 224, 0.26); /* --line-2 */
+    border-radius: 24px;
+  }
+  .copy {
+    position: absolute; left: 84px; right: 84px; top: 0; bottom: 0;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .kicker {
+    display: flex; align-items: center; gap: 16px;
+    color: #2dd4bf; /* --teal */
+    font-size: 27px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .kicker::before {
+    content: ""; width: 56px; height: 4px; border-radius: 999px;
+    background: linear-gradient(90deg, #2dd4bf, #8b5cf6);
+  }
+  h1 {
+    margin-top: 18px;
+    font-size: 124px; font-weight: 850; line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: #f4f8ff;
+    text-shadow: 0 2px 40px rgba(45, 212, 191, 0.28), 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  h1 .vuosi {
+    background: linear-gradient(95deg, #5eead4 10%, #2dd4bf 45%, #8b5cf6 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub {
+    margin-top: 26px;
+    color: #b9c6da; /* --ink-2 */
+    font-size: 41px; font-weight: 600; letter-spacing: -0.01em;
+  }
+  .sub b { color: #e9eff9; font-weight: 800; }
+  .sub .dot { color: #2dd4bf; font-weight: 800; padding: 0 8px; }
+  .site {
+    position: absolute; left: 84px; bottom: 56px;
+    display: flex; align-items: center; gap: 14px;
+    color: #8495ae; /* --ink-3 */
+    font-size: 26px; font-weight: 600; letter-spacing: 0.01em;
+  }
+  .site::before {
+    content: ""; width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #5eead4, #0d9488);
+    box-shadow: 0 0 14px rgba(45, 212, 191, 0.8);
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="ribbon"></div>
+  <div class="stars">
+    <i style="left:140px; top:70px;  width:3px; height:3px;"></i>
+    <i style="left:340px; top:46px;  width:2px; height:2px; opacity:.5;"></i>
+    <i style="left:540px; top:96px;  width:2px; height:2px; opacity:.6;"></i>
+    <i style="left:760px; top:52px;  width:3px; height:3px;"></i>
+    <i style="left:930px; top:120px; width:2px; height:2px; opacity:.5;"></i>
+    <i style="left:1080px;top:64px;  width:3px; height:3px; opacity:.8;"></i>
+    <i style="left:1130px;top:210px; width:2px; height:2px; opacity:.5;"></i>
+    <i style="left:60px;  top:240px; width:2px; height:2px; opacity:.6;"></i>
+  </div>
+  <div class="scrim"></div>
+  <div class="frame"></div>
+  <div class="copy">
+    <div class="kicker">Tilastot</div>
+    <h1>MM-kisat <span class="vuosi">2026</span></h1>
+    <p class="sub"><b>48</b> joukkuetta <span class="dot">·</span> <b>104</b> ottelua <span class="dot">·</span> <b>16</b> stadionia</p>
+  </div>
+  <div class="site">kasinotilmanrekisteroitymista.com</div>
+</body>
+</html>

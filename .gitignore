@@ -18,3 +18,6 @@ screenshots/
 # OS noise
 Thumbs.db
 .DS_Store
+
+# local tooling clone (installer copies to ~/.claude)
+claude-seo/

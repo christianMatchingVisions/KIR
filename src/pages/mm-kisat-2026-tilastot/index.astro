@@ -1,0 +1,1419 @@
+---
+// @custom — hand-edited page; converters/scrapers must not overwrite it.
+//
+// /mm-kisat-2026-tilastot/ — World Cup 2026 deep-stats page (Arctic Night).
+// Pattern B (chrome slicing, same technique as src/layouts/ArticleLayout.astro):
+// the real header/slide-menu/footer/disclosure are sliced out of the scraped
+// homepage fragment at build time, so a re-scrape (`npm run sync:content`)
+// never breaks this page. All statistics are rendered at build time from
+// /public/mm2026-data.js (single source of truth, parsed between markers);
+// /public/mm2026-tilastot.js adds the client-side interactivity.
+//
+// COMPLIANCE (do not remove): sliced footer + .kir-affiliate-disclosure carry
+// the mandatory affiliate disclosure and responsible-gambling chrome
+// (18+ / Peluuri.fi). No affiliate links on this page. No first-hand-testing
+// claims anywhere in the copy.
+import homeBody from "../../fragments/home/body.html?raw";
+import homeHead from "../../fragments/home/head.html?raw";
+import dataModuleRaw from "../../../public/mm2026-data.js?raw";
+
+/* ---- Stats data: parse the localized data module (build-time) ---- */
+const dataJson = dataModuleRaw.split("/*__MM2026_START__*/")[1]?.split("/*__MM2026_END__*/")[0];
+if (!dataJson) throw new Error("mm-kisat-2026-tilastot: markers missing in public/mm2026-data.js");
+const MM = JSON.parse(dataJson);
+
+const siteName = "Kasinot ilman rekisteröitymistä";
+const siteUrl = "https://kasinotilmanrekisteroitymista.com";
+const canonical = `${siteUrl}/mm-kisat-2026-tilastot/`;
+const title = "MM-kisojen 2026 tilastot – lohkot, joukkueet ja ennätykset";
+const description =
+  "Jalkapallon MM-kisat 2026 tilastoina: 12 lohkoa, 48 joukkuetta, 16 stadionia, kaikkien aikojen maalintekijät ja MM-historian ennätykset yhdessä paikassa.";
+/* Topical OG card (1200×630, generated from scripts/og/mm-kisat-2026-tilastot.html). */
+const ogImage = `${siteUrl}/og/mm-kisat-2026-tilastot.png`;
+const ogImageAlt = "MM-kisat 2026 tilastoina: 48 joukkuetta, 104 ottelua ja 16 stadionia";
+/* Site logo (same asset the sliced header chrome uses). */
+const logoUrl = `${siteUrl}/wp-content/uploads/2026/01/new-logo.png`;
+/* Verified external references (all HTTP 200, no redirects — 2026-06-11). */
+const fifaRankingUrl = "https://inside.fifa.com/fifa-world-ranking/men";
+const fifaTournamentUrl = "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026";
+const rsssfUrl = "https://www.rsssf.org/";
+const wikiWcUrl = "https://fi.wikipedia.org/wiki/Jalkapallon_maailmanmestaruuskilpailut";
+const wikiWc2026Url = "https://fi.wikipedia.org/wiki/Jalkapallon_maailmanmestaruuskilpailut_2026";
+
+/* ---- Site chrome, sliced from the scraped homepage fragment ---- */
+function sliceBetween(src: string, startMarker: string, endMarker: string, includeEnd = false): string {
+  const a = src.indexOf(startMarker);
+  if (a === -1) throw new Error(`mm-kisat-2026-tilastot: marker not found: ${startMarker}`);
+  const b = src.indexOf(endMarker, a);
+  if (b === -1) throw new Error(`mm-kisat-2026-tilastot: marker not found: ${endMarker}`);
+  return src.slice(a, includeEnd ? b + endMarker.length : b);
+}
+
+/* ShortPixel adaptive images use base64 SVG placeholders; the real image URL
+   sits URL-encoded in a data-u attribute INSIDE the encoded SVG. Decode at
+   build time → plain <img>, no spai script needed on this page. */
+function decodeSpai(html: string): string {
+  return html.replace(
+    /<img\b[^>]*src="data:image\/svg\+xml;base64,([^"]+)"[^>]*>/g,
+    (tag, b64) => {
+      const svg = Buffer.from(b64, "base64").toString("utf8");
+      const dataU = svg.match(/data-u="([^"]+)"/)?.[1];
+      if (!dataU) return tag;
+      const real = decodeURIComponent(dataU).replace(siteUrl, "");
+      return tag
+        .replace(/src="data:[^"]*"/, `src="${real}"`)
+        .replace(/\s+data-spai="[^"]*"/g, "");
+    },
+  );
+}
+
+const headerHtml = decodeSpai(
+  sliceBetween(homeBody, '<header id="site-header"', '<section class="container-fluid kir-hero"'),
+);
+/* Display-only cleanup: the WP footer widget currently ships an empty
+   RG-logo slot (<img src="" alt="" />); strip it from this page's slice so
+   the "Vastuullinen pelaaminen" logo row renders cleanly. Site-wide fix
+   belongs in wp-admin + `npm run sync:content` — do not edit the fragment. */
+const footerHtml = decodeSpai(sliceBetween(homeBody, "<footer", "</footer>", true)).replace(
+  /<img\b[^>]*\bsrc=""[^>]*>/g,
+  "",
+);
+const disclosureHtml = sliceBetween(homeBody, '<div class="kir-affiliate-disclosure"', "</style>", true);
+const styleLinks = (homeHead.match(/<link[^>]*rel=['"]stylesheet['"][^>]*>/g) ?? []).join("\n");
+
+/* ---- Derived view data ---- */
+type Joukkue = (typeof MM.joukkueet)[number];
+const groups: { letter: string; teams: Joukkue[] }[] = [..."ABCDEFGHIJKL"].map((letter) => ({
+  letter,
+  teams: MM.joukkueet.filter((j: Joukkue) => j.lohko === letter),
+}));
+const katNimi: Record<string, string> = Object.fromEntries(
+  MM.kategoriat.map((k: { id: string; nimi: string }) => [k.id, k.nimi]),
+);
+const nf = new Intl.NumberFormat("fi-FI");
+const dShort = (iso: string) => {
+  const [, m, d] = iso.split("-");
+  return `${Number(d)}.${Number(m)}.`;
+};
+const alkaa = dShort(MM.turnaus.alkaa); // 11.6.
+const paattyy = `${dShort(MM.turnaus.paattyy)}${MM.turnaus.paattyy.slice(0, 4)}`; // 19.7.2026
+const saavutus = (j: Joukkue) =>
+  j.saavutusVuodet ? `${j.parasSaavutus} (${j.saavutusVuodet})` : j.parasSaavutus;
+
+const heroStats = [
+  { v: String(MM.turnaus.joukkueita), l: "joukkuetta" },
+  { v: String(MM.turnaus.otteluita), l: "ottelua" },
+  { v: String(MM.turnaus.stadioneita), l: "stadionia" },
+  { v: String(MM.turnaus.isantamaat.length), l: "isäntämaata" },
+  { v: `${alkaa}–${paattyy}`, l: "kisojen ajankohta" },
+];
+
+/* Default comparator pair (re-rendered client-side on change). */
+const vsA = MM.joukkueet.find((j: Joukkue) => j.id === "argentina");
+const vsB = MM.joukkueet.find((j: Joukkue) => j.id === "france");
+const vsRows = (a: Joukkue, b: Joukkue) => [
+  { l: "FIFA-ranking", av: `${a.fifaRanking}.`, bv: `${b.fifaRanking}.`, aBetter: a.fifaRanking < b.fifaRanking, bBetter: b.fifaRanking < a.fifaRanking },
+  { l: "MM-osallistumiset", av: String(a.osallistumiset), bv: String(b.osallistumiset), aBetter: a.osallistumiset > b.osallistumiset, bBetter: b.osallistumiset > a.osallistumiset },
+  { l: "Mestaruudet", av: String(a.mestaruudet), bv: String(b.mestaruudet), aBetter: a.mestaruudet > b.mestaruudet, bBetter: b.mestaruudet > a.mestaruudet },
+  { l: "Paras saavutus", av: saavutus(a), bv: saavutus(b), aBetter: a.saavutusTaso > b.saavutusTaso, bBetter: b.saavutusTaso > a.saavutusTaso },
+  { l: "Lohko", av: a.lohko, bv: b.lohko, aBetter: false, bBetter: false },
+  { l: "Maanosaliitto", av: a.maanosa, bv: b.maanosa, aBetter: false, bBetter: false },
+];
+
+/* ---- FAQ (same array feeds the visible markup and the FAQPage JSON-LD) ---- */
+const faq = [
+  {
+    q: "Milloin jalkapallon MM-kisat 2026 pelataan?",
+    a: "MM-kisat 2026 pelataan 11. kesäkuuta – 19. heinäkuuta 2026. Isäntämaina toimivat Yhdysvallat, Kanada ja Meksiko, ja turnaukseen osallistuu ensimmäistä kertaa 48 joukkuetta, jotka pelaavat yhteensä 104 ottelua.",
+  },
+  {
+    q: "Missä MM-kisojen 2026 ottelut pelataan?",
+    a: "Ottelut pelataan 16 stadionilla: 11 Yhdysvalloissa, 3 Meksikossa ja 2 Kanadassa. Stadioneista suurin on Mexico Cityn Estadio Azteca, jonka kapasiteetti on 80 824 katsojaa.",
+  },
+  {
+    q: "Montako joukkuetta ja lohkoa MM-kisoissa 2026 on?",
+    a: "Turnaukseen osallistuu 48 joukkuetta, jotka on jaettu kahteentoista neljän joukkueen lohkoon (A–L). Lohkovaiheen jälkeen pelataan pudotuspelit, ja otteluita kertyy kaikkiaan 104.",
+  },
+  {
+    q: "Mikä maa on voittanut eniten jalkapallon maailmanmestaruuksia?",
+    a: "Brasilia on voittanut maailmanmestaruuden viidesti (1958, 1962, 1970, 1994 ja 2002). Saksa ja Italia ovat voittaneet neljä mestaruutta kumpikin.",
+  },
+  {
+    q: "Kuka on MM-kisojen kaikkien aikojen paras maalintekijä?",
+    a: "Saksan Miroslav Klose on MM-historian paras maalintekijä 16 maalillaan vuosien 2002–2014 turnauksissa. Toisena on Brasilian Ronaldo, joka teki 15 maalia.",
+  },
+  {
+    q: "Kuka on hallitseva jalkapallon maailmanmestari?",
+    a: "Argentiina voitti maailmanmestaruuden Qatarissa 2022. Loppuottelu Ranskaa vastaan päättyi 3–3, ja Argentiina voitti rangaistuspotkukilpailun 4–2.",
+  },
+];
+
+/* ---- JSON-LD ---- */
+const ldSafe = (o: unknown) => JSON.stringify(o).replace(/</g, "\\u003c");
+const articleLd = ldSafe({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  image: [ogImage, logoUrl],
+  inLanguage: "fi",
+  datePublished: "2026-06-11T08:00:00+03:00",
+  dateModified: "2026-06-11T14:00:00+03:00",
+  mainEntityOfPage: canonical,
+  about: {
+    "@type": "SportsEvent",
+    name: "Jalkapallon MM-kisat 2026",
+    alternateName: "FIFA World Cup 2026",
+    sport: "Jalkapallo",
+    startDate: "2026-06-11",
+    endDate: "2026-07-19",
+    location: [
+      { "@type": "Country", name: "Yhdysvallat" },
+      { "@type": "Country", name: "Kanada" },
+      { "@type": "Country", name: "Meksiko" },
+    ],
+    organizer: { "@type": "Organization", name: "FIFA", url: "https://www.fifa.com/" },
+    sameAs: [fifaTournamentUrl, wikiWc2026Url],
+  },
+  author: { "@type": "Organization", name: siteName, url: siteUrl },
+  publisher: {
+    "@type": "Organization",
+    name: siteName,
+    url: siteUrl,
+    logo: { "@type": "ImageObject", url: logoUrl },
+  },
+});
+const breadcrumbLd = ldSafe({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Kasinot Ilman Rekisteröitymistä", item: `${siteUrl}/` },
+    { "@type": "ListItem", position: 2, name: "MM-kisojen 2026 tilastot", item: canonical },
+  ],
+});
+const faqLd = ldSafe({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  inLanguage: "fi",
+  mainEntity: faq.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+});
+
+/* In-page nav (Lenis smooth-scrolls these; scroll-margin covers native jumps) */
+const navChips = [
+  { href: "#lohkot", label: "Lohkot" },
+  { href: "#maajoukkueet", label: "Maajoukkueet" },
+  { href: "#maalintekijat", label: "Maalintekijät" },
+  { href: "#mestarit", label: "Mestarit" },
+  { href: "#kaaviot", label: "Kaaviot" },
+  { href: "#vertailu", label: "Vertailu" },
+  { href: "#ennatykset", label: "Ennätykset" },
+  { href: "#ukk", label: "UKK" },
+];
+---
+
+<!doctype html>
+<html lang="fi" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:locale" content="fi_FI" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="kasinotilmanrekisteroitymista.com" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={articleLd} />
+    <script type="application/ld+json" set:html={breadcrumbLd} />
+    <script type="application/ld+json" set:html={faqLd} />
+    <script is:inline id="jquery-js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js?ver=3.4.1"></script>
+    <Fragment set:html={styleLinks} />
+    {/* Arctic Night design system (shared with the migrated pages). */}
+    <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/redesign.css" />
+    <script src="/vendor/lenis.min.js" defer></script>
+    <script src="/vendor/gsap.min.js" defer></script>
+    <script src="/vendor/ScrollTrigger.min.js" defer></script>
+    <script src="/arctic.js" defer></script>
+    <script src="/mm2026-data.js" defer></script>
+    <script src="/mm2026-tilastot.js" defer></script>
+  </head>
+  <body class="kir-stats-page page wp-theme-affiliateKIR wp-child-theme-affiliateKIR-child">
+    <Fragment set:html={headerHtml} />
+
+    {/* LCP guard — do not remove: /arctic.js grabs the FIRST .kir-hero in the
+        document and tweens its h1 + every <p> from opacity 0 (≈1.3 s LCP delay
+        on the hero intro paragraph, this page's LCP element). This hidden,
+        empty decoy is what querySelector(".kir-hero") matches instead, so the
+        real hero below paints fully visible on first render. The stat cards
+        keep their own entrance via /mm2026-tilastot.js (".kir-hero .mm-stat"
+        is a querySelectorAll — it still matches the real hero), and the
+        prefers-reduced-motion guards in both scripts are unaffected. */}
+    <div class="kir-hero" hidden aria-hidden="true" style="display:none"></div>
+
+    <section class="container-fluid kir-hero">
+      <div class="container px-0 px-lg-3">
+        <h1 class="mb-0">MM-kisojen 2026 tilastot: lohkot, joukkueet ja ennätykset</h1>
+        <span class="custom-breadcrumb mb-5">
+          <a href="/">Kasinot Ilman Rekisteröitymistä</a>
+          {" | "}
+          <span>MM-kisojen 2026 tilastot</span>
+        </span>
+        <div class="intro-paragraph d-flex flex-column mt-3">
+          <p>
+            Jalkapallon MM-kisat 2026 pelataan Yhdysvalloissa, Kanadassa ja Meksikossa
+            11.6.–19.7.2026. Kokosimme tälle sivulle kisojen keskeiset tilastot: kaikki 12 lohkoa
+            ja 48 joukkuetta, kaikkien aikojen maajoukkuetaulukko, MM-historian parhaat
+            maalintekijät sekä turnaushistorian ennätykset.
+          </p>
+        </div>
+        {/* NOTE: deliberately NOT .top-card-box — arctic.js's homepage podium
+            entrance leaves non-home podium cards in a half-animated state, so
+            the stat band uses its own class + entrance in /mm2026-tilastot.js. */}
+        <div class="mm-statband" role="list" aria-label="MM-kisojen 2026 avainluvut">
+          {heroStats.map((s) => (
+            <div class="mm-stat" role="listitem">
+              <span class="mm-stat-value">{s.v}</span>
+              <span class="mm-stat-label">{s.l}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="container-fluid bg-light-blue py-3 inner-shadow mb-4" id="top">
+      <div class="container px-0 px-lg-3">
+        <nav aria-label="Sivun sisältö">
+          <div class="filters mm-navchips">
+            {navChips.map((c) => <a href={c.href}>{c.label}</a>)}
+          </div>
+        </nav>
+      </div>
+    </section>
+
+    <main id="mm-sisalto">
+      {/* ---------- Johdanto ---------- */}
+      <section class="container-fluid mm-section" id="johdanto">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Historian suurimmat MM-kisat</h2>
+            <p>
+              Kesän 2026 MM-kisat ovat kaikkien aikojen suurimmat: mukana on ensimmäistä kertaa 48
+              joukkuetta, ja otteluita pelataan yhteensä 104. Turnaus järjestetään kolmen
+              isäntämaan voimin Yhdysvalloissa, Kanadassa ja Meksikossa, ja ottelupaikkoina toimii
+              16 stadionia – 11 Yhdysvalloissa, 3 Meksikossa ja 2 Kanadassa.
+            </p>
+            <p>
+              Meksikosta tulee samalla ensimmäinen maa, joka isännöi MM-kisoja kolmatta kertaa
+              (1970, 1986 ja 2026). Stadioneista suurin on Mexico Cityn legendaarinen Estadio
+              Azteca, jonne mahtuu {nf.format(80824)} katsojaa. Avauspotku potkaistaan 11.
+              kesäkuuta 2026, ja maailmanmestari selviää 19. heinäkuuta 2026.
+            </p>
+            <p>
+              <small class="text-disclaimer">
+                Tilastot on päivitetty 11. kesäkuuta 2026.{" "}
+                <a href={fifaRankingUrl} target="_blank" rel="noopener">FIFA-rankingit</a> ovat
+                kesäkuun 2026 listalta. Päivitämme tilastot turnauksen aikana.
+              </small>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- (b) Lohkoselain ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="lohkot">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Lohkot A–L: joukkueet, rankingit ja saavutukset</h2>
+            <p>
+              Kaikki 48 joukkuetta on arvottu kahteentoista neljän joukkueen lohkoon. Valitse lohko
+              alta, niin näet jokaisen joukkueen FIFA-rankingin, MM-osallistumisten määrän,
+              mestaruudet ja parhaan saavutuksen. Hallitseva maailmanmestari Argentiina johtaa
+              FIFA-rankingia ja pelaa lohkossa J, kun taas isäntämaista Meksiko aloittaa lohkosta
+              A, Kanada lohkosta B ja Yhdysvallat lohkosta D.
+            </p>
+          </div>
+          <div class="mm-tabs" role="tablist" aria-label="Lohkot A–L">
+            {groups.map((g, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`mm-tab-${g.letter}`}
+                class="mm-tab"
+                aria-selected={i === 0 ? "true" : "false"}
+                aria-controls={`mm-panel-${g.letter}`}
+                aria-label={`Lohko ${g.letter}`}
+                tabindex={i === 0 ? 0 : -1}
+              >
+                {g.letter}
+              </button>
+            ))}
+          </div>
+          {groups.map((g, i) => (
+            <div
+              role="tabpanel"
+              id={`mm-panel-${g.letter}`}
+              class="mm-panel"
+              aria-labelledby={`mm-tab-${g.letter}`}
+              tabindex="0"
+              hidden={i !== 0}
+            >
+              <h3 class="mm-panel-otsikko">Lohko {g.letter}</h3>
+              {g.teams.map((t: Joukkue) => (
+                <div class="mm-team">
+                  <p class="mm-team-name">
+                    <span class="mm-flag" aria-hidden="true">{t.lippu}</span>
+                    {t.nimi}
+                    {t.tieKisoihin === "Isäntämaa" && <span class="mm-badge">Isäntämaa</span>}
+                  </p>
+                  <div class="mm-team-stats">
+                    <div class="mm-cell">
+                      <span class="mm-cell-l">FIFA-ranking</span>
+                      <span class="mm-cell-v">{t.fifaRanking}.</span>
+                    </div>
+                    <div class="mm-cell">
+                      <span class="mm-cell-l">MM-osallistumiset</span>
+                      <span class="mm-cell-v">{t.osallistumiset}</span>
+                    </div>
+                    <div class="mm-cell">
+                      <span class="mm-cell-l">Mestaruudet</span>
+                      <span class="mm-cell-v">{t.mestaruudet}</span>
+                    </div>
+                    <div class="mm-cell">
+                      <span class="mm-cell-l">Paras saavutus</span>
+                      <span class="mm-cell-v">{saavutus(t)}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+          <p class="mm-footnote">
+            <small class="text-disclaimer">
+              Osallistumismäärät sisältävät vuoden 2026 lopputurnauksen. Tšekin saavutuksiin on
+              laskettu Tšekkoslovakian tulokset (FIFA:n tilastokäytäntö).
+            </small>
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- (c) Kaikkien aikojen taulukko ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="maajoukkueet">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Kaikkien aikojen maajoukkuetaulukko (top 25)</h2>
+            <p>
+              Brasilia hallitsee MM-historian maratontaulukkoa: 22 lopputurnausta, 114 ottelua ja
+              247 pistettä – ja se on ainoa maa, joka on pelannut jokaisissa MM-kisoissa. Saksa
+              seuraa 225 pisteellä. Voit järjestää taulukon minkä tahansa sarakkeen mukaan
+              klikkaamalla otsikkoa; oletuksena rivit ovat pistejärjestyksessä.
+            </p>
+            <div class="mm-table-wrap">
+              <table class="mm-sortable" id="mm-taulukko-maat" aria-label="Kaikkien aikojen MM-taulukko, 25 parasta maata">
+                <thead>
+                  <tr>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: sija">Sija</button></th>
+                    <th scope="col" data-type="text" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: maa">Maa</button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: MM-lopputurnaukset"><abbr title="MM-lopputurnaukset">Kisat</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: ottelut"><abbr title="Ottelut">O</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: voitot"><abbr title="Voitot">V</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: tasapelit"><abbr title="Tasapelit">T</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: häviöt"><abbr title="Häviöt">H</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: tehdyt maalit"><abbr title="Tehdyt maalit">TM</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: päästetyt maalit"><abbr title="Päästetyt maalit">PM</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="descending"><button type="button" class="mm-sort" aria-label="Järjestä: pisteet"><abbr title="Pisteet">P</abbr></button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: mestaruudet"><abbr title="Mestaruudet">Mest.</abbr></button></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MM.kaikkienAikojen.map((r: any, i: number) => (
+                    <tr>
+                      <td data-v={i + 1}>{i + 1}.</td>
+                      <td data-v={r.nimi}><span class="mm-flag" aria-hidden="true">{r.lippu}</span> {r.nimi}</td>
+                      <td data-v={r.turnaukset}>{r.turnaukset}</td>
+                      <td data-v={r.ottelut}>{r.ottelut}</td>
+                      <td data-v={r.voitot}>{r.voitot}</td>
+                      <td data-v={r.tasapelit}>{r.tasapelit}</td>
+                      <td data-v={r.tappiot}>{r.tappiot}</td>
+                      <td data-v={r.tehdyt}>{r.tehdyt}</td>
+                      <td data-v={r.paastetyt}>{r.paastetyt}</td>
+                      <td data-v={r.pisteet}><strong>{r.pisteet}</strong></td>
+                      <td data-v={r.mestaruudet}>{r.mestaruudet}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="mm-footnote">
+              <small class="text-disclaimer">
+                Pisteet: kolme pistettä voitosta ja yksi tasapelistä. Venäjän lukuihin sisältyvät
+                Neuvostoliiton, Serbian lukuihin Jugoslavian sekä Tšekin ja Slovakian lukuihin
+                Tšekkoslovakian tulokset (FIFA:n tilastokäytäntö).
+              </small>
+            </p>
+            <p class="mm-footnote">
+              <small class="text-disclaimer">
+                Lähteet: <a href={fifaTournamentUrl} target="_blank" rel="noopener">FIFA</a> ja{" "}
+                <a href={rsssfUrl} target="_blank" rel="noopener">RSSSF</a>.
+              </small>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- (d) Maalintekijät ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="maalintekijat">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>MM-historian parhaat maalintekijät</h2>
+            <p>
+              Saksan Miroslav Klose nousi listan kärkeen 16 maalillaan vuosina 2002–2014, ja
+              Brasilian Ronaldo on toisena 15 osumalla. Ranskan Just Fontaine teki 13 maaliaan
+              yhdessä ainoassa turnauksessa – vuoden 1958 kisoissa, vain kuudessa ottelussa. Voit
+              järjestää taulukon sarakkeiden mukaan ja suodattaa rivejä pelaajan tai maan nimellä.
+            </p>
+            <div class="mm-toolbar">
+              <label class="mm-label" for="mm-haku">Hae pelaajaa tai maata</label>
+              <input
+                type="search"
+                id="mm-haku"
+                class="mm-input"
+                placeholder="Esim. Klose tai Brasilia"
+                autocomplete="off"
+              />
+              <p id="mm-haku-tulos" class="text-disclaimer mb-0" role="status" aria-live="polite"></p>
+            </div>
+            <div class="mm-table-wrap">
+              <table class="mm-sortable" id="mm-taulukko-maalintekijat" aria-label="MM-kisojen kaikkien aikojen parhaat maalintekijät, 15 parasta">
+                <thead>
+                  <tr>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: sija">Sija</button></th>
+                    <th scope="col" data-type="text" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: pelaaja">Pelaaja</button></th>
+                    <th scope="col" data-type="text" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: maa">Maa</button></th>
+                    <th scope="col" data-type="num" aria-sort="descending"><button type="button" class="mm-sort" aria-label="Järjestä: maalit">Maalit</button></th>
+                    <th scope="col" data-type="num" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: ottelut">Ottelut</button></th>
+                    <th scope="col" data-type="text" aria-sort="none"><button type="button" class="mm-sort" aria-label="Järjestä: turnaukset">Turnaukset</button></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MM.maalintekijat.map((r: any, i: number) => (
+                    <tr data-haku={`${r.nimi} ${r.maa}`}>
+                      <td data-v={i + 1}>{i + 1}.</td>
+                      <td data-v={r.nimi}>{r.nimi}</td>
+                      <td data-v={r.maa}><span class="mm-flag" aria-hidden="true">{r.lippu}</span> {r.maa}</td>
+                      <td data-v={r.maalit}><strong>{r.maalit}</strong></td>
+                      <td data-v={r.ottelut}>{r.ottelut}</td>
+                      <td data-v={r.turnaukset}>{r.turnaukset}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- (e) Mestarien aikajana ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="mestarit">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Maailmanmestarit 1930–2022</h2>
+            <p>
+              MM-kisat on pelattu 22 kertaa vuosina 1930–2022, ja mestaruuden on voittanut vain
+              kahdeksan eri maata. Brasilia johtaa tilastoa viidellä mestaruudella, ja Saksa sekä
+              Italia ovat voittaneet neljästi kumpikin. Aikajanalta näet jokaisen turnauksen
+              isännän, loppuottelun tuloksen ja maalikuninkaan.
+            </p>
+          </div>
+          <ol class="mm-timeline" aria-label="Maailmanmestarit turnauksittain 1930–2022">
+            {MM.mestarit.map((m: any) => (
+              <li class="mm-tl-item mm-reveal">
+                <article class="mm-tl-card">
+                  <p class="mm-tl-head">
+                    <span class="mm-tl-year">{m.vuosi}</span>
+                    <span class="mm-tl-host">
+                      {m.isannat.includes(" ja ") ? "Isäntämaat" : "Isäntämaa"}: {m.isannat}
+                    </span>
+                  </p>
+                  <p class="mm-tl-champ">
+                    <span class="mm-flag" aria-hidden="true">{m.mestariLippu}</span> {m.mestari}
+                  </p>
+                  <p class="mm-tl-final">Loppuottelu: {m.mestari} – {m.hopea} {m.tulos}</p>
+                  <p class="mm-tl-scorer">
+                    Maalikuningas: {m.maalikuningas} ({m.maalikuningasMaa}), {m.maalikuningasMaalit} maalia
+                  </p>
+                </article>
+              </li>
+            ))}
+          </ol>
+          <p class="mm-footnote">
+            <small class="text-disclaimer">
+              Jaetut maalikuninkuudet (1962 ja 1994) on merkitty aikajanalle yhdellä edustajalla.
+            </small>
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- (f) Kaaviot ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="kaaviot">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Maalit ja mestaruudet kaavioina</h2>
+            <p>
+              Turnauksen kasvu näkyy suoraan maalimäärissä: vuoden 1930 kisoissa tehtiin 70 maalia,
+              kun Qatarissa 2022 osumia kirjattiin jo ennätykselliset 172. Maanosaliitoista vain
+              kaksi on juhlinut maailmanmestaruutta: Euroopan UEFA (12 mestaruutta) ja
+              Etelä-Amerikan CONMEBOL (10 mestaruutta).
+            </p>
+          </div>
+          <figure class="mm-card mm-chart-figure">
+            <h3 class="mm-chart-otsikko">Maalit MM-lopputurnauksissa 1930–2022</h3>
+            <div class="mm-chart-wrap mm-chart-bar" id="mm-kaavio-maalit"></div>
+            <figcaption class="text-disclaimer">
+              Pylväs näyttää turnauksen kokonaismaalimäärän. Vie osoitin pylvään päälle tai siirry
+              pylvääseen sarkaimella nähdäksesi tarkat luvut.
+            </figcaption>
+            <noscript><p>Kaavion katselu edellyttää JavaScriptiä. Maalimäärät: 1930: 70, 1934: 70, 1938: 84, 1950: 88, 1954: 140, 1958: 126, 1962: 89, 1966: 89, 1970: 95, 1974: 97, 1978: 102, 1982: 146, 1986: 132, 1990: 115, 1994: 141, 1998: 171, 2002: 161, 2006: 147, 2010: 145, 2014: 171, 2018: 169, 2022: 172.</p></noscript>
+          </figure>
+          <figure class="mm-card mm-chart-figure">
+            <h3 class="mm-chart-otsikko">Maailmanmestaruudet maanosaliitoittain</h3>
+            <div class="mm-donut-rivi">
+              <div class="mm-chart-wrap mm-chart-donut" id="mm-kaavio-maanosat"></div>
+              <ul class="mm-legenda" id="mm-legenda" aria-label="Kaavion selite"></ul>
+            </div>
+            <figcaption class="text-disclaimer">
+              Kaikki 22 maailmanmestaruutta ovat menneet kahdelle maanosaliitolle.
+            </figcaption>
+            <noscript><p>Kaavion katselu edellyttää JavaScriptiä. Mestaruudet: UEFA 12, CONMEBOL 10.</p></noscript>
+          </figure>
+        </div>
+      </section>
+
+      {/* ---------- (g) Joukkuevertailu ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="vertailu">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Joukkuevertailu: aseta kaksi maata vastakkain</h2>
+            <p>
+              Valitse kaksi joukkuetta, niin näet rinnakkain niiden FIFA-rankingin,
+              MM-osallistumiset, mestaruudet ja parhaan saavutuksen. Parempi arvo korostetaan
+              automaattisesti. Oletuksena vastakkain ovat vuoden 2022 loppuottelun osapuolet
+              Argentiina ja Ranska.
+            </p>
+          </div>
+          <div class="mm-vs-controls">
+            <div>
+              <label class="mm-label" for="mm-vs-a">Joukkue A</label>
+              <select id="mm-vs-a" class="mm-select" aria-label="Valitse ensimmäinen joukkue">
+                {groups.map((g) => (
+                  <optgroup label={`Lohko ${g.letter}`}>
+                    {g.teams.map((t: Joukkue) => (
+                      <option value={t.id} selected={t.id === "argentina"}>{t.nimi}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label class="mm-label" for="mm-vs-b">Joukkue B</label>
+              <select id="mm-vs-b" class="mm-select" aria-label="Valitse toinen joukkue">
+                {groups.map((g) => (
+                  <optgroup label={`Lohko ${g.letter}`}>
+                    {g.teams.map((t: Joukkue) => (
+                      <option value={t.id} selected={t.id === "france"}>{t.nimi}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div id="mm-vs-tulos" class="mm-vs-result" aria-live="polite">
+            {[{ team: vsA, side: "a" }, { team: vsB, side: "b" }].map(({ team, side }) => (
+              <article class="mm-card mm-vs-card">
+                <p class="mm-vs-name">
+                  <span class="mm-flag" aria-hidden="true">{team.lippu}</span> {team.nimi}
+                </p>
+                <ul class="mm-vs-rows">
+                  {vsRows(vsA, vsB).map((row) => {
+                    const better = side === "a" ? row.aBetter : row.bBetter;
+                    const value = side === "a" ? row.av : row.bv;
+                    return (
+                      <li class="mm-vs-row">
+                        <span class="mm-vs-l">{row.l}</span>
+                        <span class={better ? "mm-vs-v mm-parempi" : "mm-vs-v"}>
+                          {value}
+                          {better && <span class="sr-only"> (parempi)</span>}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </article>
+            ))}
+          </div>
+          <noscript><p class="text-disclaimer">Joukkueiden vaihtaminen vertailussa edellyttää JavaScriptiä.</p></noscript>
+        </div>
+      </section>
+
+      {/* ---------- (h) Ennätykset ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="ennatykset">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>MM-historian ennätykset</h2>
+            <p>
+              Unkarin 10–1-voitto El Salvadorista vuonna 1982 ja Maracanãn 173 850 katsojaa vuonna
+              1950 kuuluvat MM-historian kovimpiin ennätyksiin. Alta löydät kisahistorian
+              merkittävimmät ennätykset viidessä kategoriassa – rajaa näkymä maaleihin, pelaajiin,
+              joukkueisiin, yleisömääriin tai turnauksiin.
+            </p>
+          </div>
+          <div class="mm-chips" id="mm-ennatys-suodatin" role="group" aria-label="Suodata ennätyksiä kategorian mukaan">
+            <button type="button" class="mm-chip" data-kategoria="kaikki" aria-pressed="true">Kaikki</button>
+            {MM.kategoriat.map((k: { id: string; nimi: string }) => (
+              <button type="button" class="mm-chip" data-kategoria={k.id} aria-pressed="false">{k.nimi}</button>
+            ))}
+          </div>
+          <div class="mm-grid" id="mm-ennatykset-lista">
+            {MM.ennatykset.map((e: any) => (
+              <article class="mm-card mm-record mm-reveal" data-kategoria={e.kategoria}>
+                <p class="mm-record-meta">
+                  <span class="mm-badge">{katNimi[e.kategoria]}</span>
+                  <span class="mm-record-vuosi">{e.vuosi}</span>
+                </p>
+                <h3 class="mm-record-otsikko">{e.otsikko}</h3>
+                <p class="mm-record-value">{e.arvo}</p>
+                <p class="mm-record-haltija">{e.haltija}</p>
+              </article>
+            ))}
+          </div>
+          <p class="mm-footnote">
+            <small class="text-disclaimer">
+              Lähteet: <a href={fifaTournamentUrl} target="_blank" rel="noopener">FIFA</a>,{" "}
+              <a href={rsssfUrl} target="_blank" rel="noopener">RSSSF</a> ja{" "}
+              <a href={wikiWcUrl} target="_blank" rel="noopener">Wikipedian katsaus jalkapallon MM-kilpailuihin</a>.
+            </small>
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- (i) UKK ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="ukk">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Usein kysytyt kysymykset</h2>
+            <p>
+              Kokosimme vielä yhteen tiiviit vastaukset yleisimpiin kysymyksiin kesän 2026
+              MM-kisoista ja turnauksen historiasta.
+            </p>
+            <div class="mm-faq">
+              {faq.map((f) => (
+                <div class="ht-faq-item mm-faq-item">
+                  <h3 class="mm-faq-q">{f.q}</h3>
+                  <p class="mm-faq-a mb-0">{f.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- Kasinovertailut (pidetään erillään RG-osiosta — compliance) ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="kasinovertailut">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Kasinovertailut sivustollamme</h2>
+            <p>
+              MM-kisojen kaltainen suurturnaus näkyy kesällä 2026 myös nettikasinoiden
+              tarjonnassa, kun pelipaikat nostavat esiin jalkapalloteemaisia kolikkopelejä ja
+              kisakampanjoita. Jos haluat pysyä kärryillä kasinomaailman kuulumisista kisojen
+              aikana, tuoreimmat artikkelit löydät <a href="/uutiset/">uutissivultamme</a>.
+            </p>
+            <p>
+              Olemme koonneet sivustollemme myös aihekohtaiset vertailut: tutustu esimerkiksi{" "}
+              <a href="/kasinobonukset/">kasinobonuksiin</a>,{" "}
+              <a href="/uudet-kasinot/">uusiin kasinoihin</a> ja{" "}
+              <a href="/trustly-kasinot/">Trustly-kasinoihin</a>, joilla kotiutukset tehdään
+              verkkopankkitunnistautumisella. Etusivulta löydät puolestaan{" "}
+              <a href="/">kasinot ilman rekisteröitymistä -vertailumme</a>, jonka kasinoilla
+              pelaaminen onnistuu suoraan verkkopankkitunnuksilla.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- Vastuullinen pelaaminen (RG — ei promosisältöä tähän osioon) ---------- */}
+      <section class="container-fluid mm-section mm-anchor" id="vastuullisuus">
+        <div class="container px-0 px-lg-3">
+          <div class="wp-content-area">
+            <h2>Vastuullinen pelaaminen</h2>
+            <p>
+              Muista kuitenkin aina pelata vastuullisesti: aseta pelaamiselle budjetti ja pidä
+              rahapelit viihteenä, ei tulonlähteenä. Rahapelaaminen on sallittu vain 18 vuotta
+              täyttäneille. Jos pelaaminen mietityttää, maksutonta apua saat{" "}
+              <a href="https://peluuri.fi" rel="nofollow noopener" target="_blank">Peluurista</a>{" "}
+              (0800 100 101).
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Fragment set:html={footerHtml} />
+    <Fragment set:html={disclosureHtml} />
+
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js?ver=1.15.0"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js?ver=4.3.1"></script>
+    <script is:inline src="/wp-content/themes/affiliateKIR/theme/js/affiliateKIR.js?ver=1.0.0"></script>
+  </body>
+</html>
+
+<style is:global>
+  /* ============ MM-kisat 2026 tilastot — page styles (Arctic Night tokens) ============ */
+
+  .mm-section {
+    padding-top: 10px;
+    padding-bottom: 26px;
+  }
+  .mm-anchor {
+    scroll-margin-top: 100px;
+  }
+  .mm-section .wp-content-area > p {
+    max-width: 78ch;
+  }
+  .mm-footnote {
+    margin: 14px 0 0;
+    max-width: 78ch;
+  }
+
+  /* ---------- Hero stat band ---------- */
+  .mm-statband {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+  }
+  .kir-hero .mm-stat {
+    flex: 1 1 150px;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 18px 14px;
+    text-align: center;
+    /* same look as .top-card-box (redesign.css podium cards) */
+    background: linear-gradient(180deg, rgba(20, 33, 54, 0.92), rgba(13, 22, 38, 0.92));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .kir-hero .mm-stat:hover {
+    border-color: rgba(45, 212, 191, 0.4);
+    box-shadow: var(--shadow-2);
+  }
+  .mm-stat-value {
+    display: block;
+    font-size: clamp(1.3rem, 1rem + 1.4vw, 2rem);
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .mm-stat-label {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-3);
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  /* ---------- In-page nav chips ---------- */
+  .mm-navchips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .mm-navchips a {
+    text-decoration: none;
+  }
+
+  /* ---------- Shared card ---------- */
+  .mm-card {
+    background: linear-gradient(180deg, rgba(18, 30, 50, 0.92), rgba(13, 22, 38, 0.94));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    padding: 18px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .mm-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(45, 212, 191, 0.35);
+    box-shadow: var(--shadow-2);
+  }
+  .mm-badge {
+    display: inline-block;
+    background: var(--gold-soft);
+    color: var(--gold);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    vertical-align: middle;
+  }
+  .mm-flag {
+    margin-right: 4px;
+  }
+
+  /* ---------- (b) Group explorer ---------- */
+  .mm-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 16px;
+  }
+  .mm-tab {
+    min-width: 44px;
+    min-height: 40px;
+    border: 1.5px solid var(--line-2);
+    background: var(--surface);
+    color: var(--ink-2);
+    border-radius: 999px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 6px 12px;
+    transition: transform 0.15s ease;
+  }
+  .mm-tab:hover {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #04221d;
+  }
+  .mm-tab[aria-selected="true"] {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #04221d;
+  }
+  .mm-panel {
+    background: linear-gradient(180deg, rgba(18, 30, 50, 0.92), rgba(13, 22, 38, 0.94));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    padding: 18px 20px;
+  }
+  .mm-panel[hidden] {
+    display: none;
+  }
+  .mm-panel-otsikko {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+  }
+  .mm-team {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .mm-team:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
+  }
+  .mm-team-name {
+    margin: 0 0 8px;
+    color: var(--ink) !important;
+    font-weight: 700;
+    font-size: 1.02rem;
+  }
+  .mm-team-name .mm-badge {
+    margin-left: 8px;
+  }
+  .mm-team-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px 18px;
+  }
+  .mm-cell-l {
+    display: block;
+    color: var(--ink-3);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .mm-cell-v {
+    display: block;
+    color: var(--ink-2);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  /* ---------- (c)(d) Sortable tables ---------- */
+  .mm-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-sm);
+  }
+  .mm-table-wrap table {
+    min-width: 640px;
+    margin-top: 0 !important;
+  }
+  .mm-table-wrap th,
+  .mm-table-wrap td {
+    white-space: nowrap;
+  }
+  button.mm-sort {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  button.mm-sort abbr {
+    text-decoration: none;
+    cursor: inherit;
+  }
+  button.mm-sort::after {
+    content: "↕";
+    font-size: 0.72em;
+    opacity: 0.55;
+  }
+  th[aria-sort="ascending"] button.mm-sort::after {
+    content: "▲";
+    color: var(--teal);
+    opacity: 1;
+  }
+  th[aria-sort="descending"] button.mm-sort::after {
+    content: "▼";
+    color: var(--teal);
+    opacity: 1;
+  }
+  .mm-toolbar {
+    margin: 0 0 14px;
+  }
+  .mm-label {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+  .mm-input {
+    width: 100%;
+    max-width: 380px;
+    background: var(--surface);
+    border: 1.5px solid var(--line-2);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-family: var(--font);
+    font-size: 0.95rem;
+  }
+  .mm-input::placeholder {
+    color: var(--ink-3);
+  }
+  .mm-input:focus {
+    outline: 3px solid rgba(45, 212, 191, 0.55);
+    outline-offset: 1px;
+    border-color: var(--teal);
+  }
+  #mm-haku-tulos {
+    margin-top: 8px;
+  }
+
+  /* ---------- (e) Champions timeline ---------- */
+  .mm-timeline {
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+    position: relative;
+    max-width: 760px;
+  }
+  .mm-timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--teal), var(--violet));
+    opacity: 0.55;
+    border-radius: 999px;
+  }
+  .mm-tl-item {
+    position: relative;
+    padding: 0 0 16px 40px;
+  }
+  .mm-tl-item::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--teal);
+    box-shadow: 0 0 10px rgba(45, 212, 191, 0.45);
+  }
+  .mm-tl-card {
+    background: linear-gradient(180deg, rgba(18, 30, 50, 0.92), rgba(13, 22, 38, 0.94));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    padding: 14px 18px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .mm-tl-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(45, 212, 191, 0.35);
+    box-shadow: var(--shadow-2);
+  }
+  .mm-tl-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    margin: 0 0 4px;
+  }
+  .mm-tl-year {
+    color: var(--teal);
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+  .mm-tl-host {
+    color: var(--ink-3);
+    font-size: 0.82rem;
+  }
+  .mm-tl-champ {
+    margin: 0 0 2px;
+    color: var(--gold) !important;
+    font-weight: 800;
+    font-size: 1.08rem;
+  }
+  .mm-tl-final,
+  .mm-tl-scorer {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .mm-tl-scorer {
+    color: var(--ink-3);
+  }
+
+  /* ---------- (f) Charts ---------- */
+  .mm-chart-figure {
+    margin: 0 0 22px;
+  }
+  .mm-chart-figure:hover {
+    transform: none;
+  }
+  .mm-chart-otsikko {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+  }
+  .mm-chart-wrap {
+    position: relative;
+  }
+  .mm-chart-bar {
+    aspect-ratio: 720 / 340;
+    width: 100%;
+  }
+  .mm-chart-wrap svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .mm-bar {
+    cursor: pointer;
+  }
+  .mm-bar:hover,
+  .mm-bar:focus,
+  .mm-bar:focus-visible {
+    fill: #8df0e2;
+    outline: none;
+  }
+  .mm-axis-text {
+    fill: var(--ink-3);
+    font-family: var(--font);
+    font-size: 11px;
+  }
+  .mm-grid-line {
+    stroke: rgba(150, 182, 224, 0.14);
+    stroke-width: 1;
+  }
+  .mm-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: #04070f;
+    border: 1px solid var(--line-2);
+    color: var(--ink);
+    font-size: 0.8rem;
+    border-radius: 8px;
+    padding: 6px 10px;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+    white-space: nowrap;
+    transform: translate(-50%, calc(-100% - 10px));
+    z-index: 5;
+  }
+  .mm-tooltip.mm-on {
+    opacity: 1;
+  }
+  .mm-donut-rivi {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 36px;
+  }
+  .mm-chart-donut {
+    width: 230px;
+    height: 230px;
+    flex: 0 0 auto;
+  }
+  .mm-donut-keskus {
+    fill: var(--ink);
+    font-family: var(--font);
+    font-weight: 800;
+  }
+  .mm-donut-keskus-sub {
+    fill: var(--ink-3);
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .mm-legenda {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mm-legenda li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    padding: 5px 0;
+  }
+  .mm-legenda .mm-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex: 0 0 auto;
+  }
+
+  /* ---------- (g) Comparator ---------- */
+  .mm-vs-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 18px;
+    max-width: 760px;
+  }
+  .mm-select {
+    width: 100%;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1.5px solid var(--line-2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-family: var(--font);
+    font-size: 0.95rem;
+  }
+  .mm-select:focus {
+    outline: 3px solid rgba(45, 212, 191, 0.55);
+    outline-offset: 1px;
+  }
+  .mm-vs-result {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .mm-vs-name {
+    margin: 0 0 10px;
+    color: var(--ink) !important;
+    font-weight: 800;
+    font-size: 1.12rem;
+  }
+  .mm-vs-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mm-vs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .mm-vs-row:last-child {
+    border-bottom: none;
+  }
+  .mm-vs-l {
+    color: var(--ink-3);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex: 0 0 auto;
+  }
+  .mm-vs-v {
+    color: var(--ink-2);
+    font-weight: 600;
+    text-align: right;
+  }
+  .mm-vs-v.mm-parempi {
+    color: var(--green);
+  }
+  .mm-vs-v.mm-parempi::after {
+    content: " ✓";
+  }
+
+  /* ---------- (h) Records ---------- */
+  .mm-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 20px;
+  }
+  .mm-chip {
+    border: 1.5px solid var(--line-2);
+    background: var(--surface);
+    color: var(--ink-2);
+    border-radius: 999px;
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 7px 16px;
+    min-height: 40px;
+    cursor: pointer;
+  }
+  .mm-chip:hover,
+  .mm-chip[aria-pressed="true"] {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #04221d;
+  }
+  .mm-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .mm-record-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 10px;
+  }
+  .mm-record-vuosi {
+    color: var(--ink-3);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .mm-record-otsikko {
+    margin: 0 0 8px;
+    font-size: 1rem !important;
+    line-height: 1.35;
+  }
+  .mm-record-value {
+    margin: 0 0 6px;
+    color: var(--teal) !important;
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .mm-record-haltija {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.92rem;
+  }
+
+  /* ---------- (i) FAQ ---------- */
+  .mm-faq {
+    max-width: 860px;
+  }
+  .mm-faq-item {
+    padding: 16px 18px;
+  }
+  .mm-faq-q {
+    margin: 0 0 6px;
+    font-size: 1.02rem !important;
+  }
+  .mm-faq-a {
+    color: var(--ink-2);
+  }
+
+  /* ---------- Breakpoints ---------- */
+  @media (min-width: 768px) {
+    .mm-vs-controls {
+      grid-template-columns: 1fr 1fr;
+    }
+    .mm-vs-result {
+      grid-template-columns: 1fr 1fr;
+    }
+    .mm-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1100px) {
+    .mm-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    /* Scroll affordance: the stat tables are wider than the viewport and
+       scroll inside .mm-table-wrap — tell mobile users more columns exist. */
+    .mm-table-wrap::before {
+      content: "Vieritä taulukkoa sivuttain nähdäksesi kaikki sarakkeet →";
+      display: block;
+      color: var(--ink-3);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 0 0 6px;
+    }
+    .kir-hero .mm-stat {
+      flex: 1 1 calc(50% - 14px);
+      min-width: 120px;
+      padding: 14px 10px;
+    }
+    .mm-panel {
+      padding: 14px;
+    }
+    .mm-tl-item {
+      padding-left: 34px;
+    }
+  }
+</style>

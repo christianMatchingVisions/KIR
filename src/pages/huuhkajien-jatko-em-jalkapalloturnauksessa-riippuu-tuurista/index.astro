@@ -1,0 +1,46 @@
+---
+// @custom — hand-edited page; converters/scrapers must not overwrite it.
+//
+// /huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/ — renders the
+// scraped football-article fragment 1:1 (same Shell as the catch-all) and
+// injects ONE contextual "Lue myös" box linking to /mm-kisat-2026-tilastot/
+// at the end of the article content. Registered in OWNED_ELSEWHERE in
+// src/pages/[...slug].astro so the catch-all skips the fragment.
+//
+// Injection is resilient by design: (1) anchor on a stable sentence from the
+// article's final paragraph; (2) fall back to the close of the single
+// .wp-content-area div (the article body contains no nested divs); (3) if
+// neither matches after a re-scrape, render the fragment unmodified — never
+// throw. Everything outside the injected block stays byte-identical.
+import Shell from "../../layouts/Shell.astro";
+import headHtml from "../../fragments/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/head.html?raw";
+import bodyHtml from "../../fragments/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/body.html?raw";
+import meta from "../../fragments/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/meta.json";
+
+const lueMyos = `
+<div class="kir-lue-myos box-shadow radius-corners p-3 mt-5">
+\t<p class="mb-0"><strong>Lue myös:</strong> Kesällä 2026 jalkapallon MM-turnaus pelataan Yhdysvalloissa, Kanadassa ja Meksikossa. Kokosimme yhteen <a href="/mm-kisat-2026-tilastot/">MM-kisojen 2026 tilastot ja lohkot</a> – mukana kaikki 48 joukkuetta, kaikkien aikojen parhaat maalintekijät ja MM-historian ennätykset.</p>
+</div>`;
+
+let finalBody = bodyHtml;
+const anchor = "kiinnostusta korona-aikana uusissa pelaajissa.</p>";
+if (finalBody.includes(anchor)) {
+  // Strategy 1: right after the article's final paragraph.
+  finalBody = finalBody.replace(anchor, anchor + lueMyos);
+} else {
+  // Strategy 2: just before the closing </div> of .wp-content-area.
+  const open = finalBody.indexOf('<div class="wp-content-area">');
+  const close = open === -1 ? -1 : finalBody.indexOf("</div>", open);
+  if (close !== -1) {
+    finalBody = finalBody.slice(0, close) + lueMyos + "\n" + finalBody.slice(close);
+  }
+  // Neither matched → fragment renders unmodified.
+}
+---
+
+<Shell
+  headHtml={headHtml}
+  bodyHtml={finalBody}
+  htmlAttrs={meta.htmlAttrs ?? ""}
+  bodyAttrs={meta.bodyAttrs ?? ""}
+/>

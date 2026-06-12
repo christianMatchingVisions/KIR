@@ -30,7 +30,10 @@ export function getStaticPaths() {
   });
 
   // Fragments owned by dedicated routes (rendered there, not by this catch-all).
-  const OWNED_ELSEWHERE = new Set(["uutiset"]); // src/pages/uutiset/index.astro
+  const OWNED_ELSEWHERE = new Set([
+    "uutiset", // src/pages/uutiset/index.astro
+    "huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista", // src/pages/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/index.astro
+  ]);
 
   return Object.entries(metas)
     .filter(([metaPath]) => !OWNED_ELSEWHERE.has(metaPath.split("/").at(-2) ?? ""))

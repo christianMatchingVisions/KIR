@@ -37,10 +37,22 @@ const cards = articles
   })
   .join("\n");
 
-// Inject engine cards at the top of the first article grid row.
-const finalBody = cards
-  ? bodyHtml.replace('<div class="row mb-5">', `<div class="row mb-5">\n${cards}`)
-  : bodyHtml;
+// Pinned card: the World Cup 2026 deep-stats page (/mm-kisat-2026-tilastot/)
+// stays first in the grid so it always has an inbound internal link — even
+// when the engine list is empty. Same theme card markup as the engine cards.
+const statsCard = `<div class="col-lg-4 col-md-6">
+\t<a href="/mm-kisat-2026-tilastot/" class="article-box">
+\t\t<img src="/og/mm-kisat-2026-tilastot.png" alt="MM-kisat 2026 tilastoina: 48 joukkuetta, 104 ottelua ja 16 stadionia" class="article-preview-img radius-corners mr-3 w-100 wp-post-image" width="1200" height="630" loading="lazy" decoding="async" />
+\t\t<p class="h4 mb-0 py-3 px-2 text-grey">MM-kisojen 2026 tilastot – lohkot, joukkueet ja ennätykset</p>
+\t</a>
+</div>`;
+
+// Inject the pinned stats card + engine cards at the top of the first article grid row.
+const injectedCards = [statsCard, cards].filter(Boolean).join("\n");
+const finalBody = bodyHtml.replace(
+  '<div class="row mb-5">',
+  `<div class="row mb-5">\n${injectedCards}`,
+);
 ---
 
 <Shell
