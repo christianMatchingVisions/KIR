@@ -124,3 +124,20 @@ like the original page.
 - The homepage toplist is a point-in-time snapshot — re-run
   `npm run sync:content` right before cutover to capture the latest casino
   order/offers.
+
+## Offers feed (Content Engine)
+
+`npm run build` runs `scripts/apply-offers.mjs` after `astro build`. It GETs
+`{CE_API_URL}/offers` (same env vars + Bearer auth as the article loader) and
+rewrites the captured RLAAF toplists in **dist/rlaaf-data/ only** — the
+`public/rlaaf-data` WP snapshot stays pristine and is the automatic fallback:
+if the env vars are missing or the feed errors/times out (10s), the script
+logs a warning and exits 0, so the build never fails. Casinos are matched
+primarily by their WordPress `post_name` (the dashboard seeder's key — WP
+typos like `kumobet-ccasino` and all), falling back to a slugged `post_title`
+(lowercase, ä→a ö→o, non-alnum→hyphen, trim hyphens);
+matched entries get `meta.no_deposit`/`meta.cta`/`meta.card_image.url`
+overridden, `paused` casinos are removed from all lists. Feed toplist keys map
+to list dirs via `TOPLIST_KEY_MAP` in the script (`etusivu` →
+`search-service-casino`, the homepage list); unmapped keys fall back to a
+same-named dir. Test: `npm run test:offers` (mock feed, restores dist after).

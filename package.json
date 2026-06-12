@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/apply-offers.mjs",
     "preview": "astro preview",
+    "test:offers": "node scripts/test-apply-offers.mjs",
     "sync:content": "node scripts/fetch-rest.mjs && node scripts/scrape-pages.mjs && node scripts/download-assets.mjs && node scripts/capture-rlaaf.mjs"
   },
   "dependencies": {
