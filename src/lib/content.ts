@@ -173,7 +173,7 @@ function escapeRe(s: string): string {
  * It is text-level only: tags, attributes, links and the preserved <title>/
  * JSON-LD head (handled elsewhere, verbatim) are not affected. Idempotent.
  */
-function scrubFirstHandClaims(html: string): string {
+export function scrubFirstHandClaims(html: string): string {
   if (!html) return "";
   return (
     html
@@ -210,6 +210,101 @@ function scrubFirstHandClaims(html: string): string {
       .replace(/\bwe tested\b/gi, "independent testing covered")
       .replace(/\bI tested\b/g, "Testing covered")
   );
+}
+
+/**
+ * COMPLIANCE: force rel="sponsored nofollow" on every affiliate link in HTML.
+ *
+ * This site is in penalty recovery and the rule is strict: EVERY affiliate
+ * link must be rel="sponsored nofollow". Two link shapes are covered:
+ *   1. internal redirect links  href="/go/<slug>/"  (the canonical affiliate
+ *      out-link shape across the whole site), and
+ *   2. external absolute affiliate links the engine may emit directly
+ *      (href="https://…" / protocol-relative "//…") that are NOT this site's
+ *      own origin — daily AI content can link straight to an operator.
+ *
+ * Behaviour per matched <a>:
+ *   - no rel attribute → add rel="sponsored nofollow"
+ *   - existing rel     → merge in sponsored + nofollow (dedup, order-stable)
+ * Same-origin and root-relative non-/go/ links (internal navigation) are left
+ * untouched. Idempotent, attribute-level, HTML-safe. Shared by the catch-all
+ * route, the casino route, and the Content-Engine loader so daily content is
+ * compliant by construction.
+ */
+const SELF_ORIGIN_HOST = SITE_ORIGIN.replace(/^https?:\/\//, "");
+
+function mergeSponsoredRel(attrs: string): string {
+  const relMatch = attrs.match(/\brel="([^"]*)"/i);
+  if (!relMatch) {
+    return `<a${attrs} rel="sponsored nofollow">`;
+  }
+  const tokens = new Set(
+    relMatch[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
+  );
+  tokens.add("sponsored");
+  tokens.add("nofollow");
+  const merged = [...tokens].join(" ");
+  const newAttrs = attrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`);
+  return `<a${newAttrs}>`;
+}
+
+/** Extract the href value from an <a>'s attribute string, or null. */
+function hrefOf(attrs: string): string | null {
+  const m = attrs.match(/\bhref="([^"]*)"/i);
+  return m ? m[1] : null;
+}
+
+/**
+ * Authoritative / non-affiliate external domains that must KEEP their normal
+ * (followed) outbound link. Editorial citations to regulators, legislation and
+ * responsible-gambling bodies are positive E-E-A-T trust signals — nofollowing
+ * them would hurt the penalty recovery — so they are exempt from the affiliate
+ * sponsored+nofollow rule. Matched on the registrable suffix (host endsWith).
+ */
+const AUTHORITY_HOST_SUFFIXES: readonly string[] = [
+  // Regulators & player-protection bodies
+  "mga.org.mt", "spelinspektionen.se", "gamblingcommission.gov.uk",
+  "peluuri.fi", "thl.fi", "avi.fi", "veikkaus.fi",
+  // EU / government / legislation
+  "europa.eu", "eur-lex.europa.eu", "finlex.fi", ".gov", ".gov.uk",
+  // Reference / standards
+  "wikipedia.org", "who.int", "begambleaware.org",
+];
+
+/** Host (lowercased) for an absolute/protocol-relative href, or null. */
+function externalHost(href: string): string | null {
+  const m = href.match(/^(?:https?:)?\/\/([^/]+)/i);
+  if (!m) return null; // root-relative or non-URL → internal
+  const host = m[1].toLowerCase();
+  return host === SELF_ORIGIN_HOST.toLowerCase() ? null : host;
+}
+
+/** True when the host is a known authoritative/non-affiliate domain. */
+function isAuthorityHost(host: string): boolean {
+  return AUTHORITY_HOST_SUFFIXES.some(
+    (s) => host === s || host.endsWith("." + s) || host.endsWith(s),
+  );
+}
+
+/**
+ * COMPLIANCE entry point. Forces rel="sponsored nofollow" on:
+ *   - EVERY internal affiliate redirect link  href="/go/<slug>/"  (always), and
+ *   - external absolute affiliate links (operator domains the engine may link
+ *     directly) — EXCEPT authoritative/regulator domains (allow-listed above),
+ *     which keep their normal followed link as a trust signal.
+ * Same-origin and root-relative non-/go/ links (internal navigation) are left
+ * untouched. See AUTHORITY_HOST_SUFFIXES for the editorial-citation exemption.
+ */
+export function ensureSponsored(html: string | null | undefined): string {
+  if (!html) return "";
+  return html.replace(/<a\b([^>]*)>/gi, (whole, attrs: string) => {
+    const href = hrefOf(attrs);
+    if (!href) return whole;
+    if (/^\/go\//i.test(href)) return mergeSponsoredRel(attrs);
+    const host = externalHost(href);
+    if (host && !isAuthorityHost(host)) return mergeSponsoredRel(attrs);
+    return whole;
+  });
 }
 
 function str(v: string | undefined): string {

@@ -1,63 +1,466 @@
 ---
 // @custom — hand-edited page; converters/scrapers must not overwrite it.
-//
-// /uutiset/ — the live WordPress site already has this news page, so we render
-// its scraped fragment 1:1 and inject Content-Engine articles at the top of
-// the existing article grid, using the theme's own card markup
-// (.col-lg-4 > a.article-box). Same pattern as OCL's /noticias/.
-//
-// Cadence note: KIR is in Google-penalty recovery, so the engine schedule is
-// deliberately conservative (2-3 articles/week). An empty engine list here is
-// expected early on — the page then renders exactly like the original.
+/**
+ * /uutiset/ — the LIGHT-theme news hub.
+ *
+ * /uutiset/ IS in the Phase-1 SEO registry (the live WordPress site already had
+ * this news page), so we render through <BaseLayout seoPath="/uutiset/">: its
+ * preserved canonical / description / robots / OG / JSON-LD are re-emitted
+ * VERBATIM (penalty-recovery requirement — the rebuild must not look like a new
+ * site to Google). Only the visible chrome is the new light theme.
+ *
+ * The grid is newest-first and combines two sources:
+ *   (a) Content-Engine delivered articles  → getCollection("articles")
+ *       (the daily Finnish AI content; link → /uutiset/<slug>/)
+ *   (b) the existing editorial blog posts   → getPosts()
+ *       (link → /<slug>/), capped so the hub stays a "news" surface.
+ * A pinned card for the World-Cup 2026 deep-stats page stays first so it always
+ * has an inbound internal link, even before any engine article exists.
+ *
+ * Cadence note: KIR is in Google-penalty recovery, so the engine schedule is
+ * deliberately conservative (2-3 articles/week). An empty engine list is
+ * expected early on — the hub still renders the pinned card + recent posts, and
+ * a Finnish empty-state line if there is genuinely nothing to show.
+ */
 import { getCollection } from "astro:content";
-import Shell from "../../layouts/Shell.astro";
-import headHtml from "../../fragments/uutiset/head.html?raw";
-import bodyHtml from "../../fragments/uutiset/body.html?raw";
-import meta from "../../fragments/uutiset/meta.json";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { getPosts } from "../../lib/content";
 
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+/** How many existing blog posts to surface alongside the engine articles. */
+const POST_LIMIT = 9;
 
-const articles = (await getCollection("articles")).sort((a, b) =>
-  (b.data.publishedAt ?? "").localeCompare(a.data.publishedAt ?? ""),
+/* -------------------------------------------------------------------------- *
+ * Helpers                                                                    *
+ * -------------------------------------------------------------------------- */
+
+/** Plain-text excerpt from HTML (tags stripped, entities decoded, capped). */
+function excerptText(html: string | undefined | null, max = 150): string {
+  if (!html) return "";
+  const text = html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&hellip;|\[&hellip;\]|\[…\]/gi, "…")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#8217;/g, "’")
+    .replace(/&#8211;/g, "–")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  return cut.slice(0, cut.lastIndexOf(" ")).trimEnd() + "…";
+}
+
+/** Format an ISO date as Finnish "15.6.2026"; returns "" on bad input. */
+function fiDate(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
+}
+
+/* -------------------------------------------------------------------------- *
+ * Build the unified, newest-first card list.                                 *
+ * -------------------------------------------------------------------------- */
+
+interface NewsCard {
+  href: string;
+  title: string;
+  /** ISO date for sorting + <time>. */
+  date: string;
+  dateLabel: string;
+  excerpt: string;
+  image: string | null;
+  imageAlt: string | null;
+  /** "Uutinen" (engine) | "Opas" (blog post). */
+  kicker: string;
+}
+
+const engineEntries = await getCollection("articles");
+const engineCards: NewsCard[] = engineEntries.map((e) => {
+  const date = e.data.publishedAt ?? e.data.updatedAt ?? "";
+  return {
+    href: `/uutiset/${e.id}/`,
+    title: e.data.title,
+    date,
+    dateLabel: fiDate(date),
+    excerpt: excerptText(e.data.description),
+    image: e.data.heroImage ?? null,
+    imageAlt: e.data.heroImageAlt ?? e.data.title,
+    kicker: "Uutinen",
+  };
+});
+
+const postCards: NewsCard[] = getPosts()
+  .slice(0, POST_LIMIT)
+  .map((p) => ({
+    href: `/${p.slug}/`,
+    title: p.title,
+    date: p.date,
+    dateLabel: fiDate(p.date),
+    excerpt: excerptText(p.excerptHtml),
+    image: null,
+    imageAlt: null,
+    kicker: "Opas",
+  }));
+
+// Merge both sources, newest first (entries without a date sink to the bottom).
+const cards: NewsCard[] = [...engineCards, ...postCards].sort((a, b) =>
+  (b.date || "").localeCompare(a.date || ""),
 );
 
-// Theme-native article cards (markup mirrors the existing grid items).
-const cards = articles
-  .map((a) => {
-    const img = a.data.heroImage
-      ? `<img src="${escapeHtml(a.data.heroImage)}" alt="${escapeHtml(a.data.title)}" class="article-preview-img radius-corners mr-3 w-100 wp-post-image" loading="lazy" decoding="async" />`
-      : "";
-    return `<div class="col-lg-4 col-md-6">
-\t<a href="/uutiset/${escapeHtml(a.id)}/" class="article-box">
-\t\t${img}
-\t\t<p class="h4 mb-0 py-3 px-2 text-grey">${escapeHtml(a.data.title)}</p>
-\t</a>
-</div>`;
-  })
-  .join("\n");
-
-// Pinned card: the World Cup 2026 deep-stats page (/mm-kisat-2026-tilastot/)
-// stays first in the grid so it always has an inbound internal link — even
-// when the engine list is empty. Same theme card markup as the engine cards.
-const statsCard = `<div class="col-lg-4 col-md-6">
-\t<a href="/mm-kisat-2026-tilastot/" class="article-box">
-\t\t<img src="/og/mm-kisat-2026-tilastot.png" alt="MM-kisat 2026 tilastoina: 48 joukkuetta, 104 ottelua ja 16 stadionia" class="article-preview-img radius-corners mr-3 w-100 wp-post-image" width="1200" height="630" loading="lazy" decoding="async" />
-\t\t<p class="h4 mb-0 py-3 px-2 text-grey">MM-kisojen 2026 tilastot – lohkot, joukkueet ja ennätykset</p>
-\t</a>
-</div>`;
-
-// Inject the pinned stats card + engine cards at the top of the first article grid row.
-const injectedCards = [statsCard, cards].filter(Boolean).join("\n");
-const finalBody = bodyHtml.replace(
-  '<div class="row mb-5">',
-  `<div class="row mb-5">\n${injectedCards}`,
-);
+const hasEngine = engineCards.length > 0;
+const hasCards = cards.length > 0;
 ---
 
-<Shell
-  headHtml={headHtml}
-  bodyHtml={finalBody}
-  htmlAttrs={meta.htmlAttrs ?? ""}
-  bodyAttrs={meta.bodyAttrs ?? ""}
-/>
+<BaseLayout seoPath="/uutiset/" bodyClass="news-hub">
+  {/* ---------------- BREADCRUMB ---------------- */}
+  <nav class="section--tight crumbs-wrap" aria-label="Murupolku">
+    <div class="container">
+      <ol class="crumbs">
+        <li class="crumbs__item"><a href="/">Etusivu</a></li>
+        <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+        <li class="crumbs__item" aria-current="page">Uutiset</li>
+      </ol>
+    </div>
+  </nav>
+
+  {/* ---------------- HERO ---------------- */}
+  <section class="section--tight news-hero" aria-labelledby="news-title">
+    <div class="container--narrow news-hero__inner">
+      <span class="eyebrow">Uutiset</span>
+      <h1 id="news-title" class="news-hero__title">Uutiset ja ajankohtaista</h1>
+      <p class="lead news-hero__lead">
+        Tuoreimmat uutiset ja katsaukset rekisteröitymisvapaista kasinoista,
+        maksutavoista, bonuksista ja alan sääntelystä. Uudet artikkelit
+        ilmestyvät tähän automaattisesti.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------------- PINNED: World Cup 2026 stats ---------------- */}
+  <section class="section--tight news-pinned-wrap" aria-label="Nostettu">
+    <div class="container">
+      <a class="news-pinned card card--lift" href="/mm-kisat-2026-tilastot/">
+        <span class="news-pinned__media">
+          <img
+            src="/og/mm-kisat-2026-tilastot.png"
+            alt="MM-kisat 2026 tilastoina: 48 joukkuetta, 104 ottelua ja 16 stadionia"
+            width="1200"
+            height="630"
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+        <span class="news-pinned__body">
+          <span class="news-card__kicker news-card__kicker--pin">Nostettu</span>
+          <span class="news-pinned__title">
+            MM-kisojen 2026 tilastot – lohkot, joukkueet ja ennätykset
+          </span>
+          <span class="news-pinned__excerpt">
+            Jalkapallon MM-kisat 2026 numeroina: 48 joukkuetta, 104 ottelua ja 16
+            stadionia kolmessa isäntämaassa. Lohkot, otteluohjelma ja ennätykset.
+          </span>
+          <span class="news-pinned__cta">
+            Lue tilastot
+            <Icon name="arrow-right" size={16} />
+          </span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  {/* ---------------- NEWS GRID ---------------- */}
+  <section class="section--tight news-grid-wrap" aria-label="Uutiset ja artikkelit">
+    <div class="container">
+      {hasCards ? (
+        <ul class="news-grid" role="list">
+          {cards.map((c, i) => (
+            <li class="news-grid__item reveal" class:list={[`d${Math.min((i % 5) + 1, 5)}`]}>
+              <a class="news-card card card--lift" href={c.href}>
+                {c.image && (
+                  <span class="news-card__media">
+                    <img
+                      src={c.image}
+                      alt={c.imageAlt ?? c.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                )}
+                <span class="news-card__body">
+                  <span class="news-card__meta">
+                    <span class="news-card__kicker">{c.kicker}</span>
+                    {c.dateLabel && (
+                      <time class="news-card__date" datetime={c.date}>{c.dateLabel}</time>
+                    )}
+                  </span>
+                  <span class="news-card__title" set:html={c.title} />
+                  {c.excerpt && <span class="news-card__excerpt">{c.excerpt}</span>}
+                  <span class="news-card__cta">
+                    Lue lisää
+                    <Icon name="arrow-right" size={16} />
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="muted news-empty">
+          Uusia uutisia ei ole juuri nyt. Uudet artikkelit julkaistaan tässä
+          säännöllisesti — käy pian uudelleen.
+        </p>
+      )}
+
+      {!hasEngine && hasCards && (
+        <p class="muted news-note">
+          Tuoreet uutisartikkelit julkaistaan tähän pian. Tällä välin voit lukea
+          oppaitamme ja katsauksiamme.
+        </p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- Breadcrumb ---------------- */
+  .crumbs-wrap {
+    padding-bottom: 0;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+
+  /* ---------------- Hero ---------------- */
+  .news-hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .news-hero__title {
+    margin: 0;
+    color: var(--navy);
+    font-size: clamp(1.8rem, 1.3rem + 2.4vw, 2.7rem);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  .news-hero__lead {
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  /* ---------------- Pinned card (World Cup stats) ---------------- */
+  .news-pinned-wrap {
+    padding-top: clamp(1rem, 0.6rem + 1.2vw, 1.6rem);
+  }
+  .news-pinned {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+    align-items: center;
+    padding: clamp(1rem, 0.7rem + 1vw, 1.5rem);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+  }
+  .news-pinned:hover {
+    text-decoration: none;
+  }
+  .news-pinned__media {
+    display: block;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg-band-2);
+  }
+  .news-pinned__media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+  }
+  .news-pinned__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+  .news-pinned__title {
+    font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.7rem);
+    line-height: 1.2;
+    font-weight: 800;
+    color: var(--navy);
+    text-wrap: balance;
+  }
+  .news-pinned__excerpt {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .news-pinned__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--brand);
+  }
+  .news-pinned:hover .news-pinned__cta {
+    color: var(--brand-dark);
+  }
+  @media (max-width: 700px) {
+    .news-pinned {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------- News grid ---------------- */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.85rem, 0.5rem + 1.2vw, 1.4rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .news-grid__item {
+    display: flex;
+  }
+  @media (max-width: 940px) {
+    .news-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------- News card ---------------- */
+  .news-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+  .news-card:hover {
+    text-decoration: none;
+  }
+  .news-card__media {
+    display: block;
+    background: var(--bg-band-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .news-card__media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .news-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    padding: 1.1rem 1.1rem 1rem;
+  }
+  .news-card__meta {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .news-card__kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .news-card__kicker--pin {
+    background: var(--cta);
+    color: var(--cta-ink, var(--navy));
+  }
+  .news-card__date {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-3);
+  }
+  .news-card__title {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.3;
+    font-weight: 800;
+    color: var(--navy);
+    text-wrap: balance;
+  }
+  .news-card__excerpt {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+    flex: 1 1 auto;
+  }
+  .news-card__cta {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--brand);
+  }
+  .news-card:hover .news-card__cta {
+    color: var(--brand-dark);
+  }
+
+  /* ---------------- Empty / note ---------------- */
+  .news-empty {
+    margin: 1rem 0 0;
+    font-size: 1rem;
+  }
+  .news-note {
+    margin: 1.5rem 0 0;
+    font-size: 0.9rem;
+  }
+</style>

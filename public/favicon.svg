@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="KIR">
+  <defs>
+    <linearGradient id="kirPlusGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f6fe5"/>
+      <stop offset="1" stop-color="#0b1f3a"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.5" y="0.5" width="39" height="39" rx="11" fill="url(#kirPlusGrad)"/>
+  <path d="M20 11v18M11 20h18" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+</svg>

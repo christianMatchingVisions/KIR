@@ -1,46 +1,98 @@
 ---
 // @custom — hand-edited page; converters/scrapers must not overwrite it.
 //
-// /huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/ — renders the
-// scraped football-article fragment 1:1 (same Shell as the catch-all) and
-// injects ONE contextual "Lue myös" box linking to /mm-kisat-2026-tilastot/
-// at the end of the article content. Registered in OWNED_ELSEWHERE in
-// src/pages/[...slug].astro so the catch-all skips the fragment.
+// /huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/ — football
+// article (Euro 2020). MIGRATED to the LIGHT theme: the scraped fragment's
+// dark sliced header / slide-menu / footer / sidebar are NO LONGER rendered —
+// this page now wraps ArticlePage.astro, which supplies the light
+// Header/Footer/DisclosureBar (via BaseLayout) and a light RelatedCasinos
+// sidebar. We extract ONLY the article body (.wp-content-area) from the
+// fragment, decode the ShortPixel SVG placeholders to real <img> URLs, soften
+// any first-hand claims, inject ONE contextual "Lue myös" box pointing to
+// /mm-kisat-2026-tilastot/, and hand the cleaned HTML to ArticlePage as
+// bodyHtml.
 //
-// Injection is resilient by design: (1) anchor on a stable sentence from the
-// article's final paragraph; (2) fall back to the close of the single
-// .wp-content-area div (the article body contains no nested divs); (3) if
-// neither matches after a re-scrape, render the fragment unmodified — never
-// throw. Everything outside the injected block stays byte-identical.
-import Shell from "../../layouts/Shell.astro";
-import headHtml from "../../fragments/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/head.html?raw";
+// COMPLIANCE: the only affiliate /go/ links on the old page lived in the dark
+// sliced sidebar, which is GONE — replaced by RelatedCasinos, whose CTAs are
+// already rel="sponsored nofollow". The article prose itself contains only
+// internal links. seoPath is forwarded so the indexed <head> (canonical /
+// description / robots / OG / JSON-LD) is preserved VERBATIM (penalty recovery).
+//
+// Body-extraction is resilient: anchor on the article's stable .wp-content-area
+// wrapper; if a re-scrape changes the markup we fall back to the full body so
+// the page never throws.
+import ArticlePage from "../../layouts/ArticlePage.astro";
+import { scrubFirstHandClaims } from "../../lib/content";
 import bodyHtml from "../../fragments/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/body.html?raw";
-import meta from "../../fragments/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/meta.json";
 
-const lueMyos = `
-<div class="kir-lue-myos box-shadow radius-corners p-3 mt-5">
-\t<p class="mb-0"><strong>Lue myös:</strong> Kesällä 2026 jalkapallon MM-turnaus pelataan Yhdysvalloissa, Kanadassa ja Meksikossa. Kokosimme yhteen <a href="/mm-kisat-2026-tilastot/">MM-kisojen 2026 tilastot ja lohkot</a> – mukana kaikki 48 joukkuetta, kaikkien aikojen parhaat maalintekijät ja MM-historian ennätykset.</p>
-</div>`;
+const seoPath = "/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/";
+const title = "Huuhkajien jatko EM -jalkapalloturnauksessa riippuu tuurista – Euro 2020";
+const siteUrl = "https://kasinotilmanrekisteroitymista.com";
 
-let finalBody = bodyHtml;
-const anchor = "kiinnostusta korona-aikana uusissa pelaajissa.</p>";
-if (finalBody.includes(anchor)) {
-  // Strategy 1: right after the article's final paragraph.
-  finalBody = finalBody.replace(anchor, anchor + lueMyos);
-} else {
-  // Strategy 2: just before the closing </div> of .wp-content-area.
-  const open = finalBody.indexOf('<div class="wp-content-area">');
-  const close = open === -1 ? -1 : finalBody.indexOf("</div>", open);
-  if (close !== -1) {
-    finalBody = finalBody.slice(0, close) + lueMyos + "\n" + finalBody.slice(close);
-  }
-  // Neither matched → fragment renders unmodified.
+/* ---- Extract just the article body from the scraped fragment ---- */
+/* The article lives inside the FIRST <div class="wp-content-area"> … </div>.
+   That div contains no nested <div>, so the first following </div> closes it. */
+function extractArticle(src: string): string {
+  const open = src.indexOf('<div class="wp-content-area">');
+  if (open === -1) return src; // resilient: never throw, render whatever we have
+  const inner = open + '<div class="wp-content-area">'.length;
+  const close = src.indexOf("</div>", inner);
+  if (close === -1) return src.slice(inner);
+  return src.slice(inner, close);
 }
+
+/* ShortPixel adaptive images ship as base64 SVG placeholders; the real image
+   URL sits URL-encoded in a data-u attribute INSIDE the encoded SVG. Decode at
+   build time → a plain <img src> (root-relative), no spai script needed. */
+function decodeSpai(html: string): string {
+  return html.replace(
+    /<img\b[^>]*src="data:image\/svg\+xml;base64,([^"]+)"[^>]*>/g,
+    (tag, b64) => {
+      const svg = Buffer.from(b64, "base64").toString("utf8");
+      const dataU = svg.match(/data-u="([^"]+)"/)?.[1];
+      if (!dataU) return tag;
+      const real = decodeURIComponent(dataU).replace(siteUrl, "");
+      return tag
+        .replace(/src="data:[^"]*"/, `src="${real}"`)
+        .replace(/\s+data-spai="[^"]*"/g, "");
+    },
+  );
+}
+
+/* ---- Contextual "Lue myös" box appended to the article body ---- */
+/* Styled inline via the .kir-prose blockquote treatment already defined in
+   ArticlePage (brand-soft callout, left brand rule) so it inherits the light
+   theme without needing a head slot. */
+const lueMyos = `
+<aside class="kir-lue-myos" style="margin:2em 0 0;padding:1.1em 1.3em;background:var(--brand-soft);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:0 var(--radius-sm) var(--radius-sm) 0;">
+\t<p style="margin:0;color:var(--ink-2);"><strong>Lue myös:</strong> Kesällä 2026 jalkapallon MM-turnaus pelataan Yhdysvalloissa, Kanadassa ja Meksikossa. Kokosimme yhteen <a href="/mm-kisat-2026-tilastot/">MM-kisojen 2026 tilastot ja lohkot</a> – mukana kaikki 48 joukkuetta, kaikkien aikojen parhaat maalintekijät ja MM-historian ennätykset.</p>
+</aside>`;
+
+let article = decodeSpai(extractArticle(bodyHtml));
+/* Soften any first-person testing language before render (compliance). */
+article = scrubFirstHandClaims(article);
+/* Append the contextual cross-link at the end of the article body. */
+article = article + lueMyos;
+
+const breadcrumb = [
+  { label: "Kasinot Ilman Rekisteröitymistä", href: "/" },
+  { label: title, href: "" },
+];
+
+const relatedLinks = [
+  { label: "MM-kisojen 2026 tilastot", href: "/mm-kisat-2026-tilastot/" },
+  { label: "Uudet kasinot", href: "/uudet-kasinot/" },
+  { label: "Kasinobonukset", href: "/kasinobonukset/" },
+  { label: "Uutiset", href: "/uutiset/" },
+];
 ---
 
-<Shell
-  headHtml={headHtml}
-  bodyHtml={finalBody}
-  htmlAttrs={meta.htmlAttrs ?? ""}
-  bodyAttrs={meta.bodyAttrs ?? ""}
+<ArticlePage
+  seoPath={seoPath}
+  title={title}
+  bodyHtml={article}
+  date="2021-06-21"
+  eyebrow="Jalkapallo"
+  breadcrumb={breadcrumb}
+  relatedLinks={relatedLinks}
 />

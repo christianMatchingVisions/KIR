@@ -158,7 +158,7 @@
        the accessibility tree with names of their own (WCAG 4.1.2). */
     var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="group" aria-label="' + esc(label) + '">';
     s += "<defs><linearGradient id=\"mmGradTeal\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">" +
-      "<stop offset=\"0\" stop-color=\"#5eead4\"/><stop offset=\"1\" stop-color=\"#0d9488\"/>" +
+      "<stop offset=\"0\" stop-color=\"#4f97f0\"/><stop offset=\"1\" stop-color=\"#1657c4\"/>" +
       "</linearGradient></defs>";
 
     [0, 60, 120, 180].forEach(function (g) {
@@ -219,7 +219,7 @@
     var legend = document.getElementById("mm-legenda");
     if (!host) return;
     var data = D.maanosaMestaruudet;
-    var colors = ["#2dd4bf", "#8b5cf6"];
+    var colors = ["#1f6fe5", "#ffce32"];
     var total = data.reduce(function (s, x) { return s + x.mestaruudet; }, 0);
     var size = 230, c = size / 2, r = 72, sw = 30;
     var circ = 2 * Math.PI * r;

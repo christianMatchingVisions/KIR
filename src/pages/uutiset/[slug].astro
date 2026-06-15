@@ -1,9 +1,33 @@
 ---
-// One page per Content Engine article delivered to this site.
-// New articles appear automatically on the next build (the engine's
-// article.published webhook should point at a Vercel deploy hook).
-import { getCollection, render } from "astro:content";
-import ArticleLayout from "../../layouts/ArticleLayout.astro";
+/**
+ * /uutiset/<slug>/ — one LIGHT-theme page per Content-Engine article delivered
+ * to this site. New articles appear automatically on the next build (the
+ * engine's article.published webhook points at a Vercel deploy hook).
+ *
+ * HEAD (clean, NOT registry): these are brand-new URLs, absent from the Phase-1
+ * scraped SEO registry, so we build a clean head directly on BaseLayout —
+ * title + meta description + self-canonical + a NewsArticle JSON-LD block
+ * (headline, datePublished, dateModified, inLanguage fi, image, publisher).
+ *
+ * COMPLIANCE (penalty recovery): the article body is hardened at load time in
+ * content-engine-loader.ts (scrubFirstHandClaims → ensureSponsored). We re-run
+ * BOTH here on the rendered HTML string as a belt-and-suspenders guarantee —
+ * they are idempotent, so this is a no-op on already-clean copy but guarantees
+ * NO first-hand/testing claims in visible prose and rel="sponsored nofollow"
+ * on EVERY /go/ and external affiliate link, regardless of feed source.
+ *
+ * LAYOUT: light hero (eyebrow + breadcrumb + H1 + passive "Päivitetty" line +
+ * hero image), then the 2-column ArticlePage-style body (.kir-prose + sticky
+ * RelatedCasinos sidebar). Renders directly on BaseLayout because ArticlePage
+ * only forwards a registry `seoPath`, and these URLs have no registry entry.
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedCasinos from "../../components/RelatedCasinos.astro";
+import Icon from "../../components/Icon.astro";
+import { scrubFirstHandClaims, ensureSponsored } from "../../lib/content";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
 export async function getStaticPaths() {
   const articles = await getCollection("articles");
@@ -14,15 +38,405 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { data } = entry;
+
+/* -------------------------------------------------------------------------- */
+/* COMPLIANCE: harden the rendered body HTML (idempotent — also done at load). */
+/* The loader stores the compliant HTML on `entry.rendered.html`; we re-apply  */
+/* both guards defensively before rendering so visible prose carries no        */
+/* first-hand claims and every affiliate link is rel="sponsored nofollow".     */
+/* -------------------------------------------------------------------------- */
+const rawHtml = (entry as unknown as { rendered?: { html?: string } }).rendered?.html ?? "";
+const bodyHtml = ensureSponsored(scrubFirstHandClaims(rawHtml));
+
+const title = data.title;
+const description = data.description;
+const canonical = `${SITE_ORIGIN}/uutiset/${entry.id}/`;
+const heroImage = data.heroImage;
+const heroImageAlt = data.heroImageAlt ?? data.title;
+
+/* -------------------------------------------------------------------------- */
+/* Freshness — passive "Päivitetty <fi-date>" (NOT a testing claim).          */
+/* Prefer updatedAt, fall back to publishedAt. Render nothing if unparseable. */
+/* -------------------------------------------------------------------------- */
+const FI_MONTHS = [
+  "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta",
+  "kesäkuuta", "heinäkuuta", "elokuuta", "syyskuuta", "lokakuuta",
+  "marraskuuta", "joulukuuta",
+];
+function formatFiDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return `${d.getDate()}. ${FI_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+function isoDay(iso: string | null | undefined): string | undefined {
+  if (!iso) return undefined;
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);
+}
+
+/* The engine delivers `delivered` (not yet `published`) articles, so
+ * `published_at` can be null while `updated_at` is always set. NewsArticle
+ * REQUIRES a datePublished, so fall back to updatedAt when the feed has no
+ * explicit publish date — never emit the schema without it. dateModified
+ * still tracks updatedAt independently. */
+const updatedAt = (data.updatedAt ?? null) || data.publishedAt;
+const publishedAt = data.publishedAt ?? updatedAt;
+const freshnessDate = formatFiDate(updatedAt);
+const freshnessIso = isoDay(updatedAt);
+
+/* -------------------------------------------------------------------------- */
+/* NewsArticle JSON-LD — clean structured data for these new URLs.            */
+/* -------------------------------------------------------------------------- */
+const newsLd: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  headline: title,
+  description,
+  inLanguage: data.language || "fi",
+  mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+  url: canonical,
+  publisher: {
+    "@type": "Organization",
+    name: "Kasinot ilman rekisteröitymistä",
+    url: SITE_ORIGIN + "/",
+  },
+};
+if (publishedAt) newsLd.datePublished = publishedAt;
+if (updatedAt) newsLd.dateModified = updatedAt;
+if (heroImage) newsLd.image = [heroImage];
+
+const jsonLd = [
+  `<script type="application/ld+json">${JSON.stringify(newsLd)}</script>`,
+];
 ---
 
-<ArticleLayout
-  title={entry.data.title}
-  description={entry.data.description}
-  canonicalPath={`/uutiset/${entry.id}/`}
-  publishedAt={entry.data.publishedAt}
-  heroImage={entry.data.heroImage}
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  bodyClass="article"
 >
-  <Content />
-</ArticleLayout>
+  {/* ---------------- HERO BAND ---------------- */}
+  <header class="art-hero band">
+    <div class="container">
+      <nav class="art-crumbs" aria-label="Murupolku">
+        <ol class="crumbs">
+          <li class="crumbs__item"><a href="/">Etusivu</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item"><a href="/uutiset/">Uutiset</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item" aria-current="page">{title}</li>
+        </ol>
+      </nav>
+
+      <div class="art-hero__inner">
+        <span class="eyebrow">Uutiset</span>
+        <h1 class="art-hero__title">{title}</h1>
+        {freshnessDate && (
+          <p class="art-hero__meta">
+            <Icon name="clock" size={16} class="art-hero__meta-ico" />
+            Päivitetty <time datetime={freshnessIso}>{freshnessDate}</time>
+          </p>
+        )}
+      </div>
+    </div>
+  </header>
+
+  {/* ---------------- BODY (2-col) ---------------- */}
+  <section class="section--tight art-body">
+    <div class="container">
+      <div class="art-grid">
+        <article class="art-main">
+          {heroImage && (
+            <figure class="art-hero-img">
+              <img
+                src={heroImage}
+                alt={heroImageAlt}
+                width="1200"
+                height="630"
+                loading="eager"
+                decoding="async"
+              />
+            </figure>
+          )}
+          <div class="kir-prose" set:html={bodyHtml} />
+        </article>
+
+        <div class="art-side">
+          <div class="art-side__sticky">
+            <RelatedCasinos
+              limit={4}
+              links={[{ label: "Kaikki uutiset", href: "/uutiset/" }]}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- Hero band ---------------- */
+  .art-hero {
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  }
+  .art-crumbs {
+    margin-bottom: 0.9rem;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item {
+    min-width: 0;
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+
+  .art-hero__inner {
+    max-width: 52rem;
+  }
+  .art-hero__title {
+    margin: 0.35rem 0 0;
+    line-height: 1.12;
+  }
+  .art-hero__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.9rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+  .art-hero__meta-ico {
+    color: var(--brand);
+    flex: none;
+  }
+  .art-hero__meta time {
+    color: var(--ink-2);
+  }
+
+  /* ---------------- 2-col body grid ---------------- */
+  .art-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+    align-items: start;
+  }
+  @media (min-width: 980px) {
+    .art-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+    }
+  }
+
+  .art-main {
+    min-width: 0;
+  }
+
+  /* Engine hero image — constrained, never overflows the column. */
+  .art-hero-img {
+    margin: 0 0 1.75rem;
+  }
+  .art-hero-img img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    display: block;
+  }
+
+  .art-side {
+    min-width: 0;
+  }
+  @media (min-width: 980px) {
+    .art-side__sticky {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+
+  /* ---------------- Light-theme prose (overflow-safe) ----------------
+     Mirrors ArticlePage.astro's .kir-prose treatment so engine articles read
+     identically to the rest of the rebuilt site (0 overflow at 360px). */
+  .kir-prose {
+    color: var(--ink-2);
+    line-height: 1.75;
+    font-size: 1.02rem;
+  }
+  .kir-prose :global(h2),
+  .kir-prose :global(h3),
+  .kir-prose :global(h4),
+  .kir-prose :global(h5) {
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 1.9em 0 0.6em;
+    text-wrap: balance;
+  }
+  .kir-prose :global(h2) {
+    font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.85rem);
+  }
+  .kir-prose :global(h3) {
+    font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.4rem);
+  }
+  .kir-prose :global(h4) {
+    font-size: 1.1rem;
+  }
+  .kir-prose :global(h5) {
+    font-size: 1rem;
+  }
+  .kir-prose :global(p) {
+    margin: 0 0 1.1em;
+  }
+  .kir-prose :global(a) {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .kir-prose :global(a:hover) {
+    color: var(--brand-dark);
+  }
+  .kir-prose :global(ul),
+  .kir-prose :global(ol) {
+    margin: 0 0 1.25em;
+    padding-left: 1.4em;
+    list-style: revert;
+  }
+  .kir-prose :global(ul) {
+    list-style: disc;
+  }
+  .kir-prose :global(ol) {
+    list-style: decimal;
+  }
+  .kir-prose :global(li) {
+    margin-bottom: 0.5em;
+  }
+  .kir-prose :global(li::marker) {
+    color: var(--brand);
+  }
+  .kir-prose :global(strong) {
+    color: var(--ink);
+  }
+
+  .kir-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin: 1.25em 0;
+  }
+  .kir-prose :global(figure) {
+    margin: 1.5em 0;
+  }
+  .kir-prose :global(figcaption) {
+    margin-top: 0.5em;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    text-align: center;
+  }
+
+  .kir-prose :global(blockquote) {
+    margin: 1.5em 0;
+    padding: 0.9em 1.2em;
+    border-left: 4px solid var(--brand);
+    background: var(--bg-band);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  .kir-prose :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .kir-prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 2em 0;
+  }
+
+  .kir-prose :global(code) {
+    background: var(--bg-band-2);
+    padding: 0.12em 0.4em;
+    border-radius: 6px;
+    font-size: 0.9em;
+  }
+  .kir-prose :global(pre) {
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 1em 1.2em;
+    background: var(--navy);
+    color: #e6edf7;
+    border-radius: var(--radius-sm);
+    margin: 1.25em 0;
+  }
+  .kir-prose :global(pre code) {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Comparison tables → overflow-safe scroll container (0 overflow at 360px). */
+  .kir-prose :global(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .kir-prose :global(table) :global(tbody) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(table) :global(thead) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(th) {
+    background: var(--bg-band-2);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .kir-prose :global(td),
+  .kir-prose :global(th) {
+    border: 1px solid var(--line);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .kir-prose :global(tbody tr:nth-child(even) td) {
+    background: var(--bg-band);
+  }
+</style>

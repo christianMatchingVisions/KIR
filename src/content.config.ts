@@ -12,7 +12,12 @@ export const collections = {
       description: z.string(),
       language: z.string(),
       publishedAt: z.string().nullable(),
+      // ISO last-modified date — powers the "Päivitetty" freshness line.
+      // Optional so older synced entries (pre-field) still validate.
+      updatedAt: z.string().nullable().optional(),
       heroImage: z.string().nullable(),
+      // Alt text for the hero image when the engine supplies it.
+      heroImageAlt: z.string().nullable().optional(),
     }),
   }),
 };

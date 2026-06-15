@@ -13,11 +13,19 @@
  * demotion — publishing cadence is deliberately conservative (2-3 articles
  * per week). Cadence is controlled engine-side (--per-week), not here.
  *
- * Compliance: article HTML is stored verbatim (`renderings.html`) — affiliate
- * links keep their rel="sponsored nofollow" attributes exactly as the engine's
- * compliance gate delivered them. Do not post-process/strip attributes here.
+ * Compliance (hardened at load time): the engine's compliance gate already
+ * delivers passing copy, but this site is in Google-penalty recovery and the
+ * rules are strict, so we make the daily AI content compliant BY CONSTRUCTION
+ * before it ever reaches the content store / render:
+ *   1. scrubFirstHandClaims — soften any first-person / testing language
+ *      ("testasin/kokeilin/oikealla pelaajatilillä" …) to passive phrasing.
+ *   2. ensureSponsored     — force rel="sponsored nofollow" on every affiliate
+ *      link (internal /go/<slug>/ AND any external/operator absolute link).
+ * Both are idempotent attribute/text-level passes (shared with the catch-all
+ * and casino routes), so re-running them on already-clean copy is a no-op.
  */
 import type { Loader } from "astro/loaders";
+import { scrubFirstHandClaims, ensureSponsored } from "./content";
 
 interface EngineArticle {
   id: string;
@@ -72,6 +80,14 @@ export function contentEngineLoader(opts: {
         const page = (await res.json()) as FeedPage;
 
         for (const article of page.data) {
+          // Compliance hardening — make the delivered HTML compliant by
+          // construction before it enters the store: soften any first-hand
+          // testing claims, then force sponsored+nofollow on every affiliate
+          // link. Idempotent, so already-clean copy passes through unchanged.
+          const compliantHtml = ensureSponsored(
+            scrubFirstHandClaims(article.renderings.html ?? ""),
+          );
+
           store.set({
             id: article.slug ?? article.id,
             data: {
@@ -79,10 +95,13 @@ export function contentEngineLoader(opts: {
               description: article.meta.description ?? "",
               language: article.language,
               publishedAt: article.published_at,
+              updatedAt: article.updated_at ?? null,
               heroImage:
                 article.media.find((m) => m.kind === "image")?.url ?? null,
+              heroImageAlt:
+                article.media.find((m) => m.kind === "image")?.alt_text ?? null,
             },
-            rendered: { html: article.renderings.html },
+            rendered: { html: compliantHtml },
           });
           count++;
         }
