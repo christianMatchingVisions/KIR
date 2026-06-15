@@ -46,6 +46,7 @@ import {
   getFaq,
   getFaqs,
   getToplistConfigForSlug,
+  optimizeProseImages,
   DEFAULT_TOPLIST_CONFIG,
 } from "../lib/content";
 import { getSeoHead } from "../lib/seo-head";
@@ -357,13 +358,20 @@ const moneyTitle =
 const moneyIntro = isMoneyPage
   ? ensureSponsored(page?.contentHtml || fragmentProse() || "")
   : "";
+
+/* PERFORMANCE: lazy-load + de-prioritise the large below-the-fold prose images
+ * (strips legacy fetchpriority="high", adds loading="lazy"/decoding="async").
+ * Applied once here so every article/money body benefits regardless of source.
+ * Does not touch any above-the-fold/template hero image. */
+articleBody = optimizeProseImages(articleBody);
+const moneyIntroOptimized = optimizeProseImages(moneyIntro);
 ---
 
 {isMoneyPage ? (
   <MoneyPage
     seoPath={path}
     title={moneyTitle}
-    introHtml={moneyIntro || undefined}
+    introHtml={moneyIntroOptimized || undefined}
     toplistConfig={toplistConfig}
   />
 ) : (

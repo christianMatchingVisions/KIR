@@ -48,6 +48,7 @@ import CasinoCard from "../../components/CasinoCard.astro";
 import Icon from "../../components/Icon.astro";
 import { getCasino, listCasinoSlugs, type CasinoReview } from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
+import { optimizeProseImages } from "../../lib/content";
 
 /** One static path per casino fragment slug. */
 export function getStaticPaths() {
@@ -175,10 +176,14 @@ function neutralizeFirstHand(html: string | null): string | null {
 const review = rawReview
   ? (() => {
       const b = backfill(rawReview);
+      // PERFORMANCE: lazy-load + de-prioritise the large below-the-fold prose
+      // images (the review prose sits after the hero/quick-facts/rating/payment
+      // sections). Strips legacy fetchpriority="high", adds loading="lazy" +
+      // decoding="async". Never touches an above-the-fold/template image.
       return {
         ...b,
-        reviewHtml: neutralizeFirstHand(ensureSponsored(b.reviewHtml)),
-        bonusesHtml: neutralizeFirstHand(ensureSponsored(b.bonusesHtml)),
+        reviewHtml: optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.reviewHtml))),
+        bonusesHtml: optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.bonusesHtml))),
       };
     })()
   : null;

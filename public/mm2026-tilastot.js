@@ -361,11 +361,35 @@
     });
   }
 
+  /* ---------- Lazy chart init ----------
+     The two inline-SVG charts (bar + donut) live deep in the #kaaviot section,
+     far below the fold on this very tall page. Building their SVG and setting
+     innerHTML is the heaviest synchronous work in this script, so we defer it
+     until the chart host is about to scroll into view (IntersectionObserver,
+     400px rootMargin so it is ready before it appears). This trims main-thread
+     cost on first load without changing behaviour. If IO is unavailable, or the
+     user prefers reduced motion (less likely to scroll-trigger surprises), we
+     fall back to rendering immediately so the charts always appear. */
+  function whenVisible(el, fn) {
+    if (!el) return;
+    if (!("IntersectionObserver" in window)) { fn(); return; }
+    var io = new IntersectionObserver(function (entries, obs) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          obs.disconnect();
+          fn();
+          return;
+        }
+      }
+    }, { rootMargin: "400px 0px" });
+    io.observe(el);
+  }
+
   initTabs();
   [].slice.call(document.querySelectorAll("table.mm-sortable")).forEach(initSortable);
   initScorerFilter();
-  renderBarChart();
-  renderDonut();
+  whenVisible(document.getElementById("mm-kaavio-maalit"), renderBarChart);
+  whenVisible(document.getElementById("mm-kaavio-maanosat"), renderDonut);
   initComparator();
   initRecordFilter();
   initHeroStats();

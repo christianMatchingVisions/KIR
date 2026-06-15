@@ -25,7 +25,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedCasinos from "../../components/RelatedCasinos.astro";
 import Icon from "../../components/Icon.astro";
-import { scrubFirstHandClaims, ensureSponsored } from "../../lib/content";
+import { scrubFirstHandClaims, ensureSponsored, optimizeProseImages } from "../../lib/content";
 
 const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
@@ -47,7 +47,10 @@ const { data } = entry;
 /* first-hand claims and every affiliate link is rel="sponsored nofollow".     */
 /* -------------------------------------------------------------------------- */
 const rawHtml = (entry as unknown as { rendered?: { html?: string } }).rendered?.html ?? "";
-const bodyHtml = ensureSponsored(scrubFirstHandClaims(rawHtml));
+// optimizeProseImages: lazy-load + de-prioritise large below-the-fold images
+// inside the article BODY only. The eager hero <img> lives in this template's
+// markup (outside .kir-prose / bodyHtml), so it is never affected.
+const bodyHtml = optimizeProseImages(ensureSponsored(scrubFirstHandClaims(rawHtml)));
 
 const title = data.title;
 const description = data.description;

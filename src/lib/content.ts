@@ -307,6 +307,51 @@ export function ensureSponsored(html: string | null | undefined): string {
   });
 }
 
+/**
+ * PERFORMANCE (Core Web Vitals) for embedded prose images.
+ *
+ * The preserved/scraped WordPress prose carries large editorial JPEGs (often
+ * 1900px+ wide) deep INSIDE the article body — always well below the fold (they
+ * sit after the hero, quick-facts, rating, payment and intro sections). The
+ * legacy markup left two anti-patterns on them:
+ *   1. `fetchpriority="high"` on the first prose image — this tells the browser
+ *      to fetch a deep, non-LCP image at top priority, starving the genuine
+ *      above-the-fold LCP candidate and inflating initial transfer.
+ *   2. NO `loading` attribute — so the image is eagerly fetched on first load
+ *      even though it is far below the fold.
+ *
+ * This pass, applied to PROSE HTML only (never to the page-template hero <img>,
+ * which lives outside .kir-prose), makes these images well-behaved:
+ *   - strips `fetchpriority="high"` (and the rare `fetchpriority=high`)
+ *   - adds `loading="lazy"` when the <img> has no `loading` attribute
+ *   - adds `decoding="async"` when the <img> has no `decoding` attribute
+ *
+ * It is deliberately CONSERVATIVE and idempotent: width/height/alt/src and every
+ * other attribute are left byte-for-byte intact, an existing `loading="eager"`
+ * is respected (never downgraded), and re-running the pass is a no-op. It does
+ * NOT touch the LCP image of any page — those are emitted by the page templates
+ * (e.g. the /uutiset/ engine hero) outside the prose string.
+ */
+export function optimizeProseImages(html: string | null | undefined): string {
+  if (!html) return "";
+  return html.replace(/<img\b([^>]*?)\s*(\/?)>/gi, (_whole, rawAttrs: string, selfClose: string) => {
+    let attrs = rawAttrs;
+    // 1. Drop fetchpriority="high" (quoted or bare) — never the LCP image here.
+    attrs = attrs.replace(/\s+fetchpriority\s*=\s*(?:"high"|'high'|high)/gi, "");
+    // 2. Lazy-load when no loading attribute is present (respect existing values).
+    if (!/\bloading\s*=/i.test(attrs)) {
+      attrs = `${attrs} loading="lazy"`;
+    }
+    // 3. Async decode when no decoding attribute is present.
+    if (!/\bdecoding\s*=/i.test(attrs)) {
+      attrs = `${attrs} decoding="async"`;
+    }
+    // Normalise stray double-spaces left by the strip; keep a single space lead.
+    attrs = attrs.replace(/\s{2,}/g, " ").replace(/^\s*/, " ").replace(/\s*$/, "");
+    return `<img${attrs}${selfClose ? " /" : ""}>`;
+  });
+}
+
 function str(v: string | undefined): string {
   return typeof v === "string" ? v : "";
 }
