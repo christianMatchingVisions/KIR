@@ -29,6 +29,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import HomeHero from "../components/HomeHero.astro";
 import FeatureStrip from "../components/FeatureStrip.astro";
 import CasinoCard from "../components/CasinoCard.astro";
+import RelatedCasinos from "../components/RelatedCasinos.astro";
 import Icon from "../components/Icon.astro";
 import { getToplist, type ToplistCasino } from "../lib/toplist";
 
@@ -123,8 +124,113 @@ function escapeHost(): string {
   );
 }
 
-const introHtml = cleanProse(extractDivByClass(homeBody, "intro-paragraph"));
-const contentHtml = cleanProse(extractDivByClass(homeBody, "wp-content-area"));
+/**
+ * Balance <div> tags in an extracted prose fragment so it is self-contained.
+ * The legacy WP home content has a stray (unmatched) </div>; injected via
+ * set:html it would underflow and prematurely close the surrounding
+ * .intro__main / .intro__grid, kicking the sidebar <aside> out of the grid.
+ * We drop stray closes that would underflow and append any missing closes,
+ * so the fragment can never leak out of its container.
+ */
+function balanceDivs(html: string): string {
+  if (!html) return "";
+  let depth = 0;
+  let out = "";
+  let last = 0;
+  const re = /<div\b[^>]*>|<\/div\s*>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) !== null) {
+    if (m[0][1] === "/") {
+      if (depth === 0) {
+        // stray close — drop it (keep the text before it, skip the tag)
+        out += html.slice(last, m.index);
+        last = m.index + m[0].length;
+        continue;
+      }
+      depth -= 1;
+    } else {
+      depth += 1;
+    }
+  }
+  out += html.slice(last);
+  if (depth > 0) out += "</div>".repeat(depth);
+  return out;
+}
+
+const introHtml = balanceDivs(cleanProse(extractDivByClass(homeBody, "intro-paragraph")));
+const rawContentHtml = balanceDivs(cleanProse(extractDivByClass(homeBody, "wp-content-area")));
+
+/* -------------------------------------------------------------------------- */
+/* Build a "Sisällys" (table of contents) from the prose <h2> headings, and   */
+/* inject a stable id on each h2 so the TOC can smooth-scroll to it. The TOC   */
+/* fills the right sidebar; ids also give the page in-content jump anchors.    */
+/* -------------------------------------------------------------------------- */
+
+interface TocEntry {
+  id: string;
+  label: string;
+}
+
+/** Finnish-aware slug: ä→a, ö→o, å→a, strip tags/punctuation, kebab-case. */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/<[^>]+>/g, "") // any inline tags inside the heading
+    .replace(/&[a-z]+;|&#\d+;/g, " ") // entities
+    .replace(/ä/g, "a")
+    .replace(/ö/g, "o")
+    .replace(/å/g, "a")
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "") // strip combining diacritics
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 60)
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Walk the content HTML, give every <h2> a unique id (preserving any existing
+ * id), and collect a TOC. Returns the rewritten HTML plus the TOC entries.
+ */
+function buildTocAndIds(html: string): { html: string; toc: TocEntry[] } {
+  if (!html) return { html, toc: [] };
+  const toc: TocEntry[] = [];
+  const used = new Set<string>();
+
+  const out = html.replace(
+    /<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi,
+    (_full, attrs: string, inner: string) => {
+      // Plain-text label (strip inline markup) for both TOC + slug.
+      const label = inner
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (!label) return `<h2${attrs}>${inner}</h2>`;
+
+      // Reuse an existing id if present; otherwise derive one from the label.
+      const existing = /\bid=["']([^"']+)["']/i.exec(attrs);
+      let id = existing ? existing[1] : slugify(label) || "osio";
+      // De-dupe.
+      let unique = id;
+      let n = 2;
+      while (used.has(unique)) unique = `${id}-${n++}`;
+      used.add(unique);
+      id = unique;
+
+      toc.push({ id, label });
+
+      const attrsNoId = attrs.replace(/\s*\bid=["'][^"']*["']/i, "");
+      return `<h2 id="${id}"${attrsNoId}>${inner}</h2>`;
+    },
+  );
+
+  return { html: out, toc };
+}
+
+const { html: contentHtml, toc } = buildTocAndIds(rawContentHtml);
+const hasToc = toc.length > 1;
 ---
 
 <BaseLayout seoPath="/" bodyClass="home">
@@ -163,19 +269,145 @@ const contentHtml = cleanProse(extractDivByClass(homeBody, "wp-content-area"));
   {/* ---------------- FEATURE STRIP ---------------- */}
   <FeatureStrip />
 
-  {/* ---------------- INTRO / EXISTING LONG-FORM COPY ---------------- */}
+  {/* ---------------- INTRO / EXISTING LONG-FORM COPY ----------------
+      2-column on desktop (≥980px) inside .container--wide: a readable prose
+      column + a sticky sidebar (top casinos + "Sisällys" jump-links) that
+      fills the previously-blank right margin. Stacks to one column below.
+
+      The 7k-word body is wrapped in a JS-clamp: collapsed it shows the first
+      portion behind a max-height + gradient fade with a "Lue lisää" button.
+      CRITICAL: the clamp uses overflow/max-height clipping (NOT display:none
+      or conditional rendering), so the FULL content stays in the DOM for
+      crawlers, and shows in full when JS is disabled (the script adds the
+      .intro-prose--clamp class; without JS the wrapper is never clamped). */}
   {(introHtml || contentHtml) && (
     <section class="section--tight intro" aria-label="Tietoa kasinoista ilman rekisteröitymistä">
-      <div class="container--narrow">
-        {introHtml && (
-          <div class="intro__lead kir-prose reveal" set:html={introHtml} />
-        )}
-        {contentHtml && (
-          <div class="kir-prose reveal d1" set:html={contentHtml} />
-        )}
+      <div class="container--wide intro__grid">
+        <div class="intro__main">
+          {introHtml && (
+            <div class="intro__lead kir-prose reveal" set:html={introHtml} />
+          )}
+          {contentHtml && (
+            <div class="intro__prose reveal d1" data-intro-prose>
+              <div class="intro-prose__inner kir-prose" set:html={contentHtml} />
+              <button
+                type="button"
+                class="intro-prose__toggle btn-outline"
+                data-intro-toggle
+                aria-expanded="false"
+                hidden
+              >
+                <span class="intro-prose__toggle-more">Lue lisää</span>
+                <span class="intro-prose__toggle-less">Näytä vähemmän</span>
+                <Icon name="chevron-right" size={18} class="intro-prose__toggle-ico" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        <aside class="intro__side" aria-label="Sivun sisältö ja suositukset">
+          <div class="intro__side-sticky">
+            <RelatedCasinos casinos={topCasinos} limit={5} />
+            {hasToc && (
+              <nav class="intro-toc card" aria-label="Sisällys">
+                <h2 class="intro-toc__title">Sisällys</h2>
+                <ol class="intro-toc__list" role="list">
+                  {toc.map((entry) => (
+                    <li class="intro-toc__item">
+                      <a class="intro-toc__link" href={`#${entry.id}`}>
+                        <Icon name="chevron-right" size={14} class="intro-toc__ico" />
+                        <span>{entry.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+          </div>
+        </aside>
       </div>
     </section>
   )}
+
+  {/* ---------------- "Lue lisää" expander + TOC active-link wiring ----------------
+      Progressive enhancement only: if this script never runs (JS off, parse
+      error) the full prose renders unclamped and every word is in the DOM. */}
+  <script>
+    (() => {
+      // Scope everything to the STABLE .intro section. The preserved WordPress
+      // prose (injected via set:html) can be re-parented by the browser's HTML5
+      // parser, which hoists the toggle button OUT of [data-intro-prose]. So we
+      // never query the toggle from the wrapper — we query from the section, and
+      // we hold the clamp/open STATE on the section (see the matching CSS), so it
+      // stays in sync wherever the parser ends up putting the button.
+      const section = document.querySelector<HTMLElement>(".intro");
+      if (!section) return;
+      const inner = section.querySelector<HTMLElement>(".intro-prose__inner");
+      const toggle = section.querySelector<HTMLButtonElement>("[data-intro-toggle]");
+      if (!inner || !toggle) return;
+
+      // Only clamp when the content is actually tall enough to be worth hiding.
+      // (~1100px collapsed height target — see .intro--clamp in the CSS.)
+      const CLAMP_PX = 1100;
+      const apply = () => {
+        if (inner.scrollHeight <= CLAMP_PX + 240) {
+          // Short enough already — leave fully expanded, no button.
+          section.classList.remove("intro--clamp");
+          toggle.hidden = true;
+          return;
+        }
+        section.classList.add("intro--clamp");
+        toggle.hidden = false;
+      };
+      apply();
+
+      toggle.addEventListener("click", () => {
+        const expanded = section.classList.toggle("is-open");
+        toggle.setAttribute("aria-expanded", String(expanded));
+        // When collapsing, keep the user anchored to the top of the section.
+        if (!expanded) {
+          const top = section.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({ top, behavior: "auto" });
+        }
+      });
+
+      // Re-evaluate the clamp threshold if the viewport width changes the
+      // measured height materially (debounced).
+      let t: number | undefined;
+      window.addEventListener("resize", () => {
+        window.clearTimeout(t);
+        t = window.setTimeout(() => {
+          if (!section.classList.contains("is-open")) apply();
+        }, 200);
+      });
+
+      // Highlight the current TOC entry as its section scrolls into view.
+      const toc = document.querySelector(".intro-toc");
+      if (toc && "IntersectionObserver" in window) {
+        const links = new Map<string, HTMLAnchorElement>();
+        toc.querySelectorAll<HTMLAnchorElement>(".intro-toc__link").forEach((a) => {
+          const id = a.getAttribute("href")?.slice(1);
+          if (id) links.set(id, a);
+        });
+        const headings = inner.querySelectorAll<HTMLElement>("h2[id]");
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const a = links.get((e.target as HTMLElement).id);
+              if (a && e.isIntersecting) {
+                toc
+                  .querySelectorAll(".intro-toc__link.is-active")
+                  .forEach((el) => el.classList.remove("is-active"));
+                a.classList.add("is-active");
+              }
+            }
+          },
+          { rootMargin: "-80px 0px -70% 0px", threshold: 0 },
+        );
+        headings.forEach((h) => io.observe(h));
+      }
+    })();
+  </script>
 </BaseLayout>
 
 <style>
@@ -253,30 +485,196 @@ const contentHtml = cleanProse(extractDivByClass(homeBody, "wp-content-area"));
   .intro {
     background: var(--bg);
   }
+
+  /* 2-column on desktop: prose (capped reading measure) + sticky sidebar that
+     fills what used to be empty margin. One column below 980px. */
+  .intro__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.75rem, 1.2rem + 2.5vw, 3rem);
+    align-items: start;
+  }
+  @media (min-width: 980px) {
+    .intro__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+    }
+  }
+  .intro__main {
+    min-width: 0;
+    /* Comfortable reading measure even in the wide container. */
+    max-width: 760px;
+  }
+
+  .intro__side {
+    min-width: 0;
+  }
+  .intro__side-sticky {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  @media (min-width: 980px) {
+    .intro__side-sticky {
+      position: sticky;
+      /* Clear the 72px sticky header + a little breathing room. */
+      top: 88px;
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+  }
+
   .intro__lead {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
   .intro__lead :global(p:first-child) {
     font-size: 1.1rem;
     color: var(--ink-2);
   }
 
-  /* Light-theme reading styles for the preserved WordPress HTML. */
+  /* ---------------- "Lue lisää" expander ----------------
+     Collapsed: clip the prose to a max-height with a soft gradient fade and a
+     toggle button. The full markup ALWAYS stays in the DOM (overflow clipping,
+     not display:none / conditional render), so crawlers see all ~7k words and
+     a no-JS visitor reads the whole thing (the clamp class is added by JS). */
+  .intro__prose {
+    position: relative;
+  }
+  /* The clamp + open state classes live on the SECTION (.intro), not on the
+     prose wrapper: the preserved WordPress HTML injected via set:html can be
+     re-parented by the HTML5 parser (foster-parenting), which ejects the toggle
+     button out of [data-intro-prose]. Anchoring state on the always-stable
+     section keeps the clamp, fade, button label and chevron in sync regardless
+     of where the parser places the button. The .intro-prose__inner is the clip
+     target wherever it ends up inside the section. */
+  .intro.intro--clamp .intro-prose__inner {
+    max-height: 1100px;
+    overflow: hidden;
+  }
+  .intro.is-open .intro-prose__inner {
+    max-height: none;
+    overflow: visible;
+  }
+  /* Gradient fade over the clipped bottom edge (collapsed state only). */
+  .intro.intro--clamp .intro-prose__inner::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 160px;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0),
+      var(--bg) 92%
+    );
+  }
+  .intro.is-open .intro-prose__inner::after {
+    display: none;
+  }
+
+  .intro-prose__toggle {
+    margin-top: 1.25rem;
+  }
+  .intro-prose__toggle[hidden] {
+    display: none;
+  }
+  /* Toggle chevron points down when collapsed, up when open. */
+  .intro-prose__toggle-ico {
+    transition: transform 0.18s ease;
+    transform: rotate(90deg);
+  }
+  .intro.is-open .intro-prose__toggle-ico {
+    transform: rotate(-90deg);
+  }
+  /* Swap label depending on state. */
+  .intro-prose__toggle-less {
+    display: none;
+  }
+  .intro.is-open .intro-prose__toggle-more {
+    display: none;
+  }
+  .intro.is-open .intro-prose__toggle-less {
+    display: inline;
+  }
+
+  /* ---------------- Sisällys (TOC) ---------------- */
+  .intro-toc {
+    padding: 1.15rem 1.15rem 1.25rem;
+  }
+  .intro-toc__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.05rem;
+    line-height: 1.2;
+    color: var(--navy);
+  }
+  .intro-toc__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: toc;
+  }
+  .intro-toc__link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.4rem 0.4rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  .intro-toc__link:hover {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    text-decoration: none;
+  }
+  .intro-toc__link.is-active {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-weight: 700;
+  }
+  .intro-toc__ico {
+    color: var(--brand);
+    flex: none;
+    margin-top: 0.18em;
+  }
+
+  /* On mobile the TOC is redundant (everything is one scroll) — hide it; the
+     casino list still shows. Sidebar stacks BELOW the prose. */
+  @media (max-width: 979px) {
+    .intro-toc {
+      display: none;
+    }
+  }
+
+  /* Light-theme reading styles for the preserved WordPress HTML.
+     Tightened vertical rhythm vs. the article template so the same ~7k words
+     occupy materially less height on the home. */
   .kir-prose {
     color: var(--ink-2);
-    line-height: 1.7;
+    line-height: 1.65;
     font-size: 1rem;
   }
   .kir-prose :global(h2),
   .kir-prose :global(h3),
   .kir-prose :global(h4) {
     color: var(--navy);
-    line-height: 1.25;
-    margin: 2em 0 0.6em;
+    line-height: 1.22;
+    margin: 1.5em 0 0.5em;
     text-wrap: balance;
   }
+  /* Anchored TOC jumps must clear the 72px sticky header. */
   .kir-prose :global(h2) {
     font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+    scroll-margin-top: 96px;
   }
   .kir-prose :global(h3) {
     font-size: clamp(1.15rem, 1rem + 0.5vw, 1.3rem);
@@ -284,8 +682,12 @@ const contentHtml = cleanProse(extractDivByClass(homeBody, "wp-content-area"));
   .kir-prose :global(h4) {
     font-size: 1.05rem;
   }
+  /* First heading shouldn't push a big gap below the lead paragraph. */
+  .kir-prose :global(> :first-child) {
+    margin-top: 0;
+  }
   .kir-prose :global(p) {
-    margin: 0 0 1.05em;
+    margin: 0 0 0.85em;
   }
   .kir-prose :global(a) {
     color: var(--brand);
@@ -297,11 +699,11 @@ const contentHtml = cleanProse(extractDivByClass(homeBody, "wp-content-area"));
   }
   .kir-prose :global(ul),
   .kir-prose :global(ol) {
-    margin: 0 0 1.2em;
+    margin: 0 0 1em;
     padding-left: 1.4em;
   }
   .kir-prose :global(li) {
-    margin-bottom: 0.5em;
+    margin-bottom: 0.4em;
   }
   .kir-prose :global(strong) {
     color: var(--ink);
