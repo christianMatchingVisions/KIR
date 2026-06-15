@@ -77,6 +77,8 @@ export interface Page {
 
 export interface Faq {
   id: number;
+  /** The post slug (e.g. "new-faq-question-22") — keys the /ht-faq/<slug>/ page. */
+  slug: string;
   /** The question (title.rendered). */
   question: string;
   /** The answer body HTML (content.rendered), self-origin URLs rewritten. */
@@ -113,6 +115,7 @@ interface RawPage extends RawPost {
 
 interface RawFaq {
   id?: number;
+  slug?: string;
   title?: Rendered;
   content?: Rendered;
   "ht-faq-group"?: number[];
@@ -156,6 +159,59 @@ function escapeRe(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/**
+ * COMPLIANCE: soften first-hand / first-person testing claims in editorial
+ * prose to passive, third-party-tested phrasing.
+ *
+ * The penalty-recovery brief forbids first-hand/testing claims
+ * ("testasin/testasimme/kokeilin/oikealla pelaajatilillä/we tested",
+ * "omakohtainen/kokemukseni …"). Only PASSIVE third-party-tested-games prose
+ * ("pelit on testattu …") may remain — so bare "testattu" is left untouched.
+ *
+ * This operates on the stored REST HTML at load time, so every consumer
+ * (catch-all article/money pages, hubs, news) renders the compliant copy.
+ * It is text-level only: tags, attributes, links and the preserved <title>/
+ * JSON-LD head (handled elsewhere, verbatim) are not affected. Idempotent.
+ */
+function scrubFirstHandClaims(html: string): string {
+  if (!html) return "";
+  return (
+    html
+      // "Testasin Oracle of Goldia …" → "Oracle of Goldia on arvioitu …"
+      // "Testasin peliä …"            → "Peliä on arvioitu …"
+      .replace(
+        /\bTestasin\s+([A-ZÅÄÖ][^\s.,;:]*(?:\s+[a-zäöå][^\s.,;:]*)?)\b/g,
+        (_m, obj) => `${obj} on arvioitu`,
+      )
+      .replace(/\bTestasin\b/g, "Arvioinnissa")
+      // First-person plural test verbs → passive.
+      .replace(/\bTestasimme\b/g, "Arvioinnissa")
+      .replace(/\bTestimme\b/g, "Arvioinnissa")
+      .replace(/\bKokeilin\b/g, "Arvioinnissa")
+      .replace(/\bKokeilimme\b/g, "Arvioinnissa")
+      .replace(/\bkokeilin\b/g, "arvioinnissa")
+      .replace(/\bkokeilimme\b/g, "arvioinnissa")
+      // "Kokemukseni tilivapaista kasinoista" (heading) → neutral.
+      .replace(/\bKokemukseni\b/g, "Havaintoja")
+      .replace(/\bkokemukseni\b/g, "havaintoja")
+      // "omakohtainen näkemyksemme" → "riippumaton näkemys"
+      .replace(/\bomakohtainen näkemyksemme\b/gi, "riippumaton näkemys")
+      // "Omakohtaisiin testeihin perustuva" → "Riippumattomiin arvioihin perustuva"
+      .replace(/\bOmakohtaisiin testeihin perustuva\b/g, "Riippumattomiin arvioihin perustuva")
+      .replace(/\bomakohtaisiin testeihin perustuva\b/g, "riippumattomiin arvioihin perustuva")
+      // any remaining "omakohtai…" stem → "riippumat(on/tomiin)…" neutralisation
+      .replace(/\bOmakohtai(nen|set|sia|siin|sten|sesti)?\b/g, "Riippumaton")
+      .replace(/\bomakohtai(nen|set|sia|siin|sten|sesti)?\b/g, "riippumaton")
+      // "pelasin itse …" → "pelitestauksessa …"
+      .replace(/\bpelasin itse\b/gi, "pelitestauksessa")
+      // explicit real-money-account testing claim
+      .replace(/\boikealla pelaajatilill[äa]\b/gi, "arviointiprosessissa")
+      // English variants (defensive)
+      .replace(/\bwe tested\b/gi, "independent testing covered")
+      .replace(/\bI tested\b/g, "Testing covered")
+  );
+}
+
 function str(v: string | undefined): string {
   return typeof v === "string" ? v : "";
 }
@@ -180,8 +236,8 @@ function mapPost(p: RawPost): Post {
     title: str(p.title?.rendered),
     date: str(p.date),
     modified: str(p.modified),
-    contentHtml: rewriteSelfOrigin(p.content?.rendered),
-    excerptHtml: rewriteSelfOrigin(p.excerpt?.rendered),
+    contentHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.content?.rendered)),
+    excerptHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.excerpt?.rendered)),
     categories: Array.isArray(p.categories) ? p.categories : [],
   };
 }
@@ -211,8 +267,8 @@ function mapPage(p: RawPage): Page {
     title: str(p.title?.rendered),
     date: str(p.date),
     modified: str(p.modified),
-    contentHtml: rewriteSelfOrigin(p.content?.rendered),
-    excerptHtml: rewriteSelfOrigin(p.excerpt?.rendered),
+    contentHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.content?.rendered)),
+    excerptHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.excerpt?.rendered)),
     parent: num(p.parent),
     menuOrder: num(p.menu_order),
   };
@@ -242,8 +298,9 @@ export function getPage(slug: string): Page | null {
 function mapFaq(f: RawFaq): Faq {
   return {
     id: num(f.id),
+    slug: str(f.slug),
     question: str(f.title?.rendered),
-    answerHtml: rewriteSelfOrigin(f.content?.rendered),
+    answerHtml: scrubFirstHandClaims(rewriteSelfOrigin(f.content?.rendered)),
     order: num(f._ht_faq_order),
     group: Array.isArray(f["ht-faq-group"]) ? f["ht-faq-group"] : [],
   };
@@ -254,6 +311,13 @@ export function getFaqs(): Faq[] {
   return readJson<RawFaq>("ht-faq")
     .map(mapFaq)
     .sort((a, b) => a.order - b.order);
+}
+
+/** A single FAQ by its post slug (e.g. "new-faq-question-22"), or null. */
+export function getFaq(slug: string): Faq | null {
+  if (!slug) return null;
+  const raw = readJson<RawFaq>("ht-faq").find((f) => f.slug === slug);
+  return raw ? mapFaq(raw) : null;
 }
 
 /* -------------------------------------------------------------------------- */

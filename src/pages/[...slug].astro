@@ -1,12 +1,54 @@
 ---
 /**
- * Catch-all route: renders every scraped page fragment in src/fragments/.
- * Each fragment folder contains head.html, body.html and meta.json
- * (produced by scripts/scrape-pages.mjs). The route is derived from
- * meta.json's `path`, so URLs match the original WordPress site exactly.
- * The homepage is the fragment whose path is "/" (slug = undefined).
+ * Catch-all route (Phase 5 — light-theme rewire).
+ *
+ * Renders every remaining scraped page fragment in src/fragments/ through the
+ * NEW light templates (ArticlePage / MoneyPage) instead of the legacy dark
+ * Shell.astro. Routes are still derived from each fragment's meta.json `path`,
+ * so URLs match the original WordPress site exactly.
+ *
+ * OWNED ELSEWHERE (never rendered here):
+ *   - "home"        → src/pages/index.astro            (light homepage owns "/")
+ *   - "uutiset"     → src/pages/uutiset/*              (news section)
+ *   - World-Cup special page                          (its own route)
+ *   - "casino__*"   → src/pages/casino/[slug].astro    (305 light reviews)
+ *   - "casino"      → src/pages/casino/index.astro     (the /casino/ hub)
+ * What remains: ~218 blog posts (/<slug>/), 14 money/category pages, 23 ht-faq
+ * pages (/ht-faq/<slug>/ incl. the index), 8 provider pages
+ * (/pragmatic-play/<slug>/) and the WP text/utility pages.
+ *
+ * CLASSIFICATION (per page, by slug/path):
+ *   MONEY PAGE  if the slug is a known money/category slug OR
+ *               getToplistConfigForSlug(slug) maps to a NON-default config.
+ *               → <MoneyPage> (intro prose + ranked toplist).
+ *   ARTICLE     otherwise (posts, provider, ht-faq, text/utility).
+ *               → <ArticlePage> (hero + 2-col body).
+ *
+ * BODY SOURCE PRIORITY (articles):
+ *   getPost(slug).contentHtml
+ *     → getPage(slug).contentHtml
+ *       → getFaq(slug) (question + answerHtml)
+ *         → the /ht-faq/ index → a generated list of all FAQs
+ *           → the scraped fragment's main prose (.wp-content-area / .intro-paragraph)
+ * Self-origin URLs are already root-relative in REST HTML; we additionally
+ * relativize them in any fragment-extracted prose.
+ *
+ * COMPLIANCE: every /go/<slug>/ link in rendered prose is forced to carry
+ * rel="sponsored nofollow" via ensureSponsored() (same approach the casino route
+ * uses on in-prose affiliate/banner links). The dark Shell.astro / redesign.css /
+ * arctic.js are NO LONGER imported or used by this catch-all.
  */
-import Shell from "../layouts/Shell.astro";
+import ArticlePage from "../layouts/ArticlePage.astro";
+import MoneyPage from "../layouts/MoneyPage.astro";
+import {
+  getPost,
+  getPage,
+  getFaq,
+  getFaqs,
+  getToplistConfigForSlug,
+  DEFAULT_TOPLIST_CONFIG,
+} from "../lib/content";
+import { getSeoHead } from "../lib/seo-head";
 
 interface FragmentMeta {
   htmlAttrs?: string;
@@ -15,11 +57,6 @@ interface FragmentMeta {
 }
 
 export function getStaticPaths() {
-  const heads = import.meta.glob<string>("../fragments/*/head.html", {
-    query: "?raw",
-    import: "default",
-    eager: true,
-  });
   const bodies = import.meta.glob<string>("../fragments/*/body.html", {
     query: "?raw",
     import: "default",
@@ -29,16 +66,15 @@ export function getStaticPaths() {
     eager: true,
   });
 
-  // Fragments owned by dedicated routes (rendered there, not by this catch-all).
+  // Fragments owned by dedicated light-theme routes (rendered there, not here).
   const OWNED_ELSEWHERE = new Set([
-    "home", // src/pages/index.astro (rebuilt light-theme homepage owns "/")
+    "home", // src/pages/index.astro (light homepage owns "/")
     "uutiset", // src/pages/uutiset/index.astro
-    "huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista", // src/pages/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/index.astro
+    "huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista", // World-Cup special page
+    "casino", // src/pages/casino/index.astro (the /casino/ hub)
   ]);
 
-  // The 305 casino__<slug> fragments are owned by src/pages/casino/[slug].astro
-  // (the light-theme review route). Skip them here so this catch-all never
-  // re-emits /casino/<slug>/ and clashes with the dedicated route.
+  // The 305 casino__<slug> fragments are owned by src/pages/casino/[slug].astro.
   const isCasinoFragment = (dirName: string) => dirName.startsWith("casino__");
 
   return Object.entries(metas)
@@ -47,27 +83,297 @@ export function getStaticPaths() {
       return !OWNED_ELSEWHERE.has(dirName) && !isCasinoFragment(dirName);
     })
     .map(([metaPath, metaModule]) => {
-    const dir = metaPath.replace(/\/meta\.json$/, "");
-    const meta = metaModule.default;
-    const headHtml = heads[`${dir}/head.html`];
-    const bodyHtml = bodies[`${dir}/body.html`];
-    if (headHtml === undefined || bodyHtml === undefined) {
-      throw new Error(`Fragment ${dir} is missing head.html or body.html`);
-    }
-    const slug = String(meta.path ?? "").replace(/^\/+|\/+$/g, "");
-    return {
-      params: { slug: slug === "" ? undefined : slug },
-      props: {
-        headHtml,
-        bodyHtml,
-        htmlAttrs: meta.htmlAttrs ?? "",
-        bodyAttrs: meta.bodyAttrs ?? "",
-      },
-    };
+      const dir = metaPath.replace(/\/meta\.json$/, "");
+      const meta = metaModule.default;
+      const bodyHtml = bodies[`${dir}/body.html`];
+      if (bodyHtml === undefined) {
+        throw new Error(`Fragment ${dir} is missing body.html`);
+      }
+      const path = String(meta.path ?? "/");
+      const slug = path.replace(/^\/+|\/+$/g, "");
+      return {
+        params: { slug: slug === "" ? undefined : slug },
+        props: {
+          path,
+          fragmentBodyHtml: bodyHtml,
+        },
+      };
     });
 }
 
-const { headHtml, bodyHtml, htmlAttrs, bodyAttrs } = Astro.props;
+interface Props {
+  /** The page's real indexed URL (with leading + trailing slash). */
+  path: string;
+  /** Raw scraped <body> HTML — used only as the last-resort prose source. */
+  fragmentBodyHtml: string;
+}
+
+const { path, fragmentBodyHtml } = Astro.props as Props;
+
+/** Live site origin — relativized in any fragment-extracted prose. */
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+
+/* -------------------------------------------------------------------------- *
+ * Slug + classification                                                      *
+ * -------------------------------------------------------------------------- */
+
+// The leaf slug of the path (e.g. "/pragmatic-play/wolf-gold-arvostelu/" → "wolf-gold-arvostelu").
+const slug = path.replace(/^\/+|\/+$/g, "").split("/").pop() ?? "";
+
+// The full path is a /ht-faq/<x>/ page (item or index).
+const isHtFaqPath = /^\/ht-faq(\/|$)/.test(path);
+const isHtFaqIndex = path === "/ht-faq/";
+// A provider sub-page like /pragmatic-play/<game>/ (NOT the /pragmatic-play/ hub).
+const isProviderSubPage = /^\/pragmatic-play\/.+/.test(path);
+
+// Explicit money/category slugs (mirrors the project's MONEY-PAGE SLUGS set).
+const MONEY_SLUGS = new Set([
+  "suomen-parhaat-nettikasinot",
+  "kaikki-kasinot",
+  "kasinobonukset",
+  "cashback-kasinot",
+  "uudet-kasinot",
+  "trustly-kasinot",
+  "zimpler-pikakasinot",
+  "apple-pay-casinot",
+  "brite-kasinot",
+  "euteller-kasinot",
+  "kryptokasinot",
+  "mga-kasinot",
+  "curacao-kasinot",
+  "nettikasinot-luotettavat-kasinot",
+]);
+
+const toplistConfig = getToplistConfigForSlug(slug);
+// MONEY when it's an explicit money slug OR has a real (non-default) toplist map.
+// ht-faq + provider sub-pages are never money pages.
+const isMoneyPage =
+  !isHtFaqPath &&
+  !isProviderSubPage &&
+  (MONEY_SLUGS.has(slug) || toplistConfig !== DEFAULT_TOPLIST_CONFIG);
+
+/* -------------------------------------------------------------------------- *
+ * Preserved SEO head → registry title (matches the indexed <title>).          *
+ * -------------------------------------------------------------------------- */
+
+const seo = getSeoHead(path);
+
+/**
+ * The visible H1 / hero heading. Prefer the registry title (so it matches the
+ * preserved <title>), but strip the trailing " - <site>" / " | <site>" suffix
+ * Rank Math appends — that belongs in <title>, not in an H1. Fall back to REST
+ * titles, then a humanized slug.
+ */
+function cleanTitle(t: string | null | undefined): string | null {
+  if (!t) return null;
+  const trimmed = t.replace(/\s*[|\-–—]\s*kasinotilmanrekisteroitymista\.com\s*$/i, "").trim();
+  return trimmed || null;
+}
+
+/* -------------------------------------------------------------------------- *
+ * COMPLIANCE: force rel="sponsored nofollow" on every /go/ link in prose.     *
+ * Mirrors the casino route's ensureSponsored(): adds the rel when missing and  *
+ * merges sponsored+nofollow into an existing rel (dedup, order-stable).        *
+ * Idempotent, attribute-level, non-/go/ links untouched.                       *
+ * -------------------------------------------------------------------------- */
+
+function ensureSponsored(html: string | null | undefined): string {
+  if (!html) return "";
+  return html.replace(
+    /<a\b([^>]*\bhref="\/go\/[^"]*"[^>]*)>/gi,
+    (_whole, attrs: string) => {
+      const relMatch = attrs.match(/\brel="([^"]*)"/i);
+      if (!relMatch) {
+        return `<a${attrs} rel="sponsored nofollow">`;
+      }
+      const tokens = new Set(
+        relMatch[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
+      );
+      tokens.add("sponsored");
+      tokens.add("nofollow");
+      const merged = [...tokens].join(" ");
+      const newAttrs = attrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`);
+      return `<a${newAttrs}>`;
+    },
+  );
+}
+
+/** Relativize self-origin absolute URLs in fragment-extracted prose. */
+function relativizeSelfOrigin(html: string): string {
+  return html
+    .replace(new RegExp(`https?://${escapeRe(SITE_ORIGIN.replace(/^https?:\/\//, ""))}`, "gi"), "")
+    .replace(/(?<=["'(\s])\/\/kasinotilmanrekisteroitymista\.com/gi, "");
+}
+
+function escapeRe(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/* -------------------------------------------------------------------------- *
+ * Last-resort prose extraction from the scraped fragment <body>.              *
+ * Used only when no REST source exists. Pulls the main editorial container    *
+ * (.wp-content-area, then .intro-paragraph) out of the legacy chrome so we     *
+ * render content, not the old dark header/footer/nav.                          *
+ * -------------------------------------------------------------------------- */
+
+/** Extract the inner HTML of the first element carrying `className`, or null. */
+function extractByClass(html: string, className: string): string | null {
+  // Find the opening tag with the class, then walk to its matching close tag.
+  const openRe = new RegExp(`<([a-z]+)\\b[^>]*class="[^"]*\\b${escapeRe(className)}\\b[^"]*"[^>]*>`, "i");
+  const m = openRe.exec(html);
+  if (!m) return null;
+  const tag = m[1];
+  const start = m.index;
+  const afterOpen = openRe.lastIndex || start + m[0].length;
+  // Balance nested same-tag pairs from afterOpen to find the matching close.
+  const tagRe = new RegExp(`<(/?)${tag}\\b[^>]*>`, "gi");
+  tagRe.lastIndex = afterOpen;
+  let depth = 1;
+  let tm: RegExpExecArray | null;
+  while ((tm = tagRe.exec(html)) !== null) {
+    if (tm[1] === "/") {
+      depth--;
+      if (depth === 0) {
+        return html.slice(afterOpen, tm.index).trim() || null;
+      }
+    } else {
+      depth++;
+    }
+  }
+  // Unbalanced — return everything after the open tag as a best effort.
+  return html.slice(afterOpen).trim() || null;
+}
+
+function fragmentProse(): string | null {
+  const main =
+    extractByClass(fragmentBodyHtml, "wp-content-area") ??
+    extractByClass(fragmentBodyHtml, "intro-paragraph");
+  return main ? relativizeSelfOrigin(main) : null;
+}
+
+/* -------------------------------------------------------------------------- *
+ * Resolve the page content + meta, honouring the body-source priority.        *
+ * -------------------------------------------------------------------------- */
+
+const post = !isMoneyPage ? getPost(slug) : null;
+const page = getPage(slug); // also the source of money-page intro copy
+const faq = !isMoneyPage && isHtFaqPath && !isHtFaqIndex ? getFaq(slug) : null;
+
+/** Humanize a slug for the rare no-title fallback ("foo-bar" → "Foo bar"). */
+function humanize(s: string): string {
+  if (!s) return "Sivu";
+  const t = s.replace(/-/g, " ").trim();
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+/* ----- ARTICLE body assembly (only for the article branch) ----- */
+
+let articleTitle = "";
+let articleBody = "";
+let articleDate: string | null = null;
+let articleModified: string | null = null;
+let breadcrumb: { label: string; href?: string }[] = [];
+let eyebrow = "Artikkeli";
+
+if (!isMoneyPage) {
+  // Title: prefer registry (matches preserved <title>), then REST, then slug.
+  const registryTitle = cleanTitle(seo?.title);
+
+  if (post) {
+    articleTitle = registryTitle ?? post.title ?? humanize(slug);
+    articleBody = ensureSponsored(post.contentHtml);
+    articleDate = post.date || null;
+    articleModified = post.modified || null;
+    eyebrow = "Opas";
+    breadcrumb = [
+      { label: "Etusivu", href: "/" },
+      { label: "Oppaat", href: "/oppaat/" },
+      { label: articleTitle },
+    ];
+  } else if (faq) {
+    articleTitle = registryTitle ?? faq.question ?? humanize(slug);
+    articleBody = ensureSponsored(faq.answerHtml);
+    eyebrow = "UKK";
+    breadcrumb = [
+      { label: "Etusivu", href: "/" },
+      { label: "Usein kysytyt kysymykset", href: "/ht-faq/" },
+      { label: articleTitle },
+    ];
+  } else if (isHtFaqIndex) {
+    // The /ht-faq/ archive index has no single REST body — generate a clean
+    // Q&A list from getFaqs() so the page is content-rich (not the legacy chrome).
+    articleTitle = registryTitle ?? cleanTitle(page?.title) ?? "Usein kysytyt kysymykset";
+    const faqs = getFaqs();
+    articleBody = ensureSponsored(
+      faqs
+        .map(
+          (f) =>
+            `<h2>${f.question}</h2>${f.answerHtml}`,
+        )
+        .join("\n"),
+    );
+    eyebrow = "UKK";
+    breadcrumb = [
+      { label: "Etusivu", href: "/" },
+      { label: articleTitle },
+    ];
+  } else if (page) {
+    // WP text/utility pages AND provider sub-pages (/pragmatic-play/<game>/).
+    articleTitle = registryTitle ?? page.title ?? humanize(slug);
+    articleBody = ensureSponsored(page.contentHtml);
+    articleDate = page.date || null;
+    articleModified = page.modified || null;
+    if (isProviderSubPage) {
+      eyebrow = "Peliarvostelu";
+      breadcrumb = [
+        { label: "Etusivu", href: "/" },
+        { label: "Pragmatic Play", href: "/pragmatic-play/" },
+        { label: articleTitle },
+      ];
+    } else {
+      eyebrow = "Sivu";
+      breadcrumb = [
+        { label: "Etusivu", href: "/" },
+        { label: articleTitle },
+      ];
+    }
+  } else {
+    // Last resort: lift the main prose out of the scraped fragment chrome.
+    articleTitle = registryTitle ?? humanize(slug);
+    articleBody = ensureSponsored(fragmentProse() ?? "");
+    eyebrow = "Artikkeli";
+    breadcrumb = [
+      { label: "Etusivu", href: "/" },
+      { label: articleTitle },
+    ];
+  }
+}
+
+/* ----- MONEY page meta ----- */
+// Money intro copy comes from the REST page (all 14 money slugs have one);
+// fall back to fragment prose if a future money slug lacks REST data.
+const moneyTitle =
+  cleanTitle(seo?.title) ?? cleanTitle(page?.title) ?? humanize(slug);
+const moneyIntro = isMoneyPage
+  ? ensureSponsored(page?.contentHtml || fragmentProse() || "")
+  : "";
 ---
 
-<Shell headHtml={headHtml} bodyHtml={bodyHtml} htmlAttrs={htmlAttrs} bodyAttrs={bodyAttrs} />
+{isMoneyPage ? (
+  <MoneyPage
+    seoPath={path}
+    title={moneyTitle}
+    introHtml={moneyIntro || undefined}
+    toplistConfig={toplistConfig}
+  />
+) : (
+  <ArticlePage
+    seoPath={path}
+    title={articleTitle}
+    bodyHtml={articleBody}
+    date={articleDate}
+    modified={articleModified}
+    breadcrumb={breadcrumb}
+    eyebrow={eyebrow}
+  />
+)}

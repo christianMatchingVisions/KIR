@@ -1,0 +1,381 @@
+---
+/**
+ * RelatedCasinos.astro — the article sidebar "Parhaat kasinot" mini-list.
+ *
+ * A compact, sticky-friendly card that fronts the top casinos beside long-form
+ * content (blog posts, guides, utility/provider/FAQ pages). It is the sidebar
+ * widget reused by ArticlePage.astro, but is self-contained so any light-theme
+ * page can drop it in.
+ *
+ * Data: pulls its own rows from getToplist('search-service-casino', limit) by
+ * default — the caller need not pass anything. Pass an explicit `casinos`
+ * array to override (e.g. a category-specific list). Closed casinos (names
+ * flagged "Suljettu") are filtered out so the sidebar never fronts a casino
+ * that no longer accepts players.
+ *
+ * Layout: a heading row (trophy + "Parhaat kasinot"), then up to `limit`
+ * compact rows — each [rank] [logo plate] [name + bonus] with a small yellow
+ * "Pelaa" CTA — and a footer "Näytä kaikki kasinot" link. Below the list an
+ * optional block of related internal links can be supplied via `links`.
+ *
+ * Compliance: every CTA is an affiliate /go/<slug>/ link and ALWAYS carries
+ * rel="sponsored nofollow". No first-hand / "tested" language anywhere.
+ *
+ * Graceful degradation:
+ *   - logoUrl missing / 404 → navy monogram plate (onerror reveals it).
+ *   - bonusText empty       → bonus line omitted.
+ *   - ctaSlug null          → inert disabled-looking CTA (no dead href).
+ *   - no rows               → the whole "Parhaat kasinot" block is omitted.
+ *
+ * Usage (defaults — top 4 from the full list):
+ *   import RelatedCasinos from "../components/RelatedCasinos.astro";
+ *   <RelatedCasinos />
+ *
+ * Usage (explicit list + related links):
+ *   <RelatedCasinos
+ *     casinos={getToplist("search-two-casino-trustly", 4)}
+ *     links={[{ label: "Trustly-kasinot", href: "/trustly-kasinot/" }]}
+ *   />
+ */
+import { getToplist, type ToplistCasino } from "../lib/toplist";
+import Icon from "./Icon.astro";
+
+interface RelatedLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  /** Pre-built casino rows. When omitted, pulls from the default config. */
+  casinos?: ToplistCasino[];
+  /** Toplist config used when `casinos` is not supplied. */
+  config?: string;
+  /** Max rows to show (default 4). */
+  limit?: number;
+  /** Heading for the mini-list. */
+  title?: string;
+  /** Optional related internal links rendered under the casino list. */
+  links?: RelatedLink[];
+  /** Heading for the related-links block. */
+  linksTitle?: string;
+  /** Extra class(es) on the root <aside>. */
+  class?: string;
+}
+
+const {
+  casinos,
+  config = "search-service-casino",
+  limit = 4,
+  title = "Parhaat kasinot",
+  links = [],
+  linksTitle = "Lue myös",
+  class: className,
+} = Astro.props;
+
+/** Hide closed/expired casinos so the sidebar never fronts a dead casino. */
+const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
+
+const rows: ToplistCasino[] = (casinos ?? getToplist(config))
+  .filter(isOpen)
+  .slice(0, Math.max(0, limit));
+
+const hasLinks = links.length > 0;
+---
+
+<aside class:list={["related", className]} aria-label="Suositukset">
+  {rows.length > 0 && (
+    <section class="related__block card">
+      <h2 class="related__title">
+        <span class="related__title-icon" aria-hidden="true">
+          <Icon name="trophy" size={20} />
+        </span>
+        {title}
+      </h2>
+
+      <ol class="related__list" role="list">
+        {rows.map((casino, i) => {
+          const hasLogo = typeof casino.logoUrl === "string" && casino.logoUrl.length > 0;
+          const hasBonus = typeof casino.bonusText === "string" && casino.bonusText.trim().length > 0;
+          const hasCta = typeof casino.ctaSlug === "string" && casino.ctaSlug.length > 0;
+          const monogram = (casino.name || "?").trim().charAt(0).toUpperCase() || "?";
+          const altText = casino.logoAlt || (casino.name ? `${casino.name} logo` : "Kasinon logo");
+          const ctaLabel = casino.name ? `Pelaa heti — ${casino.name}` : "Pelaa heti";
+          return (
+            <li class="related__item">
+              <span class="related__rank" aria-hidden="true">{i + 1}</span>
+
+              <span class="related__plate">
+                {hasLogo && (
+                  <img
+                    class="related__logo"
+                    src={casino.logoUrl}
+                    alt={altText}
+                    loading="lazy"
+                    decoding="async"
+                    width="96"
+                    height="40"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+                  />
+                )}
+                <span
+                  class="related__mono"
+                  aria-hidden="true"
+                  style={hasLogo ? "display:none" : undefined}
+                >{monogram}</span>
+              </span>
+
+              <span class="related__info">
+                <span class="related__name">{casino.name}</span>
+                {hasBonus && <span class="related__bonus">{casino.bonusText}</span>}
+              </span>
+
+              {hasCta ? (
+                <a
+                  class="btn-cta btn-sm related__cta"
+                  href={casino.ctaSlug}
+                  rel="sponsored nofollow"
+                  aria-label={ctaLabel}
+                >
+                  Pelaa
+                </a>
+              ) : (
+                <span class="btn-cta btn-sm related__cta is-disabled" aria-disabled="true">
+                  Pelaa
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+
+      <a class="related__all" href="/kaikki-kasinot/">
+        Näytä kaikki kasinot
+        <Icon name="arrow-right" size={16} />
+      </a>
+    </section>
+  )}
+
+  {hasLinks && (
+    <nav class="related__block card related__links" aria-label={linksTitle}>
+      <h2 class="related__title related__title--sm">{linksTitle}</h2>
+      <ul class="related__linklist" role="list">
+        {links.map((link) => (
+          <li>
+            <a class="related__link" href={link.href}>
+              <Icon name="chevron-right" size={15} class="related__link-ico" />
+              <span>{link.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )}
+</aside>
+
+<style>
+  .related {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  .related__block {
+    padding: 1.15rem 1.15rem 1.25rem;
+  }
+
+  /* ---------- Headings ---------- */
+  .related__title {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 0.9rem;
+    font-size: 1.05rem;
+    line-height: 1.2;
+    color: var(--navy);
+  }
+  .related__title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .related__title--sm {
+    font-size: 0.95rem;
+    margin-bottom: 0.65rem;
+  }
+
+  /* ---------- Casino list ---------- */
+  .related__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .related__item {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  }
+  .related__item:hover {
+    border-color: var(--line-2);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .related__rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex: none;
+    border-radius: 999px;
+    background: var(--cta);
+    color: var(--cta-ink);
+    font-weight: 800;
+    font-size: 0.78rem;
+    line-height: 1;
+  }
+
+  .related__plate {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 36px;
+    flex: none;
+    padding: 0.2rem 0.3rem;
+    background: var(--bg-band-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .related__logo {
+    max-height: 28px;
+    width: auto;
+    object-fit: contain;
+  }
+  .related__mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .related__info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .related__name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: var(--ink);
+    /* keep names on a single line; ellipsis rather than wrap-blowout */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .related__bonus {
+    font-size: 0.76rem;
+    line-height: 1.3;
+    color: var(--ink-3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .related__cta {
+    flex: none;
+    padding: 0.5em 0.85em;
+    font-size: 0.8rem;
+  }
+  .related__cta.is-disabled {
+    background: var(--line);
+    color: var(--ink-3);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .related__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--brand);
+  }
+  .related__all:hover {
+    color: var(--brand-dark);
+    text-decoration: none;
+  }
+
+  /* ---------- Related links ---------- */
+  .related__linklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .related__link {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.4rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    line-height: 1.35;
+  }
+  .related__link:hover {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    text-decoration: none;
+  }
+  .related__link-ico {
+    color: var(--brand);
+    flex: none;
+  }
+
+  /* On very narrow screens shrink the CTA wording room gracefully; the grid
+     already keeps zero overflow because name/bonus use min-width:0 + ellipsis. */
+  @media (max-width: 360px) {
+    .related__block {
+      padding: 1rem 0.85rem 1.1rem;
+    }
+    .related__item {
+      gap: 0.45rem;
+      padding: 0.5rem 0.5rem;
+    }
+    .related__plate {
+      width: 46px;
+      height: 34px;
+    }
+  }
+</style>

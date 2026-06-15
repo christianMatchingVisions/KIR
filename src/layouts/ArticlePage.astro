@@ -1,0 +1,487 @@
+---
+/**
+ * ArticlePage.astro — the clean light long-form template for content pages.
+ *
+ * Used by the Phase-5 catch-all to render everything that is plain editorial
+ * content rather than a money page or a casino review:
+ *   - the 218 blog posts at /<slug>/
+ *   - the WP text/utility pages (5)
+ *   - the provider pages at /pragmatic-play/<slug>/ (8)
+ *   - the ht-faq items at /ht-faq/<slug>/ (23)
+ *
+ * It wraps BaseLayout and ALWAYS forwards `seoPath` so the Phase-1 SEO registry
+ * re-emits the page's real, indexed canonical / description / robots / OG /
+ * JSON-LD VERBATIM (penalty-recovery requirement — the rebuild must not look
+ * like a new site to Google). No title prop is forced on BaseLayout unless the
+ * caller passes one; the registry title wins by default.
+ *
+ * Composition:
+ *   1. A light hero band (--bg-band): optional breadcrumb, eyebrow, H1, and a
+ *      "Päivitetty <fi-date>" freshness line when a date is available. This is a
+ *      neutral freshness signal — NOT a "tested / we tried it" claim.
+ *   2. A 2-column body (≥980px): the main column renders `bodyHtml` inside a
+ *      `.kir-prose` wrapper (the overflow-safe table + light reading styles),
+ *      and a right sidebar (<RelatedCasinos>) with the top casinos + related
+ *      links. Stacks to a single column on mobile (sidebar drops below).
+ *
+ * Compliance: the sidebar CTAs are affiliate /go/ links with
+ * rel="sponsored nofollow" (handled inside RelatedCasinos). No first-hand
+ * testing claims are introduced by this template; the freshness line is passive.
+ *
+ * Prop contract:
+ *   seoPath      string                 REQUIRED — the page's real indexed URL.
+ *   title        string                 the H1 (and BaseLayout title override).
+ *   bodyHtml     string                 the preserved/cleaned content HTML.
+ *   date?        string | null          ISO publish date (for freshness line).
+ *   modified?    string | null          ISO modified date — preferred for freshness.
+ *   breadcrumb?  {label,href}[]          optional crumb trail (current = last, no href needed).
+ *   relatedLinks?{label,href}[]          optional "Lue myös" links in the sidebar.
+ *   showSidebar? boolean (default true)  set false for a centered single column.
+ *
+ * Usage (blog post):
+ *   import ArticlePage from "../layouts/ArticlePage.astro";
+ *   const post = getPost(slug);
+ *   <ArticlePage
+ *     seoPath={`/${post.slug}/`}
+ *     title={post.title}
+ *     bodyHtml={post.contentHtml}
+ *     date={post.date}
+ *     modified={post.modified}
+ *     breadcrumb={[{ label: "Etusivu", href: "/" }, { label: "Blogi", href: "/blogi/" }, { label: post.title, href: "" }]}
+ *   />
+ */
+import BaseLayout from "./BaseLayout.astro";
+import RelatedCasinos from "../components/RelatedCasinos.astro";
+import Icon from "../components/Icon.astro";
+
+interface Crumb {
+  label: string;
+  /** Empty/omitted href ⇒ rendered as the current (non-link) crumb. */
+  href?: string;
+}
+
+interface RelatedLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  /** REQUIRED — the page's real indexed URL; forwarded to BaseLayout verbatim. */
+  seoPath: string;
+  /** The H1 text (also used as the BaseLayout <title> override). */
+  title: string;
+  /** Preserved/cleaned content HTML rendered inside .kir-prose. */
+  bodyHtml: string;
+  /** ISO publish date — used for the freshness line if `modified` is absent. */
+  date?: string | null;
+  /** ISO last-modified date — preferred source for the freshness line. */
+  modified?: string | null;
+  /** Optional breadcrumb trail (last item is treated as the current page). */
+  breadcrumb?: Crumb[];
+  /** Optional related internal links shown in the sidebar ("Lue myös"). */
+  relatedLinks?: RelatedLink[];
+  /** Show the casino/related sidebar (default true). */
+  showSidebar?: boolean;
+  /** Small eyebrow label above the H1. */
+  eyebrow?: string;
+}
+
+const {
+  seoPath,
+  title,
+  bodyHtml,
+  date = null,
+  modified = null,
+  breadcrumb = [],
+  relatedLinks = [],
+  showSidebar = true,
+  eyebrow = "Artikkeli",
+} = Astro.props;
+
+/* -------------------------------------------------------------------------- */
+/* Freshness line — passive "Päivitetty <fi-date>" (NOT a testing claim).     */
+/* Prefer `modified`, fall back to `date`. Render nothing on an unparseable    */
+/* value rather than printing "Invalid Date".                                 */
+/* -------------------------------------------------------------------------- */
+
+const FI_MONTHS = [
+  "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta",
+  "kesäkuuta", "heinäkuuta", "elokuuta", "syyskuuta", "lokakuuta",
+  "marraskuuta", "joulukuuta",
+];
+
+/** Format an ISO date as "15. kesäkuuta 2026", or null when unparseable. */
+function formatFiDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return `${d.getDate()}. ${FI_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+const freshnessSource = modified || date;
+const freshnessDate = formatFiDate(freshnessSource);
+/** datetime attr for the <time> element (YYYY-MM-DD), best-effort. */
+const freshnessIso =
+  freshnessSource && !Number.isNaN(new Date(freshnessSource).getTime())
+    ? new Date(freshnessSource).toISOString().slice(0, 10)
+    : undefined;
+
+const hasCrumbs = breadcrumb.length > 0;
+---
+
+<BaseLayout seoPath={seoPath} title={title} bodyClass="article">
+  {/* ---------------- HERO BAND ---------------- */}
+  <header class="art-hero band">
+    <div class="container">
+      {hasCrumbs && (
+        <nav class="art-crumbs" aria-label="Murupolku">
+          <ol class="crumbs">
+            {breadcrumb.map((c, i) => {
+              const isLast = i === breadcrumb.length - 1;
+              return (
+                <Fragment>
+                  <li class="crumbs__item" aria-current={isLast ? "page" : undefined}>
+                    {!isLast && c.href ? <a href={c.href}>{c.label}</a> : c.label}
+                  </li>
+                  {!isLast && (
+                    <li class="crumbs__sep" aria-hidden="true">
+                      <Icon name="chevron-right" size={14} />
+                    </li>
+                  )}
+                </Fragment>
+              );
+            })}
+          </ol>
+        </nav>
+      )}
+
+      <div class="art-hero__inner">
+        {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+        <h1 class="art-hero__title" set:html={title} />
+        {freshnessDate && (
+          <p class="art-hero__meta">
+            <Icon name="clock" size={16} class="art-hero__meta-ico" />
+            Päivitetty <time datetime={freshnessIso}>{freshnessDate}</time>
+          </p>
+        )}
+      </div>
+    </div>
+  </header>
+
+  {/* ---------------- BODY (2-col) ---------------- */}
+  <section class="section--tight art-body">
+    <div class="container">
+      <div class:list={["art-grid", { "art-grid--full": !showSidebar }]}>
+        <article class="art-main">
+          <div class="kir-prose" set:html={bodyHtml} />
+        </article>
+
+        {showSidebar && (
+          <div class="art-side">
+            <div class="art-side__sticky">
+              <RelatedCasinos limit={4} links={relatedLinks} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- Hero band ---------------- */
+  .art-hero {
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  }
+  .art-crumbs {
+    margin-bottom: 0.9rem;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item {
+    min-width: 0;
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+
+  .art-hero__inner {
+    max-width: 52rem;
+  }
+  .art-hero__title {
+    margin: 0.35rem 0 0;
+    line-height: 1.12;
+  }
+  .art-hero__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.9rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+  .art-hero__meta-ico {
+    color: var(--brand);
+    flex: none;
+  }
+  .art-hero__meta time {
+    color: var(--ink-2);
+  }
+
+  /* ---------------- 2-col body grid ---------------- */
+  .art-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+    align-items: start;
+  }
+  @media (min-width: 980px) {
+    .art-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+    }
+    /* Single-column (no sidebar): centre the reading column. */
+    .art-grid--full {
+      grid-template-columns: minmax(0, 820px);
+      justify-content: center;
+    }
+  }
+
+  .art-main {
+    min-width: 0;
+  }
+
+  /* Sidebar sticks beside long content on desktop; static when stacked. */
+  .art-side {
+    min-width: 0;
+  }
+  @media (min-width: 980px) {
+    .art-side__sticky {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+
+  /* ---------------- Light-theme prose (overflow-safe) ----------------
+     Mirrors the homepage/review .kir-prose treatment: the legacy WordPress
+     tables carry fixed widths > a phone viewport, so they become horizontal
+     scroll containers instead of forcing the whole page wide (0 overflow at
+     360px). Images are constrained to the column width. */
+  .kir-prose {
+    color: var(--ink-2);
+    line-height: 1.75;
+    font-size: 1.02rem;
+  }
+  .kir-prose :global(h2),
+  .kir-prose :global(h3),
+  .kir-prose :global(h4),
+  .kir-prose :global(h5) {
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 1.9em 0 0.6em;
+    text-wrap: balance;
+  }
+  .kir-prose :global(h2) {
+    font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.85rem);
+  }
+  .kir-prose :global(h3) {
+    font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.4rem);
+  }
+  .kir-prose :global(h4) {
+    font-size: 1.1rem;
+  }
+  .kir-prose :global(h5) {
+    font-size: 1rem;
+  }
+  .kir-prose :global(p) {
+    margin: 0 0 1.1em;
+  }
+  .kir-prose :global(a) {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .kir-prose :global(a:hover) {
+    color: var(--brand-dark);
+  }
+  .kir-prose :global(ul),
+  .kir-prose :global(ol) {
+    margin: 0 0 1.25em;
+    padding-left: 1.4em;
+    list-style: revert;
+  }
+  .kir-prose :global(ul) {
+    list-style: disc;
+  }
+  .kir-prose :global(ol) {
+    list-style: decimal;
+  }
+  .kir-prose :global(li) {
+    margin-bottom: 0.5em;
+  }
+  .kir-prose :global(li::marker) {
+    color: var(--brand);
+  }
+  .kir-prose :global(strong) {
+    color: var(--ink);
+  }
+
+  /* Images: never overflow the column. */
+  .kir-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin: 1.25em 0;
+  }
+  .kir-prose :global(figure) {
+    margin: 1.5em 0;
+  }
+  .kir-prose :global(figcaption) {
+    margin-top: 0.5em;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    text-align: center;
+  }
+
+  /* Blockquotes → soft brand-accented callout. */
+  .kir-prose :global(blockquote) {
+    margin: 1.5em 0;
+    padding: 0.9em 1.2em;
+    border-left: 4px solid var(--brand);
+    background: var(--bg-band);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  .kir-prose :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .kir-prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 2em 0;
+  }
+
+  /* Inline code + pre blocks. */
+  .kir-prose :global(code) {
+    background: var(--bg-band-2);
+    padding: 0.12em 0.4em;
+    border-radius: 6px;
+    font-size: 0.9em;
+  }
+  .kir-prose :global(pre) {
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 1em 1.2em;
+    background: var(--navy);
+    color: #e6edf7;
+    border-radius: var(--radius-sm);
+    margin: 1.25em 0;
+  }
+  .kir-prose :global(pre code) {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* Comparison tables → overflow-safe scroll container (0 overflow at 360px). */
+  .kir-prose :global(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .kir-prose :global(table) :global(tbody) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(table) :global(thead) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(th) {
+    background: var(--bg-band-2);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .kir-prose :global(td),
+  .kir-prose :global(th) {
+    border: 1px solid var(--line);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .kir-prose :global(tbody tr:nth-child(even) td) {
+    background: var(--bg-band);
+  }
+
+  /* The preserved FAQ accordion (.hfaqwrapper) — readable static fallback.
+     Its toggle JS is not loaded in the rebuild, so render every answer open. */
+  .kir-prose :global(.hfaqlist) {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25em;
+  }
+  .kir-prose :global(.hfaqlist > li) {
+    margin-bottom: 0.75rem;
+  }
+  .kir-prose :global(.hfaq) {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.15rem;
+    background: var(--bg-band);
+  }
+  .kir-prose :global(.hfaq__question) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .kir-prose :global(.hfaq__icon) {
+    flex: none;
+  }
+  .kir-prose :global(.hfaq__text) {
+    font-weight: 800;
+    color: var(--navy);
+    font-size: 1.02rem;
+  }
+  .kir-prose :global(.hfaq__answer) {
+    margin-top: 0.5rem;
+  }
+  .kir-prose :global(.hfaq__answercontent p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,285 @@
+---
+/**
+ * casino/index.astro — the "Arvostelut" reviews hub at /casino/.
+ *
+ * This is the destination of the nav "Arvostelut" link and of every casino
+ * review breadcrumb ("Etusivu › Arvostelut › <Name>"). It is a genuinely useful
+ * index of EVERY casino review on the site: a responsive grid of review-link
+ * cards (logo + name + rating chip) each pointing at its /casino/<slug>/ review.
+ *
+ * WHY A DEDICATED CARD (not <CasinoCard>): CasinoCard's CTA targets the
+ * affiliate /go/<slug>/ link, but a reviews HUB must link to the REVIEW page,
+ * not the affiliate redirect. So we render a lighter, internal-link review card
+ * here, sourced from getAllCasinos() (casino-data) → name + logo + rating +
+ * review.url. No /go/ links exist on this page → nothing to mark sponsored.
+ *
+ * HEAD: /casino/ IS present in the Phase-1 SEO registry, so we render through
+ * <BaseLayout seoPath="/casino/"> to re-emit its PRESERVED canonical /
+ * description / robots / OpenGraph / Twitter / JSON-LD VERBATIM (penalty
+ * recovery). No title prop — the registry owns the indexed <title>. (If the
+ * path were ever absent, BaseLayout's empty-registry guard would fail the build
+ * loudly rather than silently drop the head.)
+ *
+ * DATA: getAllCasinos() parses all 305 casino fragments. Closed casinos
+ * (showNoReview) and any name flagged "Suljettu" are filtered out so the hub
+ * only fronts live, reviewable casinos. Sorted by overall rating (desc, nulls
+ * last) then name, so the strongest reviews lead.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Stars from "../../components/Stars.astro";
+import Icon from "../../components/Icon.astro";
+import { getAllCasinos, type CasinoReview } from "../../lib/casino-data";
+
+/* -------------------------------------------------------------------------- *
+ * Build the review index: open casinos only, best-rated first.               *
+ * -------------------------------------------------------------------------- */
+
+const isOpen = (c: CasinoReview) =>
+  !c.showNoReview && !/\bsuljettu\b/i.test(c.name ?? "");
+
+const reviews: CasinoReview[] = getAllCasinos()
+  .filter(isOpen)
+  .filter((c) => c.name && c.url)
+  .sort((a, b) => {
+    const ra = a.ratingOverall;
+    const rb = b.ratingOverall;
+    // Rated casinos first (desc), unrated last, then alphabetical (fi).
+    if (ra != null && rb != null && ra !== rb) return rb - ra;
+    if (ra != null && rb == null) return -1;
+    if (ra == null && rb != null) return 1;
+    return a.name.localeCompare(b.name, "fi");
+  });
+
+const reviewCount = reviews.length;
+---
+
+<BaseLayout seoPath="/casino/" bodyClass="reviews-hub">
+  {/* ---------------- HERO ---------------- */}
+  <section class="section--tight band-brand hub-hero" aria-labelledby="hub-title">
+    <div class="container--narrow hub-hero__inner">
+      <span class="eyebrow">Kasinoarvostelut</span>
+      <h1 id="hub-title" class="hub-hero__title">Kasinoarvostelut</h1>
+      <p class="lead hub-hero__lead">
+        Selaa kaikki arvioidut kasinot ilman rekisteröitymistä yhdestä paikasta.
+        Avaa arvostelu nähdäksesi bonukset, maksutavat, lisenssin ja
+        kokonaisarvion.
+      </p>
+      {reviewCount > 0 && (
+        <p class="hub-hero__count">
+          <Icon name="shield" size={16} class="hub-hero__count-ico" />
+          {reviewCount} arvostelua
+        </p>
+      )}
+    </div>
+  </section>
+
+  {/* ---------------- REVIEW GRID ---------------- */}
+  <section class="section--tight hub-grid-wrap" aria-label="Kaikki arvostelut">
+    <div class="container">
+      {reviewCount > 0 ? (
+        <ul class="hub-grid" role="list">
+          {reviews.map((c, i) => {
+            const monogram =
+              (c.name || "?").trim().charAt(0).toUpperCase() || "?";
+            const hasLogo =
+              typeof c.logoUrl === "string" && c.logoUrl.length > 0;
+            const hasRating =
+              c.ratingOverall != null && Number.isFinite(c.ratingOverall);
+            return (
+              <li class="hub-grid__item reveal" class:list={[`d${Math.min((i % 5) + 1, 5)}`]}>
+                <a class="rev-card card card--lift" href={c.url}>
+                  <span class="rev-card__plate">
+                    {hasLogo && (
+                      <img
+                        class="rev-card__logo"
+                        src={c.logoUrl as string}
+                        alt={`${c.name} logo`}
+                        loading="lazy"
+                        decoding="async"
+                        width="140"
+                        height="56"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+                      />
+                    )}
+                    <span
+                      class="rev-card__mono"
+                      aria-hidden="true"
+                      style={hasLogo ? "display:none" : undefined}
+                    >{monogram}</span>
+                  </span>
+
+                  <span class="rev-card__name">{c.name}</span>
+
+                  {hasRating ? (
+                    <span class="rev-card__rating">
+                      <Stars value={c.ratingOverall as number} showValue size={15} />
+                    </span>
+                  ) : (
+                    <span class="rev-card__rating rev-card__rating--empty">
+                      Lue arvostelu
+                    </span>
+                  )}
+
+                  <span class="rev-card__cta">
+                    Lue arvostelu
+                    <Icon name="arrow-right" size={16} />
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p class="muted">Arvostelut eivät ole juuri nyt saatavilla.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- Hero ---------------- */
+  .hub-hero {
+    text-align: center;
+  }
+  .hub-hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .hub-hero__title {
+    margin: 0;
+    color: var(--navy);
+    font-size: clamp(1.8rem, 1.3rem + 2.4vw, 2.7rem);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  .hub-hero__lead {
+    margin: 0;
+    max-width: 60ch;
+  }
+  .hub-hero__count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.35rem 0 0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  .hub-hero__count-ico {
+    color: var(--brand);
+  }
+
+  /* ---------------- Review grid ---------------- */
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.85rem, 0.5rem + 1.2vw, 1.4rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hub-grid__item {
+    display: flex;
+  }
+  @media (max-width: 1040px) {
+    .hub-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 760px) {
+    .hub-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 460px) {
+    .hub-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------- Review-link card (internal link → /casino/<slug>/) ----- */
+  .rev-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1.15rem 1rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  .rev-card:hover {
+    text-decoration: none;
+  }
+
+  .rev-card__plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 74px;
+    padding: 0.5rem 0.8rem;
+    background: var(--bg-band-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .rev-card__logo {
+    max-height: 50px;
+    width: auto;
+    object-fit: contain;
+  }
+  .rev-card__mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .rev-card__name {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+
+  .rev-card__rating {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+  }
+  .rev-card__rating--empty {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-3);
+  }
+
+  .rev-card__cta {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--brand);
+  }
+  .rev-card:hover .rev-card__cta {
+    color: var(--brand-dark);
+  }
+</style>

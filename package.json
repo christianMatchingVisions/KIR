@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "test:offers": "node scripts/test-apply-offers.mjs",
     "test:texts": "node scripts/test-apply-texts.mjs",
-    "sync:content": "node scripts/fetch-rest.mjs && node scripts/scrape-pages.mjs && node scripts/download-assets.mjs && node scripts/capture-rlaaf.mjs"
+    "sync:content": "node scripts/fetch-rest.mjs && node scripts/scrape-pages.mjs && node scripts/download-assets.mjs && node scripts/capture-rlaaf.mjs && node scripts/download-casino-logos.mjs && node scripts/download-content-images.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",

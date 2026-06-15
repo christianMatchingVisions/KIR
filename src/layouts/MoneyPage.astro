@@ -1,0 +1,300 @@
+---
+/**
+ * MoneyPage.astro — light template for the category / "money" pages
+ * (e.g. /trustly-kasinot/, /kasinobonukset/, /uudet-kasinot/,
+ * /suomen-parhaat-nettikasinot/, /kaikki-kasinot/ …).
+ *
+ * Layout intent: the RANKED CASINO LIST is the money element, so it sits ABOVE
+ * the fold — directly under a slim hero — and the page's long-form editorial
+ * copy (introHtml) is rendered BELOW the list in .kir-prose. This is the
+ * inverse of an article: list first, prose after.
+ *
+ * Composition (top → bottom):
+ *   1. light hero      — eyebrow + H1 + optional lead (first paragraph of intro,
+ *                        or a supplied lead). Sits in the soft brand band.
+ *   2. toplist         — getToplist(toplistConfig, toplistLimit ?? 20) rendered
+ *                        as ranked <CasinoRow>s (rank badge = post-filter index).
+ *                        Closed casinos (name matches /\bsuljettu\b/i) are removed
+ *                        BEFORE ranking so no closed brand eats a rank slot.
+ *   3. long-form copy  — introHtml in .kir-prose (overflow-safe), below the list.
+ *
+ * HEAD: rendered through <BaseLayout seoPath={seoPath}> so the Phase-1 SEO
+ * registry re-emits this page's PRESERVED canonical / description / robots /
+ * OpenGraph / Twitter / JSON-LD VERBATIM (penalty-recovery requirement). No
+ * title prop is passed — the registry owns the indexed <title>. Every money
+ * slug used by this template IS present in the registry.
+ *
+ * COMPLIANCE: each ranked row's CTA is an affiliate /go/<slug>/ link carrying
+ * rel="sponsored nofollow" (handled inside CasinoRow). No first-hand / testing
+ * claims are authored here; introHtml is preserved editorial prose rendered
+ * verbatim. 18+/disclosure handled globally by the chrome.
+ *
+ * Usage (from a money-page route, e.g. src/pages/trustly-kasinot.astro or the
+ * Phase-5 catch-all branch):
+ *   ---
+ *   import MoneyPage from "../layouts/MoneyPage.astro";
+ *   import { getPage } from "../lib/content";
+ *   import { getToplistConfigForSlug } from "../lib/content";
+ *   const page = getPage("trustly-kasinot");
+ *   ---
+ *   <MoneyPage
+ *     seoPath="/trustly-kasinot/"
+ *     title={page?.title ?? "Trustly-kasinot"}
+ *     introHtml={page?.contentHtml}
+ *     toplistConfig={getToplistConfigForSlug("trustly-kasinot")}
+ *   />
+ */
+import BaseLayout from "./BaseLayout.astro";
+import CasinoRow from "../components/CasinoRow.astro";
+import Icon from "../components/Icon.astro";
+import { getToplist, type ToplistCasino } from "../lib/toplist";
+
+interface Props {
+  /** Real indexed URL of this page → preserves the registered SEO head verbatim. */
+  seoPath: string;
+  /** Visible H1 (and hero heading). The SEO <title> stays registry-owned. */
+  title: string;
+  /** Long-form editorial HTML rendered BELOW the list in .kir-prose (optional). */
+  introHtml?: string;
+  /** Toplist config dir name powering the ranked list (from getToplistConfigForSlug). */
+  toplistConfig: string;
+  /** Max rows to show. Defaults to 20. */
+  toplistLimit?: number;
+}
+
+const { seoPath, title, introHtml, toplistConfig, toplistLimit } = Astro.props;
+
+/* -------------------------------------------------------------------------- *
+ * Toplist — filter closed BEFORE ranking, then cap.                          *
+ * -------------------------------------------------------------------------- */
+
+const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
+// Pull a generous slice (closed rows are dropped, so over-fetch a little), then
+// filter + cap to the requested limit.
+const LIMIT = toplistLimit ?? 20;
+const casinos: ToplistCasino[] = getToplist(toplistConfig)
+  .filter(isOpen)
+  .slice(0, LIMIT);
+
+/* -------------------------------------------------------------------------- *
+ * Hero lead — use the FIRST <p> of introHtml as the hero lead, then render    *
+ * the FULL introHtml below the list. We do not strip it from the body copy    *
+ * (the preserved prose stays intact); the lead is a light, derived preview.   *
+ * -------------------------------------------------------------------------- */
+
+/** Extract plain text of the first paragraph of some HTML, capped, or null. */
+function firstParagraphText(html: string | undefined): string | null {
+  if (!html) return null;
+  const m = html.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i);
+  if (!m) return null;
+  const text = m[1]
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return null;
+  // Keep the hero lead tight: ~220 chars, break on a word boundary.
+  if (text.length <= 220) return text;
+  const cut = text.slice(0, 220);
+  return cut.slice(0, cut.lastIndexOf(" ")).trimEnd() + "…";
+}
+
+const leadText = firstParagraphText(introHtml);
+---
+
+<BaseLayout seoPath={seoPath} bodyClass="money-page">
+  {/* ---------------- HERO ---------------- */}
+  <section class="section--tight band-brand money-hero" aria-labelledby="money-title">
+    <div class="container--narrow money-hero__inner">
+      <span class="eyebrow">Vertailu &amp; suositukset</span>
+      <h1 id="money-title" class="money-hero__title">{title}</h1>
+      {leadText && <p class="lead money-hero__lead">{leadText}</p>}
+    </div>
+  </section>
+
+  {/* ---------------- TOPLIST (above the fold) ---------------- */}
+  <section class="section--tight money-list" aria-labelledby="money-list-title">
+    <div class="container">
+      <h2 id="money-list-title" class="money-list__title">
+        <span class="money-list__title-icon" aria-hidden="true">
+          <Icon name="trophy" size={24} />
+        </span>
+        Suositellut kasinot
+      </h2>
+
+      {casinos.length > 0 ? (
+        <ol class="money-list__rows" role="list">
+          {casinos.map((casino, i) => (
+            <li class="money-list__item reveal" class:list={[`d${Math.min(i + 1, 5)}`]}>
+              <CasinoRow casino={casino} rank={i + 1} />
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="muted">Kasinolistaus ei ole juuri nyt saatavilla.</p>
+      )}
+    </div>
+  </section>
+
+  {/* ---------------- LONG-FORM EDITORIAL COPY (below the list) ---------------- */}
+  {introHtml && (
+    <section class="section--tight money-prose" aria-label="Lisätietoa">
+      <div class="container--narrow">
+        <div class="kir-prose reveal" set:html={introHtml} />
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  /* ---------------- Hero ---------------- */
+  .money-hero {
+    text-align: center;
+  }
+  .money-hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .money-hero__title {
+    margin: 0;
+    color: var(--navy);
+    font-size: clamp(1.7rem, 1.25rem + 2.2vw, 2.6rem);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+  .money-hero__lead {
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  /* ---------------- Toplist ---------------- */
+  .money-list__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 clamp(1rem, 0.7rem + 1.2vw, 1.6rem);
+    color: var(--navy);
+    font-size: clamp(1.3rem, 1.05rem + 1.1vw, 1.7rem);
+    line-height: 1.2;
+  }
+  .money-list__title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .money-list__rows {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.7rem, 0.5rem + 0.7vw, 1.1rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+  }
+  .money-list__item {
+    display: block;
+  }
+  .money-list__item > :global(.casino-row) {
+    width: 100%;
+  }
+
+  /* ---------------- Long-form prose ---------------- */
+  .money-prose {
+    background: var(--bg);
+  }
+
+  /* -------------------------------------------------------------------------
+     Light-theme reading styles for the preserved WordPress HTML.
+     Mirrors the OVERFLOW-SAFE .kir-prose treatment from index.astro: legacy
+     comparison tables become horizontal scroll containers (0 overflow at 390px)
+     instead of forcing the whole page wide. Scoped here so this layout renders
+     preserved prose cleanly without a global dependency.
+     ------------------------------------------------------------------------- */
+  .kir-prose {
+    color: var(--ink-2);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .kir-prose :global(h2),
+  .kir-prose :global(h3),
+  .kir-prose :global(h4) {
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 2em 0 0.6em;
+    text-wrap: balance;
+  }
+  .kir-prose :global(h2) {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+  }
+  .kir-prose :global(h3) {
+    font-size: clamp(1.15rem, 1rem + 0.5vw, 1.3rem);
+  }
+  .kir-prose :global(h4) {
+    font-size: 1.05rem;
+  }
+  .kir-prose :global(p) {
+    margin: 0 0 1.05em;
+  }
+  .kir-prose :global(a) {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .kir-prose :global(a:hover) {
+    color: var(--brand-dark);
+  }
+  .kir-prose :global(ul),
+  .kir-prose :global(ol) {
+    margin: 0 0 1.2em;
+    padding-left: 1.4em;
+  }
+  .kir-prose :global(li) {
+    margin-bottom: 0.5em;
+  }
+  .kir-prose :global(strong) {
+    color: var(--ink);
+  }
+  .kir-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Comparison tables → overflow-safe scroll container (0 overflow at 390px). */
+  .kir-prose :global(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin: 1.25em 0 1.6em;
+    font-size: 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .kir-prose :global(table) :global(tbody) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(td),
+  .kir-prose :global(th) {
+    border: 1px solid var(--line);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .kir-prose :global(tr:nth-child(even) td) {
+    background: var(--bg-band);
+  }
+</style>
