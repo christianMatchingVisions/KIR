@@ -1,0 +1,454 @@
+---
+/**
+ * SearchBox.astro — instant, backend-free casino search for the header.
+ *
+ * A pill-shaped input ("Etsi kasinoa…") that, on first focus, lazy-fetches the
+ * build-time index at /casino-index.json (emitted by src/pages/casino-index.json.ts).
+ * As the user types (debounced), it shows up to 8 matching casino names as links
+ * to their /casino/<slug>/ review pages. Enter goes to the highlighted match (or
+ * the first), Arrow keys move the highlight, Esc/blur closes.
+ *
+ * Self-contained: NO required props, so Header can drop in <SearchBox /> as-is.
+ * Optional `id` (to host more than one on a page) and `class` (extra wrapper
+ * classes) only.
+ *
+ * Progressive enhancement: with JS off (or the index unavailable) it is a plain
+ * <form method="get" action="/casino/"> with a text input — submitting simply
+ * navigates to the casino listing page, so it never dead-ends.
+ *
+ * Accessibility: ARIA 1.2 combobox pattern (role="combobox" + aria-expanded +
+ * aria-controls + aria-activedescendant; role="listbox"/"option"). Vanilla JS,
+ * no dependencies. All script is scoped via the unique instance id.
+ */
+import Icon from "./Icon.astro";
+
+interface Props {
+  /** Unique id (allows multiple instances, e.g. desktop + mobile header). */
+  id?: string;
+  /** Extra classes on the wrapper. */
+  class?: string;
+  /** Placeholder text. */
+  placeholder?: string;
+}
+
+const {
+  id = "casino-search",
+  class: className,
+  placeholder = "Etsi kasinoa…",
+} = Astro.props;
+
+const inputId = `${id}-input`;
+const listId = `${id}-list`;
+---
+
+<search class:list={["searchbox", className]} data-searchbox data-id={id}>
+  {/* No-JS / submit fallback: lands on the casino listing page. */}
+  <form class="searchbox__form" role="search" method="get" action="/casino/">
+    <span class="searchbox__icon" aria-hidden="true">
+      <Icon name="search" size={18} />
+    </span>
+    <input
+      id={inputId}
+      class="searchbox__input"
+      type="search"
+      name="q"
+      placeholder={placeholder}
+      autocomplete="off"
+      autocapitalize="off"
+      autocorrect="off"
+      spellcheck="false"
+      enterkeyhint="search"
+      aria-label="Etsi kasinoa"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls={listId}
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
+    />
+  </form>
+  <ul id={listId} class="searchbox__list" role="listbox" aria-label="Kasinoehdotukset" hidden></ul>
+</search>
+
+<style>
+  .searchbox {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 360px;
+  }
+  .searchbox__form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0 0.95rem;
+    height: 42px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .searchbox__form:focus-within {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--brand-soft);
+  }
+  .searchbox__icon {
+    display: inline-flex;
+    color: var(--ink-3);
+    flex: none;
+  }
+  .searchbox__form:focus-within .searchbox__icon {
+    color: var(--brand);
+  }
+  .searchbox__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1;
+    padding: 0;
+  }
+  .searchbox__input::placeholder {
+    color: var(--ink-3);
+    opacity: 1;
+  }
+  /* Hide the native clear/search decorations for a clean pill. */
+  .searchbox__input::-webkit-search-decoration,
+  .searchbox__input::-webkit-search-cancel-button,
+  .searchbox__input::-webkit-search-results-button,
+  .searchbox__input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Dropdown */
+  .searchbox__list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 60;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    max-height: min(60vh, 420px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .searchbox__list[hidden] {
+    display: none;
+  }
+  .searchbox__option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.93rem;
+    line-height: 1.25;
+    cursor: pointer;
+  }
+  .searchbox__option:hover,
+  .searchbox__option[aria-selected="true"] {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+  }
+  .searchbox__option-ico {
+    color: var(--ink-3);
+    flex: none;
+  }
+  .searchbox__option[aria-selected="true"] .searchbox__option-ico {
+    color: var(--brand);
+  }
+  .searchbox__option mark {
+    background: transparent;
+    color: inherit;
+    font-weight: 700;
+  }
+  .searchbox__empty {
+    padding: 0.7rem;
+    color: var(--ink-3);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .searchbox {
+      max-width: none;
+    }
+  }
+</style>
+
+<script>
+  // Instant client-side casino search. One initializer per [data-searchbox]
+  // instance; everything is scoped to that node so multiple boxes coexist.
+  type Entry = { n: string; u: string };
+
+  const INDEX_URL = "/casino-index.json";
+  const MAX_RESULTS = 8;
+  const DEBOUNCE_MS = 120;
+
+  // Module-level cache + in-flight promise so the index is fetched at most once
+  // per page even with several search boxes mounted.
+  let cache: Entry[] | null = null;
+  let inflight: Promise<Entry[]> | null = null;
+
+  function loadIndex(): Promise<Entry[]> {
+    if (cache) return Promise.resolve(cache);
+    if (inflight) return inflight;
+    inflight = fetch(INDEX_URL, { headers: { Accept: "application/json" } })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: unknown) => {
+        cache = Array.isArray(data) ? (data as Entry[]) : [];
+        return cache;
+      })
+      .catch(() => {
+        cache = [];
+        return cache;
+      });
+    return inflight;
+  }
+
+  // Fold Finnish/diacritics so "ä"≈"a", and lowercase, for tolerant matching.
+  function fold(s: string): string {
+    return s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "");
+  }
+
+  function escapeHtml(s: string): string {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // Rank: prefix match (word-start) beats substring; then shorter name; then alpha.
+  function search(index: Entry[], rawQuery: string): Entry[] {
+    const q = fold(rawQuery.trim());
+    if (!q) return [];
+    const scored: { e: Entry; score: number }[] = [];
+    for (const e of index) {
+      const name = fold(e.n);
+      const idx = name.indexOf(q);
+      if (idx === -1) continue;
+      // 0 = name starts with query, 1 = a word starts with query, 2 = anywhere.
+      let score = 2;
+      if (idx === 0) score = 0;
+      else if (name[idx - 1] === " " || name[idx - 1] === "-") score = 1;
+      scored.push({ e, score });
+    }
+    scored.sort(
+      (a, b) =>
+        a.score - b.score ||
+        a.e.n.length - b.e.n.length ||
+        a.e.n.localeCompare(b.e.n, "fi"),
+    );
+    return scored.slice(0, MAX_RESULTS).map((s) => s.e);
+  }
+
+  // Bold the matched span within the displayed name (safe-escaped).
+  function highlight(name: string, rawQuery: string): string {
+    const q = rawQuery.trim();
+    if (!q) return escapeHtml(name);
+    const idx = fold(name).indexOf(fold(q));
+    if (idx === -1) return escapeHtml(name);
+    const before = escapeHtml(name.slice(0, idx));
+    const mid = escapeHtml(name.slice(idx, idx + q.length));
+    const after = escapeHtml(name.slice(idx + q.length));
+    return `${before}<mark>${mid}</mark>${after}`;
+  }
+
+  const SEARCH_ICON =
+    '<svg class="icon searchbox__option-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>';
+
+  function initSearchBox(root: HTMLElement): void {
+    const id = root.dataset.id || "casino-search";
+    const form = root.querySelector<HTMLFormElement>(".searchbox__form");
+    const input = root.querySelector<HTMLInputElement>(".searchbox__input");
+    const list = root.querySelector<HTMLUListElement>(".searchbox__list");
+    if (!form || !input || !list) return;
+
+    let results: Entry[] = [];
+    let active = -1; // index of highlighted option, -1 = none
+    let debounce: number | undefined;
+
+    const open = () => {
+      if (list.hidden && list.children.length > 0) {
+        list.hidden = false;
+        input.setAttribute("aria-expanded", "true");
+      }
+    };
+    const close = () => {
+      list.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+      active = -1;
+    };
+
+    const optionId = (i: number) => `${id}-opt-${i}`;
+
+    function render(): void {
+      if (results.length === 0) {
+        const q = input!.value.trim();
+        if (q.length === 0) {
+          list!.innerHTML = "";
+          close();
+          return;
+        }
+        list!.innerHTML =
+          '<li class="searchbox__empty" role="presentation">Ei osumia</li>';
+        list!.hidden = false;
+        input!.setAttribute("aria-expanded", "true");
+        input!.removeAttribute("aria-activedescendant");
+        active = -1;
+        return;
+      }
+      const q = input!.value;
+      list!.innerHTML = results
+        .map(
+          (e, i) =>
+            `<li role="presentation"><a id="${optionId(i)}" class="searchbox__option" role="option" aria-selected="false" href="${escapeHtml(
+              e.u,
+            )}" tabindex="-1">${SEARCH_ICON}<span>${highlight(e.n, q)}</span></a></li>`,
+        )
+        .join("");
+      active = -1;
+      open();
+    }
+
+    function setActive(i: number): void {
+      const options = list!.querySelectorAll<HTMLAnchorElement>(".searchbox__option");
+      if (options.length === 0) return;
+      // Wrap around.
+      active = (i + options.length) % options.length;
+      options.forEach((opt, idx) => {
+        const on = idx === active;
+        opt.setAttribute("aria-selected", on ? "true" : "false");
+        if (on) {
+          input!.setAttribute("aria-activedescendant", opt.id);
+          opt.scrollIntoView({ block: "nearest" });
+        }
+      });
+    }
+
+    function go(url: string): void {
+      window.location.href = url;
+    }
+
+    function runSearch(): void {
+      loadIndex().then((index) => {
+        // Guard against a stale async result if the input changed meanwhile.
+        results = search(index, input!.value);
+        render();
+      });
+    }
+
+    // Lazy-load the index on first focus so the JSON is fetched only when used.
+    input.addEventListener("focus", () => {
+      loadIndex();
+      if (results.length > 0) open();
+    });
+
+    input.addEventListener("input", () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(runSearch, DEBOUNCE_MS);
+    });
+
+    input.addEventListener("keydown", (ev: KeyboardEvent) => {
+      switch (ev.key) {
+        case "ArrowDown":
+          if (!list.hidden && results.length) {
+            ev.preventDefault();
+            setActive(active + 1);
+          } else if (results.length) {
+            ev.preventDefault();
+            open();
+            setActive(0);
+          }
+          break;
+        case "ArrowUp":
+          if (!list.hidden && results.length) {
+            ev.preventDefault();
+            setActive(active - 1);
+          }
+          break;
+        case "Enter": {
+          // Enter on a highlighted option goes there; otherwise first match.
+          const target =
+            active >= 0 ? results[active] : results.length ? results[0] : null;
+          if (target) {
+            ev.preventDefault();
+            go(target.u);
+          }
+          // No matches → let the form submit (fallback to /casino/).
+          break;
+        }
+        case "Escape":
+          if (!list.hidden) {
+            ev.preventDefault();
+            close();
+          }
+          break;
+        case "Tab":
+          close();
+          break;
+      }
+    });
+
+    // Click a suggestion: anchors navigate natively; nothing extra needed.
+    // Close on blur (deferred so a click on an option registers first).
+    root.addEventListener("focusout", () => {
+      window.setTimeout(() => {
+        if (!root.contains(document.activeElement)) close();
+      }, 0);
+    });
+
+    // Close when clicking outside the box.
+    document.addEventListener("click", (ev) => {
+      if (!root.contains(ev.target as Node)) close();
+    });
+
+    // Prevent the no-JS GET submit from doing a full navigation when we have
+    // matches to honour (Enter is handled above); a bare submit still works.
+    form.addEventListener("submit", (ev) => {
+      const target = results.length ? results[active >= 0 ? active : 0] : null;
+      if (target) {
+        ev.preventDefault();
+        go(target.u);
+      }
+      // else: allow native GET to /casino/ (graceful fallback).
+    });
+  }
+
+  function initAll(): void {
+    document
+      .querySelectorAll<HTMLElement>("[data-searchbox]")
+      .forEach((el) => {
+        if (el.dataset.searchInit === "1") return;
+        el.dataset.searchInit = "1";
+        initSearchBox(el);
+      });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAll);
+  } else {
+    initAll();
+  }
+</script>

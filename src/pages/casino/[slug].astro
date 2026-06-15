@@ -1,0 +1,690 @@
+---
+/**
+ * casino/[slug].astro — the light-theme casino REVIEW route.
+ *
+ * One page per scraped casino fragment (casino__<slug>), 305 in all. The
+ * canonical URL is /casino/<slug>/ (taken from the fragment's meta.json via
+ * getCasino().url), and that same path is passed to <BaseLayout seoPath> so the
+ * Phase-1 SEO registry re-emits the page's PRESERVED Rank Math head + JSON-LD
+ * VERBATIM (penalty-recovery requirement — no title prop, the registry owns it).
+ *
+ * Composition (open casinos):
+ *   breadcrumb (Etusivu › Arvostelut › <Name>)
+ *   2-col hero grid:  <ReviewHero/>  +  <BonusSidebar/>   (sidebar sticky ≥980px)
+ *   <QuickFacts/>                    pikatiedot strip
+ *   <RatingBars/> + <ReviewMethodology/>   (arviointi + "Näin arvioimme")
+ *   <PaymentMethods/>
+ *   review prose (.kir-prose: reviewHtml + bonusesHtml as "Bonukset")
+ *   <CasinoInfoGrid/>
+ *   <ReviewFaq/>
+ *   "Muut kasinot" strip — 4 <CasinoCard> from getToplist('search-service-casino')
+ *
+ * BACKFILL: getCasino() values are derived from the scraped fragment. When a
+ * key display field (bonusText / license / logoUrl) is null we look the casino
+ * up by slug in the toplist (search-service-casino) and fill the gap BEFORE the
+ * components decide to omit a block. The toplist row is matched by exact slug,
+ * then by normalized name as a fallback. We never invent data — backfill only
+ * substitutes a real value the toplist already holds for the same casino.
+ *
+ * CLOSED CASINOS (showNoReview === true): render breadcrumb + a name/logo hero
+ * + a clear "ei käytettävissä" notice + the prose (if any). NO CTA buttons, NO
+ * rating bars, NO bonus sidebar. The URL + preserved SEO head still exist so the
+ * page is not dropped from the index.
+ *
+ * COMPLIANCE: every /go/<slug>/ CTA carries rel="sponsored nofollow" (handled
+ * inside the components); trailing slashes everywhere; no first-hand testing
+ * claims anywhere on the page.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReviewHero from "../../components/review/ReviewHero.astro";
+import BonusSidebar from "../../components/review/BonusSidebar.astro";
+import QuickFacts from "../../components/review/QuickFacts.astro";
+import RatingBars from "../../components/review/RatingBars.astro";
+import ReviewMethodology from "../../components/review/ReviewMethodology.astro";
+import PaymentMethods from "../../components/review/PaymentMethods.astro";
+import CasinoInfoGrid from "../../components/review/CasinoInfoGrid.astro";
+import ReviewFaq from "../../components/review/ReviewFaq.astro";
+import CasinoCard from "../../components/CasinoCard.astro";
+import Icon from "../../components/Icon.astro";
+import { getCasino, listCasinoSlugs, type CasinoReview } from "../../lib/casino-data";
+import { getToplist, type ToplistCasino } from "../../lib/toplist";
+
+/** One static path per casino fragment slug. */
+export function getStaticPaths() {
+  return listCasinoSlugs().map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const rawReview = slug ? getCasino(slug) : null;
+
+/* -------------------------------------------------------------------------- *
+ * Toplist backfill                                                           *
+ * -------------------------------------------------------------------------- */
+
+const OTHERS_CONFIG = "search-service-casino";
+const toplistRows = getToplist(OTHERS_CONFIG);
+
+/** Normalize a name for a lenient fallback match (lowercase, no spaces/punct). */
+function normName(s: string | null | undefined): string {
+  return (s ?? "").toLowerCase().replace(/[^a-z0-9åäö]+/gi, "");
+}
+
+/** Find the toplist row for a review (exact slug first, then normalized name). */
+function matchToplist(review: CasinoReview): ToplistCasino | null {
+  const bySlug = toplistRows.find((r) => r.slug === review.slug);
+  if (bySlug) return bySlug;
+  const n = normName(review.name);
+  return toplistRows.find((r) => normName(r.name) === n) ?? null;
+}
+
+/**
+ * Boilerplate "bonus" placeholders that are NOT a real bonus headline. The data
+ * layer's parseBonusText already rejects these for fragment-sourced text; we
+ * mirror that here so toplist backfill never resurrects a meaningless headline.
+ */
+function isPlaceholderBonus(text: string): boolean {
+  const lower = text.trim().toLowerCase();
+  return (
+    lower === "kasinot ilman rekisteröitymistä" ||
+    lower === "rekisteröintiä ei tarvita"
+  );
+}
+
+/**
+ * Backfill null display fields (bonusText / license / logoUrl) from the matching
+ * toplist row before components omit a block. Returns a NEW CasinoReview-shaped
+ * object plus the (possibly toplist-sourced) logoAlt the BonusSidebar can use.
+ * Only ever substitutes a real value the toplist holds for the SAME casino — and
+ * never a boilerplate "bonus" placeholder (those stay null → block omitted).
+ */
+function backfill(review: CasinoReview): CasinoReview & { logoAlt: string | null } {
+  const row = matchToplist(review);
+  const rowBonus = row?.bonusText.trim() ?? "";
+  const bonusText =
+    review.bonusText ??
+    (rowBonus.length > 0 && !isPlaceholderBonus(rowBonus) ? rowBonus : null);
+  const license =
+    review.license ??
+    (row && row.license.trim().length > 0 ? row.license.trim() : null);
+  const logoUrl = review.logoUrl ?? row?.logoUrl ?? null;
+  const logoAlt = row?.logoAlt ?? (review.name ? `${review.name} logo` : null);
+  return { ...review, bonusText, license, logoUrl, logoAlt };
+}
+
+/**
+ * COMPLIANCE GUARD for embedded prose. The scraped reviewHtml / bonusesHtml can
+ * contain legacy affiliate links to /go/<slug>/ (e.g. banner-image links) that
+ * do NOT carry rel="sponsored nofollow". This site is in penalty recovery and
+ * the rule is strict: EVERY /go/ link must be sponsored+nofollow. We rewrite any
+ * <a ... href="/go/..."> in the prose so it carries exactly that rel:
+ *   - no rel attribute        → add rel="sponsored nofollow"
+ *   - existing rel            → merge in sponsored + nofollow (dedup, keep order)
+ * Non-/go/ links are left untouched. Idempotent and HTML-safe (attribute-level).
+ */
+function ensureSponsored(html: string | null): string | null {
+  if (!html) return html;
+  return html.replace(
+    /<a\b([^>]*\bhref="\/go\/[^"]*"[^>]*)>/gi,
+    (whole, attrs: string) => {
+      const relMatch = attrs.match(/\brel="([^"]*)"/i);
+      if (!relMatch) {
+        return `<a${attrs} rel="sponsored nofollow">`;
+      }
+      const tokens = new Set(
+        relMatch[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
+      );
+      tokens.add("sponsored");
+      tokens.add("nofollow");
+      const merged = [...tokens].join(" ");
+      const newAttrs = attrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`);
+      return `<a${newAttrs}>`;
+    },
+  );
+}
+
+/**
+ * COMPLIANCE GUARD for first-hand / personal-testing language in scraped prose.
+ *
+ * This is a penalty-recovery affiliate site: first-person testing claims
+ * ("kokeilin", "testasin", "oikealla pelaajatilillä") are forbidden. The legacy
+ * WordPress prose contains some of these. We neutralize ONLY the unambiguous
+ * first-person verbs + the banned real-account phrase, rewriting them to neutral,
+ * criteria-based phrasing — while deliberately LEAVING passive industry-factual
+ * uses intact ("pelit ovat testattuja", "RNG on auditoitu" = third-party tested,
+ * not us). Conservative, regex-bounded, meaning-preserving.
+ */
+function neutralizeFirstHand(html: string | null): string | null {
+  if (!html) return html;
+  return (
+    html
+      // "oikealla pelaajatilillä" → drop the real-account claim entirely.
+      .replace(/\s*oikealla pelaajatilill[äa]/gi, "")
+      // First-person "kokeilin/testasin/testailin ..." → neutral "arviossamme ...".
+      // Capture the following lowercase clause start so the sentence still flows.
+      .replace(/\bKokeilin\b/g, "Arviossamme tarkasteltiin")
+      .replace(/\bkokeilin\b/g, "arviossa tarkasteltiin")
+      .replace(/\bTestasin\b/g, "Arviossamme tarkasteltiin")
+      .replace(/\btestasin\b/g, "arviossa tarkasteltiin")
+      .replace(/\bTestailin\b/g, "Arviossamme tarkasteltiin")
+      .replace(/\btestailin\b/g, "arviossa tarkasteltiin")
+      // "ei muuta kuin testaamaan itse" CTA → neutral close.
+      .replace(/ei muuta kuin testaamaan itse/gi, "tutustu kasinoon itse")
+  );
+}
+
+const review = rawReview
+  ? (() => {
+      const b = backfill(rawReview);
+      return {
+        ...b,
+        reviewHtml: neutralizeFirstHand(ensureSponsored(b.reviewHtml)),
+        bonusesHtml: neutralizeFirstHand(ensureSponsored(b.bonusesHtml)),
+      };
+    })()
+  : null;
+
+/* -------------------------------------------------------------------------- *
+ * "Muut kasinot" strip — 4 open casinos, excluding the current one.          *
+ * -------------------------------------------------------------------------- */
+
+const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
+const others: ToplistCasino[] = review
+  ? toplistRows
+      .filter(isOpen)
+      .filter((c) => c.slug !== review.slug && normName(c.name) !== normName(review.name))
+      .slice(0, 4)
+  : [];
+
+const PROSE_ANCHOR = "arvostelu";
+
+/**
+ * The 305 fragments all parse, but guard defensively: if a slug somehow has no
+ * fragment, render a minimal "not found" page rather than crashing the build.
+ * (No title prop / no seoPath — there is no preserved head to honour.)
+ */
+---
+
+{!review ? (
+  <BaseLayout title="Kasinoa ei löytynyt — Kasinot ilman rekisteröitymistä">
+    <section class="section">
+      <div class="container--narrow nf">
+        <h1 class="nf__title">Kasinoa ei löytynyt</h1>
+        <p class="lead">Hakemaasi kasinoarvostelua ei valitettavasti löytynyt.</p>
+        <a class="btn-cta btn-lg" href="/kaikki-kasinot/">
+          Selaa kaikkia kasinoita
+          <Icon name="arrow-right" size={20} />
+        </a>
+      </div>
+    </section>
+  </BaseLayout>
+) : (
+  <BaseLayout seoPath={review.url} bodyClass="casino-review">
+    {/* ---------------- BREADCRUMB ---------------- */}
+    <nav class="section--tight crumbs-wrap" aria-label="Murupolku">
+      <div class="container">
+        <ol class="crumbs">
+          <li class="crumbs__item"><a href="/">Etusivu</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item"><a href="/kaikki-kasinot/">Arvostelut</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item" aria-current="page">{review.name}</li>
+        </ol>
+      </div>
+    </nav>
+
+    {review.showNoReview ? (
+      /* ============== CLOSED / NO-REVIEW CASINO ============== */
+      <section class="section--tight">
+        <div class="container--narrow closed">
+          <div class="closed__head">
+            <div class="closed__plate">
+              {review.logoUrl ? (
+                <img
+                  class="closed__logo"
+                  src={review.logoUrl}
+                  alt={review.logoAlt ?? `${review.name} logo`}
+                  loading="lazy"
+                  decoding="async"
+                  width="180"
+                  height="72"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+                />
+              ) : null}
+              <span
+                class="closed__mono"
+                aria-hidden="true"
+                style={review.logoUrl ? "display:none" : undefined}
+              >
+                {(review.name || "?").trim().charAt(0).toUpperCase() || "?"}
+              </span>
+            </div>
+            <div>
+              <span class="eyebrow">Arvostelu</span>
+              <h1 class="closed__title">{review.name}</h1>
+            </div>
+          </div>
+
+          <div class="closed__notice" role="note">
+            <Icon name="info" size={22} class="closed__notice-ico" />
+            <p>
+              Tämä kasino ei ole tällä hetkellä käytettävissä. Suosittelemme
+              tutustumaan muihin rekisteröitymisvapaisiin kasinoihin alta.
+            </p>
+          </div>
+
+          {review.reviewHtml && (
+            <div
+              class="kir-prose closed__prose"
+              id={PROSE_ANCHOR}
+              set:html={review.reviewHtml}
+            />
+          )}
+        </div>
+      </section>
+    ) : (
+      /* ============== OPEN CASINO — FULL REVIEW ============== */
+      <Fragment>
+        {/* ---------------- HERO (2-col) ---------------- */}
+        <section class="section--tight">
+          <div class="container">
+            <div class="rev-hero">
+              <ReviewHero review={review} proseAnchorId={PROSE_ANCHOR} />
+              <BonusSidebar review={review} />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- QUICK FACTS ---------------- */}
+        <section class="section--tight band">
+          <div class="container">
+            <QuickFacts review={review} />
+          </div>
+        </section>
+
+        {/* ---------------- RATING BARS + METHODOLOGY ---------------- */}
+        <section class="section--tight">
+          <div class="container">
+            <div class="rev-assess">
+              <RatingBars review={review} />
+              <ReviewMethodology name={review.name} />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- PAYMENT METHODS ---------------- */}
+        {review.paymentMethods.length > 0 && (
+          <section class="section--tight">
+            <div class="container">
+              <PaymentMethods methods={review.paymentMethods} />
+            </div>
+          </section>
+        )}
+
+        {/* ---------------- REVIEW PROSE (+ Bonukset) ---------------- */}
+        {(review.reviewHtml || review.bonusesHtml) && (
+          <section class="section--tight" id={PROSE_ANCHOR}>
+            <div class="container--narrow">
+              <h2 class="rev-prose__title">Arvostelu: {review.name}</h2>
+              {review.reviewHtml && (
+                <div class="kir-prose reveal" set:html={review.reviewHtml} />
+              )}
+              {review.bonusesHtml && (
+                <div class="rev-bonuses">
+                  <h3 class="rev-bonuses__title">Bonukset</h3>
+                  <div class="kir-prose" set:html={review.bonusesHtml} />
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* ---------------- INFO GRID ---------------- */}
+        <section class="section--tight">
+          <div class="container--narrow">
+            <CasinoInfoGrid review={review} />
+          </div>
+        </section>
+
+        {/* ---------------- FAQ ---------------- */}
+        <section class="section--tight band">
+          <div class="container--narrow">
+            <ReviewFaq review={review} />
+          </div>
+        </section>
+      </Fragment>
+    )}
+
+    {/* ---------------- MUUT KASINOT ---------------- */}
+    {others.length > 0 && (
+      <section class="section" aria-labelledby="others-title">
+        <div class="container">
+          <div class="others__head">
+            <h2 id="others-title" class="others__title">
+              <span class="others__title-icon" aria-hidden="true">
+                <Icon name="trophy" size={24} />
+              </span>
+              Muut kasinot ilman rekisteröitymistä
+            </h2>
+            <a class="others__all" href="/kaikki-kasinot/">
+              Näytä kaikki
+              <Icon name="arrow-right" size={18} />
+            </a>
+          </div>
+          <ul class="others__grid" role="list">
+            {others.map((c, i) => (
+              <li class="others__item reveal" class:list={[`d${Math.min(i + 1, 5)}`]}>
+                <CasinoCard casino={c} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+  </BaseLayout>
+)}
+
+<style>
+  /* ---------------- Breadcrumb ---------------- */
+  .crumbs-wrap {
+    padding-bottom: 0;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item {
+    min-width: 0;
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+
+  /* ---------------- 2-col hero grid ---------------- */
+  .rev-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+    align-items: start;
+  }
+  @media (min-width: 980px) {
+    .rev-hero {
+      grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
+    }
+  }
+
+  /* ---------------- Assessment row (bars + methodology) ---------------- */
+  .rev-assess {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 0.8rem + 2vw, 2.25rem);
+    align-items: start;
+  }
+  @media (min-width: 880px) {
+    .rev-assess {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+  }
+
+  /* ---------------- Review prose ---------------- */
+  .rev-prose__title {
+    margin: 0 0 1.1rem;
+    color: var(--navy);
+  }
+  .rev-bonuses {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .rev-bonuses__title {
+    margin: 0 0 0.9rem;
+    color: var(--navy);
+  }
+
+  /* ---------------- Closed / no-review casino ---------------- */
+  .closed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .closed__head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .closed__plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 92px;
+    min-width: 150px;
+    padding: 0.6rem 1rem;
+    background: var(--bg-band-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .closed__logo {
+    max-height: 60px;
+    width: auto;
+    object-fit: contain;
+  }
+  .closed__mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .closed__title {
+    margin: 0.15rem 0 0;
+    line-height: 1.15;
+  }
+  .closed__notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--bg-band);
+    border: 1px solid var(--line-2);
+  }
+  .closed__notice-ico {
+    color: var(--brand);
+    flex: none;
+    margin-top: 1px;
+  }
+  .closed__notice p {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+
+  /* ---------------- Muut kasinot ---------------- */
+  .others__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  }
+  .others__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: clamp(1.3rem, 1.05rem + 1.1vw, 1.7rem);
+    color: var(--navy);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .others__title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .others__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    color: var(--brand);
+    white-space: nowrap;
+  }
+  .others__all:hover {
+    color: var(--brand-dark);
+  }
+  .others__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.85rem, 0.5rem + 1.2vw, 1.4rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .others__item {
+    display: flex;
+  }
+  .others__item > :global(.casino-card) {
+    width: 100%;
+  }
+  @media (max-width: 900px) {
+    .others__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 480px) {
+    .others__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------- Not-found fallback ---------------- */
+  .nf {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 2rem;
+  }
+  .nf__title {
+    margin: 0;
+  }
+
+  /* ---------------- Light-theme prose (mirrors index.astro .kir-prose) ----
+     Scoped copy of the homepage's overflow-safe reading styles so review prose
+     and the legacy comparison tables render cleanly here too. */
+  .kir-prose {
+    color: var(--ink-2);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .kir-prose :global(h2),
+  .kir-prose :global(h3),
+  .kir-prose :global(h4) {
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 2em 0 0.6em;
+    text-wrap: balance;
+  }
+  .kir-prose :global(h2) {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+  }
+  .kir-prose :global(h3) {
+    font-size: clamp(1.15rem, 1rem + 0.5vw, 1.3rem);
+  }
+  .kir-prose :global(h4) {
+    font-size: 1.05rem;
+  }
+  .kir-prose :global(p) {
+    margin: 0 0 1.05em;
+  }
+  .kir-prose :global(a) {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .kir-prose :global(a:hover) {
+    color: var(--brand-dark);
+  }
+  .kir-prose :global(ul),
+  .kir-prose :global(ol) {
+    margin: 0 0 1.2em;
+    padding-left: 1.4em;
+  }
+  .kir-prose :global(li) {
+    margin-bottom: 0.5em;
+  }
+  .kir-prose :global(strong) {
+    color: var(--ink);
+  }
+  .kir-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Comparison tables → overflow-safe scroll container (0 overflow at 390px). */
+  .kir-prose :global(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin: 1.25em 0 1.6em;
+    font-size: 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .kir-prose :global(table) :global(tbody) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(td),
+  .kir-prose :global(th) {
+    border: 1px solid var(--line);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .kir-prose :global(tr:nth-child(even) td) {
+    background: var(--bg-band);
+  }
+</style>

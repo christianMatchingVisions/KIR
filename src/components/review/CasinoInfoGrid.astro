@@ -1,0 +1,129 @@
+---
+/**
+ * CasinoInfoGrid.astro — the "Tietoa <Name>:sta" definition grid.
+ *
+ * A <dl> grid of present-fields-only cells:
+ *   - Perustettu      (foundedYear)
+ *   - Lisenssi        (license)
+ *   - Maksutavat      (paymentMethods joined)
+ *   - Minimitalletus  (minDeposit)
+ *   - Asiakaspalvelu  (support: email / phone / live chat — summarised)
+ *
+ * Each cell is skipped when its field is missing; the whole section is omitted
+ * if no cell has data. No fabricated values.
+ *
+ * Props:
+ *   review : CasinoReview
+ *   title? : string  (default `Tietoa <name>:sta`)
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+
+interface Props {
+  review: CasinoReview;
+  title?: string;
+}
+
+const { review, title } = Astro.props;
+const {
+  name,
+  foundedYear,
+  license,
+  paymentMethods,
+  minDeposit,
+  support,
+} = review;
+
+const heading = title ?? `Tietoa ${name}:sta`;
+
+/* Build the support value from whatever channels we actually have. */
+function supportValue(): string | null {
+  if (!support) return null;
+  const parts: string[] = [];
+  if (support.liveChat === true) parts.push("Live-chat");
+  if (support.email) parts.push(support.email);
+  if (support.phone && support.phone !== "Kyllä") parts.push(support.phone);
+  else if (support.phone === "Kyllä") parts.push("Puhelintuki");
+  return parts.length ? parts.join(" · ") : null;
+}
+
+type Row = { label: string; value: string };
+const rows: Row[] = [];
+
+if (foundedYear && foundedYear.trim().length > 0) {
+  rows.push({ label: "Perustettu", value: foundedYear });
+}
+if (license && license.trim().length > 0) {
+  rows.push({ label: "Lisenssi", value: license });
+}
+if (paymentMethods.length > 0) {
+  rows.push({ label: "Maksutavat", value: paymentMethods.join(", ") });
+}
+if (minDeposit && minDeposit.trim().length > 0) {
+  rows.push({ label: "Minimitalletus", value: minDeposit });
+}
+const sv = supportValue();
+if (sv) rows.push({ label: "Asiakaspalvelu", value: sv });
+---
+
+{rows.length > 0 && (
+  <section class="ig" aria-label={heading}>
+    <h2 class="ig__title">{heading}</h2>
+    <dl class="ig__grid card">
+      {rows.map((r) => (
+        <div class="ig__row">
+          <dt class="ig__label">{r.label}</dt>
+          <dd class="ig__value">{r.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+)}
+
+<style>
+  .ig {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .ig__title {
+    margin: 0;
+  }
+  .ig__grid {
+    margin: 0;
+    padding: 0.4rem 1.25rem;
+  }
+  .ig__row {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.45fr) 1fr;
+    gap: 0.5rem 1.25rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .ig__row:last-child {
+    border-bottom: 0;
+  }
+  .ig__label {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  .ig__value {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 480px) {
+    .ig__row {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

@@ -1,0 +1,273 @@
+---
+/**
+ * ReviewHero.astro — the LEFT column of the 2-col casino review hero.
+ *
+ * Renders (in order): an "ARVOSTELU" eyebrow; the H1 <Name>; a Stars row + a
+ * qualitative word derived from the overall score (only when ratingOverall is
+ * present); an optional "Päivitetty <fi-date>" line (sourced from the SEO
+ * registry's modified date — NOT a "tested" claim); up to three trust pills
+ * built from REAL fields; a 1–2 sentence neutral intro; a primary yellow CTA
+ * ("Pelaa nyt <Name>issä →", rel="sponsored nofollow") + an outline button that
+ * scrolls to the prose anchor.
+ *
+ * COMPLIANCE:
+ *   - The CTA carries rel="sponsored nofollow"; href is the /go/<slug>/ path.
+ *   - NO first-hand / "testattu" language. The "Päivitetty" line is a freshness
+ *     signal, the intro is derived from the existing prose or templated from
+ *     name + license — never a personal-testing claim.
+ *   - No fabricated review counts; the secondary button is a plain anchor jump.
+ *
+ * Graceful degradation:
+ *   - ratingOverall null → the stars+word row is omitted.
+ *   - modifiedDate absent → the "Päivitetty" line is omitted.
+ *   - no trust pills derivable → the pill row is omitted.
+ *   - ctaSlug null → primary CTA renders as an inert disabled-looking button.
+ *
+ * Props:
+ *   review        : CasinoReview               (the parsed casino)
+ *   modifiedDate? : string | null              (already-formatted fi date, e.g. "15.6.2026")
+ *   proseAnchorId?: string                     (id the outline button scrolls to; default "arvostelu")
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+import Stars from "../Stars.astro";
+import Icon from "../Icon.astro";
+import type { IconName } from "../Icon.astro";
+
+interface Props {
+  review: CasinoReview;
+  modifiedDate?: string | null;
+  proseAnchorId?: string;
+}
+
+const { review, modifiedDate = null, proseAnchorId = "arvostelu" } = Astro.props;
+const {
+  name,
+  ctaSlug,
+  ratingOverall,
+  license,
+  paymentMethods,
+  reviewHtml,
+} = review;
+
+const hasRating = ratingOverall != null && Number.isFinite(ratingOverall);
+const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
+// ctaSlug is the bare /go/<x>/ target (the "<x>"); build the affiliate href.
+const ctaHref = hasCta ? `/go/${ctaSlug}/` : null;
+
+/** Qualitative word for a 0–5 score (criteria-based, not a personal verdict). */
+function qualitativeWord(score: number): string {
+  if (score >= 4.5) return "Erinomainen";
+  if (score >= 4) return "Hyvä";
+  if (score >= 3) return "Kelvollinen";
+  return "Välttävä";
+}
+const ratingWord = hasRating ? qualitativeWord(ratingOverall as number) : null;
+
+/* ---- Trust pills (max 3) from REAL fields only ---- */
+type Pill = { icon: IconName; label: string };
+const pills: Pill[] = [];
+// Every page on this site is no-registration — a safe, on-brand first pill.
+pills.push({ icon: "bolt", label: "Ilman rekisteröitymistä" });
+const fastDeposit = paymentMethods.some((m) =>
+  /trustly|zimpler|pay\s*n\s*play|brite/i.test(m),
+);
+if (fastDeposit) {
+  pills.push({ icon: "wallet", label: "Nopeat talletukset" });
+}
+if (license && license.trim().length > 0) {
+  pills.push({ icon: "shield", label: "Lisensoitu toimija" });
+}
+// Backfill a third generic-but-true pill if we still have room.
+if (pills.length < 3) {
+  pills.push({ icon: "clock", label: "Pikapelaaminen" });
+}
+const trustPills = pills.slice(0, 3);
+
+/* ---- Intro: first sentence(s) of the prose, else a neutral template ---- */
+function firstSentences(html: string, maxLen = 240): string | null {
+  // Strip tags, decode the few entities the prose may carry, collapse space.
+  const text = html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#8211;/g, "–")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return null;
+  if (text.length <= maxLen) return text;
+  // Cut at the last sentence boundary within the budget.
+  const slice = text.slice(0, maxLen);
+  const lastStop = Math.max(slice.lastIndexOf(". "), slice.lastIndexOf("! "), slice.lastIndexOf("? "));
+  return (lastStop > 80 ? slice.slice(0, lastStop + 1) : slice.trimEnd() + "…");
+}
+const proseIntro = reviewHtml ? firstSentences(reviewHtml) : null;
+const intro =
+  proseIntro ??
+  (license
+    ? `${name} on rekisteröitymisvapaa kasino, joka toimii ${license}-lisenssillä. Alta löydät arviomme sen bonuksista, maksutavoista ja pelivalikoimasta.`
+    : `${name} on rekisteröitymisvapaa kasino. Alta löydät arviomme sen bonuksista, maksutavoista ja pelivalikoimasta.`);
+
+// Finnish "<name>issä" inessive is unreliable to inflect; a clean, safe label.
+const ctaLabel = `Pelaa nyt ${name}`;
+---
+
+<div class="rh">
+  <span class="eyebrow rh__eyebrow">Arvostelu</span>
+  <h1 class="rh__title">{name}</h1>
+
+  {hasRating && (
+    <div class="rh__score">
+      <Stars value={ratingOverall as number} showValue size={22} />
+      {ratingWord && <span class="rh__word">{ratingWord}</span>}
+    </div>
+  )}
+
+  {modifiedDate && (
+    <p class="rh__updated">
+      <Icon name="clock" size={15} class="rh__updated-ico" />
+      <span>Päivitetty {modifiedDate}</span>
+    </p>
+  )}
+
+  {trustPills.length > 0 && (
+    <ul class="rh__pills">
+      {trustPills.map((p) => (
+        <li class="rh__pill">
+          <Icon name={p.icon} size={15} class="rh__pill-ico" />
+          <span>{p.label}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <p class="rh__intro lead">{intro}</p>
+
+  <div class="rh__actions">
+    {hasCta ? (
+      <a
+        class="btn-cta btn-lg rh__cta"
+        href={ctaHref}
+        rel="sponsored nofollow"
+        aria-label={ctaLabel}
+      >
+        {ctaLabel}
+        <Icon name="arrow-right" size={20} />
+      </a>
+    ) : (
+      <span class="btn-cta btn-lg rh__cta is-disabled" aria-disabled="true">
+        {ctaLabel}
+      </span>
+    )}
+    <a class="btn-outline btn-lg rh__read" href={`#${proseAnchorId}`}>
+      Lue arvostelu
+    </a>
+  </div>
+</div>
+
+<style>
+  .rh {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+  .rh__eyebrow {
+    margin: 0;
+  }
+  .rh__title {
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .rh__score {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.85rem;
+  }
+  .rh__word {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25em 0.7em;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: -0.01em;
+  }
+
+  .rh__updated {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .rh__updated-ico {
+    color: var(--ink-3);
+    flex: none;
+  }
+
+  .rh__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rh__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4em 0.85em;
+    border-radius: 999px;
+    background: var(--bg-band);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.83rem;
+    line-height: 1.2;
+  }
+  .rh__pill-ico {
+    color: var(--brand);
+    flex: none;
+  }
+
+  .rh__intro {
+    margin: 0.3rem 0 0;
+    max-width: 56ch;
+  }
+
+  .rh__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 0.6rem;
+    width: 100%;
+  }
+  .rh__cta,
+  .rh__read {
+    flex: 1 1 auto;
+  }
+  .rh__cta.is-disabled {
+    background: var(--line);
+    color: var(--ink-3);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  @media (max-width: 520px) {
+    .rh__actions {
+      flex-direction: column;
+    }
+    .rh__cta,
+    .rh__read {
+      width: 100%;
+    }
+  }
+</style>

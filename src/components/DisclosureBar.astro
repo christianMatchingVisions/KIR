@@ -1,0 +1,60 @@
+---
+/**
+ * DisclosureBar.astro — slim, site-wide affiliate-disclosure + 18+ bar.
+ *
+ * MANDATORY for penalty recovery + compliance: this MUST render on every page.
+ * BaseLayout places it at the very bottom of the document (after the footer).
+ *
+ * Content is a single auditable constant (DISCLOSURE_TEXT) plus a Peluuri
+ * help link (rel="nofollow noopener", new tab). Light navy band, small print.
+ */
+import { DISCLOSURE_TEXT, PELUURI_URL, PELUURI_LABEL } from "../config/site-nav";
+import Icon from "./Icon.astro";
+---
+
+<aside class="disclosure-bar" aria-label="Mainosvastuu ja vastuullinen pelaaminen">
+  <div class="container disclosure-bar__inner">
+    <Icon name="info" size={16} class="disclosure-bar__icon" />
+    <p class="disclosure-bar__text">
+      {DISCLOSURE_TEXT}{" "}
+      <span class="disclosure-bar__help">
+        Apua:{" "}
+        <a href={PELUURI_URL} target="_blank" rel="nofollow noopener">{PELUURI_LABEL}</a>.
+      </span>
+    </p>
+  </div>
+</aside>
+
+<style>
+  .disclosure-bar {
+    background: var(--navy);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #aab9d0;
+  }
+  .disclosure-bar__inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding-block: 0.75rem;
+  }
+  .disclosure-bar__icon {
+    flex: none;
+    margin-top: 2px;
+    color: var(--cta);
+  }
+  .disclosure-bar__text {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #aab9d0;
+  }
+  .disclosure-bar__help a {
+    color: #9cc2ff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+  .disclosure-bar__help a:hover {
+    color: #c4dbff;
+  }
+</style>

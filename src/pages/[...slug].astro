@@ -31,12 +31,21 @@ export function getStaticPaths() {
 
   // Fragments owned by dedicated routes (rendered there, not by this catch-all).
   const OWNED_ELSEWHERE = new Set([
+    "home", // src/pages/index.astro (rebuilt light-theme homepage owns "/")
     "uutiset", // src/pages/uutiset/index.astro
     "huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista", // src/pages/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/index.astro
   ]);
 
+  // The 305 casino__<slug> fragments are owned by src/pages/casino/[slug].astro
+  // (the light-theme review route). Skip them here so this catch-all never
+  // re-emits /casino/<slug>/ and clashes with the dedicated route.
+  const isCasinoFragment = (dirName: string) => dirName.startsWith("casino__");
+
   return Object.entries(metas)
-    .filter(([metaPath]) => !OWNED_ELSEWHERE.has(metaPath.split("/").at(-2) ?? ""))
+    .filter(([metaPath]) => {
+      const dirName = metaPath.split("/").at(-2) ?? "";
+      return !OWNED_ELSEWHERE.has(dirName) && !isCasinoFragment(dirName);
+    })
     .map(([metaPath, metaModule]) => {
     const dir = metaPath.replace(/\/meta\.json$/, "");
     const meta = metaModule.default;

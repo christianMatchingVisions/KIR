@@ -1,0 +1,118 @@
+---
+/**
+ * FeatureStrip.astro — the homepage 4-column "why us" strip.
+ *
+ * Sits on a light .band. Each column = a blue <Icon> + bold navy title + one
+ * --ink-2 line. Responsive: 4 columns ≥900px, 2 columns on tablet, 1 column on
+ * phones. Items can be overridden via the `items` prop; sensible Finnish
+ * defaults from the reference design are used otherwise.
+ */
+import Icon from "./Icon.astro";
+import type { IconName } from "./Icon.astro";
+
+interface Feature {
+  icon: IconName;
+  title: string;
+  text: string;
+}
+
+interface Props {
+  items?: Feature[];
+}
+
+const defaults: Feature[] = [
+  {
+    icon: "clock",
+    title: "Nopea ja vaivaton",
+    text: "Pelaa suosikkipeliäsi ilman rekisteröitymistä ja odottelua.",
+  },
+  {
+    icon: "wallet",
+    title: "Turvalliset maksutavat",
+    text: "Talleta ja nosta rahasi nopeasti ja turvallisesti.",
+  },
+  {
+    icon: "percent",
+    title: "Parhaat bonukset",
+    text: "Vertaa kasinobonuksia ja löydä parhaat tarjoukset.",
+  },
+  {
+    icon: "headset",
+    title: "Asiakastuki",
+    text: "Apua saatavilla 24/7 – nopeasti ja luotettavasti.",
+  },
+];
+
+const { items = defaults } = Astro.props;
+---
+
+<section class="band features">
+  <div class="container">
+    <ul class="features__grid" role="list">
+      {items.map((f, i) => (
+        <li class="feature reveal" class:list={[`d${Math.min(i + 1, 5)}`]}>
+          <span class="feature__icon" aria-hidden="true">
+            <Icon name={f.icon} size={28} />
+          </span>
+          <h3 class="feature__title">{f.title}</h3>
+          <p class="feature__text">{f.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding-block: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  }
+
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .feature__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    background: var(--brand-soft);
+    color: var(--brand);
+    margin-bottom: 0.15rem;
+  }
+  .feature__title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.015em;
+  }
+  .feature__text {
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Tablet: 2 columns */
+  @media (max-width: 900px) {
+    .features__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Phones: single column */
+  @media (max-width: 520px) {
+    .features__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

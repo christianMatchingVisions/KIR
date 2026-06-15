@@ -1,0 +1,174 @@
+---
+/**
+ * ReviewFaq.astro — "Usein kysytyt kysymykset" accordion from REAL data.
+ *
+ * Builds 3–5 templated Q&As, each skipped when its source field is missing:
+ *   - "Onko <Name> rekisteröitymisvapaa?"     (always — every casino here is)
+ *   - "Mikä on <Name>:n tervetuliaisbonus?"   (bonusText)
+ *   - "Millä lisenssillä <Name> toimii?"      (license)
+ *   - "Mikä on <Name>:n minimitalletus?"      (minDeposit)
+ *   - "Mitä maksutapoja <Name> tukee?"        (paymentMethods)
+ *
+ * Native <details>/<summary> accordion (no JS) styled with a chevron Icon that
+ * rotates on open. Factual answers only — NO first-hand claims.
+ *
+ * Emits a FAQPage JSON-LD <script> for the rendered Q&As so the page is
+ * eligible for rich results (built from the same real data; no fabrication).
+ *
+ * The whole block is omitted if (somehow) no question qualifies.
+ *
+ * Props:
+ *   review : CasinoReview
+ *   title? : string  (default "Usein kysytyt kysymykset")
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+import Icon from "../Icon.astro";
+
+interface Props {
+  review: CasinoReview;
+  title?: string;
+}
+
+const { review, title = "Usein kysytyt kysymykset" } = Astro.props;
+const { name, bonusText, license, minDeposit, paymentMethods } = review;
+
+type QA = { q: string; a: string };
+const qas: QA[] = [];
+
+// Always true on this no-registration site.
+qas.push({
+  q: `Onko ${name} rekisteröitymisvapaa?`,
+  a: `Kyllä. ${name} on rekisteröitymisvapaa kasino, jolla voit pelata tunnistautumalla pankkitunnuksilla ilman erillisen pelitilin luomista.`,
+});
+if (bonusText && bonusText.trim().length > 0) {
+  qas.push({
+    q: `Mikä on ${name}:n tervetuliaisbonus?`,
+    a: `${name} tarjoaa tervetuliaisbonuksen: ${bonusText}. Tarkista aina voimassa olevat bonusehdot kasinon sivuilta ennen pelaamista.`,
+  });
+}
+if (license && license.trim().length > 0) {
+  qas.push({
+    q: `Millä lisenssillä ${name} toimii?`,
+    a: `${name} toimii ${license}-lisenssillä.`,
+  });
+}
+if (minDeposit && minDeposit.trim().length > 0) {
+  qas.push({
+    q: `Mikä on ${name}:n minimitalletus?`,
+    a: `${name}:n minimitalletus on ${minDeposit}.`,
+  });
+}
+if (paymentMethods.length > 0) {
+  qas.push({
+    q: `Mitä maksutapoja ${name} tukee?`,
+    a: `${name} tukee seuraavia maksutapoja: ${paymentMethods.join(", ")}.`,
+  });
+}
+
+const faqs = qas.slice(0, 5);
+
+// FAQPage structured data for the rendered Q&As.
+const faqJsonLd =
+  faqs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
+---
+
+{faqs.length > 0 && (
+  <section class="faq" aria-label={title}>
+    <h2 class="faq__title">{title}</h2>
+    <div class="faq__list">
+      {faqs.map((f, i) => (
+        <details class="faq__item" open={i === 0}>
+          <summary class="faq__q">
+            <span class="faq__q-text">{f.q}</span>
+            <Icon name="chevron-down" size={20} class="faq__chev" />
+          </summary>
+          <div class="faq__a">
+            <p>{f.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+    {faqJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    )}
+  </section>
+)}
+
+<style>
+  .faq {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .faq__title {
+    margin: 0;
+  }
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .faq__item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    overflow: hidden;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .faq__item[open] {
+    border-color: var(--line-2);
+    box-shadow: var(--shadow-sm);
+  }
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 800;
+    color: var(--navy);
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+  /* Hide the native disclosure triangle across engines. */
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .faq__q-text {
+    min-width: 0;
+  }
+  .faq__chev {
+    color: var(--brand);
+    flex: none;
+    transition: transform 0.2s ease;
+  }
+  .faq__item[open] .faq__chev {
+    transform: rotate(180deg);
+  }
+  .faq__a {
+    padding: 0 1.15rem 1.1rem;
+  }
+  .faq__a p {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__chev {
+      transition: none;
+    }
+  }
+</style>

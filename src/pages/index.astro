@@ -1,0 +1,379 @@
+---
+/**
+ * index.astro — the REBUILT homepage (light "Arctic Day" theme).
+ *
+ * Composition (top → bottom):
+ *   1. <HomeHero/>                — two-column hero, original CSS/SVG visual.
+ *   2. TOPLIST section #parhaat   — heading row + grid of FIVE <CasinoCard>.
+ *   3. <FeatureStrip/>            — 4-column "why us" band.
+ *   4. INTRO long-form content    — the site's EXISTING home copy, extracted
+ *                                   verbatim from src/fragments/home/body.html
+ *                                   (.intro-paragraph + .wp-content-area), with
+ *                                   self-origin URLs rewritten root-relative and
+ *                                   broken ShortPixel placeholder <img>s removed.
+ *                                   No new SEO prose is authored here.
+ *
+ * HEAD: <BaseLayout seoPath="/"> with NO title prop, so the Phase-1 SEO
+ * registry re-emits the real, indexed home <title>/canonical/description/
+ * robots/OpenGraph/Twitter/JSON-LD VERBATIM (penalty-recovery requirement).
+ *
+ * NOTE: the `home` fragment is excluded from the catch-all route
+ * (src/pages/[...slug].astro → OWNED_ELSEWHERE) so this file owns "/".
+ *
+ * TOPLIST DATA: top 5 from `search-two-casino-selected`. That config returns 5
+ * rows with real ratings (the rebuild's intended "selected" home list). The
+ * `search-service-casino` fallback only fires if the primary yields fewer than
+ * 5 rows OR every rating is null (defensive — it does not fire on real data).
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HomeHero from "../components/HomeHero.astro";
+import FeatureStrip from "../components/FeatureStrip.astro";
+import CasinoCard from "../components/CasinoCard.astro";
+import Icon from "../components/Icon.astro";
+import { getToplist, type ToplistCasino } from "../lib/toplist";
+
+// Raw home body fragment (build-time only; ?raw keeps it out of the client).
+import homeBody from "../fragments/home/body.html?raw";
+
+/* -------------------------------------------------------------------------- */
+/* Toplist (top 5, with graceful fallback)                                    */
+/* -------------------------------------------------------------------------- */
+
+const PRIMARY_CONFIG = "search-two-casino-selected";
+const FALLBACK_CONFIG = "search-service-casino";
+
+// Exclude closed/expired casinos (names flagged "Suljettu") so the homepage
+// never fronts a casino that no longer accepts players. Filter BEFORE slicing
+// to 5 so a closed row doesn't eat a slot.
+const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
+
+const primary = getToplist(PRIMARY_CONFIG).filter(isOpen);
+const primaryHasRating = primary.some((c) => c.rating != null);
+
+// Fall back only when the primary list is too short OR has no ratings at all.
+const usedFallback = primary.length < 5 || !primaryHasRating;
+const topCasinos: ToplistCasino[] = (
+  usedFallback ? getToplist(FALLBACK_CONFIG).filter(isOpen) : primary
+).slice(0, 5);
+
+/* -------------------------------------------------------------------------- */
+/* Extract the existing long-form home copy from the body fragment            */
+/* -------------------------------------------------------------------------- */
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+
+/**
+ * Return the inner HTML of the first `<div class="...needle...">` in `html`,
+ * matching `<div>`/`</div>` nesting by depth (the WP blocks contain nested
+ * divs, so a flat regex would close too early). Returns "" when not found.
+ */
+function extractDivByClass(html: string, needle: string): string {
+  // Locate the opening tag of the wrapper div whose class contains `needle`.
+  const openRe = new RegExp(
+    `<div\\b[^>]*class=["'][^"']*\\b${needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b[^"']*["'][^>]*>`,
+    "i",
+  );
+  const openMatch = openRe.exec(html);
+  if (!openMatch) return "";
+
+  const start = openMatch.index + openMatch[0].length;
+  // Walk div open/close tags from `start`, tracking depth (we begin inside 1).
+  const tagRe = /<\/?div\b[^>]*>/gi;
+  tagRe.lastIndex = start;
+  let depth = 1;
+  let m: RegExpExecArray | null;
+  while ((m = tagRe.exec(html)) !== null) {
+    if (m[0].startsWith("</")) {
+      depth -= 1;
+      if (depth === 0) return html.slice(start, m.index);
+    } else {
+      depth += 1;
+    }
+  }
+  return ""; // unbalanced — bail rather than render a runaway slice
+}
+
+/**
+ * Clean an extracted prose block for the light theme:
+ *  - rewrite self-origin absolute URLs (href/src) to root-relative,
+ *  - drop the broken ShortPixel `data:image/svg+xml;base64,...` placeholder
+ *    <img>s (their real src lives base64-encoded in data-u and never loads
+ *    here), which would otherwise render as empty 0-size boxes,
+ *  - strip ShortPixel/translate housekeeping leftovers (data-spai, #gtx-trans).
+ */
+function cleanProse(html: string): string {
+  if (!html) return "";
+  return (
+    html
+      // Self-origin absolute → root-relative (normal + escaped + protocol-rel).
+      .replace(new RegExp(`https?:\\\\/\\\\/${escapeHost()}`, "gi"), "\\/")
+      .replace(new RegExp(`https?://${escapeHost()}`, "gi"), "")
+      .replace(new RegExp(`(?<=["'(\\s])//${escapeHost()}`, "gi"), "")
+      // Remove ShortPixel placeholder images (no usable src in this build).
+      .replace(/<img\b[^>]*\bsrc=["']data:image\/svg\+xml[^"']*["'][^>]*>/gi, "")
+      // Remove the stray Google-translate widget div left in one FAQ answer.
+      .replace(/<div id="gtx-trans"[\s\S]*?<\/div>\s*<\/div>/gi, "</div>")
+  );
+}
+
+function escapeHost(): string {
+  return SITE_ORIGIN.replace(/^https?:\/\//, "").replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&",
+  );
+}
+
+const introHtml = cleanProse(extractDivByClass(homeBody, "intro-paragraph"));
+const contentHtml = cleanProse(extractDivByClass(homeBody, "wp-content-area"));
+---
+
+<BaseLayout seoPath="/" bodyClass="home">
+  <HomeHero />
+
+  {/* ---------------- TOPLIST ---------------- */}
+  <section class="section toplist" id="parhaat" aria-labelledby="toplist-title">
+    <div class="container">
+      <div class="toplist__head">
+        <h2 id="toplist-title" class="toplist__title">
+          <span class="toplist__title-icon" aria-hidden="true">
+            <Icon name="trophy" size={26} />
+          </span>
+          Parhaat kasinot ilman rekisteröitymistä
+        </h2>
+        <a class="toplist__all" href="/kaikki-kasinot/">
+          Näytä kaikki kasinot
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+
+      {topCasinos.length > 0 ? (
+        <ul class="toplist__grid" role="list">
+          {topCasinos.map((casino, i) => (
+            <li class="toplist__item reveal" class:list={[`d${Math.min(i + 1, 5)}`]}>
+              <CasinoCard casino={casino} rank={i + 1} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="muted text-center">Kasinolistaus ei ole juuri nyt saatavilla.</p>
+      )}
+    </div>
+  </section>
+
+  {/* ---------------- FEATURE STRIP ---------------- */}
+  <FeatureStrip />
+
+  {/* ---------------- INTRO / EXISTING LONG-FORM COPY ---------------- */}
+  {(introHtml || contentHtml) && (
+    <section class="section--tight intro" aria-label="Tietoa kasinoista ilman rekisteröitymistä">
+      <div class="container--narrow">
+        {introHtml && (
+          <div class="intro__lead kir-prose reveal" set:html={introHtml} />
+        )}
+        {contentHtml && (
+          <div class="kir-prose reveal d1" set:html={contentHtml} />
+        )}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  /* ---------------- Toplist section ---------------- */
+  .toplist__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  }
+  .toplist__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.9rem);
+    color: var(--navy);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .toplist__title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .toplist__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    color: var(--brand);
+    white-space: nowrap;
+  }
+  .toplist__all:hover {
+    color: var(--brand-dark);
+  }
+
+  /* 5-up ≥1100px, 3-up tablet, 2-up small, 1-up phone. */
+  .toplist__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.85rem, 0.5rem + 1.2vw, 1.4rem);
+  }
+  .toplist__item {
+    display: flex;
+  }
+  .toplist__item > :global(.casino-card) {
+    width: 100%;
+  }
+
+  @media (max-width: 1100px) {
+    .toplist__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 760px) {
+    .toplist__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 480px) {
+    .toplist__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------- Intro long-form prose ---------------- */
+  .intro {
+    background: var(--bg);
+  }
+  .intro__lead {
+    margin-bottom: 1.5rem;
+  }
+  .intro__lead :global(p:first-child) {
+    font-size: 1.1rem;
+    color: var(--ink-2);
+  }
+
+  /* Light-theme reading styles for the preserved WordPress HTML. */
+  .kir-prose {
+    color: var(--ink-2);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .kir-prose :global(h2),
+  .kir-prose :global(h3),
+  .kir-prose :global(h4) {
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 2em 0 0.6em;
+    text-wrap: balance;
+  }
+  .kir-prose :global(h2) {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+  }
+  .kir-prose :global(h3) {
+    font-size: clamp(1.15rem, 1rem + 0.5vw, 1.3rem);
+  }
+  .kir-prose :global(h4) {
+    font-size: 1.05rem;
+  }
+  .kir-prose :global(p) {
+    margin: 0 0 1.05em;
+  }
+  .kir-prose :global(a) {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .kir-prose :global(a:hover) {
+    color: var(--brand-dark);
+  }
+  .kir-prose :global(ul),
+  .kir-prose :global(ol) {
+    margin: 0 0 1.2em;
+    padding-left: 1.4em;
+  }
+  .kir-prose :global(li) {
+    margin-bottom: 0.5em;
+  }
+  .kir-prose :global(strong) {
+    color: var(--ink);
+  }
+
+  /* Comparison tables in the copy → clean light styling.
+     The preserved WP tables carry legacy width="624" + fixed per-cell widths
+     (sum > a phone viewport), so we let them scroll horizontally inside their
+     column instead of forcing the whole page wide (0 overflow at 390px). */
+  .kir-prose :global(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin: 1.25em 0 1.6em;
+    font-size: 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  /* On a real table (tbody present) keep cells aligned; the legacy width
+     attributes become harmless once the table is a scroll container. */
+  .kir-prose :global(table) :global(tbody) {
+    display: table;
+    width: 100%;
+  }
+  .kir-prose :global(td),
+  .kir-prose :global(th) {
+    border: 1px solid var(--line);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .kir-prose :global(tr:nth-child(even) td) {
+    background: var(--bg-band);
+  }
+
+  /* The preserved FAQ accordion (.hfaqwrapper) — readable static fallback.
+     Its toggle JS is not loaded in the rebuild, so render every answer open. */
+  .kir-prose :global(.hfaqlist) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .kir-prose :global(.hfaqlist > li) {
+    margin-bottom: 0.75rem;
+  }
+  .kir-prose :global(.hfaq) {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.15rem;
+    background: var(--bg-band);
+  }
+  .kir-prose :global(.hfaq__question) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .kir-prose :global(.hfaq__icon) {
+    flex: none;
+  }
+  .kir-prose :global(.hfaq__text) {
+    font-weight: 800;
+    color: var(--navy);
+    font-size: 1.02rem;
+  }
+  .kir-prose :global(.hfaq__answer) {
+    margin-top: 0.5rem;
+  }
+  .kir-prose :global(.hfaq__answercontent p) {
+    margin-bottom: 0;
+  }
+</style>

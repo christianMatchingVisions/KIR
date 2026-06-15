@@ -1,0 +1,237 @@
+---
+/**
+ * BonusSidebar.astro — the sticky RIGHT bonus card of the review hero.
+ *
+ * A white `.card` that sticks below the (~90px) sticky header on wide screens
+ * and sits inline (non-sticky) on mobile. Contents, top→bottom:
+ *   - logo plate (with monogram fallback + onerror reveal, mirroring CasinoCard)
+ *   - "ARVOSANA" label + Stars (only when ratingOverall present)
+ *   - "TERVETULIAISBONUS" label + bonusText (only when present)
+ *   - yellow "Pelaa nyt →" CTA (rel="sponsored nofollow")
+ *   - "Pikapelaa – rekisteröitymistä ei vaadita" line
+ *   - a checklist of REAL facts with green check Icons
+ *
+ * COMPLIANCE:
+ *   - CTA carries rel="sponsored nofollow"; href is the /go/<slug>/ path.
+ *   - No first-hand claims; checklist items are sourced from parsed fields only.
+ *
+ * Graceful degradation:
+ *   - ratingOverall null → ARVOSANA block omitted.
+ *   - bonusText null → bonus block omitted.
+ *   - ctaSlug null → inert disabled-looking CTA.
+ *   - any fact missing → that checklist row is skipped (block omitted if empty).
+ *
+ * Props:
+ *   review : CasinoReview
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+import Stars from "../Stars.astro";
+import Icon from "../Icon.astro";
+
+interface Props {
+  review: CasinoReview;
+}
+
+const { review } = Astro.props;
+const {
+  name,
+  logoUrl,
+  logoAlt,
+  ctaSlug,
+  ratingOverall,
+  bonusText,
+  license,
+  paymentMethods,
+} = review;
+
+const hasLogo = typeof logoUrl === "string" && logoUrl.length > 0;
+const hasRating = ratingOverall != null && Number.isFinite(ratingOverall);
+const hasBonus = typeof bonusText === "string" && bonusText.trim().length > 0;
+const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
+// ctaSlug is the bare /go/<x>/ target (the "<x>"); build the affiliate href.
+const ctaHref = hasCta ? `/go/${ctaSlug}/` : null;
+
+const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
+const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
+const ctaLabel = `Pelaa nyt — ${name}`;
+
+/* Checklist of REAL facts only. */
+const facts: string[] = [];
+if (license && license.trim().length > 0) facts.push(`Lisenssi: ${license}`);
+if (paymentMethods.some((m) => /trustly/i.test(m))) facts.push("Trustly-talletukset");
+if (paymentMethods.length > 0) facts.push("Turvalliset maksutavat");
+---
+
+<aside class="bs card" aria-label={`${name} – bonus ja arvosana`}>
+  <div class="bs__plate">
+    {hasLogo && (
+      <img
+        class="bs__logo"
+        src={logoUrl}
+        alt={altText}
+        loading="lazy"
+        decoding="async"
+        width="180"
+        height="72"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+      />
+    )}
+    <span class="bs__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
+  </div>
+
+  {hasRating && (
+    <div class="bs__block bs__rating">
+      <span class="bs__label">Arvosana</span>
+      <Stars value={ratingOverall as number} showValue size={20} />
+    </div>
+  )}
+
+  {hasBonus && (
+    <div class="bs__block bs__bonus">
+      <span class="bs__label">Tervetuliaisbonus</span>
+      <p class="bs__bonus-text">{bonusText}</p>
+    </div>
+  )}
+
+  {hasCta ? (
+    <a
+      class="btn-cta btn-block bs__cta"
+      href={ctaHref}
+      rel="sponsored nofollow"
+      aria-label={ctaLabel}
+    >
+      Pelaa nyt
+      <Icon name="arrow-right" size={18} />
+    </a>
+  ) : (
+    <span class="btn-cta btn-block bs__cta is-disabled" aria-disabled="true">
+      Pelaa nyt
+    </span>
+  )}
+
+  <p class="bs__note">Pikapelaa – rekisteröitymistä ei vaadita</p>
+
+  {facts.length > 0 && (
+    <ul class="bs__facts">
+      {facts.map((f) => (
+        <li class="bs__fact">
+          <Icon name="check" size={16} class="bs__fact-ico" />
+          <span>{f}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+</aside>
+
+<style>
+  .bs {
+    position: sticky;
+    top: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+    padding: 1.25rem 1.25rem 1.4rem;
+  }
+
+  .bs__plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 92px;
+    padding: 0.6rem 1rem;
+    background: var(--bg-band-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .bs__logo {
+    max-height: 60px;
+    width: auto;
+    object-fit: contain;
+  }
+  .bs__mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .bs__block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
+    text-align: center;
+  }
+  .bs__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+  }
+  .bs__bonus-text {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .bs__cta {
+    margin-top: 0.1rem;
+  }
+  .bs__cta.is-disabled {
+    background: var(--line);
+    color: var(--ink-3);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .bs__note {
+    margin: 0;
+    text-align: center;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+
+  .bs__facts {
+    margin: 0.2rem 0 0;
+    padding: 0.9rem 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .bs__fact {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .bs__fact-ico {
+    color: var(--ok);
+    flex: none;
+    margin-top: 1px;
+  }
+
+  /* Stop sticking when the layout stacks (handled by the route's grid). */
+  @media (max-width: 980px) {
+    .bs {
+      position: static;
+      top: auto;
+    }
+  }
+</style>

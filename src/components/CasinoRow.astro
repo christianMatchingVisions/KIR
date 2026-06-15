@@ -1,0 +1,316 @@
+---
+/**
+ * CasinoRow.astro — the HORIZONTAL list-row casino variant.
+ *
+ * For longer toplists on money pages / Phase 5 (and review sidebars where a
+ * compact horizontal row reads better than a stacked card). Layout, left→right
+ * on desktop:
+ *
+ *   [rank badge] [logo plate] [bonus + wagering/license meta] [rating] [CTA]
+ *
+ * On mobile it collapses cleanly to a stacked block: logo + rank on top, the
+ * bonus/meta below, then the rating, then a full-width CTA.
+ *
+ * Same data shape as CasinoCard ({@link ToplistCasino}). The CTA is an affiliate
+ * /go/<slug>/ link and ALWAYS carries rel="sponsored nofollow". No "I tested /
+ * first-hand" claims anywhere.
+ *
+ * Graceful degradation:
+ *   - logoUrl missing  → navy monogram plate.
+ *   - rating null      → the rating cell is omitted.
+ *   - bonusText empty  → bonus line omitted (meta chips may still render).
+ *   - wagering/license empty → that meta chip is skipped.
+ *   - ctaSlug null     → inert disabled-looking CTA (no dead href).
+ *   - rank undefined   → no badge (and the layout reflows without the column).
+ *
+ * Usage:
+ *   import CasinoRow from "../components/CasinoRow.astro";
+ *   import { getToplist } from "../lib/toplist";
+ *   const casinos = getToplist("search-service-casino");
+ *   {casinos.map((c, i) => <CasinoRow casino={c} rank={i + 1} />)}
+ */
+import type { ToplistCasino } from "../lib/toplist";
+import Stars from "./Stars.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  /** The cleaned casino row from getToplist(). */
+  casino: ToplistCasino;
+  /** Optional 1-based rank — renders the yellow numbered badge when given. */
+  rank?: number;
+}
+
+const { casino, rank } = Astro.props;
+
+const {
+  name,
+  logoUrl,
+  logoAlt,
+  ctaSlug,
+  rating,
+  bonusText,
+  wagering,
+  license,
+} = casino;
+
+const hasLogo = typeof logoUrl === "string" && logoUrl.length > 0;
+const hasRating = rating != null && Number.isFinite(rating);
+const hasBonus = typeof bonusText === "string" && bonusText.trim().length > 0;
+const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
+const hasWagering = typeof wagering === "string" && wagering.trim().length > 0;
+const hasLicense = typeof license === "string" && license.trim().length > 0;
+
+const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
+const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
+const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
+---
+
+<article class="casino-row card card--lift" class:list={{ "casino-row--ranked": rank != null }}>
+  {rank != null && (
+    <span class="casino-row__rank" aria-hidden="true">{rank}</span>
+  )}
+
+  <div class="casino-row__plate">
+    {hasLogo ? (
+      <img
+        class="casino-row__logo"
+        src={logoUrl}
+        alt={altText}
+        loading="lazy"
+        decoding="async"
+        width="120"
+        height="48"
+      />
+    ) : (
+      <span class="casino-row__mono" aria-hidden="true">{monogram}</span>
+    )}
+  </div>
+
+  <div class="casino-row__body">
+    <h3 class="casino-row__name">{name}</h3>
+    {hasBonus && <p class="casino-row__bonus">{bonusText}</p>}
+    {(hasWagering || hasLicense) && (
+      <ul class="casino-row__meta">
+        {hasWagering && (
+          <li class="casino-row__meta-item">
+            <Icon name="percent" size={15} class="casino-row__meta-ico" />
+            <span><span class="casino-row__meta-label">Kierrätys:</span> {wagering}</span>
+          </li>
+        )}
+        {hasLicense && (
+          <li class="casino-row__meta-item">
+            <Icon name="shield" size={15} class="casino-row__meta-ico" />
+            <span><span class="casino-row__meta-label">Lisenssi:</span> {license}</span>
+          </li>
+        )}
+      </ul>
+    )}
+  </div>
+
+  {hasRating && (
+    <div class="casino-row__rating">
+      <span class="casino-row__rating-label">Arvio</span>
+      <Stars value={rating as number} showValue size={16} />
+    </div>
+  )}
+
+  <div class="casino-row__action">
+    {hasCta ? (
+      <a
+        class="btn-cta casino-row__cta"
+        href={ctaSlug}
+        rel="sponsored nofollow"
+        aria-label={ctaLabel}
+      >
+        Pelaa heti
+      </a>
+    ) : (
+      <span class="btn-cta casino-row__cta is-disabled" aria-disabled="true">
+        Pelaa heti
+      </span>
+    )}
+  </div>
+</article>
+
+<style>
+  .casino-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto 1fr auto auto;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1rem 1.25rem;
+  }
+  /* Reserve the rank column only when ranked. */
+  .casino-row--ranked {
+    padding-left: 1rem;
+  }
+
+  /* Yellow circular numbered rank badge. */
+  .casino-row__rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--cta);
+    color: var(--cta-ink);
+    font-weight: 800;
+    font-size: 0.95rem;
+    line-height: 1;
+    flex: none;
+  }
+
+  /* Neutral logo plate so dark logos read on white. */
+  .casino-row__plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 116px;
+    height: 60px;
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-band-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    flex: none;
+  }
+  .casino-row__logo {
+    max-height: 44px;
+    width: auto;
+    object-fit: contain;
+  }
+  .casino-row__mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .casino-row__body {
+    min-width: 0;
+    text-align: left;
+  }
+  .casino-row__name {
+    font-size: 1.05rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .casino-row__bonus {
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    margin: 0.2rem 0 0;
+  }
+  .casino-row__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    margin: 0.45rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .casino-row__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    line-height: 1.3;
+  }
+  .casino-row__meta-ico {
+    color: var(--brand);
+    flex: none;
+  }
+  .casino-row__meta-label {
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+
+  .casino-row__rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    flex: none;
+  }
+  .casino-row__rating-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+
+  .casino-row__action {
+    flex: none;
+  }
+  .casino-row__cta {
+    white-space: nowrap;
+  }
+  .casino-row__cta.is-disabled {
+    background: var(--line);
+    color: var(--ink-3);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ---------- Tablet: drop the rating into the action column edge ---------- */
+  @media (max-width: 860px) {
+    .casino-row {
+      grid-template-columns: auto auto 1fr auto;
+      gap: 0.9rem 1rem;
+    }
+    /* Rating moves under the body, action stays on the right. */
+    .casino-row__rating {
+      grid-column: 2 / 4;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+  }
+
+  /* ---------- Mobile: stack everything cleanly ---------- */
+  @media (max-width: 560px) {
+    .casino-row {
+      grid-template-columns: auto 1fr;
+      gap: 0.7rem 0.9rem;
+      padding: 1rem;
+    }
+    .casino-row__rank {
+      grid-row: 1;
+      grid-column: 1;
+    }
+    .casino-row__plate {
+      grid-row: 1;
+      grid-column: 2;
+      justify-self: start;
+    }
+    .casino-row__body {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+    .casino-row__rating {
+      grid-row: 3;
+      grid-column: 1 / -1;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .casino-row__action {
+      grid-row: 4;
+      grid-column: 1 / -1;
+    }
+    .casino-row__cta {
+      display: flex;
+      width: 100%;
+    }
+  }
+</style>

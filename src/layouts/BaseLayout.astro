@@ -1,0 +1,176 @@
+---
+/**
+ * BaseLayout.astro — the document shell every REBUILT (light-theme) page uses.
+ *
+ * Two head modes:
+ *  1. seoPath given  → this URL corresponds to an existing, indexed page.
+ *     We look up the PRESERVED SEO head from the Phase-1 registry and emit its
+ *     canonical / description / robots / OpenGraph / Twitter / JSON-LD VERBATIM
+ *     (penalty-recovery requirement — the rebuild must not look like a new
+ *     site to Google). The registry's <title> is used unless an explicit
+ *     `title` prop overrides it.
+ *  2. no seoPath (brand-new hub pages) → build a clean head from the
+ *     title / description / canonical / jsonLd props.
+ *
+ * BUILD-TIME GUARD: if a seoPath is provided but the SEO registry is empty,
+ * we THROW. Phase 1 had a bug where the fragments dir failed to resolve at
+ * build time and silently produced an EMPTY registry (every preserved head
+ * vanished). Failing loudly here turns that silent SEO data-loss into a build
+ * failure instead of a shipped regression.
+ *
+ * Always emits charset + viewport and preloads the Inter woff2. Renders
+ * Header → <main><slot/></main> → Footer → DisclosureBar, and ships a tiny
+ * IntersectionObserver that reveals `.reveal` elements (respecting
+ * prefers-reduced-motion).
+ */
+import "../styles/base.css";
+import { getSeoHead, renderSeoHeadHtml, listSeoPaths } from "../lib/seo-head";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import DisclosureBar from "../components/DisclosureBar.astro";
+
+interface Props {
+  /** URL path of an EXISTING page → preserve its registered SEO head verbatim. */
+  seoPath?: string;
+  /** Page <title>. For seoPath pages this overrides the registry title only if set. */
+  title?: string;
+  /** Meta description (new pages, or override). */
+  description?: string;
+  /** Canonical URL (new pages). */
+  canonical?: string;
+  /** Raw JSON-LD <script> strings to inject (new pages). */
+  jsonLd?: string[];
+  /** Extra class(es) on <body>. */
+  bodyClass?: string;
+}
+
+const {
+  seoPath,
+  title,
+  description,
+  canonical,
+  jsonLd = [],
+  bodyClass,
+} = Astro.props;
+
+// ---- Preserved-head lookup (penalty recovery) ----
+const seo = seoPath ? getSeoHead(seoPath) : null;
+
+// BUILD-TIME GUARD: a seoPath was requested but the whole registry is empty →
+// the fragments data layer failed to load. Fail the build loudly.
+if (seoPath && listSeoPaths().length === 0) {
+  throw new Error(
+    `[BaseLayout] SEO registry is EMPTY but seoPath="${seoPath}" was requested. ` +
+      `This means src/fragments failed to resolve at build time and every ` +
+      `preserved <head> would be silently dropped (a penalty-recovery regression). ` +
+      `Refusing to build. Check seo-head.ts / fragment sync.`
+  );
+}
+
+// Title resolution: explicit prop wins; else registry title; else site fallback.
+const resolvedTitle =
+  title ?? seo?.title ?? "Kasinot ilman rekisteröitymistä";
+
+// Discrete preserved-head HTML (canonical/desc/robots/og/twitter/jsonLd),
+// VERBATIM — <title> intentionally omitted by renderSeoHeadHtml (layout owns it).
+const preservedHeadHtml = seo ? renderSeoHeadHtml(seo) : "";
+
+// For NEW pages (no preserved head), decide which clean tags to emit.
+const emitCleanCanonical = !seo && Boolean(canonical);
+const emitCleanDescription = !seo && Boolean(description);
+const cleanJsonLd = !seo ? jsonLd : [];
+---
+
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{resolvedTitle}</title>
+
+    {/* Preserved SEO head for existing pages — verbatim. */}
+    {seo && <Fragment set:html={preservedHeadHtml} />}
+
+    {/* Clean head for new pages. */}
+    {emitCleanCanonical && <link rel="canonical" href={canonical} />}
+    {emitCleanDescription && <meta name="description" content={description} />}
+    {cleanJsonLd.map((s) => <Fragment set:html={s} />)}
+
+    {/* Fonts: preload the primary Inter woff2 for fast first paint. */}
+    <link
+      rel="preload"
+      href="/fonts/inter-var-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Siirry sisältöön</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <DisclosureBar />
+
+    <script>
+      // Reveal-on-scroll: add .in to .reveal elements as they enter the
+      // viewport. Respects prefers-reduced-motion (base.css already shows
+      // .reveal at full opacity in that case, but we also reveal immediately).
+      (() => {
+        const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
+        if (!els.length) return;
+
+        const reduce = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        if (reduce || !("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("in"));
+          return;
+        }
+
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+                obs.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -3rem;
+    z-index: 300;
+    padding: 0.6rem 1rem;
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.18s ease;
+  }
+  .skip-link:focus-visible {
+    top: 0.75rem;
+    color: #fff;
+  }
+
+  main {
+    display: block;
+    min-height: 40vh;
+  }
+</style>

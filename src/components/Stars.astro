@@ -1,0 +1,70 @@
+---
+/**
+ * Stars.astro — 0–5 star rating row using the Icon line-icons in --star colour.
+ * Renders full stars, an optional half star, and muted empty stars.
+ *
+ * Usage:
+ *   <Stars value={4.5} />
+ *   <Stars value={3.8} showValue />
+ *   <Stars value={4} size={16} max={5} />
+ */
+import Icon from "./Icon.astro";
+
+interface Props {
+  value: number;
+  showValue?: boolean;
+  max?: number;
+  size?: number;
+  class?: string;
+}
+
+const {
+  value,
+  showValue = false,
+  max = 5,
+  size = 18,
+  class: className,
+} = Astro.props;
+
+// Clamp to [0, max] then resolve full / half / empty counts (round to .5).
+const clamped = Math.max(0, Math.min(max, Number(value) || 0));
+const rounded = Math.round(clamped * 2) / 2;
+const full = Math.floor(rounded);
+const hasHalf = rounded - full === 0.5;
+const empty = max - full - (hasHalf ? 1 : 0);
+
+const label = `${clamped.toFixed(1)} / ${max}`;
+---
+
+<span
+  class:list={["stars", className]}
+  role="img"
+  aria-label={`Arvosana ${label}`}
+>
+  {Array.from({ length: full }).map(() => <Icon name="star" size={size} class="star star--on" />)}
+  {hasHalf && <Icon name="star-half" size={size} class="star star--on" />}
+  {Array.from({ length: empty }).map(() => <Icon name="star" size={size} class="star star--off" />)}
+  {showValue && <span class="stars__value" aria-hidden="true">{clamped.toFixed(1)}</span>}
+</span>
+
+<style>
+  .stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    line-height: 1;
+  }
+  .star--on {
+    color: var(--star);
+  }
+  .star--off {
+    color: var(--line-2);
+  }
+  .stars__value {
+    margin-left: 0.4em;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+</style>

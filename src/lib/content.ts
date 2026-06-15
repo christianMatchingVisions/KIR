@@ -1,0 +1,290 @@
+/**
+ * Editorial content loader (Phase 1 — data layer).
+ *
+ * Loads the WordPress REST dumps captured under `data/rest/` and exposes them
+ * as clean, typed loaders for the new component layer:
+ *
+ *   data/rest/posts.json    → getPosts() / getPost(slug)
+ *   data/rest/pages.json    → getPages() / getPage(slug)
+ *   data/rest/ht-faq.json   → getFaqs()
+ *
+ * All HTML is taken verbatim from `*.rendered`, then self-origin absolute URLs
+ * are rewritten to root-relative so the new build serves everything from its
+ * own domain. No attributes are stripped (affiliate rel="sponsored nofollow"
+ * etc. are preserved).
+ *
+ * Also exports a best-effort slug → toplist-config map (and a resolver) so the
+ * "money"/category pages can pick the right captured toplist.
+ *
+ * No new npm dependencies: plain node:fs + string ops only.
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+/**
+ * Where the captured WordPress REST dumps live: `data/rest`.
+ *
+ * Anchor on `process.cwd()` (the Astro project root in both dev and build).
+ * Vite bundles this module into `dist/pages/*.mjs` for the SSG render pass, so
+ * an `import.meta.url`-relative hop would resolve to a non-existent path under
+ * `dist/` and silently yield zero rows. Fall back to the module-relative path
+ * for unbundled/dev use.
+ */
+function resolveRestDir(): string {
+  const fromCwd = path.join(process.cwd(), "data", "rest");
+  if (fs.existsSync(fromCwd)) return fromCwd;
+  return path.join(fileURLToPath(new URL("../../data", import.meta.url)), "rest");
+}
+const REST_DIR = resolveRestDir();
+
+/** Live site origin — rewritten to root-relative in stored HTML. */
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+
+/* -------------------------------------------------------------------------- */
+/* Public types                                                               */
+/* -------------------------------------------------------------------------- */
+
+export interface Post {
+  id: number;
+  slug: string;
+  title: string;
+  /** ISO publish date (WP `date`). */
+  date: string;
+  /** ISO last-modified date (WP `modified`). */
+  modified: string;
+  /** Body HTML (content.rendered), self-origin URLs rewritten root-relative. */
+  contentHtml: string;
+  /** Excerpt HTML (excerpt.rendered), self-origin URLs rewritten. */
+  excerptHtml: string;
+  /** Category term ids. */
+  categories: number[];
+}
+
+export interface Page {
+  id: number;
+  slug: string;
+  title: string;
+  date: string;
+  modified: string;
+  contentHtml: string;
+  excerptHtml: string;
+  /** Parent page id (0 = top level). */
+  parent: number;
+  /** WP menu_order for sorting nav/children. */
+  menuOrder: number;
+}
+
+export interface Faq {
+  id: number;
+  /** The question (title.rendered). */
+  question: string;
+  /** The answer body HTML (content.rendered), self-origin URLs rewritten. */
+  answerHtml: string;
+  /** Sort order within its group (_ht_faq_order, numeric). */
+  order: number;
+  /** FAQ group term ids (ht-faq-group). */
+  group: number[];
+}
+
+/* -------------------------------------------------------------------------- */
+/* Raw REST shapes (only the fields we read)                                  */
+/* -------------------------------------------------------------------------- */
+
+interface Rendered {
+  rendered?: string;
+}
+
+interface RawPost {
+  id?: number;
+  slug?: string;
+  date?: string;
+  modified?: string;
+  title?: Rendered;
+  content?: Rendered;
+  excerpt?: Rendered;
+  categories?: number[];
+}
+
+interface RawPage extends RawPost {
+  parent?: number;
+  menu_order?: number;
+}
+
+interface RawFaq {
+  id?: number;
+  title?: Rendered;
+  content?: Rendered;
+  "ht-faq-group"?: number[];
+  _ht_faq_order?: string | number;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Helpers                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/** Read + parse a REST dump. Returns [] if missing/corrupt. */
+function readJson<T>(name: string): T[] {
+  try {
+    const raw = fs.readFileSync(path.join(REST_DIR, `${name}.json`), "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as T[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Rewrite self-origin absolute URLs in stored HTML to root-relative.
+ * Handles `https://`, protocol-relative `//`, and escaped `https:\/\/` forms.
+ * Foreign URLs (affiliate redirects on other domains) are left untouched.
+ * No attributes are removed.
+ */
+function rewriteSelfOrigin(html: string | undefined): string {
+  if (!html) return "";
+  const host = SITE_ORIGIN.replace(/^https?:\/\//, ""); // kasinotilman...com
+  return html
+    // escaped JSON-style: https:\/\/host  ->  \/
+    .replace(new RegExp(`https?:\\\\/\\\\/${escapeRe(host)}`, "gi"), "\\/")
+    // normal absolute: https://host  ->  (root-relative)
+    .replace(new RegExp(`https?://${escapeRe(host)}`, "gi"), "")
+    // protocol-relative: //host  ->  (root-relative)
+    .replace(new RegExp(`(?<=["'(\\s])//${escapeRe(host)}`, "gi"), "");
+}
+
+function escapeRe(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function str(v: string | undefined): string {
+  return typeof v === "string" ? v : "";
+}
+
+function num(v: string | number | undefined, fallback = 0): number {
+  if (typeof v === "number") return Number.isFinite(v) ? v : fallback;
+  if (typeof v === "string") {
+    const n = Number.parseInt(v, 10);
+    return Number.isFinite(n) ? n : fallback;
+  }
+  return fallback;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Posts                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function mapPost(p: RawPost): Post {
+  return {
+    id: num(p.id),
+    slug: str(p.slug),
+    title: str(p.title?.rendered),
+    date: str(p.date),
+    modified: str(p.modified),
+    contentHtml: rewriteSelfOrigin(p.content?.rendered),
+    excerptHtml: rewriteSelfOrigin(p.excerpt?.rendered),
+    categories: Array.isArray(p.categories) ? p.categories : [],
+  };
+}
+
+/** All blog posts, newest first (by publish date). */
+export function getPosts(): Post[] {
+  return readJson<RawPost>("posts")
+    .map(mapPost)
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+}
+
+/** A single post by slug, or null. */
+export function getPost(slug: string): Post | null {
+  if (!slug) return null;
+  const raw = readJson<RawPost>("posts").find((p) => p.slug === slug);
+  return raw ? mapPost(raw) : null;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Pages                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function mapPage(p: RawPage): Page {
+  return {
+    id: num(p.id),
+    slug: str(p.slug),
+    title: str(p.title?.rendered),
+    date: str(p.date),
+    modified: str(p.modified),
+    contentHtml: rewriteSelfOrigin(p.content?.rendered),
+    excerptHtml: rewriteSelfOrigin(p.excerpt?.rendered),
+    parent: num(p.parent),
+    menuOrder: num(p.menu_order),
+  };
+}
+
+/** All pages, sorted by menu_order then title. */
+export function getPages(): Page[] {
+  return readJson<RawPage>("pages")
+    .map(mapPage)
+    .sort(
+      (a, b) =>
+        a.menuOrder - b.menuOrder || a.title.localeCompare(b.title, "fi"),
+    );
+}
+
+/** A single page by slug, or null. */
+export function getPage(slug: string): Page | null {
+  if (!slug) return null;
+  const raw = readJson<RawPage>("pages").find((p) => p.slug === slug);
+  return raw ? mapPage(raw) : null;
+}
+
+/* -------------------------------------------------------------------------- */
+/* FAQs                                                                       */
+/* -------------------------------------------------------------------------- */
+
+function mapFaq(f: RawFaq): Faq {
+  return {
+    id: num(f.id),
+    question: str(f.title?.rendered),
+    answerHtml: rewriteSelfOrigin(f.content?.rendered),
+    order: num(f._ht_faq_order),
+    group: Array.isArray(f["ht-faq-group"]) ? f["ht-faq-group"] : [],
+  };
+}
+
+/** All FAQs sorted by their _ht_faq_order. */
+export function getFaqs(): Faq[] {
+  return readJson<RawFaq>("ht-faq")
+    .map(mapFaq)
+    .sort((a, b) => a.order - b.order);
+}
+
+/* -------------------------------------------------------------------------- */
+/* slug → toplist-config mapping                                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Best-effort map from a money/category page slug to the captured toplist
+ * config that should power its ranking table. Derived from the recon of
+ * `public/rlaaf-data/`. Pages not listed fall back to `search-service-casino`
+ * (the full "all casinos" list) via {@link getToplistConfigForSlug}.
+ */
+export const SLUG_TO_TOPLIST_CONFIG: Readonly<Record<string, string>> = {
+  "trustly-kasinot": "search-two-casino-trustly",
+  "zimpler-pikakasinot": "search-two-casino-zimpler",
+  "mga-kasinot": "search-two-mga",
+  "curacao-kasinot": "search-two-curacao",
+  "kryptokasinot": "search-two-krypto",
+  "cashback-kasinot": "search-service-cashback",
+  "apple-pay-casinot": "search-two-casino-apple-pay",
+  "brite-kasinot": "search-two-brite",
+  "euteller-kasinot": "search-two-casino-euteller",
+  "uudet-kasinot": "search-two-casino-2025",
+  "suomen-parhaat-nettikasinot": "search-two-casino-selected",
+  "kaikki-kasinot": "search-service-casino",
+};
+
+/** Default toplist config when a slug has no explicit mapping. */
+export const DEFAULT_TOPLIST_CONFIG = "search-service-casino";
+
+/** Resolve a page slug to its toplist config, falling back to the full list. */
+export function getToplistConfigForSlug(slug: string): string {
+  return SLUG_TO_TOPLIST_CONFIG[slug] ?? DEFAULT_TOPLIST_CONFIG;
+}

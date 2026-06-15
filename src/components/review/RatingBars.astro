@@ -1,0 +1,187 @@
+---
+/**
+ * RatingBars.astro — the "Arviointimme" sub-rating bars + Yhteensä summary.
+ *
+ * Each subRating renders as a labeled horizontal bar: the label on the left,
+ * a track (--line) with a --brand fill scaled to value/5, and the numeric
+ * value/5 on the right. A "Yhteensä <ratingOverall>/5" summary with Stars sits
+ * below the bars.
+ *
+ * Animation: the fill grows from 0 → its width using the global `.reveal`
+ * mechanism — when the block scrolls into view the IntersectionObserver adds
+ * `.in`, and a CSS transition on the fill's `width` animates it. No GSAP/JS
+ * here; the final width is supplied via a CSS custom property (--w). With
+ * reduced motion (or no JS / no observer) the fill still ends at the correct
+ * width because the rule below sets the resting width to the same value.
+ *
+ * The WHOLE block is omitted when there are no subRatings AND no ratingOverall.
+ *
+ * Props:
+ *   review : CasinoReview
+ *   title? : string  (default "Arviointimme")
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+import Stars from "../Stars.astro";
+
+interface Props {
+  review: CasinoReview;
+  title?: string;
+}
+
+const { review, title = "Arviointimme" } = Astro.props;
+const { subRatings, ratingOverall } = review;
+
+const hasOverall = ratingOverall != null && Number.isFinite(ratingOverall);
+const hasBars = subRatings.length > 0;
+const show = hasBars || hasOverall;
+
+/** Clamp a 0–5 value to a 0–100 percentage string. */
+function pct(v: number): string {
+  const clamped = Math.max(0, Math.min(5, v));
+  return `${(clamped / 5) * 100}%`;
+}
+/** Finnish comma decimals for display (4.5 → "4,5"). */
+function fi(v: number): string {
+  return v.toFixed(1).replace(".", ",");
+}
+---
+
+{show && (
+  <section class="rb" aria-label={title}>
+    <h2 class="rb__title">{title}</h2>
+
+    {hasBars && (
+      <ul class="rb__list reveal">
+        {subRatings.map((r) => (
+          <li class="rb__row">
+            <span class="rb__label">{r.label}</span>
+            <span class="rb__track" aria-hidden="true">
+              <span class="rb__fill" style={`--w:${pct(r.value)}`}></span>
+            </span>
+            <span class="rb__value">{fi(r.value)}<span class="rb__max">/5</span></span>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {hasOverall && (
+      <div class="rb__summary">
+        <span class="rb__summary-label">Yhteensä</span>
+        <span class="rb__summary-score">{fi(ratingOverall as number)}<span class="rb__max">/5</span></span>
+        <Stars value={ratingOverall as number} size={20} />
+      </div>
+    )}
+  </section>
+)}
+
+<style>
+  .rb {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .rb__title {
+    margin: 0;
+  }
+
+  .rb__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rb__row {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.9fr) 1fr auto;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+  .rb__label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+    min-width: 0;
+  }
+  .rb__track {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .rb__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--w);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+  }
+  .rb__value {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--navy);
+    white-space: nowrap;
+    justify-self: end;
+  }
+  .rb__max {
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+
+  .rb__summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.85rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-band);
+    border: 1px solid var(--line);
+  }
+  .rb__summary-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  .rb__summary-score {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  /* ---- Animated fill: grow from 0 → --w when the block reveals into view ----
+     The bars start collapsed; `.reveal.in` (added by the global observer) lets
+     the fill expand to its target width. The resting (no-observer / reduced-
+     motion) state below restores the correct width so values never read wrong. */
+  .rb__list.reveal .rb__fill {
+    width: 0;
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .rb__list.reveal.in .rb__fill {
+    width: var(--w);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rb__list.reveal .rb__fill,
+    .rb__list.reveal.in .rb__fill {
+      width: var(--w);
+      transition: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .rb__row {
+      grid-template-columns: 1fr auto;
+      gap: 0.3rem 0.75rem;
+    }
+    .rb__track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+</style>

@@ -1,0 +1,116 @@
+---
+/**
+ * QuickFacts.astro — the "pikatiedot" band of fact cells with blue Icons.
+ *
+ * Renders ONLY the cells we have data for. Possible cells:
+ *   - Lisenssi          (shield, license)
+ *   - Tervetuliaisbonus (gift, bonusText)
+ *   - Maksutavat        (card, first ~3 paymentMethods joined)
+ *   - Perustettu        (clock, foundedYear)
+ *   - Minimitalletus    (wallet, minDeposit)
+ *
+ * NO invented payout-time / game-count / mobile cells — we have no such data.
+ * The whole band is omitted if no cell has data.
+ *
+ * Props:
+ *   review : CasinoReview
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+import Icon from "../Icon.astro";
+import type { IconName } from "../Icon.astro";
+
+interface Props {
+  review: CasinoReview;
+}
+
+const { review } = Astro.props;
+const { license, bonusText, paymentMethods, foundedYear, minDeposit } = review;
+
+type Fact = { icon: IconName; label: string; value: string };
+const facts: Fact[] = [];
+
+if (license && license.trim().length > 0) {
+  facts.push({ icon: "shield", label: "Lisenssi", value: license });
+}
+if (bonusText && bonusText.trim().length > 0) {
+  facts.push({ icon: "gift", label: "Tervetuliaisbonus", value: bonusText });
+}
+if (paymentMethods.length > 0) {
+  facts.push({
+    icon: "card",
+    label: "Maksutavat",
+    value: paymentMethods.slice(0, 3).join(", "),
+  });
+}
+if (foundedYear && foundedYear.trim().length > 0) {
+  facts.push({ icon: "clock", label: "Perustettu", value: foundedYear });
+}
+if (minDeposit && minDeposit.trim().length > 0) {
+  facts.push({ icon: "wallet", label: "Minimitalletus", value: minDeposit });
+}
+---
+
+{facts.length > 0 && (
+  <ul class="qf">
+    {facts.map((f) => (
+      <li class="qf__cell card">
+        <span class="qf__ico" aria-hidden="true">
+          <Icon name={f.icon} size={20} />
+        </span>
+        <span class="qf__text">
+          <span class="qf__label">{f.label}</span>
+          <span class="qf__value">{f.value}</span>
+        </span>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .qf {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: clamp(0.7rem, 0.5rem + 0.8vw, 1rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .qf__cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    min-width: 0;
+  }
+  .qf__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .qf__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+  .qf__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+  .qf__value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+</style>

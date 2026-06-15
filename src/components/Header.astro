@@ -1,0 +1,590 @@
+---
+/**
+ * Header.astro — sticky white global header (light theme).
+ *
+ * Desktop (≥1024px): logo left, horizontal nav with hover/focus dropdowns,
+ * SearchBox on the right. A subtle bottom border at rest + a soft shadow once
+ * the page is scrolled (toggled via a tiny scroll listener that sets
+ * data-scrolled on the element).
+ *
+ * Mobile (<1024px): logo + search trigger collapse to a hamburger that opens a
+ * full-screen slide-over listing the nav and its dropdown children as
+ * accordions. Body scroll is locked while open; ESC and backdrop close it.
+ *
+ * Accessibility: dropdown/menu triggers expose aria-expanded; the mobile panel
+ * is a labelled dialog; focus-visible rings come from base.css. All behaviour
+ * is vanilla JS (no jQuery), scoped by data-attributes so it is safe to ship
+ * once per page.
+ *
+ * SearchBox is built by a teammate — self-contained, no required props.
+ */
+import { mainNav } from "../config/site-nav";
+import Brand from "./Brand.astro";
+import Icon from "./Icon.astro";
+import SearchBox from "./SearchBox.astro";
+---
+
+<header class="site-header" data-site-header>
+  <div class="container site-header__inner">
+    <Brand class="site-header__brand" />
+
+    <!-- Desktop primary nav -->
+    <nav class="primary-nav" aria-label="Päävalikko">
+      <ul class="primary-nav__list">
+        {
+          mainNav.map((item) =>
+            item.children && item.children.length ? (
+              <li class="primary-nav__item has-dropdown" data-dropdown>
+                <button
+                  type="button"
+                  class="primary-nav__link primary-nav__toggle"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  data-dropdown-trigger
+                >
+                  <span>{item.label}</span>
+                  <Icon name="chevron-down" size={16} class="primary-nav__caret" />
+                </button>
+                <div class="dropdown" data-dropdown-panel>
+                  <ul class="dropdown__list">
+                    <li>
+                      <a class="dropdown__link dropdown__link--lead" href={item.href}>
+                        {item.label}
+                        <Icon name="arrow-right" size={16} />
+                      </a>
+                    </li>
+                    {item.children.map((child) => (
+                      <li>
+                        <a class="dropdown__link" href={child.href}>
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li class="primary-nav__item">
+                <a class="primary-nav__link" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            )
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__right">
+      <div class="site-header__search">
+        <SearchBox id="hdr-search-desktop" />
+      </div>
+      <button
+        type="button"
+        class="hamburger"
+        aria-label="Avaa valikko"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-open
+      >
+        <Icon name="menu" size={26} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile slide-over menu -->
+<div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+  <div class="mobile-menu__backdrop" data-menu-close tabindex="-1"></div>
+  <div
+    class="mobile-menu__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Päävalikko"
+  >
+    <div class="mobile-menu__head">
+      <Brand compact />
+      <button
+        type="button"
+        class="mobile-menu__close"
+        aria-label="Sulje valikko"
+        data-menu-close
+      >
+        <Icon name="close" size={26} />
+      </button>
+    </div>
+
+    <div class="mobile-menu__search">
+      <SearchBox id="hdr-search-mobile" />
+    </div>
+
+    <nav aria-label="Mobiilivalikko">
+      <ul class="mobile-nav">
+        {
+          mainNav.map((item) =>
+            item.children && item.children.length ? (
+              <li class="mobile-nav__item" data-acc>
+                <div class="mobile-nav__row">
+                  <a class="mobile-nav__link" href={item.href}>
+                    {item.label}
+                  </a>
+                  <button
+                    type="button"
+                    class="mobile-nav__expand"
+                    aria-expanded="false"
+                    aria-label={`Näytä ${item.label} -alavalikko`}
+                    data-acc-trigger
+                  >
+                    <Icon name="chevron-down" size={20} />
+                  </button>
+                </div>
+                <ul class="mobile-sub" data-acc-panel hidden>
+                  {item.children.map((child) => (
+                    <li>
+                      <a class="mobile-sub__link" href={child.href}>
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li class="mobile-nav__item">
+                <a class="mobile-nav__link" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            )
+          )
+        }
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<style>
+  /* ---------- Header shell ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .site-header[data-scrolled] {
+    box-shadow: var(--shadow-sm);
+    border-bottom-color: var(--line-2);
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    min-height: 72px;
+  }
+
+  .site-header__brand {
+    flex: none;
+  }
+
+  .site-header__right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* ---------- Desktop nav ---------- */
+  .primary-nav {
+    display: none;
+  }
+  .primary-nav__list {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+  .primary-nav__item {
+    position: relative;
+  }
+  .primary-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .primary-nav__link:hover,
+  .primary-nav__item:hover > .primary-nav__link,
+  .primary-nav__item:focus-within > .primary-nav__link {
+    color: var(--brand);
+    background: var(--brand-soft);
+    text-decoration: none;
+  }
+  .primary-nav__caret {
+    transition: transform 0.18s ease;
+  }
+  .primary-nav__item:hover .primary-nav__caret,
+  .primary-nav__toggle[aria-expanded="true"] .primary-nav__caret {
+    transform: rotate(180deg);
+  }
+
+  /* ---------- Dropdown ---------- */
+  .dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 248px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 0.4rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+    z-index: 20;
+  }
+  .primary-nav__item:hover > .dropdown,
+  .primary-nav__item:focus-within > .dropdown,
+  .dropdown[data-open] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .dropdown__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .dropdown__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 0.14s ease, background-color 0.14s ease;
+  }
+  .dropdown__link:hover {
+    color: var(--brand);
+    background: var(--brand-soft);
+    text-decoration: none;
+  }
+  .dropdown__link--lead {
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 1px solid var(--line);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    margin-bottom: 2px;
+  }
+  .dropdown__link--lead :global(.icon) {
+    color: var(--brand);
+  }
+
+  /* ---------- Search slot ---------- */
+  .site-header__search {
+    display: none;
+  }
+
+  /* ---------- Hamburger ---------- */
+  .hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    color: var(--navy);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .hamburger:hover {
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+
+  /* ---------- Mobile slide-over ---------- */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+  }
+  .mobile-menu[hidden] {
+    display: none;
+  }
+  .mobile-menu__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 31, 58, 0.45);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .mobile-menu__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(88vw, 380px);
+    background: var(--bg);
+    box-shadow: -12px 0 40px -12px rgba(16, 31, 58, 0.35);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.1rem 1.5rem;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mobile-menu[data-open] .mobile-menu__backdrop {
+    opacity: 1;
+  }
+  .mobile-menu[data-open] .mobile-menu__panel {
+    transform: translateX(0);
+  }
+
+  .mobile-menu__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.85rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-menu__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    color: var(--navy);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .mobile-menu__close:hover {
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .mobile-menu__search {
+    margin: 0.4rem 0 0.75rem;
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-nav__item {
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-nav__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mobile-nav__link {
+    flex: 1;
+    display: block;
+    padding: 0.95rem 0.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .mobile-nav__link:hover {
+    color: var(--brand);
+    text-decoration: none;
+  }
+  .mobile-nav__expand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--ink-3);
+    border-radius: var(--radius-sm);
+  }
+  .mobile-nav__expand :global(.icon) {
+    transition: transform 0.18s ease;
+  }
+  .mobile-nav__expand[aria-expanded="true"] :global(.icon) {
+    transform: rotate(180deg);
+  }
+
+  .mobile-sub {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 0.6rem 0.65rem;
+  }
+  .mobile-sub[hidden] {
+    display: none;
+  }
+  .mobile-sub__link {
+    display: block;
+    padding: 0.6rem 0.2rem;
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  .mobile-sub__link:hover {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  /* ---------- Breakpoint: ≥1024px desktop layout ---------- */
+  @media (min-width: 1024px) {
+    .primary-nav {
+      display: block;
+    }
+    .site-header__search {
+      display: block;
+      width: clamp(180px, 18vw, 240px);
+    }
+    .hamburger {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // ------- Sticky shadow on scroll -------
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  if (header) {
+    const onScroll = () => {
+      if (window.scrollY > 4) header.setAttribute("data-scrolled", "");
+      else header.removeAttribute("data-scrolled");
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  // ------- Desktop dropdowns: click/keyboard support (hover handled in CSS) -------
+  const dropdowns = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-dropdown]")
+  );
+  const closeAllDropdowns = (except?: HTMLElement) => {
+    for (const dd of dropdowns) {
+      if (dd === except) continue;
+      const trigger = dd.querySelector<HTMLButtonElement>("[data-dropdown-trigger]");
+      const panel = dd.querySelector<HTMLElement>("[data-dropdown-panel]");
+      trigger?.setAttribute("aria-expanded", "false");
+      panel?.removeAttribute("data-open");
+    }
+  };
+  for (const dd of dropdowns) {
+    const trigger = dd.querySelector<HTMLButtonElement>("[data-dropdown-trigger]");
+    const panel = dd.querySelector<HTMLElement>("[data-dropdown-panel]");
+    if (!trigger || !panel) continue;
+    trigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      const open = trigger.getAttribute("aria-expanded") === "true";
+      closeAllDropdowns(dd);
+      trigger.setAttribute("aria-expanded", String(!open));
+      if (open) panel.removeAttribute("data-open");
+      else panel.setAttribute("data-open", "");
+    });
+  }
+  document.addEventListener("click", (e) => {
+    const t = e.target as Node;
+    if (!dropdowns.some((dd) => dd.contains(t))) closeAllDropdowns();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAllDropdowns();
+  });
+
+  // ------- Mobile slide-over -------
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const openBtn = document.querySelector<HTMLButtonElement>("[data-menu-open]");
+  const closeEls = Array.from(document.querySelectorAll<HTMLElement>("[data-menu-close]"));
+  let lastFocused: HTMLElement | null = null;
+
+  const getFocusable = (root: HTMLElement) =>
+    Array.from(
+      root.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => el.offsetParent !== null || el === root);
+
+  const openMenu = () => {
+    if (!menu || !openBtn) return;
+    lastFocused = document.activeElement as HTMLElement;
+    menu.hidden = false;
+    // next frame so the transition runs
+    requestAnimationFrame(() => menu.setAttribute("data-open", ""));
+    openBtn.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+    const panel = menu.querySelector<HTMLElement>(".mobile-menu__panel");
+    const focusables = panel ? getFocusable(panel) : [];
+    focusables[0]?.focus();
+  };
+
+  const closeMenu = () => {
+    if (!menu || !openBtn) return;
+    menu.removeAttribute("data-open");
+    openBtn.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    const finish = () => {
+      menu.hidden = true;
+      menu.removeEventListener("transitionend", finish);
+    };
+    const panel = menu.querySelector<HTMLElement>(".mobile-menu__panel");
+    if (panel) panel.addEventListener("transitionend", finish);
+    else menu.hidden = true;
+    lastFocused?.focus();
+  };
+
+  openBtn?.addEventListener("click", openMenu);
+  closeEls.forEach((el) => el.addEventListener("click", closeMenu));
+
+  // ESC + focus trap while open
+  document.addEventListener("keydown", (e) => {
+    if (!menu || menu.hidden) return;
+    if (e.key === "Escape") {
+      closeMenu();
+      return;
+    }
+    if (e.key === "Tab") {
+      const panel = menu.querySelector<HTMLElement>(".mobile-menu__panel");
+      if (!panel) return;
+      const focusables = getFocusable(panel);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  // ------- Mobile accordions -------
+  const accTriggers = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-acc-trigger]")
+  );
+  for (const trigger of accTriggers) {
+    const item = trigger.closest<HTMLElement>("[data-acc]");
+    const panel = item?.querySelector<HTMLElement>("[data-acc-panel]");
+    if (!panel) continue;
+    trigger.addEventListener("click", () => {
+      const open = trigger.getAttribute("aria-expanded") === "true";
+      trigger.setAttribute("aria-expanded", String(!open));
+      panel.hidden = open;
+    });
+  }
+</script>

@@ -141,3 +141,22 @@ overridden, `paused` casinos are removed from all lists. Feed toplist keys map
 to list dirs via `TOPLIST_KEY_MAP` in the script (`etusivu` →
 `search-service-casino`, the homepage list); unmapped keys fall back to a
 same-named dir. Test: `npm run test:offers` (mock feed, restores dist after).
+
+## Text blocks feed (Content Engine)
+
+`npm run build` runs `scripts/apply-texts.mjs` after `apply-offers`. It GETs
+`{CE_API_URL}/text-blocks` (same env vars + Bearer auth) and rewrites
+**dist/ only**. Because `src/fragments` is a WordPress mirror that re-scrapes
+wipe, this site uses `kind: "replace"` blocks: the feed's exact
+`originalText` is found in the page's visible text (whitespace-tolerant —
+built pages wrap lines) and swapped for HTML-escaped `currentText`, but ONLY
+when it occurs exactly once on `dist/<pagePath>/index.html` — otherwise the
+script warns and skips, never guessing. `kind: "marker"`
+(`data-mv-text="<blockKey>"` elements) is also supported for hand-edited
+`@custom` pages. Blocks with `currentText === originalText` are no-ops.
+Missing env vars or a feed error/timeout (10s) log a warning and exit 0 — the
+build never fails. Seeded blocks (stats-page hero intro, update-cadence line,
+etc.) live in `../_wc2026-scratch/text-blocks-seed.json`; seed `replace`
+blocks only from `@custom` pages, never from scraped fragments, and verify
+`originalText` against a fresh dist. Test: `npm run test:texts` (uses the
+real dist, restores it byte-identical).

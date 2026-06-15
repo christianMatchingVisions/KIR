@@ -1,0 +1,88 @@
+---
+/**
+ * ReviewMethodology.astro — the compliant "Näin arvioimme" criteria block.
+ *
+ * Replaces the reference image's pros/cons + "tested on a real account" column,
+ * which we cannot source or claim on a penalty-recovery affiliate site. Instead
+ * it states the assessment CRITERIA as neutral bullets — phrased as how reviews
+ * are compiled, NEVER as personal/first-hand testing.
+ *
+ * COMPLIANCE: no "testattu / testasin / kokeilin / oikealla pelaajatilillä" or
+ * any first-hand language. Every bullet is a criterion, not an experience.
+ *
+ * The bullets are static (criteria are the same for every casino) but the lede
+ * names the casino so it reads specifically. Always renders (it is editorial
+ * methodology, not data-dependent).
+ *
+ * Props:
+ *   name   : string  (casino display name, for the lede)
+ *   title? : string  (default "Näin arvioimme")
+ */
+import Icon from "../Icon.astro";
+
+interface Props {
+  name: string;
+  title?: string;
+}
+
+const { name, title = "Näin arvioimme" } = Astro.props;
+
+const criteria: string[] = [
+  "Lisenssi ja turvallisuus: tarkistamme lisenssin myöntäjän ja toimiluvan voimassaolon.",
+  "Bonusehdot: käymme läpi tervetuliaisbonuksen ehdot ja kierrätysvaatimukset.",
+  "Maksutavat: arvioimme talletus- ja kotiutustapojen kattavuuden ja nopeuden.",
+  "Pelivalikoima: tarkastelemme peliyhtiöiden ja pelityyppien laajuutta.",
+  "Asiakaspalvelu: selvitämme tukikanavien saatavuuden ja palvelukielet.",
+];
+---
+
+<section class="rm card" aria-label={title}>
+  <h2 class="rm__title">{title}</h2>
+  <p class="rm__lede">
+    Arviomme {name}-kasinosta perustuu julkisesti saatavilla oleviin tietoihin,
+    jotka käymme läpi seuraavilla kriteereillä.
+  </p>
+  <ul class="rm__list">
+    {criteria.map((c) => (
+      <li class="rm__item">
+        <Icon name="check" size={18} class="rm__ico" />
+        <span>{c}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .rm {
+    padding: 1.4rem 1.5rem;
+  }
+  .rm__title {
+    margin: 0 0 0.6rem;
+  }
+  .rm__lede {
+    margin: 0 0 1.1rem;
+    color: var(--ink-2);
+    max-width: 62ch;
+  }
+  .rm__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rm__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .rm__ico {
+    color: var(--ok);
+    flex: none;
+    margin-top: 2px;
+  }
+</style>

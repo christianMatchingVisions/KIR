@@ -1,0 +1,237 @@
+---
+/**
+ * Footer.astro — navy global footer (light text on --navy).
+ *
+ * Four columns from site-nav (K.I.R / Luokat / Uutiset / Vastuullinen
+ * pelaaminen), the wordmark + tagline on the left, and the responsible-gambling
+ * column with the Peluuri link (rel="nofollow noopener", new tab), an 18+ note,
+ * and the two trust logos shipped in /public.
+ *
+ * Compliance (mandatory, do not weaken): the 18+ / RG notice + Peluuri link
+ * MUST be present. The slim affiliate-disclosure bar is a separate component
+ * (DisclosureBar) rendered after this in the layout.
+ */
+import {
+  footerColumns,
+  responsibleColumn,
+  SITE_NAME,
+} from "../config/site-nav";
+import Brand from "./Brand.astro";
+import Icon from "./Icon.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer band-navy">
+  <div class="container site-footer__inner">
+    <div class="site-footer__top">
+      <!-- Brand / intro -->
+      <div class="site-footer__brand">
+        <Brand variant="light" />
+        <p class="site-footer__tagline">
+          {SITE_NAME} — riippumattomat arvostelut ja vertailut suomalaisille
+          pelaajille. Vain lisensoidut, luotettavat kasinot.
+        </p>
+      </div>
+
+      <!-- Link columns -->
+      <nav class="site-footer__cols" aria-label="Alatunnisteen valikko">
+        {
+          footerColumns.map((col) => (
+            <div class="site-footer__col">
+              <h2 class="site-footer__heading">{col.title}</h2>
+              <ul class="site-footer__list">
+                {col.links.map((link) => (
+                  <li>
+                    <a
+                      class="site-footer__link"
+                      href={link.href}
+                      {...(link.external
+                        ? {
+                            target: "_blank",
+                            rel: link.rel ?? "nofollow noopener",
+                          }
+                        : {})}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+
+        <!-- Responsible-gambling column (special-cased) -->
+        <div class="site-footer__col site-footer__col--rg">
+          <h2 class="site-footer__heading">{responsibleColumn.title}</h2>
+          <p class="site-footer__rg-note">
+            <Icon name="info" size={18} class="site-footer__rg-icon" />
+            <span>{responsibleColumn.notice}</span>
+          </p>
+          <a
+            class="btn-outline btn-sm site-footer__peluuri"
+            href={responsibleColumn.peluuri.href}
+            target="_blank"
+            rel="nofollow noopener"
+          >
+            {responsibleColumn.peluuri.label}
+            <Icon name="arrow-right" size={16} />
+          </a>
+          <div class="site-footer__trust">
+            {
+              responsibleColumn.trustLogos.map((logo) => (
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={logo.width}
+                  height={logo.height}
+                  loading="lazy"
+                  decoding="async"
+                  class="site-footer__trust-logo"
+                />
+              ))
+            }
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p class="site-footer__copy">
+        © {year} {SITE_NAME}. Kaikki oikeudet pidätetään.
+      </p>
+      <p class="site-footer__age" aria-hidden="true"><span>18+</span></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: clamp(2.5rem, 1.8rem + 2.6vw, 3.75rem) 1.75rem;
+  }
+
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+  }
+
+  .site-footer__brand {
+    max-width: 38ch;
+  }
+  .site-footer__tagline {
+    margin-top: 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #aab9d0;
+  }
+
+  .site-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.5rem;
+  }
+
+  .site-footer__heading {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 0.85rem;
+  }
+  .site-footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .site-footer__link {
+    font-size: 0.92rem;
+    color: #c3d2e8;
+    text-decoration: none;
+    transition: color 0.14s ease;
+  }
+  .site-footer__link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* Responsible-gambling column */
+  .site-footer__rg-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #c3d2e8;
+    margin-bottom: 0.9rem;
+  }
+  .site-footer__rg-icon {
+    flex: none;
+    margin-top: 2px;
+    color: var(--cta);
+  }
+  .site-footer__peluuri {
+    margin-bottom: 1.1rem;
+  }
+  .site-footer__trust {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .site-footer__trust-logo {
+    height: 42px;
+    width: auto;
+    background: #ffffff;
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Bottom strip */
+  .site-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .site-footer__copy {
+    font-size: 0.85rem;
+    color: #94a6c2;
+  }
+  .site-footer__age span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 28px;
+    padding: 0 0.5rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width: 640px) {
+    .site-footer__cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 980px) {
+    .site-footer__top {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 2.4fr);
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+</style>

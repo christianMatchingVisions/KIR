@@ -1,0 +1,215 @@
+---
+/**
+ * CasinoCard.astro — the VERTICAL casino card (homepage toplist + sidebars).
+ *
+ * A white `.card` with hover lift. An optional yellow circular numbered rank
+ * badge (1..5) sits at the top-left corner. The casino logo is centred on a
+ * small neutral plate (so dark logos read on white); below it the bonus line
+ * in strong navy ink; then a full-width yellow "Pelaa heti" CTA; and finally an
+ * "Arvio" row with <Stars> — but ONLY when a rating is present.
+ *
+ * Compliance: the CTA is an affiliate /go/<slug>/ link and ALWAYS carries
+ *   rel="sponsored nofollow". No "I tested / first-hand" language anywhere.
+ *
+ * Graceful degradation:
+ *   - logoUrl missing  → a navy monogram plate (first letter of the name).
+ *   - rating null      → the whole "Arvio" row is omitted (data is ~88% sparse).
+ *   - bonusText empty  → the bonus line is omitted (no empty box).
+ *   - ctaSlug null     → CTA renders as a disabled-looking non-link (no dead href).
+ *   - rank undefined   → no badge.
+ *
+ * Usage:
+ *   import CasinoCard from "../components/CasinoCard.astro";
+ *   import { getToplist } from "../lib/toplist";
+ *   const casinos = getToplist("search-service-casino", 5);
+ *   {casinos.map((c, i) => <CasinoCard casino={c} rank={i + 1} />)}
+ */
+import type { ToplistCasino } from "../lib/toplist";
+import Stars from "./Stars.astro";
+
+interface Props {
+  /** The cleaned casino row from getToplist(). */
+  casino: ToplistCasino;
+  /** Optional 1-based rank — renders the yellow numbered badge when given. */
+  rank?: number;
+}
+
+const { casino, rank } = Astro.props;
+
+const {
+  name,
+  logoUrl,
+  logoAlt,
+  ctaSlug,
+  rating,
+  bonusText,
+} = casino;
+
+const hasLogo = typeof logoUrl === "string" && logoUrl.length > 0;
+const hasRating = rating != null && Number.isFinite(rating);
+const hasBonus = typeof bonusText === "string" && bonusText.trim().length > 0;
+const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
+
+// Monogram fallback when no logo is available.
+const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
+// Alt: prefer the supplied logo alt, else a neutral "<name> logo".
+const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
+// CTA accessible label names the casino so screen-reader users have context.
+const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
+---
+
+<article class="casino-card card card--lift">
+  {rank != null && (
+    <span class="casino-card__rank" aria-hidden="true">{rank}</span>
+  )}
+
+  <div class="casino-card__plate">
+    {hasLogo && (
+      <img
+        class="casino-card__logo"
+        src={logoUrl}
+        alt={altText}
+        loading="lazy"
+        decoding="async"
+        width="160"
+        height="64"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+      />
+    )}
+    {/* Monogram: the fallback when no logo, OR when a logo URL 404s (onerror reveals it). */}
+    <span class="casino-card__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
+  </div>
+
+  <h3 class="casino-card__name">{name}</h3>
+
+  {hasBonus && <p class="casino-card__bonus">{bonusText}</p>}
+
+  {hasCta ? (
+    <a
+      class="btn-cta btn-block casino-card__cta"
+      href={ctaSlug}
+      rel="sponsored nofollow"
+      aria-label={ctaLabel}
+    >
+      Pelaa heti
+    </a>
+  ) : (
+    <span class="btn-cta btn-block casino-card__cta is-disabled" aria-disabled="true">
+      Pelaa heti
+    </span>
+  )}
+
+  {hasRating && (
+    <div class="casino-card__rating">
+      <span class="casino-card__rating-label">Arvio</span>
+      <Stars value={rating as number} showValue size={16} />
+    </div>
+  )}
+</article>
+
+<style>
+  .casino-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding: 1.35rem 1.15rem 1.15rem;
+    text-align: center;
+    height: 100%;
+  }
+
+  /* Yellow circular numbered rank badge, top-left corner. */
+  .casino-card__rank {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--cta);
+    color: var(--cta-ink);
+    font-weight: 800;
+    font-size: 0.95rem;
+    line-height: 1;
+    box-shadow: 0 4px 10px -4px rgba(245, 194, 0, 0.85);
+    border: 2px solid #fff;
+  }
+
+  /* Neutral plate so dark logos read on the white card. */
+  .casino-card__plate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 86px;
+    padding: 0.6rem 0.9rem;
+    background: var(--bg-band-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .casino-card__logo {
+    max-height: 56px;
+    width: auto;
+    object-fit: contain;
+  }
+  /* Monogram fallback. */
+  .casino-card__mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .casino-card__name {
+    font-size: 1.05rem;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .casino-card__bonus {
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin: 0;
+    /* push the CTA to a consistent baseline across cards of varying copy */
+    flex: 1 1 auto;
+  }
+
+  .casino-card__cta {
+    margin-top: auto;
+  }
+  /* Disabled CTA (no affiliate target) — still looks like a button, inert. */
+  .casino-card__cta.is-disabled {
+    background: var(--line);
+    color: var(--ink-3);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .casino-card__rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .casino-card__rating-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+  }
+</style>

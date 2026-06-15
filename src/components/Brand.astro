@@ -1,0 +1,129 @@
+---
+/**
+ * Brand.astro — the KIR wordmark, recreated as inline SVG/CSS (NO png).
+ *
+ * Layout: a navy→brand "+" plus-badge, then a two-line wordmark:
+ *   line 1  KASINOT                 (heavy navy)
+ *   line 2  ILMAN REKISTERÖITYMISTÄ (small-caps, --brand / --ink-3)
+ *
+ * Links to "/". Use `variant="light"` on dark surfaces (footer) so the text
+ * flips to white/light. `compact` drops the subtitle (mobile header / tight
+ * spaces) but keeps the full name available to screen readers.
+ */
+import { brand } from "../config/site-nav";
+
+interface Props {
+  variant?: "dark" | "light";
+  compact?: boolean;
+  class?: string;
+}
+
+const { variant = "dark", compact = false, class: className } = Astro.props;
+---
+
+<a
+  href={brand.href}
+  class:list={["brand", `brand--${variant}`, { "brand--compact": compact }, className]}
+  aria-label={brand.ariaLabel}
+>
+  <span class="brand__badge" aria-hidden="true">
+    <svg viewBox="0 0 40 40" width="40" height="40" role="img" focusable="false">
+      <defs>
+        <linearGradient id="kirPlusGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="var(--brand)"></stop>
+          <stop offset="1" stop-color="var(--navy)"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="0.5" y="0.5" width="39" height="39" rx="11" fill="url(#kirPlusGrad)"></rect>
+      <path
+        d="M20 11v18M11 20h18"
+        stroke="#fff"
+        stroke-width="3.4"
+        stroke-linecap="round"
+      ></path>
+    </svg>
+  </span>
+
+  <span class="brand__text">
+    <span class="brand__word">{brand.wordmark}</span>
+    <span class="brand__sub" aria-hidden={compact ? "true" : undefined}>{brand.subtitle}</span>
+  </span>
+</a>
+
+<style>
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    line-height: 1;
+    color: inherit;
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .brand:hover .brand__word {
+    color: var(--brand);
+  }
+  .brand--light:hover .brand__word {
+    color: #fff;
+    opacity: 0.92;
+  }
+
+  .brand__badge {
+    flex: none;
+    display: inline-flex;
+    filter: drop-shadow(0 4px 10px rgba(31, 111, 229, 0.28));
+  }
+  .brand__badge svg {
+    width: 40px;
+    height: 40px;
+    display: block;
+  }
+
+  .brand__text {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .brand__word {
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+    transition: color 0.15s ease;
+  }
+  .brand__sub {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+
+  /* Light variant (navy footer) */
+  .brand--light .brand__word {
+    color: #fff;
+  }
+  .brand--light .brand__sub {
+    color: #9cc2ff;
+  }
+
+  /* Compact: hide subtitle visually but keep it for SR via .brand aria-label */
+  .brand--compact .brand__badge svg {
+    width: 34px;
+    height: 34px;
+  }
+  .brand--compact .brand__word {
+    font-size: 1.15rem;
+  }
+  .brand--compact .brand__sub {
+    display: none;
+  }
+
+  @media (max-width: 360px) {
+    .brand__sub {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+/**
+ * PaymentMethods.astro — the "Maksutavat" section: a row of named chips.
+ *
+ * Each payment method renders as a chip (wallet/card Icon + name). The icon is
+ * card for card-like methods (Visa/Mastercard), otherwise wallet — a light
+ * heuristic, never a claim. NO per-method star ratings or payout minutes (we
+ * have no such data).
+ *
+ * The whole section is omitted when there are no payment methods.
+ *
+ * Props:
+ *   methods : string[]   (CasinoReview.paymentMethods)
+ *   title?  : string     (default "Maksutavat")
+ */
+import Icon from "../Icon.astro";
+import type { IconName } from "../Icon.astro";
+
+interface Props {
+  methods: string[];
+  title?: string;
+}
+
+const { methods, title = "Maksutavat" } = Astro.props;
+const list = (methods ?? []).filter((m) => m && m.trim().length > 0);
+
+/** Card-like methods get the card icon; everything else the wallet icon. */
+function iconFor(name: string): IconName {
+  return /visa|mastercard|maestro|amex|debit|credit|kortti|card/i.test(name)
+    ? "card"
+    : "wallet";
+}
+---
+
+{list.length > 0 && (
+  <section class="pm" aria-label={title}>
+    <h2 class="pm__title">{title}</h2>
+    <ul class="pm__chips">
+      {list.map((m) => (
+        <li class="pm__chip">
+          <Icon name={iconFor(m)} size={16} class="pm__chip-ico" />
+          <span>{m}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .pm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .pm__title {
+    margin: 0;
+  }
+  .pm__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pm__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5em 0.9em;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1px solid var(--line-2);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.2;
+  }
+  .pm__chip-ico {
+    color: var(--brand);
+    flex: none;
+  }
+</style>
