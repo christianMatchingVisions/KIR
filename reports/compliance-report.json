@@ -1,0 +1,27 @@
+{
+  "verdict": "PASS",
+  "jurisdictions": ["fi"],
+  "checked_at": "2026-06-15",
+  "scope": "post-rebuild dist sample",
+  "pages": [
+    "/",
+    "/casino/21red-kasino/",
+    "/trustly-kasinot/",
+    "/uutiset/verkkopankkitunnistautuminen-kasinoilla-ilman-rekisteroitymista/"
+  ],
+  "summary": { "critical_fails": 0, "high_fails": 0, "medium_fails": 0, "warns": 0, "low_notes": 1, "passes": 7 },
+  "findings": [
+    { "rule_id": "FI-AGE-18", "severity": "high", "status": "pass", "evidence": "18+ marker present in footer + disclosure bar on all pages" },
+    { "rule_id": "FI-RG-PELUURI", "severity": "high", "status": "pass", "evidence": "Peluuri + peluuri.fi link + 'Pelaa vastuullisesti' present site-wide" },
+    { "rule_id": "UNI-AFFILIATE-LINK-INTEGRITY", "severity": "medium", "status": "pass", "evidence": "all /go/ links rel=\"sponsored nofollow\" (35/35 across sample)" },
+    { "rule_id": "UNI-AFFILIATE-DISCLOSURE", "severity": "medium", "status": "pass", "evidence": "Mainos · Kaupallinen yhteistyö disclosure bar site-wide" },
+    { "rule_id": "UNI-NO-INDUCEMENT-TO-CHASE-LOSSES", "severity": "critical", "status": "pass", "evidence": "no loss-chasing/guaranteed-win language found" },
+    { "rule_id": "FIRST-HAND-CLAIMS", "severity": "high", "status": "pass", "evidence": "0 first-hand testing claims in visible prose (scrubFirstHandClaims enforced)" },
+    { "rule_id": "UNI-DATA-FRESHNESS", "severity": "low", "status": "pass", "evidence": "visible Päivitetty date + preserved article:modified_time" },
+    { "rule_id": "UNI-NO-DECEPTIVE-LANGUAGE", "severity": "low", "status": "warn", "evidence": "home intro 'Kuinka valita paras kasino … vertaamalla eksperttiemme arvostelut' — instructional 'best casino' with comparison methodology; preserved indexed content", "fix": "optional: add explicit methodology anchor; no change required" }
+  ],
+  "forward_risks": [
+    { "rule_id": "FI-NON-LICENSED-WARNING", "effective": "2027-01-01" },
+    { "rule_id": "FI-NO-WELCOME-BONUS-TO-EXCLUDED", "effective": "2027-07-01" }
+  ]
+}

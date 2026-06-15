@@ -23,7 +23,7 @@ single catch-all route**, not one `.astro` file per page.
 |------|-----------|
 | `src/fragments/<name>/head.html` + `body.html` + `meta.json` | Scraped 1:1 copies of every live page (581 of them). `meta.json` carries the original `<html>`/`<body>` attribute strings (WP body classes are load-bearing for theme CSS) and the URL path. Folder name = URL path with `/` → `__`, homepage = `home`. |
 | `src/pages/[...slug].astro` | Catch-all that builds one route per fragment from `meta.json`'s `path`. Skips fragments listed in `OWNED_ELSEWHERE` (currently `uutiset`). |
-| `src/layouts/Shell.astro` | Raw document shell — renders fragments byte-for-byte, no injected elements. |
+| `src/layouts/BaseLayout.astro` | Light document shell — chrome + SEO-head registry injection; all routes render through it. (The old byte-for-byte `Shell.astro` was removed in the rebuild.) |
 | `src/pages/uutiset/index.astro` | **Custom** (`@custom` marker): renders the scraped `/uutiset/` page and injects Content-Engine article cards (theme-native markup) at the top of the article grid. |
 | `src/pages/uutiset/[slug].astro` | One page per delivered engine article. |
 | `src/layouts/ArticleLayout.astro` | Chrome for engine article pages (Finnish, with mandatory affiliate disclosure + 18+/Peluuri notice). Header/footer still TODO — replace with the real ones from `src/fragments/home/body.html`. |
@@ -38,33 +38,46 @@ single catch-all route**, not one `.astro` file per page.
 
 Sitemap: `@astrojs/sitemap` → `/sitemap-index.xml` (robots.txt points there).
 
-## Redesign ("Arctic Night / Revontulet")
+## Architecture — "Arctic Day" light component rebuild (current)
 
-Dark northern-lights cinematic theme, two injected files (no markup edits, so
-re-scraping fragments never breaks it):
+The site is a **full Astro component rebuild** in a clean light theme (navy +
+blue + yellow CTAs, white cards). The earlier dark "Arctic Night" aurora theme
+and the byte-for-byte `Shell.astro` fragment renderer have been **removed**.
 
-- `public/redesign.css` — design-system stylesheet (tokens in `:root`:
-  arctic-night surfaces, aurora teal/green/violet accents, self-hosted Inter
-  from `public/fonts/`) loaded **after** the legacy theme CSS by `Shell.astro`
-  and `ArticleLayout.astro`. The legacy theme CSS under
-  `public/wp-content/.../custom.css` is still loaded first; don't delete it
-  (layout/positioning still comes from there).
-- `public/arctic.js` + `public/vendor/{lenis,gsap,ScrollTrigger}.min.js`
-  (self-hosted) — two-layer sky behind every page: `#arctic-sky` (stars,
-  native-DPR canvas) + `#arctic-aurora` (low-res ribbon canvas softened by a
-  CSS `filter: blur()` on the element — canvas `ctx.filter` is NOT supported
-  on iOS Safari, so never blur inside the canvas; ~30fps, pauses on hidden
-  tabs), Lenis momentum scroll,
-  hero entrance "card deal", pointer parallax, scroll reveals
-  (`ScrollTrigger.batch`, arms RLAAF-rendered cards via MutationObserver),
-  and a pinned scrubbed homepage hero scene (desktop ≥992px only).
-  **`prefers-reduced-motion` gets a static sky + native scroll** — keep that
-  guard. Budget: transform/opacity only in scroll loops.
+**The model: scraped fragments + REST dumps + captured toplist JSON are a DATA
+LAYER; Astro components are the presentation.** This keeps all 581 original
+URLs, canonicals and JSON-LD intact (penalty-recovery safe) while the look is
+fully rebuilt. Key pieces:
+
+- **Design system:** `src/styles/base.css` (light tokens on `:root`, Inter from
+  `public/fonts/`) — imported once by `src/layouts/BaseLayout.astro`. Shared
+  components in `src/components/` (`Icon`, `Stars`, `CasinoCard`, `CasinoRow`,
+  `Header`, `Footer`, `DisclosureBar`, `Brand`, `SearchBox`, `review/*`).
+- **SEO preservation (critical):** `src/lib/seo-head.ts` is a build-time
+  registry that extracts each page's canonical/OG/robots/JSON-LD from its
+  scraped `head.html`. `BaseLayout` re-emits that head **verbatim** when given
+  `seoPath`. A build-time guard throws if the registry is empty. Verified by
+  `scripts/seo-parity-check.mjs` (581/581 pages, 100% parity).
+- **Data layer:** `src/lib/casino-data.ts` (305 reviews → structured data from
+  the scraped fragments), `toplist.ts` (captured `rlaaf-data` JSON),
+  `content.ts` (REST posts/pages/FAQ; also `scrubFirstHandClaims()` +
+  `ensureSponsored()` + `optimizeProseImages()` applied at load time).
+- **Routes/templates:** `index.astro` (home), `casino/[slug].astro` (305
+  reviews) + `casino/index.astro` (Arvostelut hub), `[...slug].astro` catch-all
+  → `ArticlePage`/`MoneyPage` for posts/category/FAQ/provider/utility,
+  `oppaat/index.astro` (guides hub), `uutiset/*` (engine news, light).
+- **Compliance baked in:** every `/go/` link `rel="sponsored nofollow"`,
+  no first-hand claims (scrubbed), 18+/Peluuri/disclosure site-wide via the
+  chrome. See `reports/compliance-report.md` (verdict PASS).
+- **Subtle motion only:** IntersectionObserver `.reveal` fade-ups (in
+  `BaseLayout`); no aurora canvas, no Lenis. The `/mm-kisat-2026-tilastot/`
+  page still uses `public/vendor/{gsap,ScrollTrigger}.min.js` for its charts.
 
 Note: the local copies of `rl-advanced-ajax-filter/js/{rlaaf,main}.js` are
-PATCHED (marked `STATIC-BUILD PATCH`) to read pre-captured toplist data from
-`public/rlaaf-data/` instead of POSTing to the WP API. `download-assets.mjs`
-skips existing files, so re-syncs won't overwrite the patches.
+PATCHED (`STATIC-BUILD PATCH`) to read pre-captured toplist data from
+`public/rlaaf-data/`; the new toplists also render at build from that JSON.
+`download-assets.mjs` / `download-casino-logos.mjs` / `download-content-images.mjs`
+skip existing files, so re-syncs won't overwrite patches.
 
 ## Commands
 
