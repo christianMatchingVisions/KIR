@@ -34,6 +34,22 @@
  * Props are all optional with Finnish defaults from the reference design.
  */
 import Icon from "./Icon.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+/**
+ * Premium hero illustration: if a raster render exists in public/hero/
+ * (lion-slot.webp|png|jpg), use it; otherwise fall back to the inline CSS/SVG
+ * casino still-life. Drop the file in → it switches automatically, no code change.
+ */
+const HERO_IMG_CANDIDATES = ["lion-slot.webp", "lion-slot.png", "lion-slot.jpg", "lion-slot.jpeg"];
+const heroImageSrc: string | null = (() => {
+  const dir = path.join(process.cwd(), "public", "hero");
+  for (const f of HERO_IMG_CANDIDATES) {
+    try { if (fs.existsSync(path.join(dir, f))) return `/hero/${f}`; } catch { /* ignore */ }
+  }
+  return null;
+})();
 
 interface Props {
   /** H1 lead text BEFORE the accent word. */
@@ -97,9 +113,21 @@ const pills = [
       </div>
     </div>
 
-    {/* ---------- RIGHT: original CSS/SVG casino composition ---------- */}
-    <div class="hero__visual reveal d2" aria-hidden="true">
-      <div class="stage">
+    {/* ---------- RIGHT: premium illustration — raster image if present in
+         public/hero/, otherwise the inline CSS/SVG casino still-life ---------- */}
+    <div class:list={["hero__visual", "reveal", "d2", heroImageSrc && "hero__visual--img"]}>
+      {heroImageSrc ? (
+        <img
+          class="hero__img"
+          src={heroImageSrc}
+          width="1024"
+          height="1024"
+          alt="Iloinen kasinomaskotti juhlii kolikkopelin ja pelimerkkien äärellä"
+          decoding="async"
+          fetchpriority="high"
+        />
+      ) : (
+      <div class="stage" aria-hidden="true">
         {/* ---- Atmosphere: blurred brand + gold blobs ---- */}
         <span class="blob blob--brand"></span>
         <span class="blob blob--gold"></span>
@@ -354,6 +382,7 @@ const pills = [
           <path d="M12 0l2.2 8.6L24 12l-9.8 3.4L12 24l-2.2-8.6L0 12l9.8-3.4Z" fill="var(--cta)"></path>
         </svg>
       </div>
+      )}
     </div>
   </div>
 </section>
@@ -365,7 +394,26 @@ const pills = [
     overflow: hidden;
     background: linear-gradient(180deg, var(--bg-band) 0%, var(--bg-band-2) 100%);
     border-bottom: 1px solid var(--line);
-    padding-block: clamp(2.5rem, 1.4rem + 4.5vw, 5rem);
+    /* A little smaller / tighter than before. */
+    padding-block: clamp(1.75rem, 1.1rem + 2.6vw, 3.25rem);
+  }
+
+  /* Premium raster illustration (lion + slot machine), used when present. */
+  .hero__img {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin-inline: auto;
+    filter: drop-shadow(0 26px 42px rgba(11, 31, 58, 0.16));
+    animation: heroImgFloat 7s ease-in-out infinite;
+  }
+  @keyframes heroImgFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__img { animation: none; }
   }
 
   .hero__grid {
@@ -624,8 +672,17 @@ const pills = [
 
   /* Phones: hide the decorative visual entirely (prevents overflow, keeps it lean). */
   @media (max-width: 560px) {
+    /* The busy CSS/SVG still-life is hidden on phones (overflow + clutter),
+       but the clean single illustration stays — shown smaller, above the copy. */
     .hero__visual {
       display: none;
+    }
+    .hero__visual--img {
+      display: block;
+      order: -1;
+    }
+    .hero__visual--img .hero__img {
+      max-width: 300px;
     }
     .hero__pills {
       gap: 0.9rem 1.1rem;

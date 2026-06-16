@@ -21,3 +21,9 @@ Thumbs.db
 
 # local tooling clone (installer copies to ~/.claude)
 claude-seo/
+
+# Vercel CLI link dir (staging deploys)
+.vercel
+
+# local screenshot scratch
+shots/
