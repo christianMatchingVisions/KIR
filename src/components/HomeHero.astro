@@ -394,8 +394,8 @@ const pills = [
     overflow: hidden;
     background: linear-gradient(180deg, var(--bg-band) 0%, var(--bg-band-2) 100%);
     border-bottom: 1px solid var(--line);
-    /* A little smaller / tighter than before. */
-    padding-block: clamp(1.75rem, 1.1rem + 2.6vw, 3.25rem);
+    /* Compact hero so the offers/toplist peeks above the fold. */
+    padding-block: clamp(1.25rem, 0.8rem + 1.8vw, 2.25rem);
   }
 
   /* Premium raster illustration (lion + slot machine), used when present.
@@ -407,7 +407,7 @@ const pills = [
   .hero__img {
     display: block;
     width: 100%;
-    max-width: 560px;
+    max-width: 480px;
     height: auto;
     margin-inline: auto;
     filter: drop-shadow(0 26px 42px rgba(11, 31, 58, 0.16));
