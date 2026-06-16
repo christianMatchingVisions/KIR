@@ -33,7 +33,9 @@ const {
   support,
 } = review;
 
-const heading = title ?? `Tietoa ${name}:sta`;
+// "Tietoa kasinosta <Name>" — avoids the broken "<Name>:sta" colon-suffix
+// (correct Finnish elative case can't be auto-generated for arbitrary names).
+const heading = title ?? `Tietoa kasinosta ${name}`;
 
 /* Build the support value from whatever channels we actually have. */
 function supportValue(): string | null {

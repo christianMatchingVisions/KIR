@@ -146,7 +146,10 @@ const cleanJsonLd = !seo ? jsonLd : [];
               }
             }
           },
-          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+          // threshold:0 so elements taller than the viewport (e.g. long money-
+          // page prose) still reveal — a ratio-based threshold can never be met
+          // by a 15000px block and would leave it permanently hidden.
+          { rootMargin: "0px 0px -8% 0px", threshold: 0 }
         );
         els.forEach((el) => io.observe(el));
       })();

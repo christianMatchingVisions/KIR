@@ -42,18 +42,21 @@ export interface TrustLogo {
   width: number;
   height: number;
 }
+// width/height are the images' TRUE intrinsic sizes — the footer renders them
+// at height:42 width:auto, so a wrong ratio here (e.g. a square logo tagged
+// 120x48) would stretch them. ssl-secure.png = 70x34, peluuri.png = 400x400.
 export const TRUST_LOGOS: TrustLogo[] = [
   {
     src: "/wp-content/uploads/2021/06/ssl-secure.png",
     alt: "SSL-suojattu sivusto",
-    width: 120,
-    height: 48,
+    width: 70,
+    height: 34,
   },
   {
     src: "/wp-content/uploads/2021/06/peluuri.png",
     alt: "Peluuri — apua peliongelmiin",
-    width: 120,
-    height: 48,
+    width: 400,
+    height: 400,
   },
 ];
 

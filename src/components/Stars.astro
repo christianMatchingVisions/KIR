@@ -41,8 +41,8 @@ const label = `${clamped.toFixed(1)} / ${max}`;
   role="img"
   aria-label={`Arvosana ${label}`}
 >
-  {Array.from({ length: full }).map(() => <Icon name="star" size={size} class="star star--on" />)}
-  {hasHalf && <Icon name="star-half" size={size} class="star star--on" />}
+  {Array.from({ length: full }).map(() => <Icon name="star" size={size} class="star star--full" />)}
+  {hasHalf && <Icon name="star-half" size={size} class="star star--half" />}
   {Array.from({ length: empty }).map(() => <Icon name="star" size={size} class="star star--off" />)}
   {showValue && <span class="stars__value" aria-hidden="true">{clamped.toFixed(1)}</span>}
 </span>
@@ -54,11 +54,20 @@ const label = `${clamped.toFixed(1)} / ${max}`;
     gap: 1px;
     line-height: 1;
   }
-  .star--on {
+  /* :global() — the <svg> is rendered by Icon.astro (its own scope), so the
+     scoped .star rules would never reach it. Full = solid gold, half = gold
+     outline + gold inner half, empty = muted grey outline. */
+  .stars :global(.star--full) {
     color: var(--star);
+    fill: var(--star);
   }
-  .star--off {
+  .stars :global(.star--half) {
+    color: var(--star);
+    fill: none;
+  }
+  .stars :global(.star--off) {
     color: var(--line-2);
+    fill: none;
   }
   .stars__value {
     margin-left: 0.4em;

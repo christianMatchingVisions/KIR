@@ -551,6 +551,9 @@ const hasToc = toc.length > 1;
   .intro.intro--clamp .intro-prose__inner {
     max-height: 1100px;
     overflow: hidden;
+    /* anchor the ::after fade to the clip edge (without this the gradient
+       attaches to a higher ancestor and the cut looks hard / mid-word). */
+    position: relative;
   }
   .intro.is-open .intro-prose__inner {
     max-height: none;

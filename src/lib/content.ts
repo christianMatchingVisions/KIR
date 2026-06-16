@@ -332,6 +332,37 @@ export function ensureSponsored(html: string | null | undefined): string {
  * NOT touch the LCP image of any page — those are emitted by the page templates
  * (e.g. the /uutiset/ engine hero) outside the prose string.
  */
+/**
+ * Decode ShortPixel (SPAI) lazy-load placeholders to their real <img src>.
+ * These render as <img src="data:image/svg+xml;base64,…" data-spai="1">, with
+ * the real URL URL-encoded in a data-u attribute INSIDE the base64 SVG (here a
+ * supabase blog-image host). Undecoded they show as blank 1x1 placeholder boxes
+ * in article/FAQ prose. We pull data-u, decode it and set it as the src,
+ * dropping the placeholder + data-spai. Self-origin URLs become root-relative;
+ * foreign hosts (supabase) stay absolute. Any host works.
+ */
+function decodeSpaiImages(html: string): string {
+  if (!html) return "";
+  return html.replace(
+    /<img\b[^>]*\bsrc="data:image\/svg\+xml;base64,([^"]+)"[^>]*>/gi,
+    (tag, b64) => {
+      let real: string | null = null;
+      try {
+        const svg = Buffer.from(b64, "base64").toString("utf8");
+        const m = svg.match(/data-u="([^"]+)"/);
+        if (m) real = decodeURIComponent(m[1]);
+      } catch {
+        /* fall through */
+      }
+      if (!real) return tag; // undecodable placeholder — leave untouched
+      real = real.replace(/^https?:\/\/kasinotilmanrekisteroitymista\.com/i, "");
+      return tag
+        .replace(/\bsrc="data:[^"]*"/, `src="${real}"`)
+        .replace(/\s+data-spai="[^"]*"/gi, "");
+    },
+  );
+}
+
 export function optimizeProseImages(html: string | null | undefined): string {
   if (!html) return "";
   return html.replace(/<img\b([^>]*?)\s*(\/?)>/gi, (_whole, rawAttrs: string, selfClose: string) => {
@@ -376,7 +407,7 @@ function mapPost(p: RawPost): Post {
     title: str(p.title?.rendered),
     date: str(p.date),
     modified: str(p.modified),
-    contentHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.content?.rendered)),
+    contentHtml: scrubFirstHandClaims(decodeSpaiImages(rewriteSelfOrigin(p.content?.rendered))),
     excerptHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.excerpt?.rendered)),
     categories: Array.isArray(p.categories) ? p.categories : [],
   };
@@ -407,7 +438,7 @@ function mapPage(p: RawPage): Page {
     title: str(p.title?.rendered),
     date: str(p.date),
     modified: str(p.modified),
-    contentHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.content?.rendered)),
+    contentHtml: scrubFirstHandClaims(decodeSpaiImages(rewriteSelfOrigin(p.content?.rendered))),
     excerptHtml: scrubFirstHandClaims(rewriteSelfOrigin(p.excerpt?.rendered)),
     parent: num(p.parent),
     menuOrder: num(p.menu_order),
@@ -440,7 +471,7 @@ function mapFaq(f: RawFaq): Faq {
     id: num(f.id),
     slug: str(f.slug),
     question: str(f.title?.rendered),
-    answerHtml: scrubFirstHandClaims(rewriteSelfOrigin(f.content?.rendered)),
+    answerHtml: scrubFirstHandClaims(decodeSpaiImages(rewriteSelfOrigin(f.content?.rendered))),
     order: num(f._ht_faq_order),
     group: Array.isArray(f["ht-faq-group"]) ? f["ht-faq-group"] : [],
   };
