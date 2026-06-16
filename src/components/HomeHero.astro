@@ -120,8 +120,8 @@ const pills = [
         <img
           class="hero__img"
           src={heroImageSrc}
-          width="1024"
-          height="1024"
+          width="917"
+          height="813"
           alt="Iloinen kasinomaskotti juhlii kolikkopelin ja pelimerkkien äärellä"
           decoding="async"
           fetchpriority="high"
@@ -399,7 +399,29 @@ const pills = [
   }
 
   /* Premium raster illustration (lion + slot machine), used when present. */
+  .hero__visual--img {
+    display: grid;
+    place-items: center;
+  }
+  /* Soft white halo behind the image so its near-white backdrop melts into the
+     pale-blue hero band (hides the rectangular image edge — no destructive
+     background removal needed). */
+  .hero__visual--img::before {
+    content: "";
+    position: absolute;
+    inset: -6% -4%;
+    background: radial-gradient(
+      ellipse 62% 58% at 50% 46%,
+      #ffffff 0%,
+      rgba(255, 255, 255, 0.6) 45%,
+      rgba(255, 255, 255, 0) 72%
+    );
+    z-index: 0;
+    pointer-events: none;
+  }
   .hero__img {
+    position: relative;
+    z-index: 1;
     display: block;
     width: 100%;
     max-width: 560px;
