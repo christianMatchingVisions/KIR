@@ -2,7 +2,8 @@
 /**
  * QuickFacts.astro — the "pikatiedot" band of fact cells with blue Icons.
  *
- * Renders ONLY the cells we have data for. Possible cells:
+ * Renders ONLY cells backed by real data, plus one always-true cell:
+ *   - Rekisteröityminen = "Ei vaadita"  (bolt — true for every casino here)
  *   - Lisenssi          (shield, license)
  *   - Tervetuliaisbonus (gift, bonusText)
  *   - Maksutavat        (card, first ~3 paymentMethods joined)
@@ -10,7 +11,11 @@
  *   - Minimitalletus    (wallet, minDeposit)
  *
  * NO invented payout-time / game-count / mobile cells — we have no such data.
- * The whole band is omitted if no cell has data.
+ *
+ * The grid is centred + auto-fit so that 3–6 cells always read as an intentional
+ * strip (never two lonely cells stranded across a wide band). The always-true
+ * "Rekisteröityminen" cell guarantees the band is never empty and gives even the
+ * sparsest casino (bonus only) a balanced 2–3 cell row.
  *
  * Props:
  *   review : CasinoReview
@@ -28,6 +33,10 @@ const { license, bonusText, paymentMethods, foundedYear, minDeposit } = review;
 
 type Fact = { icon: IconName; label: string; value: string };
 const facts: Fact[] = [];
+
+// Always true on this no-registration site — anchors the strip so it never
+// looks empty even when every other field is missing.
+facts.push({ icon: "bolt", label: "Rekisteröityminen", value: "Ei vaadita" });
 
 if (license && license.trim().length > 0) {
   facts.push({ icon: "shield", label: "Lisenssi", value: license });
@@ -69,7 +78,10 @@ if (minDeposit && minDeposit.trim().length > 0) {
 <style>
   .qf {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    /* auto-fit + a max cell width keeps 3–6 cells centred and evenly sized,
+       so a sparse 2–3 cell strip never sprawls across the whole band. */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
+    justify-content: center;
     gap: clamp(0.7rem, 0.5rem + 0.8vw, 1rem);
     margin: 0;
     padding: 0;

@@ -37,9 +37,11 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReviewHero from "../../components/review/ReviewHero.astro";
+import HeroIllustration from "../../components/review/HeroIllustration.astro";
 import BonusSidebar from "../../components/review/BonusSidebar.astro";
 import QuickFacts from "../../components/review/QuickFacts.astro";
 import RatingBars from "../../components/review/RatingBars.astro";
+import ReviewHighlights from "../../components/review/ReviewHighlights.astro";
 import ReviewMethodology from "../../components/review/ReviewMethodology.astro";
 import PaymentMethods from "../../components/review/PaymentMethods.astro";
 import CasinoInfoGrid from "../../components/review/CasinoInfoGrid.astro";
@@ -160,14 +162,52 @@ function neutralizeFirstHand(html: string | null): string | null {
     html
       // "oikealla pelaajatilillä" → drop the real-account claim entirely.
       .replace(/\s*oikealla pelaajatilill[äa]/gi, "")
-      // First-person "kokeilin/testasin/testailin ..." → neutral "arviossamme ...".
-      // Capture the following lowercase clause start so the sentence still flows.
-      .replace(/\bKokeilin\b/g, "Arviossamme tarkasteltiin")
+      // "Oman kokemukseni mukaan" / "Kokemukseni mukaan" → neutral lede.
+      .replace(/\b[Oo]man kokemukseni mukaan\b/g, "Saatavilla olevien tietojen mukaan")
+      .replace(/\bKokemukseni mukaan\b/g, "Saatavilla olevien tietojen mukaan")
+      // "Kokemukseni X:stä oli/on …" heading/sentence start → "Arviomme X:stä …".
+      .replace(/\bKokemukseni\b/g, "Arviomme")
+      .replace(/\bkokemukseni\b/g, "arviomme")
+      // "Itse testasin talletuksen …" → neutral passive.
+      .replace(/\bItse testasin\b/g, "Arviossa tarkasteltiin")
+      // First-person "kokeilin/testasin/testailin ..." → neutral "arviossa ...".
+      .replace(/\bKokeilin\b/g, "Arviossa tarkasteltiin")
       .replace(/\bkokeilin\b/g, "arviossa tarkasteltiin")
-      .replace(/\bTestasin\b/g, "Arviossamme tarkasteltiin")
+      .replace(/\bTestasin\b/g, "Arviossa tarkasteltiin")
       .replace(/\btestasin\b/g, "arviossa tarkasteltiin")
-      .replace(/\bTestailin\b/g, "Arviossamme tarkasteltiin")
+      .replace(/\bTestailin\b/g, "Arviossa tarkasteltiin")
       .replace(/\btestailin\b/g, "arviossa tarkasteltiin")
+      // First-person "Pelasin … / pelasin itse …" → neutral.
+      .replace(/\bpelasin itse\b/gi, "pelivalikoimaa tarkasteltaessa")
+      .replace(/\bPelasin\b/g, "Tarjolla on")
+      .replace(/\bpelasin\b/g, "tarjolla on")
+      // First-hand withdrawal-time claim — drop the whole first-person sentence
+      // (it both claims a personal test AND quotes a specific payout time, both
+      // forbidden): "Ensimmäisen kotiutukseni sain tilille 15 minuutissa, …"
+      .replace(
+        /\bEnsimmäisen kotiutukseni sain tilille[^.]*\.\s*/gi,
+        "Kotiutukset käsitellään kasinon ilmoittamien aikataulujen mukaisesti. ",
+      )
+      // First-person possessives → neutral (drop the "-ni" my-/mine sense).
+      .replace(/\bpyy[nt]+ööni\b/gi, "pyyntöön")
+      .replace(/\bkotiutukseni\b/gi, "kotiutuksen")
+      // First-person customer-service narrative: "otin yhteyttä", "kohtasin",
+      // "sain vastauksen …" → neutral, criteria-based phrasing. These describe a
+      // claimed first-hand support test, which is forbidden in recovery.
+      .replace(/\b[Kk]un kerran kohtasin ongelman\b/g, "Ongelmatilanteissa")
+      .replace(/\bkohtasin ongelman\b/gi, "ongelmatilanteessa")
+      .replace(/\botin yhteyttä\b/gi, "yhteydenotto onnistuu")
+      .replace(/\bsain vastauksen\b/gi, "vastauksen saa")
+      .replace(/\bSain vastauksen\b/g, "Vastauksen saa")
+      // Remaining first-person "sain …" (e.g. "sain tilin luotua", "sain tietoa") →
+      // passive "voi". Conservative: only the standalone verb is rewritten.
+      .replace(/\bSain\b/g, "Voi saada")
+      .replace(/\bsain\b/g, "voi saada")
+      // First-person "halusin …" wishes → neutral. Handle the common
+      // "kertoi … minulle kaiken mitä halusin … tietää" phrasing first.
+      .replace(/\bminulle kaiken mitä halusin\b/gi, "kattavasti kaiken mitä")
+      .replace(/\bmitä halusin\b/gi, "mitä")
+      .replace(/\bhalusin\b/gi, "halutessa")
       // "ei muuta kuin testaamaan itse" CTA → neutral close.
       .replace(/ei muuta kuin testaamaan itse/gi, "tutustu kasinoon itse")
   );
@@ -201,6 +241,17 @@ const others: ToplistCasino[] = review
   : [];
 
 const PROSE_ANCHOR = "arvostelu";
+
+/**
+ * Does the assessment block have a ratings column? RatingBars renders when there
+ * are sub-ratings OR an overall score; when neither exists we drop column 1 and
+ * balance the remaining two (highlights + methodology) so the row never shows a
+ * stranded empty cell. Mirrors RatingBars' own `show` condition.
+ */
+const hasAssessmentBars =
+  review != null &&
+  (review.subRatings.length > 0 ||
+    (review.ratingOverall != null && Number.isFinite(review.ratingOverall)));
 
 /**
  * The 305 fragments all parse, but guard defensively: if a slug somehow has no
@@ -289,11 +340,12 @@ const PROSE_ANCHOR = "arvostelu";
     ) : (
       /* ============== OPEN CASINO — FULL REVIEW ============== */
       <Fragment>
-        {/* ---------------- HERO (2-col) ---------------- */}
+        {/* ---------------- HERO (copy · illustration · sidebar) ---------------- */}
         <section class="section--tight">
           <div class="container">
             <div class="rev-hero">
               <ReviewHero review={review} proseAnchorId={PROSE_ANCHOR} />
+              <HeroIllustration />
               <BonusSidebar review={review} />
             </div>
           </div>
@@ -306,12 +358,21 @@ const PROSE_ANCHOR = "arvostelu";
           </div>
         </section>
 
-        {/* ---------------- RATING BARS + METHODOLOGY ---------------- */}
-        <section class="section--tight">
+        {/* ---------------- ASSESSMENT (3-col: bars · highlights · methodology) ---------------- */}
+        <section class="section--tight band">
           <div class="container">
-            <div class="rev-assess">
-              <RatingBars review={review} />
-              <ReviewMethodology name={review.name} />
+            <div class="rev-assess" class:list={[{ "rev-assess--two": !hasAssessmentBars }]}>
+              {hasAssessmentBars && (
+                <div class="rev-assess__col card rev-assess__bars">
+                  <RatingBars review={review} />
+                </div>
+              )}
+              <div class="rev-assess__col">
+                <ReviewHighlights review={review} />
+              </div>
+              <div class="rev-assess__col">
+                <ReviewMethodology name={review.name} />
+              </div>
             </div>
           </div>
         </section>
@@ -331,7 +392,7 @@ const PROSE_ANCHOR = "arvostelu";
             <div class="container--narrow">
               <h2 class="rev-prose__title">Arvostelu: {review.name}</h2>
               {review.reviewHtml && (
-                <div class="kir-prose reveal" set:html={review.reviewHtml} />
+                <div class="kir-prose" set:html={review.reviewHtml} />
               )}
               {review.bonusesHtml && (
                 <div class="rev-bonuses">
@@ -427,7 +488,12 @@ const PROSE_ANCHOR = "arvostelu";
     opacity: 0.7;
   }
 
-  /* ---------------- 2-col hero grid ---------------- */
+  /* ---------------- Hero grid (copy · illustration · sidebar) ----------------
+     Mobile: single column (illustration is display:none, so it drops out of the
+     grid). ≥980px: copy + sticky sidebar (still 2 cells — illustration hidden).
+     ≥1100px: the illustration becomes visible and takes the centre zone, giving
+     a 3-zone hero. align-items:start keeps the sidebar top-aligned so short left
+     copy never opens a blank gap. */
   .rev-hero {
     display: grid;
     grid-template-columns: 1fr;
@@ -439,18 +505,51 @@ const PROSE_ANCHOR = "arvostelu";
       grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
     }
   }
+  @media (min-width: 1100px) {
+    .rev-hero {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr) minmax(300px, 1fr);
+      gap: clamp(1.5rem, 0.8rem + 2vw, 2.75rem);
+    }
+  }
 
-  /* ---------------- Assessment row (bars + methodology) ---------------- */
+  /* ---------------- Assessment block (bars · highlights · methodology) -------
+     3 equal columns on wide screens, collapsing to 1 on narrow. When there are
+     no sub-ratings/overall the bars column is omitted in the markup and
+     `.rev-assess--two` balances the remaining two cells. */
   .rev-assess {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(1.25rem, 0.8rem + 2vw, 2.25rem);
-    align-items: start;
+    gap: clamp(1.1rem, 0.7rem + 1.6vw, 1.75rem);
+    align-items: stretch;
   }
-  @media (min-width: 880px) {
-    .rev-assess {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  @media (min-width: 760px) {
+    .rev-assess--two {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
+  }
+  @media (min-width: 980px) {
+    .rev-assess {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .rev-assess--two {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  /* The bars column gets a card surface to match the other two cards. */
+  .rev-assess__bars {
+    padding: 1.4rem 1.5rem;
+  }
+  .rev-assess__col {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Each column's inner card fills the column so the three cards are equal
+     height on wide screens (graceful: a short column still matches its row). */
+  .rev-assess__col,
+  .rev-assess__col > :global(*) {
+    width: 100%;
+    height: 100%;
   }
 
   /* ---------------- Review prose ---------------- */

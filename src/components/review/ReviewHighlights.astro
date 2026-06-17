@@ -1,0 +1,149 @@
+---
+/**
+ * ReviewHighlights.astro — the middle "Miksi valita <name>?" column of the
+ * 3-column assessment block.
+ *
+ * A green-check highlights list DERIVED FROM REAL DATA ONLY. Every bullet is a
+ * factual property of the casino (no invented pros/cons, no "tested" claims):
+ *   - "Rekisteröitymätön pikapelaaminen"      (always true on this site)
+ *   - "<license>-lisenssi"                     (when license present)
+ *   - "Trustly-pikatalletukset"                (when Trustly/Zimpler/Brite present)
+ *   - "Tervetuliaisbonus: <bonusText>"         (when bonusText present)
+ *   - "Korkea arvio: <best subRating label>"   (when a sub-rating ≥ 4.5 exists)
+ *   - "Monipuoliset maksutavat"                (when ≥ 4 payment methods)
+ *   - "Perustettu <year>"                      (when foundedYear present)
+ * Capped at 5 to keep the column balanced. A single honest "Huomioi" note about
+ * reading the bonus terms closes the card (never a fabricated con).
+ *
+ * COMPLIANCE: no first-hand / "testattu" language; every item is sourced from a
+ * parsed field. The "Huomioi" note is generic and true for all casinos.
+ *
+ * Graceful: this component ALWAYS yields at least the "Rekisteröitymätön
+ * pikapelaaminen" bullet, so the column is never empty even for the sparsest
+ * casino. When data is rich it fills up to 5 strong, real bullets.
+ *
+ * Props:
+ *   review : CasinoReview
+ *   title? : string  (default `Miksi valita <name>?`)
+ */
+import type { CasinoReview } from "../../lib/casino-data";
+import Icon from "../Icon.astro";
+
+interface Props {
+  review: CasinoReview;
+  title?: string;
+}
+
+const { review, title } = Astro.props;
+const { name, license, bonusText, paymentMethods, subRatings, foundedYear } =
+  review;
+
+const heading = title ?? `Miksi valita ${name}?`;
+
+const items: string[] = [];
+
+// Always true on this no-registration site — guarantees a non-empty column.
+items.push("Rekisteröitymätön pikapelaaminen pankkitunnuksilla");
+
+if (license && license.trim().length > 0) {
+  items.push(`${license}-lisenssi`);
+}
+
+const fastDeposit = paymentMethods.some((m) =>
+  /trustly|zimpler|brite|pay\s*n\s*play/i.test(m),
+);
+if (fastDeposit) {
+  items.push("Trustly-pikatalletukset ja -kotiutukset");
+}
+
+if (bonusText && bonusText.trim().length > 0) {
+  items.push(`Tervetuliaisbonus: ${bonusText}`);
+}
+
+// Turn the single best sub-rating into a factual highlight when it is strong.
+const best = subRatings.length
+  ? [...subRatings].sort((a, b) => b.value - a.value)[0]
+  : null;
+if (best && best.value >= 4.5) {
+  items.push(`Korkea arvio osa-alueella: ${best.label}`);
+}
+
+if (paymentMethods.length >= 4) {
+  items.push("Monipuoliset maksutavat");
+}
+
+if (foundedYear && foundedYear.trim().length > 0) {
+  items.push(`Vakiintunut toimija (perustettu ${foundedYear})`);
+}
+
+// Cap to keep the column balanced against the other two.
+const highlights = items.slice(0, 5);
+---
+
+<section class="hl card" aria-label={heading}>
+  <h2 class="hl__title">{heading}</h2>
+  <ul class="hl__list">
+    {highlights.map((h) => (
+      <li class="hl__item">
+        <Icon name="check" size={18} class="hl__ico" />
+        <span>{h}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="hl__note">
+    <Icon name="info" size={16} class="hl__note-ico" />
+    <span>Lue bonusehdot huolellisesti ennen pelaamista.</span>
+  </p>
+</section>
+
+<style>
+  .hl {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.4rem 1.5rem;
+    height: 100%;
+  }
+  .hl__title {
+    margin: 0;
+  }
+  .hl__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex: 1 1 auto;
+  }
+  .hl__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+  .hl__ico {
+    color: var(--ok);
+    flex: none;
+    margin-top: 2px;
+  }
+  .hl__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    line-height: 1.45;
+  }
+  .hl__note-ico {
+    color: var(--brand);
+    flex: none;
+    margin-top: 2px;
+  }
+</style>

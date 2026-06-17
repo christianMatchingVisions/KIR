@@ -1,17 +1,19 @@
 ---
 /**
- * PaymentMethods.astro — the "Maksutavat" section: a row of named chips.
+ * PaymentMethods.astro — the "Maksutavat ja kotiutukset" section.
  *
- * Each payment method renders as a chip (wallet/card Icon + name). The icon is
- * card for card-like methods (Visa/Mastercard), otherwise wallet — a light
- * heuristic, never a claim. NO per-method star ratings or payout minutes (we
- * have no such data).
+ * Each real payment-method NAME renders as a clean, equal-height card
+ * (wallet/card Icon + name). The icon is `card` for card-like methods
+ * (Visa/Mastercard), otherwise `wallet` — a light visual heuristic, never a
+ * claim. NO fabricated per-method star ratings or payout/min times (we have no
+ * such data). A short, generic, compliant note sits under the grid.
  *
- * The whole section is omitted when there are no payment methods.
+ * The auto-fit grid centres a small set so 1–2 methods still look intentional,
+ * and the whole section is omitted when there are no payment methods.
  *
  * Props:
  *   methods : string[]   (CasinoReview.paymentMethods)
- *   title?  : string     (default "Maksutavat")
+ *   title?  : string     (default "Maksutavat ja kotiutukset")
  */
 import Icon from "../Icon.astro";
 import type { IconName } from "../Icon.astro";
@@ -21,7 +23,7 @@ interface Props {
   title?: string;
 }
 
-const { methods, title = "Maksutavat" } = Astro.props;
+const { methods, title = "Maksutavat ja kotiutukset" } = Astro.props;
 const list = (methods ?? []).filter((m) => m && m.trim().length > 0);
 
 /** Card-like methods get the card icon; everything else the wallet icon. */
@@ -35,14 +37,20 @@ function iconFor(name: string): IconName {
 {list.length > 0 && (
   <section class="pm" aria-label={title}>
     <h2 class="pm__title">{title}</h2>
-    <ul class="pm__chips">
+    <ul class="pm__grid">
       {list.map((m) => (
-        <li class="pm__chip">
-          <Icon name={iconFor(m)} size={16} class="pm__chip-ico" />
-          <span>{m}</span>
+        <li class="pm__card">
+          <span class="pm__ico" aria-hidden="true">
+            <Icon name={iconFor(m)} size={20} />
+          </span>
+          <span class="pm__name">{m}</span>
         </li>
       ))}
     </ul>
+    <p class="pm__note">
+      Talletukset ja kotiutukset hoituvat valitsemallasi maksutavalla. Tarkista
+      ajantasaiset rajat ja käsittelyajat kasinon sivuilta.
+    </p>
   </section>
 )}
 
@@ -55,29 +63,57 @@ function iconFor(name: string): IconName {
   .pm__title {
     margin: 0;
   }
-  .pm__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
+  .pm__grid {
+    display: grid;
+    /* equal-height cards; auto-fit + max width keeps a small set centred. */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 170px));
+    justify-content: center;
+    gap: clamp(0.6rem, 0.4rem + 0.7vw, 0.9rem);
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .pm__chip {
+  .pm__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 96px;
+    padding: 1rem 0.85rem;
+    text-align: center;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .pm__card:hover {
+    border-color: var(--line-2);
+    box-shadow: var(--shadow-sm);
+  }
+  .pm__ico {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.5em 0.9em;
-    border-radius: 999px;
-    background: var(--bg);
-    border: 1px solid var(--line-2);
-    color: var(--ink);
-    font-weight: 700;
-    font-size: 0.88rem;
-    line-height: 1.2;
-  }
-  .pm__chip-ico {
-    color: var(--brand);
+    justify-content: center;
+    width: 42px;
+    height: 42px;
     flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .pm__name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  .pm__note {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    line-height: 1.5;
+    max-width: 64ch;
   }
 </style>

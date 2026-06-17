@@ -1,0 +1,233 @@
+---
+/**
+ * HeroIllustration.astro — an ORIGINAL, decorative casino illustration for the
+ * centre zone of the review hero (between the left copy and the bonus sidebar).
+ *
+ * Pure inline SVG + CSS, no images, no JS, no dependencies. Composes a glossy
+ * "Arctic Day" scene: a stack of poker chips, a gift box with a ribbon, and a
+ * gold coin with sparkles — all in the site palette (navy / --brand blue /
+ * --cta gold / white) with soft radial glows and linear-gradient sheen.
+ *
+ * Purely decorative: the whole block is aria-hidden and only shown on wide
+ * screens (≥1100px). Below that it is display:none so it never clutters or
+ * overflows tablet / mobile, and the hero collapses to copy + sidebar.
+ *
+ * Gradients use unique ids (prefixed) so multiple instances never collide, and
+ * a very gentle float keeps it alive without violating reduced-motion.
+ */
+const uid = `hi-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="hi" aria-hidden="true">
+  <div class="hi__stage">
+    <span class="hi__glow hi__glow--blue"></span>
+    <span class="hi__glow hi__glow--gold"></span>
+
+    <svg
+      class="hi__svg"
+      viewBox="0 0 320 320"
+      role="presentation"
+      focusable="false"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id={`${uid}-chipBlue`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3f86f2" />
+          <stop offset="1" stop-color="#1657c4" />
+        </linearGradient>
+        <linearGradient id={`${uid}-chipNavy`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#16335c" />
+          <stop offset="1" stop-color="#0b1f3a" />
+        </linearGradient>
+        <linearGradient id={`${uid}-gold`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffe08a" />
+          <stop offset="0.5" stop-color="#ffce32" />
+          <stop offset="1" stop-color="#f5b50a" />
+        </linearGradient>
+        <linearGradient id={`${uid}-box`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" />
+          <stop offset="1" stop-color="#dfe9fb" />
+        </linearGradient>
+        <linearGradient id={`${uid}-lid`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3f86f2" />
+          <stop offset="1" stop-color="#1f6fe5" />
+        </linearGradient>
+        <radialGradient id={`${uid}-sheen`} cx="0.35" cy="0.3" r="0.8">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* soft ground shadow */}
+      <ellipse cx="160" cy="276" rx="116" ry="20" fill="#0b1f3a" opacity="0.08" />
+
+      {/* ---- chip stack (left) ---- */}
+      <g class="hi__chips">
+        <g transform="translate(96 214)">
+          <ellipse cx="0" cy="0" rx="58" ry="22" fill={`url(#${uid}-chipNavy)`} />
+          <ellipse cx="0" cy="-6" rx="58" ry="22" fill={`url(#${uid}-chipBlue)`} />
+          <ellipse cx="0" cy="-6" rx="40" ry="15" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2.5" stroke-dasharray="3 9" />
+        </g>
+        <g transform="translate(96 196)">
+          <ellipse cx="0" cy="0" rx="58" ry="22" fill={`url(#${uid}-chipNavy)`} />
+          <ellipse cx="0" cy="-6" rx="58" ry="22" fill={`url(#${uid}-gold)`} />
+          <ellipse cx="0" cy="-6" rx="40" ry="15" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2.5" stroke-dasharray="3 9" />
+        </g>
+        <g transform="translate(96 178)">
+          <ellipse cx="0" cy="0" rx="58" ry="22" fill={`url(#${uid}-chipNavy)`} />
+          <ellipse cx="0" cy="-6" rx="58" ry="22" fill={`url(#${uid}-chipBlue)`} />
+          <ellipse cx="0" cy="-6" rx="40" ry="15" fill="none" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2.5" stroke-dasharray="3 9" />
+          <ellipse cx="-14" cy="-12" rx="20" ry="7" fill={`url(#${uid}-sheen)`} />
+        </g>
+      </g>
+
+      {/* ---- gift box (right) ---- */}
+      <g class="hi__gift">
+        {/* body */}
+        <rect x="158" y="150" width="104" height="90" rx="12" fill={`url(#${uid}-box)`} stroke="#cdd9ee" stroke-width="1.5" />
+        {/* vertical ribbon */}
+        <rect x="200" y="150" width="20" height="90" fill={`url(#${uid}-gold)`} />
+        {/* lid */}
+        <rect x="148" y="128" width="124" height="30" rx="10" fill={`url(#${uid}-lid)`} />
+        <rect x="200" y="128" width="20" height="30" fill={`url(#${uid}-gold)`} />
+        {/* lid sheen */}
+        <rect x="156" y="133" width="60" height="7" rx="3.5" fill="#ffffff" opacity="0.35" />
+        {/* bow */}
+        <g>
+          <path d="M210 128 C 188 104 168 110 178 126 C 186 138 204 132 210 128 Z" fill={`url(#${uid}-gold)`} stroke="#e6a800" stroke-width="1.5" />
+          <path d="M210 128 C 232 104 252 110 242 126 C 234 138 216 132 210 128 Z" fill={`url(#${uid}-gold)`} stroke="#e6a800" stroke-width="1.5" />
+          <circle cx="210" cy="127" r="7" fill={`url(#${uid}-gold)`} stroke="#e6a800" stroke-width="1.5" />
+        </g>
+      </g>
+
+      {/* ---- floating coin ---- */}
+      <g class="hi__coin" transform="translate(244 92)">
+        <circle cx="0" cy="0" r="26" fill={`url(#${uid}-gold)`} stroke="#e6a800" stroke-width="2" />
+        <circle cx="0" cy="0" r="18" fill="none" stroke="#ffffff" stroke-opacity="0.65" stroke-width="2" />
+        <text x="0" y="7" text-anchor="middle" font-size="22" font-weight="700" fill="#a9760a" font-family="Inter, system-ui, sans-serif">€</text>
+        <ellipse cx="-8" cy="-10" rx="8" ry="4" fill="#ffffff" opacity="0.5" />
+      </g>
+
+      {/* ---- sparkles ---- */}
+      <g class="hi__sparkle hi__sparkle--1" fill={`url(#${uid}-gold)`}>
+        <path d="M70 96 l4 12 12 4 -12 4 -4 12 -4 -12 -12 -4 12 -4 Z" />
+      </g>
+      <g class="hi__sparkle hi__sparkle--2" fill="#3f86f2">
+        <path d="M280 196 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 Z" />
+      </g>
+      <g class="hi__sparkle hi__sparkle--3" fill={`url(#${uid}-gold)`}>
+        <path d="M150 70 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5 Z" />
+      </g>
+    </svg>
+  </div>
+</div>
+
+<style>
+  /* Decorative centre zone — only on wide screens, never below 1100px. */
+  .hi {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .hi {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+  }
+
+  .hi__stage {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hi__svg {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 18px 30px rgba(11, 31, 58, 0.16));
+    animation: hi-float 6s ease-in-out infinite;
+  }
+
+  /* Ambient glows behind the artwork. */
+  .hi__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(34px);
+    z-index: 0;
+  }
+  .hi__glow--blue {
+    width: 70%;
+    height: 70%;
+    left: 2%;
+    top: 12%;
+    background: radial-gradient(circle, rgba(63, 134, 242, 0.28), transparent 70%);
+  }
+  .hi__glow--gold {
+    width: 55%;
+    height: 55%;
+    right: 4%;
+    bottom: 8%;
+    background: radial-gradient(circle, rgba(255, 206, 50, 0.32), transparent 70%);
+  }
+
+  .hi__coin {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hi-coin 5s ease-in-out infinite;
+  }
+  .hi__sparkle {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hi-twinkle 3.2s ease-in-out infinite;
+  }
+  .hi__sparkle--2 {
+    animation-delay: 0.8s;
+  }
+  .hi__sparkle--3 {
+    animation-delay: 1.6s;
+  }
+
+  @keyframes hi-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes hi-coin {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-4deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(4deg);
+    }
+  }
+  @keyframes hi-twinkle {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.85);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hi__svg,
+    .hi__coin,
+    .hi__sparkle {
+      animation: none;
+    }
+  }
+</style>

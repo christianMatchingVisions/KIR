@@ -1,20 +1,25 @@
 ---
 /**
- * CasinoInfoGrid.astro — the "Tietoa <Name>:sta" definition grid.
+ * CasinoInfoGrid.astro — the "Tietoa kasinosta <Name>" definition grid.
  *
- * A <dl> grid of present-fields-only cells:
+ * A <dl> of present-fields-only rows:
  *   - Perustettu      (foundedYear)
  *   - Lisenssi        (license)
  *   - Maksutavat      (paymentMethods joined)
  *   - Minimitalletus  (minDeposit)
  *   - Asiakaspalvelu  (support: email / phone / live chat — summarised)
+ *   - Verkkosivusto   (link to /go/<ctaSlug>/, rel="sponsored nofollow")
  *
- * Each cell is skipped when its field is missing; the whole section is omitted
- * if no cell has data. No fabricated values.
+ * Each row is skipped when its field is missing; the whole section is omitted
+ * if no row has data. When there are only a few rows the grid uses a compact
+ * two-column layout so it never leaves a tall empty card. No fabricated values.
+ *
+ * COMPLIANCE: the "Verkkosivusto" link is the /go/ affiliate path and always
+ * carries rel="sponsored nofollow".
  *
  * Props:
  *   review : CasinoReview
- *   title? : string  (default `Tietoa <name>:sta`)
+ *   title? : string  (default `Tietoa kasinosta <name>`)
  */
 import type { CasinoReview } from "../../lib/casino-data";
 
@@ -26,6 +31,7 @@ interface Props {
 const { review, title } = Astro.props;
 const {
   name,
+  ctaSlug,
   foundedYear,
   license,
   paymentMethods,
@@ -36,6 +42,9 @@ const {
 // "Tietoa kasinosta <Name>" — avoids the broken "<Name>:sta" colon-suffix
 // (correct Finnish elative case can't be auto-generated for arbitrary names).
 const heading = title ?? `Tietoa kasinosta ${name}`;
+
+const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
+const ctaHref = hasCta ? `/go/${ctaSlug}/` : null;
 
 /* Build the support value from whatever channels we actually have. */
 function supportValue(): string | null {
@@ -48,7 +57,8 @@ function supportValue(): string | null {
   return parts.length ? parts.join(" · ") : null;
 }
 
-type Row = { label: string; value: string };
+/** A row's value is either plain text or a sponsored affiliate link. */
+type Row = { label: string; value: string; href?: string };
 const rows: Row[] = [];
 
 if (foundedYear && foundedYear.trim().length > 0) {
@@ -65,16 +75,29 @@ if (minDeposit && minDeposit.trim().length > 0) {
 }
 const sv = supportValue();
 if (sv) rows.push({ label: "Asiakaspalvelu", value: sv });
+if (hasCta) {
+  rows.push({ label: "Verkkosivusto", value: `Siirry ${name}`, href: ctaHref! });
+}
+
+// Compact two-column layout when the list is short, so it never leaves a tall
+// empty card; a longer list reads as a single clean definition list.
+const compact = rows.length <= 4;
 ---
 
 {rows.length > 0 && (
   <section class="ig" aria-label={heading}>
     <h2 class="ig__title">{heading}</h2>
-    <dl class="ig__grid card">
+    <dl class="ig__grid card" class:list={[{ "ig__grid--compact": compact }]}>
       {rows.map((r) => (
         <div class="ig__row">
           <dt class="ig__label">{r.label}</dt>
-          <dd class="ig__value">{r.value}</dd>
+          <dd class="ig__value">
+            {r.href ? (
+              <a class="ig__link" href={r.href} rel="sponsored nofollow">{r.value}</a>
+            ) : (
+              r.value
+            )}
+          </dd>
         </div>
       ))}
     </dl>
@@ -104,6 +127,33 @@ if (sv) rows.push({ label: "Asiakaspalvelu", value: sv });
   }
   .ig__row:last-child {
     border-bottom: 0;
+  }
+  .ig__link {
+    color: var(--brand);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .ig__link:hover {
+    color: var(--brand-dark);
+    text-decoration: underline;
+  }
+
+  /* Compact: 2 rows per line on wide screens so a short list stays tidy. */
+  @media (min-width: 620px) {
+    .ig__grid--compact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 2rem;
+      padding-block: 0.9rem;
+    }
+    .ig__grid--compact .ig__row {
+      border-bottom: 1px solid var(--line);
+    }
+    /* Drop the bottom border on the last row of each column. */
+    .ig__grid--compact .ig__row:last-child,
+    .ig__grid--compact .ig__row:nth-last-child(2):nth-child(odd) {
+      border-bottom: 0;
+    }
   }
   .ig__label {
     margin: 0;
