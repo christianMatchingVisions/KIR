@@ -3,8 +3,16 @@
  * ReviewHighlights.astro — the middle "Miksi valita <name>?" column of the
  * 3-column assessment block.
  *
- * A green-check highlights list DERIVED FROM REAL DATA ONLY. Every bullet is a
- * factual property of the casino (no invented pros/cons, no "tested" claims):
+ * TWO modes:
+ *
+ *  A. ENGINE pros/cons — when the Content Engine supplies real `pros` (and
+ *     optionally `cons`), they are rendered verbatim: pros as a green-check
+ *     "Plussat" list and cons as a red-x "Miinukset" list (like the reference
+ *     review layout). These are genuine, sourced points — not derived.
+ *
+ *  B. DERIVED (scraped, default) — the original behaviour below: a green-check
+ *     highlights list DERIVED FROM REAL DATA ONLY. Every bullet is a factual
+ *     property of the casino (no invented pros/cons, no "tested" claims):
  *   - "Rekisteröitymätön pikapelaaminen"      (always true on this site)
  *   - "<license>-lisenssi"                     (when license present)
  *   - "Trustly-pikatalletukset"                (when Trustly/Zimpler/Brite present)
@@ -39,6 +47,14 @@ const { name, license, bonusText, paymentMethods, subRatings, foundedYear } =
   review;
 
 const heading = title ?? `Miksi valita ${name}?`;
+
+// MODE A: engine pros/cons present → render the real points (capped to keep the
+// column balanced). cons are optional; a pros-only engine review still uses A.
+const enginePros = (review.pros ?? []).filter((p) => p && p.trim().length > 0);
+const engineCons = (review.cons ?? []).filter((c) => c && c.trim().length > 0);
+const useEngine = enginePros.length > 0;
+const prosList = enginePros.slice(0, 6);
+const consList = engineCons.slice(0, 5);
 
 const items: string[] = [];
 
@@ -82,14 +98,47 @@ const highlights = items.slice(0, 5);
 
 <section class="hl card" aria-label={heading}>
   <h2 class="hl__title">{heading}</h2>
-  <ul class="hl__list">
-    {highlights.map((h) => (
-      <li class="hl__item">
-        <Icon name="check" size={18} class="hl__ico" />
-        <span>{h}</span>
-      </li>
-    ))}
-  </ul>
+
+  {useEngine ? (
+    <Fragment>
+      {/* MODE A — real engine pros (+ optional cons). */}
+      <div class="hl__group">
+        <h3 class="hl__sub hl__sub--pro">Plussat</h3>
+        <ul class="hl__list">
+          {prosList.map((p) => (
+            <li class="hl__item">
+              <Icon name="check" size={18} class="hl__ico hl__ico--pro" />
+              <span>{p}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {consList.length > 0 && (
+        <div class="hl__group">
+          <h3 class="hl__sub hl__sub--con">Miinukset</h3>
+          <ul class="hl__list">
+            {consList.map((c) => (
+              <li class="hl__item">
+                <Icon name="x" size={18} class="hl__ico hl__ico--con" />
+                <span>{c}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </Fragment>
+  ) : (
+    /* MODE B — derived-from-data highlights (default / pure-scraped). */
+    <ul class="hl__list">
+      {highlights.map((h) => (
+        <li class="hl__item">
+          <Icon name="check" size={18} class="hl__ico hl__ico--pro" />
+          <span>{h}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+
   <p class="hl__note">
     <Icon name="info" size={16} class="hl__note-ico" />
     <span>Lue bonusehdot huolellisesti ennen pelaamista.</span>
@@ -106,6 +155,32 @@ const highlights = items.slice(0, 5);
   }
   .hl__title {
     margin: 0;
+  }
+  /* MODE A groups (pros / cons). The first group flexes to fill so the note
+     stays pinned to the card bottom, matching the other two columns' height. */
+  .hl__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .hl__group:first-of-type {
+    flex: 1 1 auto;
+  }
+  .hl__group + .hl__group {
+    margin-top: 0.4rem;
+  }
+  .hl__sub {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .hl__sub--pro {
+    color: var(--ok);
+  }
+  .hl__sub--con {
+    color: var(--bad, #dc2626);
   }
   .hl__list {
     display: flex;
@@ -126,9 +201,14 @@ const highlights = items.slice(0, 5);
     overflow-wrap: anywhere;
   }
   .hl__ico {
-    color: var(--ok);
     flex: none;
     margin-top: 2px;
+  }
+  .hl__ico--pro {
+    color: var(--ok);
+  }
+  .hl__ico--con {
+    color: var(--bad, #dc2626);
   }
   .hl__note {
     display: flex;

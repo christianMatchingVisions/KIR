@@ -10,7 +10,13 @@
  *   - Perustettu        (clock, foundedYear)
  *   - Minimitalletus    (wallet, minDeposit)
  *
- * NO invented payout-time / game-count / mobile cells — we have no such data.
+ * ENGINE ENRICHMENT (additive): when the Content Engine supplies structured
+ * data, three further cells render — ONLY when their value is present:
+ *   - Keskimääräinen kotiutus (clock,  payoutTime)
+ *   - Pelivalikoima           (dice,   gameCount)
+ *   - Mobiilipelaaminen       (mobile, mobile)
+ * Absent on pure-scraped casinos (those fields are undefined/null), so the band
+ * looks exactly as today when the engine has no data — these are never invented.
  *
  * The grid is centred + auto-fit so that 3–6 cells always read as an intentional
  * strip (never two lonely cells stranded across a wide band). The always-true
@@ -29,7 +35,16 @@ interface Props {
 }
 
 const { review } = Astro.props;
-const { license, bonusText, paymentMethods, foundedYear, minDeposit } = review;
+const {
+  license,
+  bonusText,
+  paymentMethods,
+  foundedYear,
+  minDeposit,
+  payoutTime,
+  gameCount,
+  mobile,
+} = review;
 
 type Fact = { icon: IconName; label: string; value: string };
 const facts: Fact[] = [];
@@ -56,6 +71,21 @@ if (foundedYear && foundedYear.trim().length > 0) {
 }
 if (minDeposit && minDeposit.trim().length > 0) {
   facts.push({ icon: "wallet", label: "Minimitalletus", value: minDeposit });
+}
+
+// Engine-only cells — render ONLY when the engine supplied a value.
+if (payoutTime && payoutTime.trim().length > 0) {
+  facts.push({
+    icon: "clock",
+    label: "Keskimääräinen kotiutus",
+    value: payoutTime,
+  });
+}
+if (gameCount && gameCount.trim().length > 0) {
+  facts.push({ icon: "dice", label: "Pelivalikoima", value: gameCount });
+}
+if (mobile && mobile.trim().length > 0) {
+  facts.push({ icon: "mobile", label: "Mobiilipelaaminen", value: mobile });
 }
 ---
 

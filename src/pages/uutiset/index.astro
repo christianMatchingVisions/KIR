@@ -26,6 +26,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Icon from "../../components/Icon.astro";
 import { getPosts } from "../../lib/content";
+import { isGuideArticleType } from "../../lib/content-engine-loader";
 
 /** How many existing blog posts to surface alongside the engine articles. */
 const POST_LIMIT = 9;
@@ -76,7 +77,11 @@ interface NewsCard {
   kicker: string;
 }
 
-const engineEntries = await getCollection("articles");
+// News stream = every delivered engine article EXCEPT guides (guides live under
+// /oppaat/). Pre-field entries have no type → treated as news → unchanged.
+const engineEntries = (await getCollection("articles")).filter(
+  (e) => !isGuideArticleType(e.data.articleType),
+);
 const engineCards: NewsCard[] = engineEntries.map((e) => {
   const date = e.data.publishedAt ?? e.data.updatedAt ?? "";
   return {

@@ -45,6 +45,9 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { loadEngineReviews, type EngineReview } from "./engine-casino-loader";
+
+export type { EngineReview } from "./engine-casino-loader";
 
 /**
  * Repo-root absolute path to the scraped fragments directory.
@@ -83,6 +86,21 @@ export type CasinoSupport = {
   email?: string;
   phone?: string;
   liveChat?: boolean;
+  /** Support hours (engine-only, e.g. "24/7"). */
+  hours?: string;
+};
+
+/**
+ * Rich per-payment-method detail (engine-only). The scraped fragments only ever
+ * carry method NAMES (paymentMethods: string[]); when the engine supplies
+ * structured payment data it lands here so PaymentMethods.astro can show payout
+ * time / min / rating per method. Optional + additive — null/absent → name-only.
+ */
+export type PaymentDetail = {
+  name: string;
+  payoutTime?: string | null;
+  min?: string | null;
+  rating?: number | null;
 };
 
 export type CasinoReview = {
@@ -118,7 +136,165 @@ export type CasinoReview = {
   bonusesHtml: string | null;
   /** True when the casino is closed ("Suljettu") or has no real review. */
   showNoReview: boolean;
+
+  /* ---- Engine-enrichment fields (ADDITIVE, optional) -------------------- *
+   * Populated by initEngineReviews() (build-time fetch of GET /reviews) and
+   * merged per the FILL-GAPS + OVERRIDE policy. Absent/undefined for every
+   * casino when the engine serves no data → components fall back to scraped
+   * behaviour and the page renders exactly as today. */
+
+  /** Positive points from the engine review. [] / undefined when none. */
+  pros?: string[];
+  /** Negative points from the engine review. [] / undefined when none. */
+  cons?: string[];
+  /** Average payout time, e.g. "0-15 min" (engine-only). */
+  payoutTime?: string | null;
+  /** Game count text, e.g. "Yli 3 000 peliä" (engine-only). */
+  gameCount?: string | null;
+  /** Mobile experience text, e.g. "Täysin optimoitu mobiiliin" (engine-only). */
+  mobile?: string | null;
+  /** Rich per-method payment detail (engine-only). Names still in paymentMethods. */
+  paymentDetails?: PaymentDetail[];
+  /** Optional extra engine prose (hardened at render time by the route). */
+  summaryHtml?: string | null;
+  /** True when ANY field on this review was filled/overridden by engine data. */
+  fromEngine?: boolean;
 };
+
+/* ------------------------------------------------------------------ *
+ * Engine enrichment (ADDITIVE, build-time) — FILL GAPS + OVERRIDE
+ * ------------------------------------------------------------------ *
+ *
+ * The scraped fragments are the BASE. When the Content Engine serves structured
+ * review data (GET {CE_API_URL}/reviews), it FILLS GAPS and OVERRIDES per-field:
+ * for any field the engine provides, the engine value wins; otherwise the
+ * scraped value is kept; otherwise null. pros/cons come from the engine when
+ * present (the scrape never has them).
+ *
+ * The engine fetch is async, but getCasino()/getAllCasinos() are synchronous
+ * (called from Astro `getStaticPaths` + frontmatter). To keep them sync we load
+ * the engine Map ONCE into module state via the awaited `initEngineReviews()`
+ * (the route/page calls it before rendering). Until init runs — or when the
+ * engine serves nothing — the Map is empty and every casino is returned
+ * pure-scraped, byte-identical to today. init is idempotent + best-effort:
+ * a failed/empty fetch leaves the empty Map in place (never throws). */
+
+let engineReviews: Map<string, EngineReview> = new Map();
+let engineInitPromise: Promise<void> | null = null;
+
+/**
+ * Load the engine reviews Map into module state (once). Awaited by the casino
+ * route before it renders so the synchronous getCasino()/getAllCasinos() can
+ * merge engine data. Safe to call repeatedly — the underlying fetch runs once.
+ * Always resolves (loadEngineReviews never throws); on any failure the Map
+ * stays empty and the build proceeds pure-scraped.
+ *
+ * The route passes CE_API_URL / CE_API_KEY explicitly (read from
+ * `import.meta.env` in the .astro module, exactly like content.config.ts wires
+ * the articles loader) so the credentials are reliably populated at build time.
+ * When omitted the loader falls back to its own `import.meta.env` read.
+ */
+export async function initEngineReviews(opts?: {
+  apiUrl?: string | undefined;
+  apiKey?: string | undefined;
+}): Promise<void> {
+  if (!engineInitPromise) {
+    engineInitPromise = loadEngineReviews(opts)
+      .then((map) => {
+        engineReviews = map;
+      })
+      .catch(() => {
+        engineReviews = new Map();
+      });
+  }
+  return engineInitPromise;
+}
+
+/** Test/advanced seam: inject a pre-built engine Map (skips the network). */
+export function setEngineReviews(map: Map<string, EngineReview>): void {
+  engineReviews = map;
+  engineInitPromise = Promise.resolve();
+}
+
+/** First non-empty string among the candidates, else null. */
+function firstNonEmpty(...vals: (string | null | undefined)[]): string | null {
+  for (const v of vals) {
+    if (typeof v === "string" && v.trim().length > 0) return v;
+  }
+  return null;
+}
+
+/**
+ * Merge an engine review over a scraped CasinoReview, per FILL-GAPS + OVERRIDE.
+ * Engine value wins when present; otherwise the scraped value; otherwise null.
+ * Returns a NEW object; the scraped review is never mutated. When `engine` is
+ * null/undefined the scraped review is returned unchanged (pure-scraped).
+ */
+function mergeEngine(
+  scraped: CasinoReview,
+  engine: EngineReview | undefined,
+): CasinoReview {
+  if (!engine) return scraped;
+
+  // Sub-ratings: prefer the engine's set when it has any, else scraped.
+  const subRatings =
+    engine.sub_ratings.length > 0
+      ? engine.sub_ratings.map((s) => ({ label: s.label, value: s.value }))
+      : scraped.subRatings;
+
+  // Payment method NAMES: engine names win when present, else scraped names.
+  const engineNames = engine.payment_methods
+    .map((p) => p.name)
+    .filter((n) => n.trim().length > 0);
+  const paymentMethods =
+    engineNames.length > 0 ? engineNames : scraped.paymentMethods;
+
+  // Rich per-method detail is engine-only (undefined when the engine has none).
+  const paymentDetails =
+    engine.payment_methods.length > 0
+      ? engine.payment_methods.map((p) => ({
+          name: p.name,
+          payoutTime: p.payout_time ?? null,
+          min: p.min ?? null,
+          rating: p.rating ?? null,
+        }))
+      : undefined;
+
+  // Support: engine wins as a whole object when it carries anything, else
+  // scraped. (Engine support is structured; scraped is sparse.)
+  const support: CasinoSupport | null = engine.support
+    ? {
+        ...(engine.support.email ? { email: engine.support.email } : {}),
+        ...(engine.support.phone ? { phone: engine.support.phone } : {}),
+        ...(typeof engine.support.live_chat === "boolean"
+          ? { liveChat: engine.support.live_chat }
+          : {}),
+        ...(engine.support.hours ? { hours: engine.support.hours } : {}),
+      }
+    : scraped.support;
+
+  return {
+    ...scraped,
+    name: firstNonEmpty(engine.name, scraped.name) ?? scraped.name,
+    ratingOverall: engine.rating_overall ?? scraped.ratingOverall,
+    subRatings,
+    bonusText: firstNonEmpty(engine.bonus_text, scraped.bonusText),
+    license: firstNonEmpty(engine.license, scraped.license),
+    paymentMethods,
+    foundedYear: firstNonEmpty(engine.founded_year, scraped.foundedYear),
+    minDeposit: firstNonEmpty(engine.min_deposit, scraped.minDeposit),
+    support,
+    // Engine-only enrichment fields.
+    pros: engine.pros.length > 0 ? engine.pros : undefined,
+    cons: engine.cons.length > 0 ? engine.cons : undefined,
+    payoutTime: engine.payout_time ?? null,
+    gameCount: engine.game_count ?? null,
+    mobile: engine.mobile ?? null,
+    paymentDetails,
+    summaryHtml: engine.summary_html ?? null,
+    fromEngine: true,
+  };
+}
 
 /* ------------------------------------------------------------------ *
  * Low-level helpers
@@ -545,13 +721,29 @@ export function getCasino(slug: string): CasinoReview | null {
   const subRatings = parseSubRatings(arviotCard);
   const ratingOverall = parseOverallRating(reviewSection);
 
+  // Engine review keyed by the SAME slug as the fragment. When present its
+  // pros/cons + overall rating can resurrect a sparse stub into a real review,
+  // so factor it into the showNoReview decision below (an engine-enriched
+  // casino is never treated as an empty stub unless it is also Suljettu).
+  const engine = engineReviews.get(slug);
+  const engineHasReview =
+    engine != null &&
+    (engine.pros.length > 0 ||
+      engine.cons.length > 0 ||
+      engine.sub_ratings.length > 0 ||
+      engine.rating_overall != null ||
+      (engine.summary_html != null && engine.summary_html.trim().length > 0));
+
   // "No review" when closed, OR when there is no prose AND no sub-ratings AND
-  // no overall score (i.e. an empty stub page).
+  // no overall score (i.e. an empty stub page) AND the engine has nothing.
   const showNoReview =
     closedByTitle ||
-    (reviewHtml == null && subRatings.length === 0 && ratingOverall == null);
+    (reviewHtml == null &&
+      subRatings.length === 0 &&
+      ratingOverall == null &&
+      !engineHasReview);
 
-  return {
+  const scraped: CasinoReview = {
     slug,
     name,
     url,
@@ -573,6 +765,10 @@ export function getCasino(slug: string): CasinoReview | null {
     bonusesHtml,
     showNoReview,
   };
+
+  // FILL GAPS + OVERRIDE: engine data wins per-field when present; otherwise
+  // the scraped base is returned unchanged (pure-scraped fallback).
+  return mergeEngine(scraped, engine);
 }
 
 /** Parse every casino fragment. Skips any that fail to parse. */

@@ -1,13 +1,19 @@
 ---
 /**
- * /uutiset/<slug>/ — one LIGHT-theme page per Content-Engine article delivered
- * to this site. New articles appear automatically on the next build (the
- * engine's article.published webhook points at a Vercel deploy hook).
+ * /oppaat/<slug>/ — one LIGHT-theme page per Content-Engine 'guide' article
+ * delivered to this site. The engine 'guide' article type is the long-form
+ * general-content stream (alongside the live 'news' stream → /uutiset/).
+ *
+ * This route is the GUIDE sibling of /uutiset/[slug].astro: it consumes the
+ * SAME `articles` collection but builds a static path ONLY for entries whose
+ * `articleType === "guide"`, so every engine article has exactly one canonical
+ * URL (news → /uutiset/<slug>/, guide → /oppaat/<slug>/, never both).
  *
  * HEAD (clean, NOT registry): these are brand-new URLs, absent from the Phase-1
  * scraped SEO registry, so we build a clean head directly on BaseLayout —
- * title + meta description + self-canonical + a NewsArticle JSON-LD block
- * (headline, datePublished, dateModified, inLanguage fi, image, publisher).
+ * title + meta description + self-canonical + an Article JSON-LD block
+ * (headline, datePublished, dateModified, inLanguage fi, image, publisher) plus
+ * a BreadcrumbList (Etusivu › Oppaat › <title>).
  *
  * COMPLIANCE (penalty recovery): the article body is hardened at load time in
  * content-engine-loader.ts (scrubFirstHandClaims → ensureSponsored). We re-run
@@ -16,10 +22,9 @@
  * NO first-hand/testing claims in visible prose and rel="sponsored nofollow"
  * on EVERY /go/ and external affiliate link, regardless of feed source.
  *
- * LAYOUT: light hero (eyebrow + breadcrumb + H1 + passive "Päivitetty" line +
- * hero image), then the 2-column ArticlePage-style body (.kir-prose + sticky
- * RelatedCasinos sidebar). Renders directly on BaseLayout because ArticlePage
- * only forwards a registry `seoPath`, and these URLs have no registry entry.
+ * GRACEFUL: when the engine delivers no guide articles, getStaticPaths returns
+ * [] and this route emits zero pages — the /oppaat/ hub still renders its
+ * scraped blog guides exactly as today.
  */
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -32,10 +37,9 @@ const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
 export async function getStaticPaths() {
   const articles = await getCollection("articles");
-  // News stream only — 'guide' articles render at /oppaat/<slug>/ instead, so
-  // each engine article has exactly one canonical URL (no /uutiset/ duplicate).
+  // Guides only — news-like types render at /uutiset/<slug>/ instead.
   return articles
-    .filter((entry) => !isGuideArticleType(entry.data.articleType))
+    .filter((entry) => isGuideArticleType(entry.data.articleType))
     .map((entry) => ({
       params: { slug: entry.id },
       props: { entry },
@@ -47,25 +51,18 @@ const { data } = entry;
 
 /* -------------------------------------------------------------------------- */
 /* COMPLIANCE: harden the rendered body HTML (idempotent — also done at load). */
-/* The loader stores the compliant HTML on `entry.rendered.html`; we re-apply  */
-/* both guards defensively before rendering so visible prose carries no        */
-/* first-hand claims and every affiliate link is rel="sponsored nofollow".     */
 /* -------------------------------------------------------------------------- */
 const rawHtml = (entry as unknown as { rendered?: { html?: string } }).rendered?.html ?? "";
-// optimizeProseImages: lazy-load + de-prioritise large below-the-fold images
-// inside the article BODY only. The eager hero <img> lives in this template's
-// markup (outside .kir-prose / bodyHtml), so it is never affected.
 const bodyHtml = optimizeProseImages(ensureSponsored(scrubFirstHandClaims(rawHtml)));
 
 const title = data.title;
 const description = data.description;
-const canonical = `${SITE_ORIGIN}/uutiset/${entry.id}/`;
+const canonical = `${SITE_ORIGIN}/oppaat/${entry.id}/`;
 const heroImage = data.heroImage;
 const heroImageAlt = data.heroImageAlt ?? data.title;
 
 /* -------------------------------------------------------------------------- */
 /* Freshness — passive "Päivitetty <fi-date>" (NOT a testing claim).          */
-/* Prefer updatedAt, fall back to publishedAt. Render nothing if unparseable. */
 /* -------------------------------------------------------------------------- */
 const FI_MONTHS = [
   "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta",
@@ -84,22 +81,17 @@ function isoDay(iso: string | null | undefined): string | undefined {
   return Number.isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);
 }
 
-/* The engine delivers `delivered` (not yet `published`) articles, so
- * `published_at` can be null while `updated_at` is always set. NewsArticle
- * REQUIRES a datePublished, so fall back to updatedAt when the feed has no
- * explicit publish date — never emit the schema without it. dateModified
- * still tracks updatedAt independently. */
 const updatedAt = (data.updatedAt ?? null) || data.publishedAt;
 const publishedAt = data.publishedAt ?? updatedAt;
 const freshnessDate = formatFiDate(updatedAt);
 const freshnessIso = isoDay(updatedAt);
 
 /* -------------------------------------------------------------------------- */
-/* NewsArticle JSON-LD — clean structured data for these new URLs.            */
+/* Article + BreadcrumbList JSON-LD — clean structured data for these URLs.   */
 /* -------------------------------------------------------------------------- */
-const newsLd: Record<string, unknown> = {
+const articleLd: Record<string, unknown> = {
   "@context": "https://schema.org",
-  "@type": "NewsArticle",
+  "@type": "Article",
   headline: title,
   description,
   inLanguage: data.language || "fi",
@@ -111,12 +103,23 @@ const newsLd: Record<string, unknown> = {
     url: SITE_ORIGIN + "/",
   },
 };
-if (publishedAt) newsLd.datePublished = publishedAt;
-if (updatedAt) newsLd.dateModified = updatedAt;
-if (heroImage) newsLd.image = [heroImage];
+if (publishedAt) articleLd.datePublished = publishedAt;
+if (updatedAt) articleLd.dateModified = updatedAt;
+if (heroImage) articleLd.image = [heroImage];
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Etusivu", item: `${SITE_ORIGIN}/` },
+    { "@type": "ListItem", position: 2, name: "Oppaat", item: `${SITE_ORIGIN}/oppaat/` },
+    { "@type": "ListItem", position: 3, name: title, item: canonical },
+  ],
+};
 
 const jsonLd = [
-  `<script type="application/ld+json">${JSON.stringify(newsLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(articleLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`,
 ];
 ---
 
@@ -134,14 +137,14 @@ const jsonLd = [
         <ol class="crumbs">
           <li class="crumbs__item"><a href="/">Etusivu</a></li>
           <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
-          <li class="crumbs__item"><a href="/uutiset/">Uutiset</a></li>
+          <li class="crumbs__item"><a href="/oppaat/">Oppaat</a></li>
           <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
           <li class="crumbs__item" aria-current="page">{title}</li>
         </ol>
       </nav>
 
       <div class="art-hero__inner">
-        <span class="eyebrow">Uutiset</span>
+        <span class="eyebrow">Opas</span>
         <h1 class="art-hero__title">{title}</h1>
         {freshnessDate && (
           <p class="art-hero__meta">
@@ -177,7 +180,7 @@ const jsonLd = [
           <div class="art-side__sticky">
             <RelatedCasinos
               limit={4}
-              links={[{ label: "Kaikki uutiset", href: "/uutiset/" }]}
+              links={[{ label: "Kaikki oppaat", href: "/oppaat/" }]}
             />
           </div>
         </div>
@@ -270,7 +273,6 @@ const jsonLd = [
     min-width: 0;
   }
 
-  /* Engine hero image — constrained, never overflows the column. */
   .art-hero-img {
     margin: 0 0 1.75rem;
   }
@@ -292,9 +294,7 @@ const jsonLd = [
     }
   }
 
-  /* ---------------- Light-theme prose (overflow-safe) ----------------
-     Mirrors ArticlePage.astro's .kir-prose treatment so engine articles read
-     identically to the rest of the rebuilt site (0 overflow at 360px). */
+  /* ---------------- Light-theme prose (overflow-safe) ---------------- */
   .kir-prose {
     color: var(--ink-2);
     line-height: 1.75;
@@ -410,7 +410,7 @@ const jsonLd = [
     color: inherit;
   }
 
-  /* Comparison tables → overflow-safe scroll container (0 overflow at 360px). */
+  /* Comparison tables → overflow-safe scroll container. */
   .kir-prose :global(table) {
     display: block;
     width: 100%;

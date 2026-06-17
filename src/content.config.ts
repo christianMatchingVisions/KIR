@@ -11,6 +11,10 @@ export const collections = {
       title: z.string(),
       description: z.string(),
       language: z.string(),
+      // Engine article type ('guide' -> /oppaat/, news-like -> /uutiset/).
+      // Optional + defaulted so older synced entries (pre-field) still validate
+      // and keep their current /uutiset/ home.
+      articleType: z.string().optional().default("news"),
       publishedAt: z.string().nullable(),
       // ISO last-modified date — powers the "Päivitetty" freshness line.
       // Optional so older synced entries (pre-field) still validate.

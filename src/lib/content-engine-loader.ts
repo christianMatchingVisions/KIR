@@ -33,6 +33,12 @@ interface EngineArticle {
   title: string | null;
   slug: string | null;
   language: string;
+  /**
+   * Engine article type (review, guide, news, comparison, listicle,
+   * informational, landing). Drives the consumer routing: 'guide' → /oppaat/,
+   * everything news-like → /uutiset/. Older feeds may omit it (nullable).
+   */
+  article_type: string | null;
   renderings: { html: string; markdown: string };
   meta: { title: string | null; description: string | null };
   media: { kind: string; url: string | null; alt_text?: string | null }[];
@@ -44,6 +50,19 @@ interface FeedPage {
   data: EngineArticle[];
   next_cursor: string | null;
   has_more: boolean;
+}
+
+/**
+ * Shared routing classifier for delivered engine articles, used by BOTH hubs so
+ * a guide never appears in two places. 'guide' articles surface under /oppaat/;
+ * everything else (news, comparison, listicle, informational, review, landing,
+ * or an unknown/missing type) stays in the /uutiset/ news stream. Tolerant of a
+ * missing field (treated as news) so pre-field entries keep their current home.
+ */
+export function isGuideArticleType(
+  articleType: string | null | undefined,
+): boolean {
+  return (articleType ?? "").toLowerCase() === "guide";
 }
 
 export function contentEngineLoader(opts: {
@@ -94,6 +113,10 @@ export function contentEngineLoader(opts: {
               title: article.meta.title ?? article.title ?? "",
               description: article.meta.description ?? "",
               language: article.language,
+              // Article type drives consumer routing: 'guide' surfaces under
+              // /oppaat/, news-like types under /uutiset/. Default to 'news' so
+              // pre-field feed entries keep their current /uutiset/ home.
+              articleType: article.article_type ?? "news",
               publishedAt: article.published_at,
               updatedAt: article.updated_at ?? null,
               heroImage:

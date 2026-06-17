@@ -2,29 +2,43 @@
 /**
  * PaymentMethods.astro — the "Maksutavat ja kotiutukset" section.
  *
- * Each real payment-method NAME renders as a clean, equal-height card
- * (wallet/card Icon + name). The icon is `card` for card-like methods
- * (Visa/Mastercard), otherwise `wallet` — a light visual heuristic, never a
- * claim. NO fabricated per-method star ratings or payout/min times (we have no
- * such data). A short, generic, compliant note sits under the grid.
+ * TWO render modes, decided by the data available:
  *
+ *  1. RICH (engine) — when `details` (CasinoReview.paymentDetails) is present,
+ *     each method shows its payout time / min / rating supplied by the engine.
+ *     Only the sub-facts the engine actually provides are shown (no fabrication).
+ *
+ *  2. NAME-ONLY (scraped, default) — each real payment-method NAME renders as a
+ *     clean, equal-height card (wallet/card Icon + name). The icon is `card` for
+ *     card-like methods (Visa/Mastercard), otherwise `wallet` — a light visual
+ *     heuristic, never a claim. NO fabricated per-method ratings or payout/min
+ *     times. This is the exact behaviour shipped today.
+ *
+ * The component prefers `details` when given; otherwise falls back to `methods`.
  * The auto-fit grid centres a small set so 1–2 methods still look intentional,
- * and the whole section is omitted when there are no payment methods.
+ * and the whole section is omitted when there is nothing to show.
  *
  * Props:
- *   methods : string[]   (CasinoReview.paymentMethods)
- *   title?  : string     (default "Maksutavat ja kotiutukset")
+ *   methods  : string[]          (CasinoReview.paymentMethods)
+ *   details? : PaymentDetail[]   (CasinoReview.paymentDetails — engine-only)
+ *   title?   : string            (default "Maksutavat ja kotiutukset")
  */
 import Icon from "../Icon.astro";
 import type { IconName } from "../Icon.astro";
+import type { PaymentDetail } from "../../lib/casino-data";
 
 interface Props {
   methods: string[];
+  details?: PaymentDetail[];
   title?: string;
 }
 
-const { methods, title = "Maksutavat ja kotiutukset" } = Astro.props;
+const { methods, details, title = "Maksutavat ja kotiutukset" } = Astro.props;
+
 const list = (methods ?? []).filter((m) => m && m.trim().length > 0);
+// Rich engine detail wins when present (at least one named method).
+const rich = (details ?? []).filter((d) => d && d.name && d.name.trim().length > 0);
+const useRich = rich.length > 0;
 
 /** Card-like methods get the card icon; everything else the wallet icon. */
 function iconFor(name: string): IconName {
@@ -32,9 +46,63 @@ function iconFor(name: string): IconName {
     ? "card"
     : "wallet";
 }
+
+/** Format a 0–5 rating like "4,6" (Finnish comma), or null when absent. */
+function fmtRating(r: number | null | undefined): string | null {
+  if (r == null || !Number.isFinite(r)) return null;
+  return r.toFixed(1).replace(".", ",");
+}
 ---
 
-{list.length > 0 && (
+{useRich ? (
+  <section class="pm" aria-label={title}>
+    <h2 class="pm__title">{title}</h2>
+    <ul class="pm__grid pm__grid--rich">
+      {rich.map((d) => {
+        const rating = fmtRating(d.rating);
+        return (
+          <li class="pm__card pm__card--rich">
+            <span class="pm__head">
+              <span class="pm__ico" aria-hidden="true">
+                <Icon name={iconFor(d.name)} size={20} />
+              </span>
+              <span class="pm__name">{d.name}</span>
+            </span>
+            {(d.payoutTime || d.min || rating) && (
+              <dl class="pm__facts">
+                {d.payoutTime && (
+                  <div class="pm__fact">
+                    <dt>Kotiutus</dt>
+                    <dd>{d.payoutTime}</dd>
+                  </div>
+                )}
+                {d.min && (
+                  <div class="pm__fact">
+                    <dt>Minimi</dt>
+                    <dd>{d.min}</dd>
+                  </div>
+                )}
+                {rating && (
+                  <div class="pm__fact">
+                    <dt>Arvio</dt>
+                    <dd class="pm__rating">
+                      <Icon name="star" size={13} class="pm__rating-ico" />
+                      {rating}<span class="pm__rating-max"> / 5</span>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+    <p class="pm__note">
+      Talletukset ja kotiutukset hoituvat valitsemallasi maksutavalla. Tarkista
+      ajantasaiset rajat ja käsittelyajat kasinon sivuilta.
+    </p>
+  </section>
+) : list.length > 0 ? (
   <section class="pm" aria-label={title}>
     <h2 class="pm__title">{title}</h2>
     <ul class="pm__grid">
@@ -52,7 +120,7 @@ function iconFor(name: string): IconName {
       ajantasaiset rajat ja käsittelyajat kasinon sivuilta.
     </p>
   </section>
-)}
+) : null}
 
 <style>
   .pm {
@@ -108,6 +176,72 @@ function iconFor(name: string): IconName {
     color: var(--ink);
     line-height: 1.25;
     overflow-wrap: anywhere;
+  }
+
+  /* ---------------- Rich (engine) variant ---------------- */
+  .pm__grid--rich {
+    /* wider cards: name + a small facts list. */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+  }
+  .pm__card--rich {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    text-align: left;
+    min-height: 0;
+    padding: 1rem 1.05rem;
+  }
+  .pm__head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .pm__card--rich .pm__name {
+    font-size: 0.95rem;
+  }
+  .pm__facts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line);
+  }
+  .pm__fact {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+  .pm__fact dt {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-3);
+  }
+  .pm__fact dd {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .pm__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .pm__rating-ico {
+    color: var(--star, var(--cta));
+    flex: none;
+  }
+  .pm__rating-max {
+    font-weight: 600;
+    color: var(--ink-3);
   }
   .pm__note {
     margin: 0.2rem 0 0;

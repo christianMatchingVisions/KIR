@@ -7,26 +7,33 @@
  * canonical and a freshly-built BreadcrumbList JSON-LD. It gives the site's 218
  * blog guides an internal-link home and a clear nav destination ("Oppaat").
  *
- * Content: every post from getPosts() (already sorted newest-first by the data
- * layer) rendered as a card linking to /<slug>/ — title, formatted date, and a
- * short plain-text excerpt derived from excerptHtml. These are internal links to
- * the guides' own canonical URLs; no affiliate /go/ links live on this page.
+ * Content (TWO sources, merged newest-first + deduped):
+ *   (a) Content-Engine 'guide' articles  → getCollection("articles") filtered to
+ *       articleType === "guide" (link → /oppaat/<slug>/, rendered by
+ *       /oppaat/[slug].astro). These are the engine's general-content stream.
+ *   (b) the existing scraped blog guides → getPosts() (link → /<slug>/).
+ * Each renders as a card — title, formatted date, short plain-text excerpt.
+ * These are internal links to the guides' own canonical URLs; no affiliate /go/
+ * links live on this page. Deduped by slug so an engine guide that shares a slug
+ * with a scraped post is shown once (engine wins).
+ *
+ * GRACEFUL: when the engine delivers no guides, the list is exactly the scraped
+ * posts — the hub renders identically to today.
  *
  * NOTE: this page intentionally does NOT pass a seoPath (it has no preserved
  * head). It supplies its own canonical + description + BreadcrumbList instead.
  */
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Icon from "../../components/Icon.astro";
-import { getPosts, type Post } from "../../lib/content";
+import { getPosts } from "../../lib/content";
+import { isGuideArticleType } from "../../lib/content-engine-loader";
 
 const SITE_URL = "https://kasinotilmanrekisteroitymista.com";
 const CANONICAL = `${SITE_URL}/oppaat/`;
 const PAGE_TITLE = "Oppaat ja vinkit — Kasinot ilman rekisteröitymistä";
 const PAGE_DESC =
   "Kaikki kasino-oppaat ja vinkit yhdessä paikassa: pelaaminen ilman rekisteröitymistä, maksutavat, bonukset ja vastuullinen pelaaminen.";
-
-const posts: Post[] = getPosts();
-const postCount = posts.length;
 
 /* -------------------------------------------------------------------------- *
  * Helpers                                                                    *
@@ -50,12 +57,66 @@ function excerptText(html: string | undefined, max = 160): string {
 }
 
 /** Format an ISO date as Finnish "15.6.2026"; returns "" on bad input. */
-function fiDate(iso: string): string {
+function fiDate(iso: string | null | undefined): string {
   if (!iso) return "";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
   return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
 }
+
+/* -------------------------------------------------------------------------- *
+ * Build the unified, newest-first guide-card list (engine + scraped, deduped).
+ * -------------------------------------------------------------------------- */
+
+interface GuideCard {
+  slug: string;
+  href: string;
+  /** May contain entity-encoded markup from the scraped title (set:html). */
+  title: string;
+  /** ISO date for sorting + <time>. */
+  date: string;
+  dateLabel: string;
+  excerpt: string;
+  /** "Opas" (engine guide) | "" (scraped blog guide). */
+  kicker: string;
+}
+
+// (a) Engine 'guide' articles → /oppaat/<slug>/.
+const engineGuides = (await getCollection("articles")).filter((e) =>
+  isGuideArticleType(e.data.articleType),
+);
+const engineCards: GuideCard[] = engineGuides.map((e) => {
+  const date = e.data.publishedAt ?? e.data.updatedAt ?? "";
+  return {
+    slug: e.id,
+    href: `/oppaat/${e.id}/`,
+    title: e.data.title,
+    date,
+    dateLabel: fiDate(date),
+    excerpt: excerptText(e.data.description),
+    kicker: "Opas",
+  };
+});
+
+// (b) Scraped blog guides → /<slug>/.
+const postCards: GuideCard[] = getPosts().map((p) => ({
+  slug: p.slug,
+  href: `/${p.slug}/`,
+  title: p.title,
+  date: p.date,
+  dateLabel: fiDate(p.date),
+  excerpt: excerptText(p.excerptHtml),
+  kicker: "",
+}));
+
+// Merge + dedupe by slug (engine wins), then newest-first (no-date sinks last).
+const bySlug = new Map<string, GuideCard>();
+for (const c of postCards) bySlug.set(c.slug, c);
+for (const c of engineCards) bySlug.set(c.slug, c);
+const posts: GuideCard[] = [...bySlug.values()].sort((a, b) =>
+  (b.date || "").localeCompare(a.date || ""),
+);
+const postCount = posts.length;
 
 /* -------------------------------------------------------------------------- *
  * BreadcrumbList JSON-LD (Etusivu › Oppaat).                                 *
@@ -123,28 +184,27 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
     <div class="container">
       {postCount > 0 ? (
         <ul class="guides-grid" role="list">
-          {posts.map((p, i) => {
-            const date = fiDate(p.date);
-            const excerpt = excerptText(p.excerptHtml);
-            return (
-              <li class="guides-grid__item reveal" class:list={[`d${Math.min((i % 5) + 1, 5)}`]}>
-                <a class="guide-card card card--lift" href={`/${p.slug}/`}>
-                  {date && (
+          {posts.map((p, i) => (
+            <li class="guides-grid__item reveal" class:list={[`d${Math.min((i % 5) + 1, 5)}`]}>
+              <a class="guide-card card card--lift" href={p.href}>
+                <span class="guide-card__meta">
+                  {p.kicker && <span class="guide-card__kicker">{p.kicker}</span>}
+                  {p.dateLabel && (
                     <time class="guide-card__date" datetime={p.date}>
                       <Icon name="info" size={13} class="guide-card__date-ico" />
-                      {date}
+                      {p.dateLabel}
                     </time>
                   )}
-                  <h2 class="guide-card__title" set:html={p.title} />
-                  {excerpt && <p class="guide-card__excerpt">{excerpt}</p>}
-                  <span class="guide-card__cta">
-                    Lue opas
-                    <Icon name="arrow-right" size={16} />
-                  </span>
-                </a>
-              </li>
-            );
-          })}
+                </span>
+                <h2 class="guide-card__title" set:html={p.title} />
+                {p.excerpt && <p class="guide-card__excerpt">{p.excerpt}</p>}
+                <span class="guide-card__cta">
+                  Lue opas
+                  <Icon name="arrow-right" size={16} />
+                </span>
+              </a>
+            </li>
+          ))}
         </ul>
       ) : (
         <p class="muted">Oppaat eivät ole juuri nyt saatavilla.</p>
@@ -259,6 +319,24 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
   }
   .guide-card:hover {
     text-decoration: none;
+  }
+  .guide-card__meta {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .guide-card__kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   .guide-card__date {
     display: inline-flex;

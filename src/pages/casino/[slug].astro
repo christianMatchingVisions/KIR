@@ -48,7 +48,12 @@ import CasinoInfoGrid from "../../components/review/CasinoInfoGrid.astro";
 import ReviewFaq from "../../components/review/ReviewFaq.astro";
 import CasinoCard from "../../components/CasinoCard.astro";
 import Icon from "../../components/Icon.astro";
-import { getCasino, listCasinoSlugs, type CasinoReview } from "../../lib/casino-data";
+import {
+  getCasino,
+  listCasinoSlugs,
+  initEngineReviews,
+  type CasinoReview,
+} from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
 import { optimizeProseImages } from "../../lib/content";
 
@@ -56,6 +61,16 @@ import { optimizeProseImages } from "../../lib/content";
 export function getStaticPaths() {
   return listCasinoSlugs().map((slug) => ({ params: { slug } }));
 }
+
+// Build-time engine enrichment: load the GET /reviews Map ONCE before the
+// synchronous getCasino() merge below. Credentials are read from import.meta.env
+// HERE (the .astro module, where Astro reliably injects them — same pattern as
+// content.config.ts wiring the articles loader). No-ops gracefully (empty Map)
+// when the engine has no data / no credentials, so the page renders pure-scraped.
+await initEngineReviews({
+  apiUrl: import.meta.env.CE_API_URL,
+  apiKey: import.meta.env.CE_API_KEY,
+});
 
 const { slug } = Astro.params;
 const rawReview = slug ? getCasino(slug) : null;
@@ -224,6 +239,12 @@ const review = rawReview
         ...b,
         reviewHtml: optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.reviewHtml))),
         bonusesHtml: optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.bonusesHtml))),
+        // Engine summary prose runs through the SAME compliance guards as the
+        // scraped prose: sponsored+nofollow on every /go/ link, no first-hand /
+        // testing claims, lazy below-the-fold images. undefined/null → no block.
+        summaryHtml: b.summaryHtml
+          ? optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.summaryHtml)))
+          : b.summaryHtml,
       };
     })()
   : null;
@@ -381,18 +402,23 @@ const hasAssessmentBars =
         {review.paymentMethods.length > 0 && (
           <section class="section--tight">
             <div class="container">
-              <PaymentMethods methods={review.paymentMethods} />
+              <PaymentMethods methods={review.paymentMethods} details={review.paymentDetails} />
             </div>
           </section>
         )}
 
         {/* ---------------- REVIEW PROSE (+ Bonukset) ---------------- */}
-        {(review.reviewHtml || review.bonusesHtml) && (
+        {(review.reviewHtml || review.bonusesHtml || review.summaryHtml) && (
           <section class="section--tight" id={PROSE_ANCHOR}>
             <div class="container--narrow">
               <h2 class="rev-prose__title">Arvostelu: {review.name}</h2>
               {review.reviewHtml && (
                 <div class="kir-prose" set:html={review.reviewHtml} />
+              )}
+              {/* Engine extra prose (compliance-hardened above) — only when the
+                  engine supplied summary_html; renders below the scraped prose. */}
+              {review.summaryHtml && (
+                <div class="kir-prose rev-engine-prose" set:html={review.summaryHtml} />
               )}
               {review.bonusesHtml && (
                 <div class="rev-bonuses">
@@ -556,6 +582,9 @@ const hasAssessmentBars =
   .rev-prose__title {
     margin: 0 0 1.1rem;
     color: var(--navy);
+  }
+  .rev-engine-prose {
+    margin-top: 1.25rem;
   }
   .rev-bonuses {
     margin-top: 1.75rem;
