@@ -56,6 +56,8 @@ import {
 } from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
 import { optimizeProseImages } from "../../lib/content";
+import { getCasinoSchemaBlocks } from "../../lib/casino-schema";
+import { getSeoHead } from "../../lib/seo-head";
 
 /** One static path per casino fragment slug. */
 export function getStaticPaths() {
@@ -274,6 +276,25 @@ const hasAssessmentBars =
   (review.subRatings.length > 0 ||
     (review.ratingOverall != null && Number.isFinite(review.ratingOverall)));
 
+/* -------------------------------------------------------------------------- *
+ * Structured data (findings B2 + H7)                                          *
+ * -------------------------------------------------------------------------- *
+ * Restore the casino's live Organization (+ Review on ~265) JSON-LD that lives
+ * VERBATIM in casino__<slug>/body.html — the SEO-head registry reads head.html
+ * only, so without this the body schema is dropped from the rebuilt page. We
+ * also append ONE additive E-E-A-T block (publisher Organization + editorial
+ * author "KIR-toimitus", no fabricated Person). We pass the preserved <head>'s
+ * jsonLd so any block already emitted there is skipped (no double-emission).
+ * These are raw <script type="application/ld+json"> strings → set:html verbatim.
+ * Closed/empty casinos still emit their Organization block + the E-E-A-T block. */
+const schemaBlocks: string[] = review
+  ? getCasinoSchemaBlocks(
+      review.slug,
+      review.name,
+      getSeoHead(review.url)?.jsonLd ?? [],
+    )
+  : [];
+
 /**
  * The 305 fragments all parse, but guard defensively: if a slug somehow has no
  * fragment, render a minimal "not found" page rather than crashing the build.
@@ -296,6 +317,14 @@ const hasAssessmentBars =
   </BaseLayout>
 ) : (
   <BaseLayout seoPath={review.url} bodyClass="casino-review">
+    {/* ---------------- STRUCTURED DATA (B2 + H7) ----------------
+        Live Organization (+ Review) JSON-LD restored VERBATIM from body.html,
+        plus the additive E-E-A-T publisher/editorial-author block. Emitted once
+        per page; valid in <body> per HTML5. Renders for open AND closed casinos. */}
+    {schemaBlocks.map((block) => (
+      <Fragment set:html={block} />
+    ))}
+
     {/* ---------------- BREADCRUMB ---------------- */}
     <nav class="section--tight crumbs-wrap" aria-label="Murupolku">
       <div class="container">

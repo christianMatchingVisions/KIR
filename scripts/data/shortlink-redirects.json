@@ -1,0 +1,3097 @@
+[
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11990"
+      }
+    ],
+    "destination": "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11987"
+      }
+    ],
+    "destination": "/tilivapaiden-kasinoiden-kayttovinkit-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11984"
+      }
+    ],
+    "destination": "/maksutapojen-rooli-kasinoilla-2026-opas-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11981"
+      }
+    ],
+    "destination": "/mika-on-tiliton-kasino-ja-miten-se-toimii/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11977"
+      }
+    ],
+    "destination": "/miten-bonusehdot-toimivat-kasinoilla-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11966"
+      }
+    ],
+    "destination": "/miksi-valita-tiliton-kasino-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11958"
+      }
+    ],
+    "destination": "/tilittoman-kasinon-toiminta-2026-opas-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11948"
+      }
+    ],
+    "destination": "/tilivapaiden-kasinoiden-edut-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11945"
+      }
+    ],
+    "destination": "/mita-tarkoittaa-pelilisenssi-opas-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11942"
+      }
+    ],
+    "destination": "/esimerkkeja-tilittomista-kasinoista-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11939"
+      }
+    ],
+    "destination": "/miksi-valita-tiliton-kasino-pelaajan-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11936"
+      }
+    ],
+    "destination": "/vinkkeja-turvalliseen-pelaamiseen-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11930"
+      }
+    ],
+    "destination": "/vinkit-turvalliseen-kasinopelaamiseen-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11927"
+      }
+    ],
+    "destination": "/turvallinen-peliprosessi-2026-opas-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11924"
+      }
+    ],
+    "destination": "/miksi-valita-trustly-maksu-kasinoille-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11912"
+      }
+    ],
+    "destination": "/kasinolisenssien-selitys-suomessa-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11909"
+      }
+    ],
+    "destination": "/miten-tilittomat-kasinot-toimivat-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11906"
+      }
+    ],
+    "destination": "/kasinoiden-edut-vuonna-2026-pelaajan-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11899"
+      }
+    ],
+    "destination": "/opas-turvalliseen-rahansiirtoon-kasinolla-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11896"
+      }
+    ],
+    "destination": "/mita-ovat-tilittomat-kasinot-selkea-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11880"
+      }
+    ],
+    "destination": "/turvallisuuden-tarkistuslista-kasinoille-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11870"
+      }
+    ],
+    "destination": "/opas-nopeisiin-nettikasino-bonuksiin-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11867"
+      }
+    ],
+    "destination": "/rooli-trustly-maksutavoissa-opas-suomalaisille-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11864"
+      }
+    ],
+    "destination": "/lisensoinnin-merkitys-suomalaisille-pikakasinoille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11861"
+      }
+    ],
+    "destination": "/verkkopankkimaksujen-merkitys-kasinoilla-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11858"
+      }
+    ],
+    "destination": "/tilittomien-kasinoiden-turvallisuusvaatimukset/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11855"
+      }
+    ],
+    "destination": "/nain-pelaat-turvallisesti-rekisteroimattomilla-kasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11851"
+      }
+    ],
+    "destination": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11840"
+      }
+    ],
+    "destination": "/atjkitchen-com-vaihtoehdot-6/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11836"
+      }
+    ],
+    "destination": "/top-pikakasinot-suomi-5/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11832"
+      }
+    ],
+    "destination": "/top-turvalliset-pikakasinot-4/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11827"
+      }
+    ],
+    "destination": "/nain-aloitat-rekisteroitymattoman-pelaamisen-helposti/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11819"
+      }
+    ],
+    "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11816"
+      }
+    ],
+    "destination": "/kasinot-ilman-tilia-suurimmat-edut-pelaajalle/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11788"
+      }
+    ],
+    "destination": "/siksi-valitset-pikakasinon-nopeat-ja-turvalliset-pelit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11780"
+      }
+    ],
+    "destination": "/miksi-valita-nopea-kasino-valitonta-pelaamista-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11777"
+      }
+    ],
+    "destination": "/regulation-importance-online-casino-speed-security/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11774"
+      }
+    ],
+    "destination": "/kasinoiden-lisenssivaatimukset-turvallisuus-ja-pelivalinta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11771"
+      }
+    ],
+    "destination": "/vinkit-turvalliseen-kasinopelaamiseen-ilman-tilia/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11768"
+      }
+    ],
+    "destination": "/nettikasinon-maksutavat-selitetty-nopeus-ja-turvallisuus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11758"
+      }
+    ],
+    "destination": "/parhaat-kasinot-listalla-turvallisimmat-ja-helpoimmat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11754"
+      }
+    ],
+    "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11751"
+      }
+    ],
+    "destination": "/parhaat-esimerkit-pikakasinoista-suomessa-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11748"
+      }
+    ],
+    "destination": "/miten-kasinoiden-lisenssit-muuttuvat-suomessa-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11739"
+      }
+    ],
+    "destination": "/opas-turvalliseen-kasinopelaamiseen-suojaat-pelisi-netissa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11735"
+      }
+    ],
+    "destination": "/tunnista-turvalliset-kasinot-sailtyseet-lisenssit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11732"
+      }
+    ],
+    "destination": "/maksutapojen-merkitys-online-kasinolla-nopeus-turvallisuus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11724"
+      }
+    ],
+    "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11720"
+      }
+    ],
+    "destination": "/valitse-turvallinen-tillitton-kasino-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11709"
+      }
+    ],
+    "destination": "/nain-kaytat-verovapaita-kasinoita-helposti-turvallisesti/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11704"
+      }
+    ],
+    "destination": "/maksutapojen-merkitys-tilittomilla-kasinoilla-valitse/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11698"
+      }
+    ],
+    "destination": "/top-pikakasinot-vertailu-6/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11693"
+      }
+    ],
+    "destination": "/parhaat-pay-n-play-kasinot-2026-5/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11651"
+      }
+    ],
+    "destination": "/top-mobiilikasinot-ilman-tilia-5/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11648"
+      }
+    ],
+    "destination": "/nopeat-kasinot-kotiutusajat-vertailu-4/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11643"
+      }
+    ],
+    "destination": "/parhaat-esimerkit-pay-n-play-kasinoista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11639"
+      }
+    ],
+    "destination": "/nain-verovapaus-vaikuttaa-nettikasinopelaamiseen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11633"
+      }
+    ],
+    "destination": "/pay-n-play-kasinoiden-edut-nopeus-turvallisuus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11630"
+      }
+    ],
+    "destination": "/turvallisen-pikakasinon-tarkistuslista-pelaa-huolettomasti/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11627"
+      }
+    ],
+    "destination": "/mobiilikasinolle-helposti-askel-askeleelta-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11620"
+      }
+    ],
+    "destination": "/suosituimmat-maksutavat-kasinoilla-nopein-turvallisin/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11616"
+      }
+    ],
+    "destination": "/verkkopankkimaksujen-rooli-kasinoilla-nopeus-pelaajalle/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11613"
+      }
+    ],
+    "destination": "/parhaat-verovapaat-pay-n-play-kasinot-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11601"
+      }
+    ],
+    "destination": "/kasinoiden-bonukset-selitetty-suomalaisille-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11596"
+      }
+    ],
+    "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11591"
+      }
+    ],
+    "destination": "/askel-askeleelta-trustly-kasinoilla-pelaaminen-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11585"
+      }
+    ],
+    "destination": "/askel-askeleelta-rekisteroitymattoman-kasinon-kaytto-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11561"
+      }
+    ],
+    "destination": "/miten-pikakasinot-toimivat-nopea-ja-turvallinen-opas-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11558"
+      }
+    ],
+    "destination": "/turvallinen-rekisteroitymisvapaa-kasino-2026-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11551"
+      }
+    ],
+    "destination": "/miksi-valita-kasino-ilman-tilia-vuonna-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11548"
+      }
+    ],
+    "destination": "/turvallisuus-kasinolla-ilman-tilia-opas-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11545"
+      }
+    ],
+    "destination": "/turvallinen-kasinopelaaminen-ilman-rekisteroitymista-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11542"
+      }
+    ],
+    "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11536"
+      }
+    ],
+    "destination": "/top-pikakasinot-bonuksilla-6/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11530"
+      }
+    ],
+    "destination": "/verovapaat-kasinot-vertailu-7/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11520"
+      }
+    ],
+    "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11517"
+      }
+    ],
+    "destination": "/esimerkkeja-nettikasinoista-ilman-tilia-2026-valintakriteerit-ja-suositukset/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11514"
+      }
+    ],
+    "destination": "/turvallisen-tilittoman-kasinon-valinta-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11511"
+      }
+    ],
+    "destination": "/verkkopankkimaksut-kasinoilla-2026-nopea-ja-turvallinen-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11508"
+      }
+    ],
+    "destination": "/turvallisuus-pay-n-play-kasinoilla-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11505"
+      }
+    ],
+    "destination": "/nopeat-kotiutukset-kasinolla-95-prosenttia-nopeammin/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11498"
+      }
+    ],
+    "destination": "/kasinot-ilman-rekisteroitymista-2026-70-turvallisempia-pelaajia/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11495"
+      }
+    ],
+    "destination": "/turvallisuus-pikakasinoilla-2026-90-pelaajista-luottaa-nopeuteen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11489"
+      }
+    ],
+    "destination": "/kasino-ilman-rekisteroitymista-60-bonuksia-40-nopeampi/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11486"
+      }
+    ],
+    "destination": "/turvallinen-pelaaminen-vertailu-kasinot-tarjoaa-vastuullisuuden/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11482"
+      }
+    ],
+    "destination": "/kasino-ilman-rekisteroitymista-ohje/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11478"
+      }
+    ],
+    "destination": "/bitcoin-hintaromahdus-syyt-analyysi/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11473"
+      }
+    ],
+    "destination": "/kasinon-edut-ilman-rekisterointia/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11469"
+      }
+    ],
+    "destination": "/kasino-ilman-rekisteroitymista-edut-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11457"
+      }
+    ],
+    "destination": "/miksi-valita-kasino-ilman-rekisteroitymista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11454"
+      }
+    ],
+    "destination": "/turvallisen-kasinopelaamisen-vinkit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11451"
+      }
+    ],
+    "destination": "/turvallisuus-kasinot-ilman-tilia/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11446"
+      }
+    ],
+    "destination": "/kasino-ilman-rekisteroitymista-suomi/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11438"
+      }
+    ],
+    "destination": "/mika-on-pikakasino-nopea-turvallinen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11433"
+      }
+    ],
+    "destination": "/7-kohdan-turvallisen-kasinon-tarkistuslista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11430"
+      }
+    ],
+    "destination": "/kuinka-pelata-kasino-ilman-rekisteroitymista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11421"
+      }
+    ],
+    "destination": "/pay-n-play-kasinon-toimintaperiaate/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11418"
+      }
+    ],
+    "destination": "/askel-askeleelta-rekisteroitymaton-kasino/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11415"
+      }
+    ],
+    "destination": "/turvallisuusvaatimukset-nettikasinoilla-2026/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11412"
+      }
+    ],
+    "destination": "/turvallisuusvaatimukset-suomalaisilla-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11402"
+      }
+    ],
+    "destination": "/trustly-casino-nopeus-turvallisuus-suomi/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11399"
+      }
+    ],
+    "destination": "/turvallisuus-pikakasinoilla-selitettyna/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11391"
+      }
+    ],
+    "destination": "/kuinka-pelata-kasinoilla-ilman-tilia/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11386"
+      }
+    ],
+    "destination": "/opas-turvallisen-kasinon-valintaan/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11380"
+      }
+    ],
+    "destination": "/nopeat-kotiutukset-kasinot-vertailu-6/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11377"
+      }
+    ],
+    "destination": "/suosituimmat-kasinot-ilman-rekisteroitymista-5/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11372"
+      }
+    ],
+    "destination": "/top-pikakasinot-suomi-7/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11368"
+      }
+    ],
+    "destination": "/kasinoiden-edut-ilman-rekisteroitymista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11357"
+      }
+    ],
+    "destination": "/askel-askeleelta-rekisteroitymattomalla-kasinolla-pelaaminen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11347"
+      }
+    ],
+    "destination": "/rooli-verkkopankkimaksuissa-mobiilikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11332"
+      }
+    ],
+    "destination": "/grid-slotit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11316"
+      }
+    ],
+    "destination": "/kolikkopelien-eri-rtp-vaihtoehdot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11308"
+      }
+    ],
+    "destination": "/kuinka-valita-oikea-kolikkopeli/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11304"
+      }
+    ],
+    "destination": "/talletusbonukset-vs-kateispalautus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11296"
+      }
+    ],
+    "destination": "/2026-nettikasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11280"
+      }
+    ],
+    "destination": "/kryptokasinoiden-turvallisuus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11246"
+      }
+    ],
+    "destination": "/mika-on-hyva-kierratysvaatimus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11225"
+      }
+    ],
+    "destination": "/kuinka-pelaat-kryptokasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11164"
+      }
+    ],
+    "destination": "/uudet-jouluslotit-2025/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11160"
+      }
+    ],
+    "destination": "/black-friday-kasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11151"
+      }
+    ],
+    "destination": "/oracle-of-gold-arvostelu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11146"
+      }
+    ],
+    "destination": "/gamification-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11139"
+      }
+    ],
+    "destination": "/le-cowboy-arvostelu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11115"
+      }
+    ],
+    "destination": "/joulu-kasino-bonukset-ja-kalenterit-2025/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11109"
+      }
+    ],
+    "destination": "/live-game-show-pelit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11082"
+      }
+    ],
+    "destination": "/kimppa-talletukset-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11023"
+      }
+    ],
+    "destination": "/halloween-kasino-bonukset/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "11001"
+      }
+    ],
+    "destination": "/livekasino-pelit-vs-poytapelit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10996"
+      }
+    ],
+    "destination": "/live-blackjack-strategiat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10991"
+      }
+    ],
+    "destination": "/ilmaiskierrokset-bonukset-ilman/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10985"
+      }
+    ],
+    "destination": "/kryptokasinoiden-suosio-kasvussa-mika-selittaa-ilmion/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10980"
+      }
+    ],
+    "destination": "/mika-tekee-nettikasinopelaamisesta-niin-hauskaa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10974"
+      }
+    ],
+    "destination": "/uudet-maksutavat-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10965"
+      }
+    ],
+    "destination": "/top-3-tulevat-kolikkopelit-2025/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10960"
+      }
+    ],
+    "destination": "/yleisimmat-ongelmat-nettikasinoilla-ja-kuinka-ratkaiset-ne/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10944"
+      }
+    ],
+    "destination": "/sisarkasinot-vs-itsenaiset-kasinot-kumpi-sopii-sinulle-paremmin/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10922"
+      }
+    ],
+    "destination": "/crash-mines-ja-plinko/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10919"
+      }
+    ],
+    "destination": "/scatter-pays/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10915"
+      }
+    ],
+    "destination": "/nopeat-kotiutukset-nettikasinoilta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10885"
+      }
+    ],
+    "destination": "/10-splitata/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10882"
+      }
+    ],
+    "destination": "/kuinka-pelaat-vastuullisesti/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10866"
+      }
+    ],
+    "destination": "/onko-nettikasinon-valinnalla-merkitysta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10862"
+      }
+    ],
+    "destination": "/ostobonukset-vs-featurespinnit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10817"
+      }
+    ],
+    "destination": "/fire-in-the-hole-3-kolikkopeliarvostelu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10799"
+      }
+    ],
+    "destination": "/veikkauksen-monopoli-murtuu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10759"
+      }
+    ],
+    "destination": "/nettikasinoiden-tilinvahvistus-kyc-mika-se-on-ja-miksi-sita-vaaditaan/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10753"
+      }
+    ],
+    "destination": "/kolikkopeliturnaukset-hitti-vai-huti/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10668"
+      }
+    ],
+    "destination": "/opas-parhaan-kasinobonuksen-loytamiseen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10658"
+      }
+    ],
+    "destination": "/parhaat-klassikkoslotit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10639"
+      }
+    ],
+    "destination": "/kolikkopelien-teemat-mika-niissa-viehattaa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10624"
+      }
+    ],
+    "destination": "/onnenpyora-bonukset-uusin-bonusmalli/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10602"
+      }
+    ],
+    "destination": "/kolikkopelien-erikoisominaisuudet-mita-kannattaa-tietaa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10537"
+      }
+    ],
+    "destination": "/miten-loytaa-itselle-sopiva-livekasino-peli/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10530"
+      }
+    ],
+    "destination": "/cashback-ja-rakeback-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10510"
+      }
+    ],
+    "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10360"
+      }
+    ],
+    "destination": "/pragmatic-play-pelit-monipuolista-viihdetta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10352"
+      }
+    ],
+    "destination": "/pragmatic-play-nettikasinopelien-edellakavija/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10343"
+      }
+    ],
+    "destination": "/miksi-valita-uudet-2025-nettikasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10266"
+      }
+    ],
+    "destination": "/kuumat-vs-kylmat-kasinopelit-faktaa-vai-fiktiota/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10253"
+      }
+    ],
+    "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10179"
+      }
+    ],
+    "destination": "/parhaat-joulupelit-nettikasinoilla-2024/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10172"
+      }
+    ],
+    "destination": "/mita-ovat-nettikasinoiden-vip-ohjelmat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10133"
+      }
+    ],
+    "destination": "/mita-bonuskoodit-ovat-ja-miksi-niita-kaytetaan/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10101"
+      }
+    ],
+    "destination": "/parhaat-livekasinopelit-2024/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10071"
+      }
+    ],
+    "destination": "/rahapelit-onko-kyse-pelkasta-onnesta-vai-taidosta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10032"
+      }
+    ],
+    "destination": "/kuinka-maksimoida-voitot-nettikasinolla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10026"
+      }
+    ],
+    "destination": "/kuinka-loytaa-sopiva-nettikasino-ekspertin-vinkit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10020"
+      }
+    ],
+    "destination": "/erilaiset-strategiat-kolikkopeleille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9988"
+      }
+    ],
+    "destination": "/kuinka-nettikasino-pelit-syntyvat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9935"
+      }
+    ],
+    "destination": "/parhaat-raaputusarvat-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9825"
+      }
+    ],
+    "destination": "/suosituimmat-e-lompakot-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9789"
+      }
+    ],
+    "destination": "/top-kasino-pelivalmistajat-parhaat-kasino-palveluntarjoajat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9742"
+      }
+    ],
+    "destination": "/katevasti-mobiililla-apple-pay-ja-google-pay-yha-useamman-nettikasinon-valikoimassa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9707"
+      }
+    ],
+    "destination": "/esportsin-ja-nettikasinoiden-historia-ja-kasvu-kasi-kadessa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9691"
+      }
+    ],
+    "destination": "/modernit-livekasino-kokemukset-klassisesta-blackjackista-live-game-show/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9550"
+      }
+    ],
+    "destination": "/kuinka-nettikasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9497"
+      }
+    ],
+    "destination": "/slottien-yha-monimutkaisemmat-ominaisuudet/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9464"
+      }
+    ],
+    "destination": "/rahat-tilille-viiveetta-yleisimmat-ongelmat-nettikasinoiden-kotiutuksissa-ja-kuinka-selvittaa-ne/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9374"
+      }
+    ],
+    "destination": "/crash-pelit-uhkapelien-uusin-aalto/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9352"
+      }
+    ],
+    "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9337"
+      }
+    ],
+    "destination": "/hacksaw-klassikot-heratetaan-taas-henkiin-arvostelussa-uutuus-slotti-keep-em/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9315"
+      }
+    ],
+    "destination": "/jackpot-pelit-jopa-miljoonien-eurojen-voittoja/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9262"
+      }
+    ],
+    "destination": "/raketti-kasino-vuoden-kuumin-uutuus-suomalaisille-pelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9248"
+      }
+    ],
+    "destination": "/kolikkopelien-ostobonukset-hitti-vai-huti/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9222"
+      }
+    ],
+    "destination": "/miksi-pelata-uusilla-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9216"
+      }
+    ],
+    "destination": "/uutuus-kolikkopeli-hacksaw-gamingilta-arvostelussa-rusty-curly/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9129"
+      }
+    ],
+    "destination": "/slotti-arvostelu-fireworks-megaways-btgn-kuuma-uutuus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9123"
+      }
+    ],
+    "destination": "/modernit-pikakasinot-mobiili-edella/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9109"
+      }
+    ],
+    "destination": "/kasinopelien-trendit-mita-seuraavaksi/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9027"
+      }
+    ],
+    "destination": "/suomalaiset-nettikasinot-ja-kryptovaluutta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8968"
+      }
+    ],
+    "destination": "/pelivalikoima-kasinoilla-ilman-rekisteroitymista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8858"
+      }
+    ],
+    "destination": "/slottien-volatiliteetti-pelin-valinta-volatiliteetin-mukaan/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8923"
+      }
+    ],
+    "destination": "/euteller-vs-zimpler-ja-brite-mika-on-paras-maksuvaihtoehto-kasinopelaajille/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8854"
+      }
+    ],
+    "destination": "/nettikasinoiden-vip-ohjelmat-kuinka-kasinot-palkitsevat-uskollisuutta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8850"
+      }
+    ],
+    "destination": "/bonusten-kierratysvaatimukset-kuinka-paihittaa-ne/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8799"
+      }
+    ],
+    "destination": "/satunnaislukugeneraattorin-rng-rooli-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8795"
+      }
+    ],
+    "destination": "/kasinot-ilman-rekisterointia-ja-bonukset-minkalaisia-tarjouksia-pikakasinot-tarjoavat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8651"
+      }
+    ],
+    "destination": "/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8389"
+      }
+    ],
+    "destination": "/vastuullinen-pelaaminen-hauskuuden-ja-riskin-tasapaino-pikakasinoiden-maailmassa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8395"
+      }
+    ],
+    "destination": "/voittavat-strategiat-kuinka-maksimoida-mahdollisuutesi-kasinoilla-ilman-rekisteroitymista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8385"
+      }
+    ],
+    "destination": "/pikakasinoiden-kasvava-suosio-kuinka-kasinot-ilman-rekisteroitymista-muuttavat-alaa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8381"
+      }
+    ],
+    "destination": "/pelitrendit-fortnitesta-peliautomaatteihin-mika-vetaa-pelaajia-puoleensa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8377"
+      }
+    ],
+    "destination": "/pelillistaminen-nettikasinoilla-kuinka-pelaaminen-on-kehittynyt-vuosien-varrella/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8373"
+      }
+    ],
+    "destination": "/kuinka-pikakasinot-takaavat-reilun-pelin/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8369"
+      }
+    ],
+    "destination": "/kryptokasinot-nettikasinoiden-tulevaisuus-vai-pelkka-muoti-ilmio/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8065"
+      }
+    ],
+    "destination": "/online-kasinoiden-evoluutio-vuonna-2023-trendit-ja-innovoinnit/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "7624"
+      }
+    ],
+    "destination": "/turvallinen-ja-varma-kuinka-tunnistaa-luotettavat-suomalaiset-nettikasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "7019"
+      }
+    ],
+    "destination": "/suomi-harkitsee-veikkauksen-monopolin-lopettamista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "6030"
+      }
+    ],
+    "destination": "/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5606"
+      }
+    ],
+    "destination": "/verovapaus-nettikasinoilla/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5577"
+      }
+    ],
+    "destination": "/mitka-ovat-kryptovaluuttojen-edut-nettikasinolla-pelattaessa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5500"
+      }
+    ],
+    "destination": "/parhaat-suomalaiset-nettikasinostriimaajat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5430"
+      }
+    ],
+    "destination": "/top-5-kolikkopelit-vuonna-2021/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5405"
+      }
+    ],
+    "destination": "/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5101"
+      }
+    ],
+    "destination": "/dragon-gaming/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5063"
+      }
+    ],
+    "destination": "/veivatko-nettikasinot-pelaajia-peliautomaateilta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "4960"
+      }
+    ],
+    "destination": "/arvostelu-viikinkiaiheisista-videokolikkopeleista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "4516"
+      }
+    ],
+    "destination": "/valletta-megaways-on-visuaalisesti-nayttava-ja-jannittava-kolikkopeli/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3872"
+      }
+    ],
+    "destination": "/hacksaw-gaming/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3851"
+      }
+    ],
+    "destination": "/evoplay-entertainment-tunnetaan-laadukkaista-peleistaan/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3786"
+      }
+    ],
+    "destination": "/bgaming-luo-houkuttelevimmat-kasinopelit-jokaiselle-pelaajalle/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3763"
+      }
+    ],
+    "destination": "/bf-games/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3749"
+      }
+    ],
+    "destination": "/nolimit-city/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10409"
+      }
+    ],
+    "destination": "/pragmatic-play/the-dog-house-arvostelu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10397"
+      }
+    ],
+    "destination": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10389"
+      }
+    ],
+    "destination": "/pragmatic-play/great-rhino-megaways/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10381"
+      }
+    ],
+    "destination": "/pragmatic-play/wolf-gold-arvostelu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10372"
+      }
+    ],
+    "destination": "/pragmatic-play/sweet-bonanza-arvostelu/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10218"
+      }
+    ],
+    "destination": "/nettikasinot-luotettavat-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10183"
+      }
+    ],
+    "destination": "/kasinopelit-netissa/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "10004"
+      }
+    ],
+    "destination": "/pragmatic-play/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9968"
+      }
+    ],
+    "destination": "/endorphina/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9945"
+      }
+    ],
+    "destination": "/euteller-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9728"
+      }
+    ],
+    "destination": "/fugaso/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9592"
+      }
+    ],
+    "destination": "/pelivalmistajat/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "9492"
+      }
+    ],
+    "destination": "/siru-mobile-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8842"
+      }
+    ],
+    "destination": "/kryptokasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8727"
+      }
+    ],
+    "destination": "/brite-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8658"
+      }
+    ],
+    "destination": "/curacao-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8612"
+      }
+    ],
+    "destination": "/mga-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "8327"
+      }
+    ],
+    "destination": "/kasino-ilman-arvostelut/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "7246"
+      }
+    ],
+    "destination": "/euteller-pikakasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "6754"
+      }
+    ],
+    "destination": "/live-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "6737"
+      }
+    ],
+    "destination": "/apple-pay-casinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "6733"
+      }
+    ],
+    "destination": "/zimpler-pikakasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5884"
+      }
+    ],
+    "destination": "/cashback-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5728"
+      }
+    ],
+    "destination": "/trustly-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5647"
+      }
+    ],
+    "destination": "/kaikki-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "5252"
+      }
+    ],
+    "destination": "/non-sticky-bonus/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "4163"
+      }
+    ],
+    "destination": "/casino/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3761"
+      }
+    ],
+    "destination": "/uutiset/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3710"
+      }
+    ],
+    "destination": "/5-syyta-miksi-pelata-kasinoilla-ilman-rekisteroitymista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "3416"
+      }
+    ],
+    "destination": "/meista/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "2891"
+      }
+    ],
+    "destination": "/ilmaiskierroksia-ilman-talletusta/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "2887"
+      }
+    ],
+    "destination": "/kasinobonukset/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "2882"
+      }
+    ],
+    "destination": "/uudet-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p",
+        "value": "2875"
+      }
+    ],
+    "destination": "/suomen-parhaat-nettikasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/",
+    "has": [
+      {
+        "type": "query",
+        "key": "p"
+      }
+    ],
+    "destination": "/",
+    "permanent": false
+  }
+]

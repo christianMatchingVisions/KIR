@@ -676,11 +676,19 @@ function parseSubRatings(arviotCard: string): SubRating[] {
  * Public API
  * ------------------------------------------------------------------ */
 
-/** All casino fragment slugs (the "<slug>" of casino__<slug>), sorted. */
+/** All casino fragment slugs (the "<slug>" of casino__<slug>), sorted.
+ *
+ * Requires a body.html: some casino__<slug> dirs are intentionally meta-only
+ * (e.g. yoyo-casino, jackie-jackpot — published in the WP DB but 301'd to home
+ * on the live front-end, so they have no faithful content to render). Without
+ * the body.html guard they would emit a content-less "not found" page at a URL
+ * the live site redirects away — an indexable soft-404. They are handled by a
+ * 301 redirect in vercel.json instead. */
 export function listCasinoSlugs(): string[] {
   if (!existsSync(FRAGMENTS_DIR)) return [];
   return readdirSync(FRAGMENTS_DIR, { withFileTypes: true })
     .filter((e) => e.isDirectory() && e.name.startsWith("casino__"))
+    .filter((e) => existsSync(join(FRAGMENTS_DIR, e.name, "body.html")))
     .map((e) => e.name.slice("casino__".length))
     .sort();
 }

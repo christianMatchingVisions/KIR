@@ -30,12 +30,43 @@ import { isGuideArticleType } from "../../lib/content-engine-loader";
 
 const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
+/* -------------------------------------------------------------------------- *
+ * DEMO / PLACEHOLDER GUARD (finding H3).                                       *
+ * The Content Engine is NOT live yet — a demo endpoint ships fixture entries   *
+ * (slugs `engine-guide-talletukset` / `engine-news-uutinen`, placeholder       *
+ * descriptions "Guide desc" / "News desc", title prefixes ENGINEGUIDE/         *
+ * ENGINENEWS) that never existed on the live site and MUST NOT become real     *
+ * URLs on a penalty-recovering domain. The guard is defined INSIDE             *
+ * getStaticPaths: Astro runs getStaticPaths in isolation, so module-scope      *
+ * frontmatter consts/functions are not reliably in scope there.                *
+ * -------------------------------------------------------------------------- */
 export async function getStaticPaths() {
+  const DEMO_ENGINE_SLUGS = new Set([
+    "engine-guide-talletukset",
+    "engine-news-uutinen",
+  ]);
+  const isPlaceholderText = (s: string | null | undefined): boolean => {
+    const t = (s ?? "").trim().toLowerCase();
+    return t === "" || t === "guide desc" || t === "news desc";
+  };
+  const isRealEngineEntry = (
+    data: { title?: string | null; description?: string | null },
+    id: string,
+  ): boolean => {
+    if (DEMO_ENGINE_SLUGS.has(id)) return false;
+    if (/^engine(guide|news)\b/i.test((data.title ?? "").trim())) return false;
+    if (isPlaceholderText(data.description)) return false;
+    return true;
+  };
+
   const articles = await getCollection("articles");
   // News stream only — 'guide' articles render at /oppaat/<slug>/ instead, so
   // each engine article has exactly one canonical URL (no /uutiset/ duplicate).
+  // isRealEngineEntry() drops the engine's demo/placeholder fixtures so no stub
+  // page ships to a recovering domain — with nothing real served, this is [].
   return articles
     .filter((entry) => !isGuideArticleType(entry.data.articleType))
+    .filter((entry) => isRealEngineEntry(entry.data, entry.id))
     .map((entry) => ({
       params: { slug: entry.id },
       props: { entry },

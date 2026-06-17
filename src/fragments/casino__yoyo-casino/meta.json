@@ -1,0 +1,18 @@
+{
+  "path": "/casino/yoyo-casino/",
+  "slug": "yoyo-casino",
+  "restId": 9470,
+  "title": "YoYo Casino",
+  "restStatus": "publish",
+  "restModified": "2026-03-18T14:05:08",
+  "liveCapture": {
+    "fetchedAt": "2026-06-17",
+    "httpStatus": 301,
+    "redirectTo": "https://kasinotilmanrekisteroitymista.com/",
+    "redirectBy": "redirection (WordPress Redirection plugin, X-Redirect-By header)",
+    "inSitemap": false,
+    "note": "LIVE 301-redirects this URL to the homepage for BOTH crawler and browser User-Agents, and OMITS it from casino-sitemap.xml (305 entries, matching the 305 existing fragments). Despite the stale REST row reading status=publish / noindex=false, the public site does NOT serve a page here. There is therefore no head/body/JSON-LD to capture byte-faithfully, and no parseable review. Fabricating a review would violate the no-invention constraint and resurrect a URL the live site deliberately killed (penalty-recovery risk)."
+  },
+  "buildAction": "REDIRECT_301_TO_HOME",
+  "integratorTodo": "True parity with LIVE = a 301 of /casino/yoyo-casino/ to / (NOT a built review page). (1) Add the 301 to the project's redirect map (e.g. the /go/ + legacy-redirect mechanism / vercel.json / astro redirects config) so cutover mirrors the live Redirection-plugin rule. (2) Because this directory has NO body.html, listCasinoSlugs() in src/lib/casino-data.ts would still emit /casino/yoyo-casino/ as a static path and the route would render a soft-404 'Kasinoa ei löytynyt' page WITHOUT a preserved seoPath/canonical — a regression. EXCLUDE casino__yoyo-casino + casino__jackie-jackpot from getStaticPaths (or make listCasinoSlugs require body.html) so no soft-404 page is built. This meta.json is a faithful record only; it is NOT consumed as a renderable fragment."
+}

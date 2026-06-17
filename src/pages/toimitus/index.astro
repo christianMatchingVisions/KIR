@@ -1,0 +1,431 @@
+---
+/**
+ * /toimitus/ — editorial & methodology page ("Näin arvostelemme kasinot").
+ *
+ * WHY (E-E-A-T / penalty recovery): a transparent, on-site explanation of HOW
+ * the site rates casinos and WHO is behind the reviews is a quality signal
+ * Google's reviewer/E-E-A-T guidance rewards, and it is a credibility anchor
+ * for a recovering domain. This is a brand-new URL (absent from the scraped
+ * SEO registry), so it builds a CLEAN head on BaseLayout: title + meta
+ * description + self-canonical + Organization/WebPage JSON-LD. Indexable.
+ *
+ * HARD COMPLIANCE BOUNDARIES (do not weaken):
+ *  - NO first-hand / "we tested / we played" claims. The methodology DESCRIBES
+ *    the criteria assessed (licence, payouts, payment methods, bonuses,
+ *    support) — it does not assert hands-on testing.
+ *  - The byline is the ORGANISATION ("KIR-toimitus"), NOT a fabricated named
+ *    human reviewer.
+ *  - The contact email below is a PLACEHOLDER. A real, on-domain, monitored
+ *    mailbox MUST be supplied by the site owner before launch (flagged in the
+ *    integrator report under owner_inputs_needed).
+ *  - 18+ / Peluuri / affiliate-disclosure render globally via BaseLayout's
+ *    Footer + DisclosureBar.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+const canonical = `${SITE_ORIGIN}/toimitus/`;
+const title = "Näin arvostelemme kasinot – KIR-toimitus";
+const description =
+  "Näin Kasinot ilman rekisteröitymistä -toimitus arvioi nettikasinot: lisenssi, kotiutusnopeus, maksutavat, bonusehdot ja asiakaspalvelu. Riippumaton menetelmä ja yhteystiedot.";
+
+/* OWNER INPUT REQUIRED — replace with a real, monitored on-domain mailbox. */
+const CONTACT_EMAIL = "toimitus@kasinotilmanrekisteroitymista.com";
+
+/* Self-canonical + a default OG image for this net-new page. BaseLayout has no
+   og:image prop on its clean-head path, so we inject the social tags through
+   its raw-head slot (the `jsonLd` prop is injected verbatim with set:html and
+   accepts any head fragment, not only JSON-LD). The shell team can later make
+   /og/default.png the global default; emitting it here keeps this page
+   socially complete in the meantime. */
+const headExtras = [
+  `<meta property="og:type" content="website" />`,
+  `<meta property="og:title" content="Näin arvostelemme kasinot – KIR-toimitus" />`,
+  `<meta property="og:description" content="Riippumaton arviointimenetelmä: lisenssi, kotiutukset, maksutavat, bonusehdot ja asiakaspalvelu." />`,
+  `<meta property="og:url" content="${canonical}" />`,
+  `<meta property="og:image" content="${SITE_ORIGIN}/og/default.png" />`,
+  `<meta name="twitter:card" content="summary_large_image" />`,
+  `<meta name="twitter:image" content="${SITE_ORIGIN}/og/default.png" />`,
+];
+
+/* Criteria the reviews assess — DESCRIPTIVE (what is checked), never a hands-on
+   testing claim. */
+const criteria: { icon: "lock" | "wallet" | "card" | "gift" | "headset" | "shield"; title: string; body: string }[] = [
+  {
+    icon: "lock",
+    title: "Lisenssi ja turvallisuus",
+    body:
+      "Tarkistamme, millä pelilisenssillä (esim. MGA tai Curaçao) kasino toimii, sekä SSL-suojauksen ja tietosuojakäytännöt. Lisensointi on edellytys sille, että kasino ylipäätään huomioidaan vertailuissamme.",
+  },
+  {
+    icon: "wallet",
+    title: "Kotiutusnopeus",
+    body:
+      "Arvioimme kasinon ilmoittamat ja yleisesti raportoidut kotiutusajat sekä mahdolliset nostorajat. Nopeat ja läpinäkyvät kotiutukset painavat arvioinnissa eniten.",
+  },
+  {
+    icon: "card",
+    title: "Maksutavat",
+    body:
+      "Käymme läpi tuetut maksu- ja kotiutustavat – erityisesti suomalaisille tärkeät pankkitunnistautumiset (Trustly, Zimpler, Brite) sekä mahdolliset kulut ja rajat.",
+  },
+  {
+    icon: "gift",
+    title: "Bonukset ja ehdot",
+    body:
+      "Tarkastelemme tarjousten kokoa ja ennen kaikkea niiden ehtoja: kierrätysvaatimuksia, aikarajoja ja peliosuuksia. Selkeät ja kohtuulliset ehdot ovat meille bonuksen kokoa tärkeämpiä.",
+  },
+  {
+    icon: "headset",
+    title: "Asiakaspalvelu",
+    body:
+      "Selvitämme tukikanavat (live-chat, sähköposti), niiden saatavuusajat ja suomenkielisen palvelun. Hyvä, helposti tavoitettava tuki nostaa arviota.",
+  },
+  {
+    icon: "shield",
+    title: "Vastuullinen pelaaminen",
+    body:
+      "Tarkistamme käytössä olevat pelaajan suojaustyökalut – talletus- ja tappiorajat, pelitauot ja itsesulku. Vastuullisen pelaamisen työkalujen puuttuminen laskee arviota.",
+  },
+];
+
+const ratingSteps: string[] = [
+  "Kokoamme kasinon julkiset tiedot: lisenssi, ehdot, maksutavat ja tarjoukset.",
+  "Pisteytämme jokaisen yllä olevan osa-alueen samoilla, ennalta määritellyillä kriteereillä.",
+  "Painotamme pelaajan kannalta tärkeimpiä tekijöitä – turvallisuutta, kotiutuksia ja ehtojen läpinäkyvyyttä.",
+  "Päivitämme arviot, kun kasinon ehdot, lisenssi tai tarjoukset muuttuvat.",
+];
+
+/* JSON-LD: Organization (the editorial body) + WebPage (this page). */
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Kasinot ilman rekisteröitymistä -toimitus",
+  alternateName: "KIR-toimitus",
+  url: SITE_ORIGIN + "/",
+  logo: `${SITE_ORIGIN}/favicon.svg`,
+  description:
+    "Riippumaton suomalainen toimitus, joka vertailee ja arvioi nettikasinoita yhdenmukaisella menetelmällä.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: CONTACT_EMAIL,
+    contactType: "editorial",
+    availableLanguage: ["fi"],
+  },
+};
+
+const webPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: "fi",
+  isPartOf: { "@type": "WebSite", name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
+  publisher: { "@type": "Organization", name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Etusivu", item: `${SITE_ORIGIN}/` },
+    { "@type": "ListItem", position: 2, name: "Toimitus", item: canonical },
+  ],
+};
+
+const jsonLd = [
+  ...headExtras,
+  `<script type="application/ld+json">${JSON.stringify(organizationLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(webPageLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`,
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  bodyClass="page-toimitus"
+>
+  {/* ---------------- HERO ---------------- */}
+  <header class="tm-hero band">
+    <div class="container container--narrow">
+      <nav class="tm-crumbs" aria-label="Murupolku">
+        <ol class="crumbs">
+          <li class="crumbs__item"><a href="/">Etusivu</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item" aria-current="page">Toimitus</li>
+        </ol>
+      </nav>
+      <span class="eyebrow">Toimitus &amp; menetelmä</span>
+      <h1 class="tm-hero__title">Näin arvostelemme kasinot</h1>
+      <p class="tm-hero__lead">
+        {description}
+      </p>
+    </div>
+  </header>
+
+  {/* ---------------- CRITERIA ---------------- */}
+  <section class="section">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">Mitä arvioimme</h2>
+      <p class="tm-intro">
+        Jokainen vertailuun otettu kasino käydään läpi samoilla kriteereillä,
+        jotta arviot ovat keskenään vertailukelpoisia. Arviomme perustuvat
+        kasinoiden julkisiin tietoihin ja ehtoihin – emme esitä niitä
+        henkilökohtaisina pelikokemuksina.
+      </p>
+
+      <ul class="tm-criteria">
+        {
+          criteria.map((c) => (
+            <li class="tm-criteria__item card">
+              <span class="tm-criteria__ico" aria-hidden="true">
+                <Icon name={c.icon} size={22} />
+              </span>
+              <div>
+                <h3 class="tm-criteria__title">{c.title}</h3>
+                <p class="tm-criteria__body">{c.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ---------------- HOW WE RATE ---------------- */}
+  <section class="section band">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">Näin pisteytämme</h2>
+      <ol class="tm-steps">
+        {
+          ratingSteps.map((step, i) => (
+            <li class="tm-steps__item">
+              <span class="tm-steps__num" aria-hidden="true">{i + 1}</span>
+              <span>{step}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="tm-note">
+        Vertailuissa on mukana ainoastaan lisensoituja kasinoita. Sivusto
+        sisältää affiliate-linkkejä, mutta kaupalliset yhteistyöt eivät vaikuta
+        arviointikriteereihimme eivätkä järjestykseen.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------------- EDITORIAL TEAM ---------------- */}
+  <section class="section">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">KIR-toimitus</h2>
+      <p class="tm-body">
+        Sisällöstä vastaa <strong>KIR-toimitus</strong> – riippumaton
+        suomalainen toimitus, joka seuraa nettikasinoalaa, lainsäädäntöä ja
+        pelaajien kannalta olennaisia muutoksia. Emme julkaise yksittäisen
+        kirjoittajan nimellä, vaan jokainen arvostelu ja opas käy läpi
+        toimituksellisen tarkistuksen ennen julkaisua. Päivitämme sisältöjä,
+        kun kasinoiden ehdot tai markkinatilanne muuttuvat.
+      </p>
+      <p class="tm-body">
+        Toimituksen tavoitteena on tarjota suomalaisille pelaajille selkeää,
+        ajantasaista ja vastuullista tietoa – ei kannustaa pelaamiseen.
+        Rahapelaaminen on tarkoitettu vain täysi-ikäisille (18+).
+      </p>
+    </div>
+  </section>
+
+  {/* ---------------- CONTACT ---------------- */}
+  <section class="section band">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">Ota yhteyttä</h2>
+      <p class="tm-body">
+        Huomasitko virheen, vanhentuneen tiedon tai haluatko antaa palautetta?
+        Toimitus ottaa palautteen mielellään vastaan.
+      </p>
+      <p class="tm-contact">
+        <Icon name="info" size={18} class="tm-contact__ico" />
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .tm-hero {
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  }
+  .tm-crumbs {
+    margin-bottom: 0.9rem;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+  .tm-hero__title {
+    margin: 0.4rem 0 0;
+    color: var(--navy);
+    line-height: 1.12;
+  }
+  .tm-hero__lead {
+    margin: 1rem 0 0;
+    max-width: 60ch;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+
+  /* ---------- Shared headings / prose ---------- */
+  .tm-h2 {
+    color: var(--navy);
+    margin: 0 0 0.9rem;
+    font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.85rem);
+  }
+  .tm-intro,
+  .tm-body,
+  .tm-note {
+    color: var(--ink-2);
+    line-height: 1.75;
+    max-width: 65ch;
+  }
+  .tm-intro {
+    margin: 0 0 1.75rem;
+  }
+  .tm-body + .tm-body {
+    margin-top: 1rem;
+  }
+  .tm-body strong {
+    color: var(--ink);
+  }
+
+  /* ---------- Criteria grid ---------- */
+  .tm-criteria {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 720px) {
+    .tm-criteria {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .tm-criteria__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 1.1rem 1.2rem;
+  }
+  .tm-criteria__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border-radius: 12px;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .tm-criteria__title {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+    color: var(--navy);
+  }
+  .tm-criteria__body {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  /* ---------- Steps ---------- */
+  .tm-steps {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    counter-reset: tm;
+    max-width: 62ch;
+  }
+  .tm-steps__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+  .tm-steps__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex: none;
+    border-radius: 999px;
+    background: var(--brand);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .tm-note {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-3);
+  }
+
+  /* ---------- Contact ---------- */
+  .tm-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    font-weight: 700;
+  }
+  .tm-contact__ico {
+    color: var(--brand);
+    flex: none;
+  }
+  .tm-contact a {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .tm-contact a:hover {
+    color: var(--brand-dark);
+  }
+</style>

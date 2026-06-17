@@ -1,0 +1,153 @@
+---
+/**
+ * 404.astro — branded "page not found" (Finnish copy).
+ *
+ * Astro's static build emits this to dist/404.html, which Vercel serves for
+ * any unmatched path. Uses BaseLayout so the global Header, Footer
+ * (18+ / Peluuri / trust logos) and DisclosureBar (affiliate disclosure)
+ * render here exactly as on every other page — confirmed: BaseLayout always
+ * renders <Footer /> + <DisclosureBar />, so the mandatory compliance chrome
+ * is present.
+ *
+ * SEO: this is a NEW page absent from the scraped registry, so we do NOT pass
+ * seoPath (no canonical — a 404 must not self-canonicalise). It must be
+ * noindex. BaseLayout has no dedicated `robots` prop, but it injects every raw
+ * string passed via `jsonLd` into <head> verbatim with set:html — that slot is
+ * a generic raw-head channel (it happens to be named for its common use), so
+ * we reuse it to emit `<meta name="robots" content="noindex,follow">`. The
+ * static build emits this file to dist/404.html, which Vercel serves with a
+ * 404 status for unmatched paths.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+
+// A 404 must never be indexed. BaseLayout has no dedicated "robots" prop, but
+// it injects any raw <script>/<meta> strings passed via `jsonLd` verbatim into
+// <head> (set:html). We reuse that slot to emit the noindex meta — it is a raw
+// head-fragment channel, not specifically JSON-LD, so this is a valid, minimal
+// use that keeps the edit inside BaseLayout's existing contract.
+const headExtras = ['<meta name="robots" content="noindex,follow" />'];
+
+// Icon names below are validated against src/components/Icon.astro's set
+// (it throws on unknown names): dice / star / info all exist.
+const links: { href: string; label: string; icon: "dice" | "star" | "info" }[] = [
+  { href: "/", label: "Etusivu", icon: "dice" },
+  { href: "/casino/", label: "Kasinoarvostelut", icon: "star" },
+  { href: "/uutiset/", label: "Uutiset", icon: "info" },
+];
+---
+
+<BaseLayout
+  title={`Sivua ei löytynyt (404) – Kasinot ilman rekisteröitymistä`}
+  jsonLd={headExtras}
+  bodyClass="page-404"
+>
+  <section class="nf band">
+    <div class="container container--narrow nf__inner">
+      <span class="nf__code" aria-hidden="true">404</span>
+      <h1 class="nf__title">Hups — sivua ei löytynyt</h1>
+      <p class="nf__lead">
+        Etsimääsi sivua ei ole olemassa tai se on siirretty. Tarkista osoite tai
+        jatka jollekin alla olevista sivuista.
+      </p>
+
+      <nav class="nf__links" aria-label="Suosittuja sivuja">
+        {
+          links.map((l) => (
+            <a class="nf__link card card--lift" href={l.href}>
+              <span class="nf__link-ico" aria-hidden="true">
+                <Icon name={l.icon} size={22} />
+              </span>
+              <span class="nf__link-label">{l.label}</span>
+              <Icon name="arrow-right" size={18} class="nf__link-arrow" />
+            </a>
+          ))
+        }
+      </nav>
+
+      <p class="nf__back">
+        <a class="btn-cta btn-lg" href="/">
+          Palaa etusivulle
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem);
+  }
+  .nf__inner {
+    text-align: center;
+  }
+  .nf__code {
+    display: block;
+    font-size: clamp(4.5rem, 3rem + 12vw, 9rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--brand);
+    opacity: 0.85;
+  }
+  .nf__title {
+    margin: 0.5rem 0 0;
+    color: var(--navy);
+    line-height: 1.15;
+  }
+  .nf__lead {
+    margin: 1rem auto 0;
+    max-width: 44ch;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+
+  .nf__links {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    margin: 2.25rem auto 0;
+    max-width: 30rem;
+    text-align: left;
+  }
+  .nf__link {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.95rem 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .nf__link:hover {
+    color: var(--brand);
+  }
+  .nf__link-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 12px;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .nf__link-label {
+    flex: 1 1 auto;
+  }
+  .nf__link-arrow {
+    flex: none;
+    color: var(--ink-3);
+  }
+  .nf__link:hover .nf__link-arrow {
+    color: var(--brand);
+  }
+
+  .nf__back {
+    margin-top: 2.25rem;
+  }
+</style>

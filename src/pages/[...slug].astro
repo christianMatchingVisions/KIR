@@ -199,6 +199,41 @@ function ensureSponsored(html: string | null | undefined): string {
   );
 }
 
+/* -------------------------------------------------------------------------- *
+ * B2 — RESTORE BODY JSON-LD (ht-faq Organization schema).                      *
+ *                                                                              *
+ * Rank Math placed each page's primary schema graph in the <head> (preserved   *
+ * verbatim by the SEO registry → BaseLayout). A SECOND, standalone             *
+ * <script type="application/ld+json"> Organization block lived in the page     *
+ * <body> on the live site. For the 22 /ht-faq/<q>/ question pages that body    *
+ * block is NOT mirrored in head.html, so re-emitting the preserved head alone  *
+ * DROPS it — a structured-data regression on a recovering domain.              *
+ *                                                                              *
+ * extractBodyJsonLd() pulls those <script type="application/ld+json"> blocks    *
+ * VERBATIM out of the scraped fragment body.html. We then drop any block that  *
+ * is byte-identical to a block already emitted from the preserved head         *
+ * (seo.jsonLd) so nothing is double-emitted. JSON-LD is valid anywhere in the  *
+ * document, so these are rendered in the page body — restoring the live        *
+ * Organization schema without touching BaseLayout or the byte-faithful head.   *
+ *                                                                              *
+ * (Mirrors the verbatim-extract approach the casino route uses for its in-body *
+ * Review/Rating schema; replicated inline here to avoid a cross-team import    *
+ * dependency on src/lib/casino-schema.ts that may not exist at build time.)    *
+ * -------------------------------------------------------------------------- */
+
+/** Every <script type="application/ld+json">…</script> block in `html`, VERBATIM. */
+function extractBodyJsonLd(html: string): string[] {
+  if (!html) return [];
+  const re =
+    /<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi;
+  return html.match(re) ?? [];
+}
+
+/** Collapse insignificant whitespace for an order-stable, byte-faithful dedupe key. */
+function jsonLdKey(block: string): string {
+  return block.replace(/\s+/g, " ").trim();
+}
+
 /** Relativize self-origin absolute URLs in fragment-extracted prose. */
 function relativizeSelfOrigin(html: string): string {
   return html
@@ -359,6 +394,22 @@ const moneyIntro = isMoneyPage
   ? ensureSponsored(page?.contentHtml || fragmentProse() || "")
   : "";
 
+/* -------------------------------------------------------------------------- *
+ * B2 — body JSON-LD to restore (ht-faq Organization schema), deduped vs head.  *
+ * Scoped to /ht-faq/ pages, the documented data-loss case: their question      *
+ * heads carry NO Organization block, so the live body block must be re-emitted *
+ * here. We drop any block byte-identical to one already in the preserved head  *
+ * (seo.jsonLd) to guard against double-emit (e.g. the /ht-faq/ index, whose    *
+ * head already includes the schema). On non-ht-faq pages this stays empty —    *
+ * their head schema is untouched and additive risk is kept minimal.            *
+ * -------------------------------------------------------------------------- */
+const headJsonLdKeys = new Set((seo?.jsonLd ?? []).map(jsonLdKey));
+const restoredBodyJsonLd: string[] = isHtFaqPath
+  ? extractBodyJsonLd(fragmentBodyHtml).filter(
+      (block) => !headJsonLdKeys.has(jsonLdKey(block)),
+    )
+  : [];
+
 /* PERFORMANCE: lazy-load + de-prioritise the large below-the-fold prose images
  * (strips legacy fetchpriority="high", adds loading="lazy"/decoding="async").
  * Applied once here so every article/money body benefits regardless of source.
@@ -385,3 +436,9 @@ const moneyIntroOptimized = optimizeProseImages(moneyIntro);
     eyebrow={eyebrow}
   />
 )}
+{/* B2: restore the live in-body Organization JSON-LD that the preserved <head>
+    does not carry (ht-faq question pages). Verbatim, deduped vs head, body-
+    placed (valid anywhere in the document). Empty → renders nothing. */}
+{restoredBodyJsonLd.map((block) => (
+  <Fragment set:html={block} />
+))}

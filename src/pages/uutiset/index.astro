@@ -32,6 +32,32 @@ import { isGuideArticleType } from "../../lib/content-engine-loader";
 const POST_LIMIT = 9;
 
 /* -------------------------------------------------------------------------- *
+ * DEMO / PLACEHOLDER GUARD (finding H3) — mirrors /oppaat/index.astro +        *
+ * /uutiset/[slug].astro. The engine is NOT live; a demo endpoint ships fixture *
+ * entries (slug `engine-news-uutinen`, description "News desc", title prefix   *
+ * ENGINENEWS) that never existed on the live site. We exclude them so the hub  *
+ * never links to a stub the [slug] route no longer emits. Real engine content  *
+ * never matches these signatures, so this is a no-op once the engine is live.  *
+ * -------------------------------------------------------------------------- */
+const DEMO_ENGINE_SLUGS = new Set([
+  "engine-guide-talletukset",
+  "engine-news-uutinen",
+]);
+function isPlaceholderText(s: string | null | undefined): boolean {
+  const t = (s ?? "").trim().toLowerCase();
+  return t === "" || t === "guide desc" || t === "news desc";
+}
+function isRealEngineEntry(
+  data: { title?: string | null; description?: string | null },
+  id: string,
+): boolean {
+  if (DEMO_ENGINE_SLUGS.has(id)) return false;
+  if (/^engine(guide|news)\b/i.test((data.title ?? "").trim())) return false;
+  if (isPlaceholderText(data.description)) return false;
+  return true;
+}
+
+/* -------------------------------------------------------------------------- *
  * Helpers                                                                    *
  * -------------------------------------------------------------------------- */
 
@@ -80,7 +106,7 @@ interface NewsCard {
 // News stream = every delivered engine article EXCEPT guides (guides live under
 // /oppaat/). Pre-field entries have no type → treated as news → unchanged.
 const engineEntries = (await getCollection("articles")).filter(
-  (e) => !isGuideArticleType(e.data.articleType),
+  (e) => !isGuideArticleType(e.data.articleType) && isRealEngineEntry(e.data, e.id),
 );
 const engineCards: NewsCard[] = engineEntries.map((e) => {
   const date = e.data.publishedAt ?? e.data.updatedAt ?? "";
