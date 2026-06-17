@@ -5,7 +5,15 @@
 **zero tracking/verification loss**, and a posture that **aids** (not repeats) the Google penalty
 that the domain is recovering from.
 
-**Status date:** 2026-06-17 · **Source:** evidence-backed audit (`kir-migration-audit` workflow, 7 parallel auditors).
+**Status date:** 2026-06-18 · **Source:** evidence-backed audit (`kir-migration-audit` workflow, 7 parallel auditors).
+
+> **EXECUTION STATUS (2026-06-18):** Phases **1 & 2 are implemented, built green, and pushed to `main`**
+> (commit `4323793` → staging deploy at kir-three.vercel.app, noindexed). Verified by an engine-disabled
+> build: 584 pages, **0 live URLs missing**, JSON-LD restored (Review 265 / Organization 306 / ht-faq 23),
+> GA4+GTM+verification live via Partytown, 86 closed/stub casinos noindexed & sitemap-excluded (498 URLs),
+> compliance gate PASS, cutover toggle proven both directions.
+> **Remaining = owner-gated:** Phase 3 (engine deploy per runbook), Phase 4 (DNS flip), Phase 5 (doorway 301s
+> post-cutover), plus the owner-input decisions listed in §8. See §4 tables for per-item ✅ status.
 **Constraints (immutable):** WP REST is read-only; never fabricate per-casino data; no first-hand/"tested" claims;
 mandatory 18+/Peluuri/affiliate-disclosure; every `/go/` link `rel="sponsored nofollow"`; SEO heads preserved
 byte-faithful; the Content Engine is **shared with the OCL project — never break it**.
