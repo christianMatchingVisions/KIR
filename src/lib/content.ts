@@ -503,6 +503,7 @@ export function getFaq(slug: string): Faq | null {
  */
 export const SLUG_TO_TOPLIST_CONFIG: Readonly<Record<string, string>> = {
   "trustly-kasinot": "search-two-casino-trustly",
+  "pikakasinot": "search-service-no-account",
   "zimpler-pikakasinot": "search-two-casino-zimpler",
   "mga-kasinot": "search-two-mga",
   "curacao-kasinot": "search-two-curacao",
