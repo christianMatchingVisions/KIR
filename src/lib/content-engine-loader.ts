@@ -71,7 +71,7 @@ export function contentEngineLoader(opts: {
 }): Loader {
   return {
     name: "content-engine",
-    load: async ({ store, meta, logger }) => {
+    load: async ({ store, logger }) => {
       if (!opts.apiUrl || !opts.apiKey) {
         logger.warn(
           "CE_API_URL / CE_API_KEY not set — skipping Content Engine sync. " +
@@ -80,8 +80,13 @@ export function contentEngineLoader(opts: {
         return;
       }
 
-      // Incremental sync: only fetch what changed since the last build.
-      const since: string | undefined = meta.get("lastSync");
+      // FULL sync every build: the rendered set must exactly mirror the current
+      // delivered feed. An incremental "since" sync silently missed newly
+      // APPROVED articles whose updated_at predated the last build (approval
+      // flips approval_status without necessarily bumping updated_at), so
+      // approvals never appeared. Clearing + full-fetching also reflects edits
+      // and un-approvals/removals. Cost is trivial (one site's article bodies).
+      store.clear();
       let cursor: string | null = null;
       let count = 0;
 
@@ -89,7 +94,6 @@ export function contentEngineLoader(opts: {
         const url = new URL(`${opts.apiUrl.replace(/\/$/, "")}/articles`);
         url.searchParams.set("status", "delivered");
         url.searchParams.set("include", "body");
-        if (since) url.searchParams.set("since", since);
         if (cursor) url.searchParams.set("cursor", cursor);
 
         const res = await fetch(url, {
@@ -131,8 +135,7 @@ export function contentEngineLoader(opts: {
         cursor = page.has_more ? page.next_cursor : null;
       } while (cursor);
 
-      meta.set("lastSync", new Date().toISOString());
-      logger.info(`Content Engine sync done (${count} article(s) updated).`);
+      logger.info(`Content Engine sync done (${count} article(s) loaded).`);
     },
   };
 }
