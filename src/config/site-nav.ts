@@ -82,6 +82,8 @@ export const mainNav: NavItem[] = [
     label: "Parhaat kasinot",
     href: "/suomen-parhaat-nettikasinot/",
     children: [
+      { label: "Pikakasinot", href: "/pikakasinot/" },
+      { label: "Nettikasino ilman rekisteröitymistä", href: "/nettikasino-ilman-rekisteroitymista/" },
       { label: "Kaikki kasinot", href: "/kaikki-kasinot/" },
       { label: "Uudet kasinot", href: "/uudet-kasinot/" },
       { label: "Trustly-kasinot", href: "/trustly-kasinot/" },
@@ -144,6 +146,8 @@ export const footerColumns: FooterColumn[] = [
     title: "Luokat",
     links: [
       { label: "Etusivu", href: "/" },
+      { label: "Pikakasinot", href: "/pikakasinot/" },
+      { label: "Nettikasino ilman rekisteröitymistä", href: "/nettikasino-ilman-rekisteroitymista/" },
       { label: "Parhaat nettikasinot", href: "/suomen-parhaat-nettikasinot/" },
       { label: "Arvostelut", href: "/casino/" },
       { label: "Uudet kasinot", href: "/uudet-kasinot/" },
