@@ -27,6 +27,7 @@ import RelatedCasinos from "../../components/RelatedCasinos.astro";
 import Icon from "../../components/Icon.astro";
 import { scrubFirstHandClaims, ensureSponsored, optimizeProseImages } from "../../lib/content";
 import { isGuideArticleType } from "../../lib/content-engine-loader";
+import { buildFaqLd } from "../../lib/faq-schema";
 
 const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
@@ -146,8 +147,29 @@ if (publishedAt) newsLd.datePublished = publishedAt;
 if (updatedAt) newsLd.dateModified = updatedAt;
 if (heroImage) newsLd.image = [heroImage];
 
+/* BreadcrumbList — mirrors the rendered Murupolku (Etusivu › Uutiset › title)
+ * so the article layer emits the same breadcrumb structured data the /oppaat/
+ * guides already do. */
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Etusivu", item: `${SITE_ORIGIN}/` },
+    { "@type": "ListItem", position: 2, name: "Uutiset", item: `${SITE_ORIGIN}/uutiset/` },
+    { "@type": "ListItem", position: 3, name: title, item: canonical },
+  ],
+};
+
+/* FAQPage — derived from the rendered body (only when ≥2 question/answer pairs
+ * exist), so AI answer engines and rich results can lift the on-page FAQ. Both
+ * question and answer come verbatim from visible HTML → never a schema/visible
+ * mismatch. Null (omitted) for non-FAQ articles. */
+const faqLd = buildFaqLd(bodyHtml);
+
 const jsonLd = [
   `<script type="application/ld+json">${JSON.stringify(newsLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`,
+  ...(faqLd ? [faqLd] : []),
 ];
 ---
 

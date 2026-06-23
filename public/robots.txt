@@ -1,6 +1,13 @@
 User-agent: *
-Disallow: /wp-admin/
 Disallow: /go/
 Disallow: /payment-providers/
 Disallow: /casino-services/
+
+# Answer-engine / AI crawlers are INTENTIONALLY allowed (governed by the
+# User-agent: * group above, which only hides affiliate-redirect endpoints).
+# Keeping them open lets ChatGPT, Perplexity, Google AI Overviews, Gemini and
+# Claude discover and cite this site. Do not block these without a deliberate
+# decision: GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, anthropic-ai,
+# PerplexityBot, Perplexity-User, Google-Extended, CCBot, Bytespider.
+
 Sitemap: https://kasinotilmanrekisteroitymista.com/sitemap-index.xml

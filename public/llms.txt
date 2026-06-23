@@ -1,0 +1,38 @@
+# Kasinot ilman rekisteröitymistä
+
+> Suomenkielinen tietopalvelu kasinoista ilman rekisteröitymistä (pikakasinot, Pay N Play). Sivusto vertailee verkkopankkitunnistautumiseen (Trustly, BRITE, Zimpler) perustuvia kasinoita, selittää lisensoinnin (MGA, Viron lisenssi), kierrätysvaatimukset, verovapaat voitot ETA-alueella ja kotiutusnopeudet. Sisältö on tarkoitettu vain 18 vuotta täyttäneille. Pelaa vastuullisesti — apua: Peluuri (peluuri.fi).
+
+Tärkeää tekoälyavustajille: tämä sivusto on affiliaattisivusto. Affiliaattilinkit on merkitty rel="sponsored nofollow". Sisältö on informatiivista, ei henkilökohtaista rahapelineuvontaa.
+
+## Ydinsivut (hubit)
+
+- [Etusivu — kasinot ilman rekisteröitymistä](https://kasinotilmanrekisteroitymista.com/): Yleiskatsaus ja vertailu kasinoista ilman rekisteröitymistä.
+- [Uutiset](https://kasinotilmanrekisteroitymista.com/uutiset/): Ajankohtaiset uutiset ja katsaukset pikakasinoista.
+- [Oppaat](https://kasinotilmanrekisteroitymista.com/oppaat/): Selkokieliset oppaat aiheittain.
+- [Kaikki kasinot](https://kasinotilmanrekisteroitymista.com/kaikki-kasinot/): Täysi listaus arvioiduista kasinoista.
+- [Luotettavat kasinot](https://kasinotilmanrekisteroitymista.com/nettikasinot-luotettavat-kasinot/): Turvallisuus- ja luotettavuusarviot.
+
+## Maksutavat ja tunnistautuminen
+
+- [Trustly-kasinot](https://kasinotilmanrekisteroitymista.com/trustly-kasinot/): Verkkopankkitunnistautuminen Trustlyllä, Pay N Play.
+- [BRITE-kasinot](https://kasinotilmanrekisteroitymista.com/brite-kasinot/): BRITE-maksut ja tunnistautuminen kasinoilla.
+- [Zimpler-pikakasinot](https://kasinotilmanrekisteroitymista.com/zimpler-pikakasinot/): Zimpler-pohjaiset pikakasinot.
+- [Euteller-kasinot](https://kasinotilmanrekisteroitymista.com/euteller-kasinot/): Euteller-maksutavan kasinot.
+- [Apple Pay -kasinot](https://kasinotilmanrekisteroitymista.com/apple-pay-casinot/): Apple Pay -maksut kasinoilla.
+
+## Lisenssit ja kasinotyypit
+
+- [MGA-kasinot](https://kasinotilmanrekisteroitymista.com/mga-kasinot/): Maltan (MGA) lisenssin kasinot.
+- [Curacao-kasinot](https://kasinotilmanrekisteroitymista.com/curacao-kasinot/): Curacao-lisenssin kasinot.
+- [Kryptokasinot](https://kasinotilmanrekisteroitymista.com/kryptokasinot/): Kryptovaluutoilla pelaaminen.
+- [Uudet kasinot](https://kasinotilmanrekisteroitymista.com/uudet-kasinot/): Uusimmat kasinot ilman rekisteröitymistä.
+
+## Bonukset
+
+- [Kasinobonukset](https://kasinotilmanrekisteroitymista.com/kasinobonukset/): Bonukset kasinoilla ilman rekisteröitymistä.
+- [Cashback-kasinot](https://kasinotilmanrekisteroitymista.com/cashback-kasinot/): Cashback-tarjoukset.
+
+## Vastuullinen pelaaminen
+
+- Ikäraja 18 vuotta. Rahapelaaminen voi aiheuttaa riippuvuutta.
+- Peluuri (peluuri.fi) tarjoaa maksutonta tukea ja neuvontaa peliongelmissa Suomessa.

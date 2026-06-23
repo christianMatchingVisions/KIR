@@ -32,6 +32,7 @@ import RelatedCasinos from "../../components/RelatedCasinos.astro";
 import Icon from "../../components/Icon.astro";
 import { scrubFirstHandClaims, ensureSponsored, optimizeProseImages } from "../../lib/content";
 import { isGuideArticleType } from "../../lib/content-engine-loader";
+import { buildFaqLd } from "../../lib/faq-schema";
 
 const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
@@ -148,9 +149,15 @@ const breadcrumbLd = {
   ],
 };
 
+/* FAQPage — derived from the rendered body (only when ≥2 question/answer pairs
+ * exist). Both question and answer come verbatim from visible HTML, so there is
+ * never a schema/visible mismatch. Null (omitted) for non-FAQ guides. */
+const faqLd = buildFaqLd(bodyHtml);
+
 const jsonLd = [
   `<script type="application/ld+json">${JSON.stringify(articleLd)}</script>`,
   `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`,
+  ...(faqLd ? [faqLd] : []),
 ];
 ---
 

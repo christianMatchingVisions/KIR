@@ -151,6 +151,30 @@ function allMatches(html: string, re: RegExp): string[] {
 }
 
 /**
+ * Sanitize a preserved JSON-LD block. The Phase-1 scrape carried a sister-site
+ * PLACEHOLDER author entity ("norskcasino_user3281") into 14 fragment heads
+ * (including the homepage). A foreign placeholder author is an active E-E-A-T
+ * liability on a penalty-recovering YMYL site, so we neutralise it at BUILD TIME
+ * WITHOUT JSON.parse/restringify (which would reorder keys / change the escaping
+ * Google has indexed) — a targeted string replacement only:
+ *   1. Repoint the non-existent /author/<placeholder>/ archive URL to the site
+ *      root (handles Yoast's escaped "\/" form and the plain "/" form).
+ *   2. Replace the remaining placeholder display name with the editorial entity
+ *      ("Toimitus") — honest collective authorship, not a fabricated person.
+ * Idempotent: a no-op on any block that never referenced the placeholder. The
+ * real named-author work (per-article Person + bio pages) supersedes this later.
+ */
+function sanitizePreservedJsonLd(block: string): string {
+  return block
+    // escaped-slash form:  ...\/author\/norskcasino_user3281\/  →  ...\/
+    .replace(/\\\/author\\\/norskcasino_user3281\\\/?/gi, "\\/")
+    // plain-slash form:    .../author/norskcasino_user3281/     →  .../
+    .replace(/\/author\/norskcasino_user3281\/?/gi, "/")
+    // any remaining bare token is the author's display name
+    .replace(/norskcasino_user3281/gi, "Toimitus");
+}
+
+/**
  * Parse a single fragment's head.html into a SeoHead. Every field is optional
  * at the source — we return whatever exists and null for the rest.
  */
@@ -189,11 +213,13 @@ function parseHead(html: string): SeoHead {
   ordered.sort((a, b) => a.idx - b.idx);
   const ogTags = ordered.map((o) => o.tag);
 
-  // Every <script type="application/ld+json">…</script> block, VERBATIM.
+  // Every <script type="application/ld+json">…</script> block, VERBATIM —
+  // except the placeholder-author neutralisation (sanitizePreservedJsonLd),
+  // which is a targeted string replacement that preserves key order/escaping.
   const jsonLd = allMatches(
     html,
     /<script[^>]*\btype=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi
-  );
+  ).map(sanitizePreservedJsonLd);
 
   return { title, canonical, description, robots, ogTags, jsonLd };
 }
