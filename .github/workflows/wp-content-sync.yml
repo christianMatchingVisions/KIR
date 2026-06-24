@@ -47,16 +47,19 @@ jobs:
       - name: Render pages for any newly-published posts
         run: node scripts/fill-missing-fragments.mjs --apply
 
-      - name: Report new casino/page items that need manual fragments (visibility only)
+      - name: Report new casino reviews that need manual fragments (visibility only)
+        # Posts are auto-rendered by the step above. Casino reviews use structured
+        # casino__<slug> fragments that can't be auto-generated, so flag new ones
+        # for manual attention. Pages are intentionally NOT checked here: many
+        # (e.g. the Pragmatic-Play game reviews) render under their own /…/ paths,
+        # not /<slug>/, so a slug-based existence check false-positives on them.
         run: |
           node -e '
             const fs=require("fs");
             const fe=p=>fs.existsSync("./src/fragments/"+p);
-            for (const [file,prefix,label] of [["casino.json","casino__","casino reviews"],["pages.json","","pages"]]) {
-              const items=JSON.parse(fs.readFileSync("./data/rest/"+file,"utf8")).filter(x=>x.status==="publish");
-              const missing=items.filter(x=>x.slug && !fe(prefix+x.slug));
-              if (missing.length) console.log("::warning::"+missing.length+" new "+label+" have no page yet (need structured fragments): "+missing.map(x=>x.slug).join(", "));
-            }
+            const items=JSON.parse(fs.readFileSync("./data/rest/casino.json","utf8")).filter(x=>x.status==="publish");
+            const missing=items.filter(x=>x.slug && !fe("casino__"+x.slug));
+            if (missing.length) console.log("::warning::"+missing.length+" new casino reviews have no page yet (need structured fragments): "+missing.map(x=>x.slug).join(", "));
           '
 
       - name: Commit & push if WordPress changed (triggers Vercel rebuild)
