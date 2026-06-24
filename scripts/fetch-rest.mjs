@@ -7,8 +7,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const API = 'https://kasinotilmanrekisteroitymista.com/wp-json/wp/v2';
-const OUT = path.join(ROOT, 'data', 'rest');
+// Source WordPress REST base. Set WP_SOURCE_URL to re-capture from a STAGING / temp
+// host (e.g. a Cloudways *.cloudwaysapps.com URL) after the live domain has cut over
+// to Astro — point it at the WordPress origin, NEVER the live site. Trailing slash trimmed.
+const WP_SOURCE = (process.env.WP_SOURCE_URL || 'https://kasinotilmanrekisteroitymista.com').replace(/\/+$/, '');
+const API = `${WP_SOURCE}/wp-json/wp/v2`;
+// Output dir. Set WP_OUT_DIR (e.g. "data/rest-new") to capture into a SEPARATE dir so a
+// fresh staging pull can be DIFFED against the current dumps without overwriting them
+// (and without regenerating vercel.json).
+const OUT = process.env.WP_OUT_DIR
+  ? path.resolve(ROOT, process.env.WP_OUT_DIR)
+  : path.join(ROOT, 'data', 'rest');
+const DIFF_MODE = Boolean(process.env.WP_OUT_DIR);
 
 const TYPES = [
   { rest: 'posts', file: 'posts.json' },
@@ -46,6 +56,13 @@ for (const { rest, file } of TYPES) {
   const items = await fetchAll(rest);
   await writeFile(path.join(OUT, file), JSON.stringify(items, null, 1));
   console.log(`${items.length} items`);
+}
+
+// In diff mode (WP_OUT_DIR set) we captured into a side dir purely to compare —
+// do NOT touch vercel.json or the live redirect rules.
+if (DIFF_MODE) {
+  console.log(`Diff capture complete → ${OUT}. Skipped vercel.json regeneration.`);
+  process.exit(0);
 }
 
 // --- Generate /go/ redirects from ThirstyAffiliates links ---
