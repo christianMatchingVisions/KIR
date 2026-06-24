@@ -1,0 +1,73 @@
+name: WordPress content sync
+
+# Keeps the live Astro site in lock-step with the (now origin-only) WordPress
+# install. The live domain points at Vercel, so we pin it to the WordPress
+# server's IP for this runner, pull the latest REST content, render pages for
+# any newly-published posts, and push — which triggers a Vercel rebuild.
+#
+# This exists because the WordPress -> Astro sync had drifted: WordPress kept
+# publishing but pages weren't regenerated, so the newest articles 404'd. This
+# job closes that loop so new paid content appears automatically within a day.
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily 06:00 UTC (after the usual ~04-05:00 UTC publish window)
+  workflow_dispatch: {} # allow manual "run now"
+
+permissions:
+  contents: write # needed to commit the refreshed content back
+
+concurrency:
+  group: wp-content-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # The live domain resolves to Vercel now. Pin it to the WordPress origin
+      # (Cloudways/DigitalOcean) FOR THIS RUNNER ONLY so the REST fetch reads
+      # WordPress, not the already-migrated Astro site.
+      - name: Pin domain to the WordPress origin (runner-local hosts override)
+        run: echo "138.68.91.51 kasinotilmanrekisteroitymista.com" | sudo tee -a /etc/hosts
+
+      - name: Pull latest WordPress content into data/rest/
+        env:
+          # The origin's TLS cert no longer matches the moved DNS; accept it
+          # (we connect over HTTPS to a server we control, by pinned IP).
+          NODE_TLS_REJECT_UNAUTHORIZED: "0"
+        run: node scripts/fetch-rest.mjs
+
+      - name: Render pages for any newly-published posts
+        run: node scripts/fill-missing-fragments.mjs --apply
+
+      - name: Report new casino/page items that need manual fragments (visibility only)
+        run: |
+          node -e '
+            const fs=require("fs");
+            const fe=p=>fs.existsSync("./src/fragments/"+p);
+            for (const [file,prefix,label] of [["casino.json","casino__","casino reviews"],["pages.json","","pages"]]) {
+              const items=JSON.parse(fs.readFileSync("./data/rest/"+file,"utf8")).filter(x=>x.status==="publish");
+              const missing=items.filter(x=>x.slug && !fe(prefix+x.slug));
+              if (missing.length) console.log("::warning::"+missing.length+" new "+label+" have no page yet (need structured fragments): "+missing.map(x=>x.slug).join(", "));
+            }
+          '
+
+      - name: Commit & push if WordPress changed (triggers Vercel rebuild)
+        run: |
+          git config user.name "wp-sync-bot"
+          git config user.email "wp-sync@users.noreply.github.com"
+          git add data/rest src/fragments vercel.json
+          if git diff --cached --quiet; then
+            echo "No new WordPress content — nothing to deploy."
+          else
+            git commit -m "chore(sync): pull latest WordPress content + render new posts [skip ci]"
+            git push
+            echo "Pushed updated content — Vercel will rebuild and publish it."
+          fi
