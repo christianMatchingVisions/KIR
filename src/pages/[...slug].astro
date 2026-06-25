@@ -45,10 +45,19 @@ import {
   getPage,
   getFaq,
   getFaqs,
+  getPosts,
   getToplistConfigForSlug,
   optimizeProseImages,
+  demoteBodyH1,
   DEFAULT_TOPLIST_CONFIG,
 } from "../lib/content";
+import { getAllCasinos } from "../lib/casino-data";
+import {
+  relatedGuides as buildRelatedGuides,
+  topicLinksFor,
+  articleAuthorJsonLd,
+  type RelatedLink,
+} from "../lib/related";
 import { getSeoHead } from "../lib/seo-head";
 
 interface FragmentMeta {
@@ -418,13 +427,103 @@ const restoredBodyJsonLd: string[] = isHtFaqPath
  * Does not touch any above-the-fold/template hero image. */
 articleBody = optimizeProseImages(articleBody);
 const moneyIntroOptimized = optimizeProseImages(moneyIntro);
+
+/* SEO: demote any stray body <h1> to <h2> so the page keeps exactly ONE H1
+ * (the page template's canonical heading). Clears the Multiple-H1 error on
+ * pages whose body prose opens with its own H1 (e.g. /endorphina/,
+ * /pelivalmistajat/). Attribute-preserving + idempotent. */
+articleBody = demoteBodyH1(articleBody);
+const moneyIntroFinal = demoteBodyH1(moneyIntroOptimized);
+
+/* -------------------------------------------------------------------------- *
+ * E-E-A-T BYLINE + INTERNAL-LINK ARCHITECTURE (additive, finding H7 + links). *
+ * -------------------------------------------------------------------------- *
+ * For real editorial articles (a post or a guide-style page — NOT the ht-faq
+ * index/items, provider stubs or money pages) we:
+ *   1. show the "KIR-toimitus" byline → /toimitus/ (links the page to the
+ *      existing editorial entity, a reviewer/E-E-A-T trust signal), and
+ *   2. emit ONE additive Article JSON-LD block whose author/reviewedBy point at
+ *      the same #editorial-team Organization (deduped vs the preserved head), and
+ *   3. compute contextual "Aiheeseen liittyvät" links — related guides + topic
+ *      money pages + related casino reviews — to raise incoming links to the
+ *      thin money/review pages and connect orphan/single-link articles.
+ * Everything below is pure build-time data → no effect on the byte-faithful head.
+ */
+const isArticleEditorial = !isMoneyPage && Boolean(post || (page && !isHtFaqPath && !isProviderSubPage));
+const isGuideArticle = Boolean(post);
+
+let bylineVariant: "review" | "guide" | "article" = "article";
+if (isGuideArticle) bylineVariant = "guide";
+
+let relatedReviews: RelatedLink[] = [];
+let relatedGuides: RelatedLink[] = [];
+let sidebarLinks: RelatedLink[] = [];
+let articleAuthorBlock = "";
+
+if (isArticleEditorial) {
+  const allPosts = getPosts();
+  // Related GUIDES by shared title tokens + curated topic/money-page links.
+  const guideMatches = buildRelatedGuides({ slug, title: articleTitle }, allPosts, 4);
+  const topicMatches = topicLinksFor(articleTitle, articleBody, 3);
+  // Merge guides + topics into one column, de-duped by href, capped at 6.
+  const seenHref = new Set<string>();
+  relatedGuides = [...guideMatches, ...topicMatches]
+    .filter((l) => l.href !== path && (seenHref.has(l.href) ? false : (seenHref.add(l.href), true)))
+    .slice(0, 6);
+
+  // Related REVIEWS, ranked by how well each open casino's facts (name + licence
+  // + payment methods) overlap the article's title topic — so a Trustly guide
+  // surfaces Trustly casinos, an MGA guide surfaces MGA casinos, etc. Falls back
+  // to the first open casinos when nothing overlaps (module is never empty).
+  const casinos = getAllCasinos();
+  if (casinos.length > 0) {
+    const STOP = new Set(["ja", "kasino", "kasinot", "casino", "ilman", "opas", "2026", "2025"]);
+    const tok = (s: string) =>
+      new Set(
+        (s || "")
+          .toLowerCase()
+          .replace(/[^a-zåäö0-9\s]/gi, " ")
+          .split(/\s+/)
+          .filter((t) => t.length >= 3 && !STOP.has(t)),
+      );
+    // Topic tokens come from the title PLUS a capped slice of the body text, so
+    // a "Trustly casinos" guide whose facts live in its prose still surfaces
+    // Trustly/MGA/Curaçao casinos (the title alone is often too sparse to match).
+    const topicTokens = tok(`${articleTitle} ${articleBody.slice(0, 4000)}`);
+    const open = casinos.filter((c) => !c.showNoReview && c.name.trim().length > 0);
+    const scored = open
+      .map((c) => {
+        const facts = tok([c.name, c.license ?? "", ...c.paymentMethods].join(" "));
+        let score = 0;
+        for (const t of topicTokens) if (facts.has(t)) score++;
+        return { c, score };
+      })
+      .sort((a, b) => b.score - a.score || a.c.name.localeCompare(b.c.name, "fi"));
+    relatedReviews = scored.slice(0, 4).map(({ c }) => ({ label: c.name, href: c.url }));
+  }
+
+  // Sidebar "Lue myös": the curated topic/money links (most useful in a rail).
+  sidebarLinks = (topicMatches.length > 0 ? topicMatches : relatedGuides).slice(0, 4);
+
+  // Additive Article author JSON-LD (author/reviewedBy → #editorial-team),
+  // deduped against the preserved head so we never double-declare.
+  const candidate = articleAuthorJsonLd({
+    title: articleTitle,
+    url: path,
+    datePublished: articleDate,
+    dateModified: articleModified,
+  });
+  if (candidate && !headJsonLdKeys.has(jsonLdKey(candidate))) {
+    articleAuthorBlock = candidate;
+  }
+}
 ---
 
 {isMoneyPage ? (
   <MoneyPage
     seoPath={path}
     title={moneyTitle}
-    introHtml={moneyIntroOptimized || undefined}
+    introHtml={moneyIntroFinal || undefined}
     toplistConfig={toplistConfig}
   />
 ) : (
@@ -436,6 +535,11 @@ const moneyIntroOptimized = optimizeProseImages(moneyIntro);
     modified={articleModified}
     breadcrumb={breadcrumb}
     eyebrow={eyebrow}
+    showByline={isArticleEditorial}
+    bylineVariant={bylineVariant}
+    relatedReviews={relatedReviews}
+    relatedGuides={relatedGuides}
+    relatedLinks={sidebarLinks}
   />
 )}
 {/* B2: restore the live in-body Organization JSON-LD that the preserved <head>
@@ -444,3 +548,6 @@ const moneyIntroOptimized = optimizeProseImages(moneyIntro);
 {restoredBodyJsonLd.map((block) => (
   <Fragment set:html={block} />
 ))}
+{/* E-E-A-T: additive Article author JSON-LD (author/reviewedBy → KIR-toimitus
+    #editorial-team), deduped vs the preserved head. Empty → renders nothing. */}
+{articleAuthorBlock && <Fragment set:html={articleAuthorBlock} />}

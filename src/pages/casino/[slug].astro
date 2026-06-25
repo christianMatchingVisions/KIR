@@ -47,16 +47,26 @@ import PaymentMethods from "../../components/review/PaymentMethods.astro";
 import CasinoInfoGrid from "../../components/review/CasinoInfoGrid.astro";
 import ReviewFaq from "../../components/review/ReviewFaq.astro";
 import CasinoCard from "../../components/CasinoCard.astro";
+import EditorialByline from "../../components/EditorialByline.astro";
+import RelatedLinks from "../../components/RelatedLinks.astro";
 import Icon from "../../components/Icon.astro";
 import {
   getCasino,
+  getAllCasinos,
   listCasinoSlugs,
   initEngineReviews,
   type CasinoReview,
 } from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
-import { optimizeProseImages } from "../../lib/content";
+import { optimizeProseImages, getPosts } from "../../lib/content";
 import { getCasinoSchemaBlocks } from "../../lib/casino-schema";
+import {
+  relatedReviews as buildRelatedReviews,
+  relatedGuides as buildRelatedGuides,
+  topicLinksFor,
+  breadcrumbJsonLd,
+  type RelatedLink,
+} from "../../lib/related";
 import { getSeoHead } from "../../lib/seo-head";
 
 /** One static path per casino fragment slug. */
@@ -295,6 +305,66 @@ const schemaBlocks: string[] = review
     )
   : [];
 
+/* BreadcrumbList JSON-LD — mirrors the visible Murupolku rendered below
+ * (Etusivu › Arvostelut › <Name>). The casino review pages carried no
+ * breadcrumb structured data before; this brings them to parity with the
+ * article/guide/news routes. Only the head registry's verbatim Organization/
+ * Review schema lived on these pages — this is purely additive (a separate
+ * <script> in the body), deduped against the preserved head so we never double-
+ * emit. "Arvostelut" links to the reviews hub (/kaikki-kasinot/) exactly as the
+ * visible crumb does. Empty string (skipped) when there is no review. */
+const headCasinoJsonLdKeys = new Set(
+  (getSeoHead(review?.url ?? "")?.jsonLd ?? []).map((s) => s.replace(/\s+/g, " ").trim()),
+);
+const casinoBreadcrumbLd =
+  review
+    ? breadcrumbJsonLd(
+        [
+          { label: "Etusivu", href: "/" },
+          { label: "Arvostelut", href: "/kaikki-kasinot/" },
+          { label: review.name },
+        ],
+        review.url,
+      )
+    : "";
+const emitCasinoBreadcrumb =
+  casinoBreadcrumbLd.length > 0 &&
+  !headCasinoJsonLdKeys.has(casinoBreadcrumbLd.replace(/\s+/g, " ").trim());
+
+/* -------------------------------------------------------------------------- *
+ * INTERNAL-LINK ARCHITECTURE — "Aiheeseen liittyvät" (additive).             *
+ * -------------------------------------------------------------------------- *
+ * Densifies the link graph from each review (finding: 8 orphans + 372 single-
+ * incoming-link pages). We compute, build-time + best-effort:
+ *   - related casino REVIEWS by shared licence / payment facts (→ /casino/...),
+ *   - related GUIDES by the casino name + curated topic/money-page links keyed
+ *     off the review's licence/payments (→ /<slug>/, /trustly-kasinot/, …).
+ * All are internal FOLLOWED links (no /go/), Finnish anchors. Empty groups make
+ * the <RelatedLinks> module render nothing. Skipped for the not-found fallback. */
+let relatedReviewLinks: RelatedLink[] = [];
+let relatedGuideLinks: RelatedLink[] = [];
+if (review && !review.showNoReview) {
+  const allCasinos = getAllCasinos();
+  relatedReviewLinks = buildRelatedReviews(review, allCasinos, 6);
+
+  // Topic/money-page links derived from the casino's own facts (licence +
+  // payment methods + name) so the anchors are contextual to THIS casino.
+  const factText = [review.name, review.license ?? "", ...review.paymentMethods].join(" ");
+  const topicMatches = topicLinksFor(factText, "", 4, review.url);
+
+  // A couple of on-topic guides (name-token overlap) round out the column.
+  const guideMatches = buildRelatedGuides(
+    { slug: review.slug, title: review.name },
+    getPosts(),
+    3,
+  );
+
+  const seen = new Set<string>([review.url]);
+  relatedGuideLinks = [...topicMatches, ...guideMatches]
+    .filter((l) => (seen.has(l.href) ? false : (seen.add(l.href), true)))
+    .slice(0, 6);
+}
+
 /**
  * The 305 fragments all parse, but guard defensively: if a slug somehow has no
  * fragment, render a minimal "not found" page rather than crashing the build.
@@ -324,6 +394,9 @@ const schemaBlocks: string[] = review
     {schemaBlocks.map((block) => (
       <Fragment set:html={block} />
     ))}
+    {/* BreadcrumbList structured data (mirrors the Murupolku below). Additive,
+        deduped vs the preserved head. Renders for open AND closed casinos. */}
+    {emitCasinoBreadcrumb && <Fragment set:html={casinoBreadcrumbLd} />}
 
     {/* ---------------- BREADCRUMB ---------------- */}
     <nav class="section--tight crumbs-wrap" aria-label="Murupolku">
@@ -441,6 +514,8 @@ const schemaBlocks: string[] = review
           <section class="section--tight" id={PROSE_ANCHOR}>
             <div class="container--narrow">
               <h2 class="rev-prose__title">Arvostelu: {review.name}</h2>
+              {/* E-E-A-T byline → /toimitus/ (existing KIR-toimitus entity). */}
+              <EditorialByline variant="review" />
               {review.reviewHtml && (
                 <div class="kir-prose" set:html={review.reviewHtml} />
               )}
@@ -472,6 +547,20 @@ const schemaBlocks: string[] = review
             <ReviewFaq review={review} />
           </div>
         </section>
+
+        {/* ---------------- AIHEESEEN LIITTYVÄT (internal links) ---------------- */}
+        {(relatedReviewLinks.length > 0 || relatedGuideLinks.length > 0) && (
+          <section class="section--tight">
+            <div class="container--narrow">
+              <RelatedLinks
+                reviews={relatedReviewLinks}
+                guides={relatedGuideLinks}
+                reviewsTitle="Vastaavat kasinot"
+                guidesTitle="Oppaat ja aiheet"
+              />
+            </div>
+          </section>
+        )}
       </Fragment>
     )}
 

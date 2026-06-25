@@ -154,8 +154,13 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
           {!noindex && <meta name="robots" content="index,follow" />}
           <meta property="og:title" content={resolvedTitle} />
           <meta property="og:type" content="website" />
+          <meta
+            property="og:url"
+            content={`https://kasinotilmanrekisteroitymista.com${normalizedPath}`}
+          />
           <meta property="og:image" content={ogDefaultImage} />
           <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={resolvedTitle} />
         </>
       )
     }

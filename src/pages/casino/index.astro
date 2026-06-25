@@ -29,6 +29,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Stars from "../../components/Stars.astro";
 import Icon from "../../components/Icon.astro";
 import { getAllCasinos, type CasinoReview } from "../../lib/casino-data";
+import { breadcrumbJsonLd } from "../../lib/related";
+import { getSeoHead } from "../../lib/seo-head";
 
 /* -------------------------------------------------------------------------- *
  * Build the review index: open casinos only, best-rated first.               *
@@ -51,9 +53,29 @@ const reviews: CasinoReview[] = getAllCasinos()
   });
 
 const reviewCount = reviews.length;
+
+/* BreadcrumbList JSON-LD — the reviews hub's place in the site hierarchy
+ * (Etusivu › Kasinoarvostelut). This is the section landing every casino review
+ * crumb's "Arvostelut" link points to; giving it its own BreadcrumbList matches
+ * the article/review/engine routes. Additive + deduped: skipped if the preserved
+ * /casino/ head already carries a BreadcrumbList (it does not in this corpus). */
+const casinoHubHeadHasBreadcrumb = (getSeoHead("/casino/")?.jsonLd ?? []).some(
+  (b) => /"@type"\s*:\s*"BreadcrumbList"/.test(b),
+);
+const hubBreadcrumbLd = casinoHubHeadHasBreadcrumb
+  ? ""
+  : breadcrumbJsonLd(
+      [
+        { label: "Etusivu", href: "/" },
+        { label: "Kasinoarvostelut" },
+      ],
+      "/casino/",
+    );
 ---
 
 <BaseLayout seoPath="/casino/" bodyClass="reviews-hub">
+  {/* BreadcrumbList structured data — Etusivu › Kasinoarvostelut. Additive. */}
+  {hubBreadcrumbLd && <Fragment set:html={hubBreadcrumbLd} />}
   {/* ---------------- HERO ---------------- */}
   <section class="section--tight band-brand hub-hero" aria-labelledby="hub-title">
     <div class="container--narrow hub-hero__inner">

@@ -1,0 +1,126 @@
+---
+/**
+ * EditorialByline.astro — visible E-E-A-T author/reviewer byline.
+ *
+ * WHY (penalty recovery, finding H7): Google's reviewer/E-E-A-T guidance rewards
+ * a clear, on-page statement of WHO stands behind a review or guide, linked to a
+ * methodology page. This component renders exactly that — a short, factual byline
+ * that links to /toimitus/ (the editorial & methodology page).
+ *
+ * HARD CONSTRAINT: the author is the EXISTING editorial Organization
+ * "KIR-toimitus" (the same #editorial-team entity casino-schema.ts emits in
+ * JSON-LD). We NEVER invent a named human reviewer on this penalty-recovery site.
+ *
+ * COMPLIANCE: descriptive only — "Arvostelun laati / Oppaan laati KIR-toimitus".
+ * No first-hand / "tested" claims. The /toimitus/ link is a normal internal,
+ * followed link (not /go/), so no sponsored/nofollow rel.
+ *
+ * Props:
+ *   variant?  "review" | "guide" | "article"  — chooses the lead-in verb phrase.
+ *   modified? string | null                   — optional "Päivitetty <fi-date>".
+ *   class?    string                          — extra class on the root.
+ */
+import Icon from "./Icon.astro";
+
+interface Props {
+  variant?: "review" | "guide" | "article";
+  modified?: string | null;
+  class?: string;
+}
+
+const { variant = "article", modified = null, class: className } = Astro.props;
+
+/* Lead-in phrasing per content type (Finnish, factual, no testing claim). */
+const LEAD: Record<NonNullable<Props["variant"]>, string> = {
+  review: "Arvostelun laati ja tarkisti",
+  guide: "Oppaan laati ja tarkisti",
+  article: "Sisällön laati ja tarkisti",
+};
+const lead = LEAD[variant];
+
+/* Optional freshness date — passive signal, never a "we tested on <date>" claim. */
+const FI_MONTHS = [
+  "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta",
+  "kesäkuuta", "heinäkuuta", "elokuuta", "syyskuuta", "lokakuuta",
+  "marraskuuta", "joulukuuta",
+];
+function formatFiDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return `${d.getDate()}. ${FI_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+const modifiedLabel = formatFiDate(modified);
+const modifiedIso =
+  modified && !Number.isNaN(new Date(modified).getTime())
+    ? new Date(modified).toISOString().slice(0, 10)
+    : undefined;
+---
+
+<div class:list={["byline", className]}>
+  <span class="byline__ico" aria-hidden="true">
+    <Icon name="shield" size={18} />
+  </span>
+  <p class="byline__text">
+    {lead}{" "}
+    <a class="byline__author" href="/toimitus/" rel="author">KIR-toimitus</a>.
+    {modifiedLabel && (
+      <span class="byline__sep" aria-hidden="true">·</span>
+    )}
+    {modifiedLabel && (
+      <span class="byline__updated">
+        Päivitetty <time datetime={modifiedIso}>{modifiedLabel}</time>
+      </span>
+    )}
+  </p>
+</div>
+
+<style>
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1.4rem;
+    padding: 0.7rem 0.95rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg-band);
+  }
+  .byline__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .byline__text {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .byline__author {
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .byline__author:hover {
+    color: var(--brand-dark);
+  }
+  .byline__sep {
+    margin: 0 0.35rem;
+    color: var(--ink-3);
+  }
+  .byline__updated {
+    color: var(--ink-3);
+  }
+  .byline__updated time {
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+</style>

@@ -66,6 +66,27 @@ function blockHasReview(block: string): boolean {
 }
 
 /**
+ * Sanitize a verbatim casino Review JSON-LD block WITHOUT JSON.parse/stringify
+ * (byte-faithful for everything else — mirrors sanitizePreservedJsonLd in
+ * seo-head.ts). Clears the schema.org validation error on ~265 casino pages:
+ *   1. The scrape produced a DEGENERATE reviewRating where ratingValue,
+ *      bestRating and worstRating are all the SAME value (e.g. all "4.7"). The
+ *      \1 backreference matches ONLY that all-equal case, so a correct rating
+ *      (best 5 / worst 1) is never touched. Rewrite best/worst to the real
+ *      5/1 scale, preserving the original ratingValue verbatim.
+ *   2. dateCreated carried a leading space + trailing "=" (" 2025-10-30=") —
+ *      strip them to a clean ISO date. Optional tokens make this idempotent.
+ */
+function sanitizeCasinoReviewBlock(block: string): string {
+  return block
+    .replace(
+      /"reviewRating":\{"@type":"Rating","ratingValue":"([0-9.]+)","bestRating":"\1","worstRating":"\1"\}/g,
+      '"reviewRating":{"@type":"Rating","ratingValue":"$1","bestRating":"5","worstRating":"1"}',
+    )
+    .replace(/"dateCreated":" ?(\d{4}-\d{2}-\d{2})=?"/g, '"dateCreated":"$1"');
+}
+
+/**
  * Read a casino fragment's body.html and return EVERY
  * <script type="application/ld+json"> block VERBATIM (raw strings, byte-faithful
  * — no parsing/reformatting), in document order. Returns [] when the fragment or
@@ -80,7 +101,7 @@ export function getCasinoBodyJsonLd(slug: string): string[] {
   } catch {
     return [];
   }
-  return body.match(LD_JSON_RE) ?? [];
+  return (body.match(LD_JSON_RE) ?? []).map(sanitizeCasinoReviewBlock);
 }
 
 /**

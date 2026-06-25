@@ -363,6 +363,16 @@ function decodeSpaiImages(html: string): string {
   );
 }
 
+/**
+ * Demote any stray <h1> inside body prose to <h2> (clears the Multiple-H1 SEO
+ * error on pages whose REST/fragment body opens with its own H1 while the page
+ * template already renders the canonical H1). Attribute-preserving, idempotent,
+ * tag-level only — content, classes and every other attribute are untouched.
+ */
+export function demoteBodyH1(html: string | null | undefined): string {
+  return (html || "").replace(/<h1(\b[^>]*)>/gi, "<h2$1>").replace(/<\/h1>/gi, "</h2>");
+}
+
 export function optimizeProseImages(html: string | null | undefined): string {
   if (!html) return "";
   return html.replace(/<img\b([^>]*?)\s*(\/?)>/gi, (_whole, rawAttrs: string, selfClose: string) => {

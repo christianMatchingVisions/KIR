@@ -48,6 +48,8 @@ import BaseLayout from "./BaseLayout.astro";
 import CasinoRow from "../components/CasinoRow.astro";
 import Icon from "../components/Icon.astro";
 import { getToplist, type ToplistCasino } from "../lib/toplist";
+import { breadcrumbJsonLd, type Crumb } from "../lib/related";
+import { getSeoHead } from "../lib/seo-head";
 
 interface Props {
   /** Real indexed URL of this page → preserves the registered SEO head verbatim. */
@@ -60,9 +62,46 @@ interface Props {
   toplistConfig: string;
   /** Max rows to show. Defaults to 20. */
   toplistLimit?: number;
+  /**
+   * Optional breadcrumb trail (last item = current page). When omitted we derive
+   * a truthful 2-level trail (Etusivu › <title>) from the title/seoPath so the
+   * money/category pages still emit BreadcrumbList structured data (parity with
+   * the article/review/engine routes). Schema only — the hero stays crumb-free.
+   */
+  breadcrumb?: Crumb[];
 }
 
-const { seoPath, title, introHtml, toplistConfig, toplistLimit } = Astro.props;
+const {
+  seoPath,
+  title,
+  introHtml,
+  toplistConfig,
+  toplistLimit,
+  breadcrumb,
+} = Astro.props;
+
+/* -------------------------------------------------------------------------- *
+ * BreadcrumbList JSON-LD — reflects this page's real position in the site     *
+ * hierarchy (homepage → this category page). Caller can pass an explicit       *
+ * trail; otherwise we build the truthful default Etusivu › <title>. Emitted    *
+ * once in the body (valid anywhere). The category hubs are one level under the *
+ * homepage, so a 2-item list is the accurate trail.                            *
+ * -------------------------------------------------------------------------- */
+const moneyCrumbs: Crumb[] =
+  breadcrumb && breadcrumb.length >= 2
+    ? breadcrumb
+    : [
+        { label: "Etusivu", href: "/" },
+        { label: title },
+      ];
+// DEDUPE: a couple of money pages (e.g. /pikakasinot/, /nettikasino-ilman-
+// rekisteroitymista/) already carry a BreadcrumbList in their PRESERVED head,
+// re-emitted verbatim by BaseLayout. Adding a second one would duplicate the
+// schema, so only emit ours when the preserved head has no BreadcrumbList.
+const headHasBreadcrumb = (getSeoHead(seoPath)?.jsonLd ?? []).some((b) =>
+  /"@type"\s*:\s*"BreadcrumbList"/.test(b),
+);
+const breadcrumbLd = headHasBreadcrumb ? "" : breadcrumbJsonLd(moneyCrumbs, seoPath);
 
 /* -------------------------------------------------------------------------- *
  * Toplist — filter closed BEFORE ranking, then cap.                          *
@@ -104,6 +143,10 @@ const leadText = firstParagraphText(introHtml);
 ---
 
 <BaseLayout seoPath={seoPath} bodyClass="money-page">
+  {/* BreadcrumbList structured data — this category page's place in the site
+      hierarchy (Etusivu › <title>). Additive, schema only. */}
+  {breadcrumbLd && <Fragment set:html={breadcrumbLd} />}
+
   {/* ---------------- HERO ---------------- */}
   <section class="section--tight band-brand money-hero" aria-labelledby="money-title">
     <div class="container--narrow money-hero__inner">

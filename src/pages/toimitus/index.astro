@@ -97,14 +97,29 @@ const ratingSteps: string[] = [
   "Päivitämme arviot, kun kasinon ehdot, lisenssi tai tarjoukset muuttuvat.",
 ];
 
-/* JSON-LD: Organization (the editorial body) + WebPage (this page). */
+/* JSON-LD: Organization (the editorial body) + AboutPage (this page).
+ * The Organization carries the canonical @id "#editorial-team" so it is the SAME
+ * entity that casino-schema.ts and related.ts reference from reviews/articles
+ * (author / reviewedBy → #editorial-team). Giving that id a full definition HERE,
+ * on its own methodology page, lets Google resolve the cross-page author graph to
+ * one real editorial entity — an E-E-A-T trust signal for the recovery. */
+const EDITORIAL_ID = `${SITE_ORIGIN}/#editorial-team`;
+const PUBLISHER_ID = `${SITE_ORIGIN}/#organization`;
+
 const organizationLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": EDITORIAL_ID,
   name: "Kasinot ilman rekisteröitymistä -toimitus",
   alternateName: "KIR-toimitus",
-  url: SITE_ORIGIN + "/",
+  url: SITE_ORIGIN + "/toimitus/",
   logo: `${SITE_ORIGIN}/favicon.svg`,
+  parentOrganization: {
+    "@type": "Organization",
+    "@id": PUBLISHER_ID,
+    name: "Kasinot ilman rekisteröitymistä",
+    url: SITE_ORIGIN + "/",
+  },
   description:
     "Riippumaton suomalainen toimitus, joka vertailee ja arvioi nettikasinoita yhdenmukaisella menetelmällä.",
   contactPoint: {
@@ -117,13 +132,15 @@ const organizationLd = {
 
 const webPageLd = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
+  "@type": "AboutPage",
   name: title,
   description,
   url: canonical,
   inLanguage: "fi",
   isPartOf: { "@type": "WebSite", name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
-  publisher: { "@type": "Organization", name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
+  about: { "@id": EDITORIAL_ID },
+  mainEntity: { "@id": EDITORIAL_ID },
+  publisher: { "@type": "Organization", "@id": PUBLISHER_ID, name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
 };
 
 const breadcrumbLd = {

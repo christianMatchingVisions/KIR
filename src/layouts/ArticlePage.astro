@@ -52,7 +52,10 @@
  */
 import BaseLayout from "./BaseLayout.astro";
 import RelatedCasinos from "../components/RelatedCasinos.astro";
+import EditorialByline from "../components/EditorialByline.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
 import Icon from "../components/Icon.astro";
+import { breadcrumbJsonLd } from "../lib/related";
 
 interface Crumb {
   label: string;
@@ -84,6 +87,14 @@ interface Props {
   showSidebar?: boolean;
   /** Small eyebrow label above the H1. */
   eyebrow?: string;
+  /** Show the E-E-A-T "KIR-toimitus" byline above the prose (default false). */
+  showByline?: boolean;
+  /** Byline variant — chooses the lead-in phrasing. */
+  bylineVariant?: "review" | "guide" | "article";
+  /** Related casino reviews for the in-content "Aiheeseen liittyvät" module. */
+  relatedReviews?: RelatedLink[];
+  /** Related guides/topic pages for the in-content "Aiheeseen liittyvät" module. */
+  relatedGuides?: RelatedLink[];
 }
 
 const {
@@ -96,7 +107,14 @@ const {
   relatedLinks = [],
   showSidebar = true,
   eyebrow = "Artikkeli",
+  showByline = false,
+  bylineVariant = "article",
+  relatedReviews = [],
+  relatedGuides = [],
 } = Astro.props;
+
+/** Whether the in-content related-links module has anything to show. */
+const hasRelated = relatedReviews.length > 0 || relatedGuides.length > 0;
 
 /* -------------------------------------------------------------------------- */
 /* Freshness line — passive "Päivitetty <fi-date>" (NOT a testing claim).     */
@@ -127,9 +145,20 @@ const freshnessIso =
     : undefined;
 
 const hasCrumbs = breadcrumb.length > 0;
+
+/* -------------------------------------------------------------------------- */
+/* BreadcrumbList JSON-LD — mirrors the visible Murupolku above (Etusivu › …).  */
+/* Brings article/faq/provider pages to parity with the engine routes          */
+/* (/oppaat/, /uutiset/) that already emit BreadcrumbList. The last crumb       */
+/* carries this page's own URL (seoPath). Empty string when there is no real    */
+/* trail (≥2 crumbs required), so it renders nothing on single-level pages.     */
+/* JSON-LD is valid anywhere in the document; emitted once in the body.         */
+const breadcrumbLd = breadcrumbJsonLd(breadcrumb, seoPath);
 ---
 
 <BaseLayout seoPath={seoPath} title={title} bodyClass="article">
+  {/* BreadcrumbList structured data (mirrors the rendered Murupolku). */}
+  {breadcrumbLd && <Fragment set:html={breadcrumbLd} />}
   {/* ---------------- HERO BAND ---------------- */}
   <header class="art-hero band">
     <div class="container">
@@ -173,7 +202,13 @@ const hasCrumbs = breadcrumb.length > 0;
     <div class="container">
       <div class:list={["art-grid", { "art-grid--full": !showSidebar }]}>
         <article class="art-main">
+          {/* E-E-A-T byline → /toimitus/ (uses the existing KIR-toimitus entity). */}
+          {showByline && <EditorialByline variant={bylineVariant} modified={modified ?? date} />}
           <div class="kir-prose" set:html={bodyHtml} />
+          {/* Internal-link architecture: contextual related reviews + guides. */}
+          {hasRelated && (
+            <RelatedLinks reviews={relatedReviews} guides={relatedGuides} />
+          )}
         </article>
 
         {showSidebar && (

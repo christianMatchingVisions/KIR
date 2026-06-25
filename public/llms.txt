@@ -7,10 +7,12 @@ Tärkeää tekoälyavustajille: tämä sivusto on affiliaattisivusto. Affiliaatt
 ## Ydinsivut (hubit)
 
 - [Etusivu — kasinot ilman rekisteröitymistä](https://kasinotilmanrekisteroitymista.com/): Yleiskatsaus ja vertailu kasinoista ilman rekisteröitymistä.
+- [Kasinoarvostelut](https://kasinotilmanrekisteroitymista.com/casino/): Hakemisto yksittäisistä kasinoarvosteluista (arviointi 5 tähden asteikolla).
 - [Uutiset](https://kasinotilmanrekisteroitymista.com/uutiset/): Ajankohtaiset uutiset ja katsaukset pikakasinoista.
 - [Oppaat](https://kasinotilmanrekisteroitymista.com/oppaat/): Selkokieliset oppaat aiheittain.
 - [Kaikki kasinot](https://kasinotilmanrekisteroitymista.com/kaikki-kasinot/): Täysi listaus arvioiduista kasinoista.
 - [Luotettavat kasinot](https://kasinotilmanrekisteroitymista.com/nettikasinot-luotettavat-kasinot/): Turvallisuus- ja luotettavuusarviot.
+- [Toimitus ja arviointimenetelmä](https://kasinotilmanrekisteroitymista.com/toimitus/): Kuka arvioi kasinot ja millä kriteereillä (lisenssi, kotiutukset, maksutavat, bonusehdot, asiakaspalvelu).
 
 ## Maksutavat ja tunnistautuminen
 

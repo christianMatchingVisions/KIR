@@ -1,0 +1,190 @@
+---
+/**
+ * RelatedLinks.astro — "Aiheeseen liittyvät" contextual internal-link module.
+ *
+ * WHY (penalty recovery, internal-link architecture): the site has 8 orphan
+ * pages and 372 pages with a single incoming link. The cheapest, lowest-risk
+ * lever to lift the thin money/review/article pages that already have
+ * impressions is to DENSIFY the internal-link graph so crawl priority + link
+ * equity flows to them. This module renders a tasteful block of contextual
+ * Finnish-anchor links at the BOTTOM of article/review bodies:
+ *   - related casino reviews  (→ /casino/<slug>/)
+ *   - related guides + topic money pages (→ /<slug>/, /pikakasinot/, …)
+ *
+ * The links are computed by the caller from EXISTING data (getPosts /
+ * getAllCasinos / topicLinksFor) — this component is presentation only and
+ * renders NOTHING when both groups are empty, so it is safe to drop in anywhere.
+ *
+ * COMPLIANCE: every link here is an internal, FOLLOWED navigation link (no /go/
+ * affiliate links), so no sponsored/nofollow rel. No first-hand/testing claims.
+ *
+ * Props:
+ *   reviews?  RelatedLink[]   related casino reviews (label = casino name).
+ *   guides?   RelatedLink[]   related guides + topic/money pages.
+ *   title?    string          section heading (default "Aiheeseen liittyvät").
+ *   reviewsTitle? / guidesTitle? string column sub-headings.
+ *   class?    string          extra class on the root <section>.
+ */
+import Icon from "./Icon.astro";
+
+interface RelatedLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  reviews?: RelatedLink[];
+  guides?: RelatedLink[];
+  title?: string;
+  reviewsTitle?: string;
+  guidesTitle?: string;
+  class?: string;
+}
+
+const {
+  reviews = [],
+  guides = [],
+  title = "Aiheeseen liittyvät",
+  reviewsTitle = "Kasinoarvostelut",
+  guidesTitle = "Oppaat ja aiheet",
+  class: className,
+} = Astro.props;
+
+/** De-dupe by href so the same target never appears twice in one column. */
+function dedupe(links: RelatedLink[]): RelatedLink[] {
+  const seen = new Set<string>();
+  const out: RelatedLink[] = [];
+  for (const l of links) {
+    if (!l || !l.href || !l.label) continue;
+    if (seen.has(l.href)) continue;
+    seen.add(l.href);
+    out.push(l);
+  }
+  return out;
+}
+
+const reviewLinks = dedupe(reviews);
+const guideLinks = dedupe(guides);
+const hasAny = reviewLinks.length > 0 || guideLinks.length > 0;
+---
+
+{hasAny && (
+  <section class:list={["rl", className]} aria-labelledby="related-title">
+    <h2 id="related-title" class="rl__title">
+      <span class="rl__title-ico" aria-hidden="true">
+        <Icon name="bolt" size={20} />
+      </span>
+      {title}
+    </h2>
+
+    <div class="rl__cols">
+      {reviewLinks.length > 0 && (
+        <nav class="rl__col" aria-label={reviewsTitle}>
+          <h3 class="rl__col-title">{reviewsTitle}</h3>
+          <ul class="rl__list" role="list">
+            {reviewLinks.map((l) => (
+              <li>
+                <a class="rl__link" href={l.href}>
+                  <Icon name="chevron-right" size={15} class="rl__link-ico" />
+                  <span>{l.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+      {guideLinks.length > 0 && (
+        <nav class="rl__col" aria-label={guidesTitle}>
+          <h3 class="rl__col-title">{guidesTitle}</h3>
+          <ul class="rl__list" role="list">
+            {guideLinks.map((l) => (
+              <li>
+                <a class="rl__link" href={l.href}>
+                  <Icon name="chevron-right" size={15} class="rl__link-ico" />
+                  <span set:html={l.label} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  </section>
+)}
+
+<style>
+  .rl {
+    margin-top: 2.25rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .rl__title {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 1.1rem;
+    font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.45rem);
+    color: var(--navy);
+  }
+  .rl__title-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+
+  .rl__cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem 2rem;
+  }
+  @media (min-width: 640px) {
+    .rl__cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .rl__col-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .rl__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rl__link {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.4rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.94rem;
+    line-height: 1.35;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  .rl__link:hover {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    text-decoration: none;
+  }
+  .rl__link-ico {
+    color: var(--brand);
+    flex: none;
+  }
+</style>
