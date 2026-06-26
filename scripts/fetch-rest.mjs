@@ -90,10 +90,19 @@ for (const l of links) {
   redirects.push({ source: `/go/${l.slug}/`, destination: dest, permanent: false });
 }
 
+// Manually-curated static redirects (legacy slug fixes, etc.) live in
+// data/static-redirects.json and are merged AHEAD of the generated /go/ rules.
+// WITHOUT this merge, regenerating vercel.redirects here would silently DROP
+// every non-/go/ redirect on each daily sync.
+const staticRedirectsPath = path.join(ROOT, 'data', 'static-redirects.json');
+const staticRedirects = existsSync(staticRedirectsPath)
+  ? JSON.parse(await readFile(staticRedirectsPath, 'utf8'))
+  : [];
+
 const vercelPath = path.join(ROOT, 'vercel.json');
 const vercel = existsSync(vercelPath)
   ? JSON.parse(await readFile(vercelPath, 'utf8'))
   : {};
-vercel.redirects = redirects;
+vercel.redirects = [...staticRedirects, ...redirects];
 await writeFile(vercelPath, JSON.stringify(vercel, null, 2));
-console.log(`Wrote ${redirects.length} redirect rules (${links.length} /go/ links) to vercel.json`);
+console.log(`Wrote ${staticRedirects.length} static + ${redirects.length} /go/ redirect rules to vercel.json`);

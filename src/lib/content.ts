@@ -373,24 +373,140 @@ export function demoteBodyH1(html: string | null | undefined): string {
   return (html || "").replace(/<h1(\b[^>]*)>/gi, "<h2$1>").replace(/<\/h1>/gi, "</h2>");
 }
 
+/* -------------------------------------------------------------------------- *
+ * ACCESSIBILITY / SEO: prose-image ALT backfill.                              *
+ * -------------------------------------------------------------------------- *
+ * Editorial prose carries ~100+ content-engine images with an EMPTY alt
+ * (alt="") — invisible to screen readers and an "image missing alt" SEO error
+ * on a recovering domain. We give every empty/missing-alt prose <img> a
+ * MEANINGFUL, TRUTHFUL alt derived (in priority order) from:
+ *   (a) the nearest preceding heading (<h1>/<h2>/<h3>) text in the same prose,
+ *   (b) else a cleaned, human-readable version of the image FILENAME (the
+ *       leading numeric/upload-timestamp prefix is stripped; meaningless
+ *       hash-only names like "1771401003868_image" are rejected),
+ *   (c) else a concise topic-generic fallback (the site's subject).
+ * We NEVER fabricate a misleading description, and we NEVER touch an <img>
+ * that already has a non-empty alt (idempotent). Body-prose only — the
+ * preserved <head> is untouched.
+ */
+
+/** Strip tags/entities/whitespace from heading inner HTML → plain alt text. */
+function headingToAlt(inner: string): string {
+  const text = inner
+    .replace(/<[^>]+>/g, " ") // drop nested tags (links/spans inside the heading)
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&[a-z]+;|&#\d+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Keep alt concise; trim on a word boundary if very long.
+  if (text.length <= 120) return text;
+  const cut = text.slice(0, 120);
+  return cut.slice(0, cut.lastIndexOf(" ") > 40 ? cut.lastIndexOf(" ") : 120).trim();
+}
+
+/**
+ * Human-readable alt from an image filename, or null when it is meaningless.
+ * Drops directory/query, the file extension, and a leading numeric upload
+ * stamp ("1770124279593_foo.jpg" → "foo"). Rejects hash-only / placeholder
+ * names ("image", "img", "photo", pure digits/hex) so we never surface noise.
+ */
+function filenameToAlt(src: string): string | null {
+  if (!src) return null;
+  let base = src.split(/[?#]/)[0].split("/").pop() ?? "";
+  base = base.replace(/\.[a-z0-9]{2,5}$/i, ""); // strip extension
+  // Strip a leading upload/timestamp prefix: digits + a separator.
+  base = base.replace(/^\d{6,}[_-]/, "");
+  // Normalise separators → spaces.
+  const words = base.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!words) return null;
+  const lower = words.toLowerCase().replace(/\s+/g, "");
+  // Reject meaningless / placeholder stems.
+  if (/^(image|img|photo|picture|untitled|screenshot|file|default|banner|logo)$/.test(lower)) {
+    return null;
+  }
+  // Reject hash-only names (all digits, or long hex with no real word).
+  if (/^\d+$/.test(lower) || /^[0-9a-f]{12,}$/.test(lower)) return null;
+  // Require at least one 3+ letter run so we don't surface code-ish noise.
+  if (!/[a-zåäö]{3,}/i.test(words)) return null;
+  // Capitalise the first letter for a tidy, sentence-like alt.
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+/** Concise, truthful topic-generic alt (the site's subject). Never misleading. */
+const GENERIC_PROSE_ALT = "Kasinot ilman rekisteröitymistä";
+
+/** Derive a meaningful alt for an empty/missing-alt prose <img>. */
+function deriveProseAlt(src: string, nearestHeading: string | null): string {
+  const fromHeading = nearestHeading ? headingToAlt(nearestHeading) : "";
+  if (fromHeading.length >= 3) return fromHeading;
+  const fromFile = filenameToAlt(src);
+  if (fromFile && fromFile.length >= 3) return fromFile;
+  return GENERIC_PROSE_ALT;
+}
+
+/** Escape a string for safe use inside a double-quoted HTML attribute. */
+function attrEscape(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/** Per-<img> rewrite: perf attrs (lazy/async, drop fetchpriority) + alt backfill. */
+function rewriteProseImg(
+  rawAttrs: string,
+  selfClose: string,
+  nearestHeading: string | null,
+): string {
+  let attrs = rawAttrs;
+  // 1. Drop fetchpriority="high" (quoted or bare) — never the LCP image here.
+  attrs = attrs.replace(/\s+fetchpriority\s*=\s*(?:"high"|'high'|high)/gi, "");
+  // 2. Lazy-load when no loading attribute is present (respect existing values).
+  if (!/\bloading\s*=/i.test(attrs)) {
+    attrs = `${attrs} loading="lazy"`;
+  }
+  // 3. Async decode when no decoding attribute is present.
+  if (!/\bdecoding\s*=/i.test(attrs)) {
+    attrs = `${attrs} decoding="async"`;
+  }
+  // 4. ALT backfill: only when alt is missing or empty (never overwrite real alt).
+  const altMatch = attrs.match(/\salt\s*=\s*"([^"]*)"/i);
+  const hasNonEmptyAlt = altMatch != null && altMatch[1].trim().length > 0;
+  if (!hasNonEmptyAlt) {
+    const src = (attrs.match(/\bsrc\s*=\s*"([^"]*)"/i) || [])[1] ?? "";
+    const alt = attrEscape(deriveProseAlt(src, nearestHeading));
+    if (altMatch) {
+      // Existing empty alt="" → fill it in place (keeps attribute order).
+      attrs = attrs.replace(/\salt\s*=\s*"[^"]*"/i, ` alt="${alt}"`);
+    } else {
+      attrs = `${attrs} alt="${alt}"`;
+    }
+  }
+  // Normalise stray double-spaces left by the strip; keep a single space lead.
+  attrs = attrs.replace(/\s{2,}/g, " ").replace(/^\s*/, " ").replace(/\s*$/, "");
+  return `<img${attrs}${selfClose ? " /" : ""}>`;
+}
+
 export function optimizeProseImages(html: string | null | undefined): string {
   if (!html) return "";
-  return html.replace(/<img\b([^>]*?)\s*(\/?)>/gi, (_whole, rawAttrs: string, selfClose: string) => {
-    let attrs = rawAttrs;
-    // 1. Drop fetchpriority="high" (quoted or bare) — never the LCP image here.
-    attrs = attrs.replace(/\s+fetchpriority\s*=\s*(?:"high"|'high'|high)/gi, "");
-    // 2. Lazy-load when no loading attribute is present (respect existing values).
-    if (!/\bloading\s*=/i.test(attrs)) {
-      attrs = `${attrs} loading="lazy"`;
-    }
-    // 3. Async decode when no decoding attribute is present.
-    if (!/\bdecoding\s*=/i.test(attrs)) {
-      attrs = `${attrs} decoding="async"`;
-    }
-    // Normalise stray double-spaces left by the strip; keep a single space lead.
-    attrs = attrs.replace(/\s{2,}/g, " ").replace(/^\s*/, " ").replace(/\s*$/, "");
-    return `<img${attrs}${selfClose ? " /" : ""}>`;
-  });
+  // Single linear pass over headings + images so each <img> knows the nearest
+  // preceding <h1>/<h2>/<h3> for a contextual alt. Headings pass through
+  // verbatim; only <img> tags are rewritten.
+  let lastHeading: string | null = null;
+  const TOKEN = /<h([1-3])\b[^>]*>([\s\S]*?)<\/h\1\s*>|<img\b([^>]*?)\s*(\/?)>/gi;
+  return html.replace(
+    TOKEN,
+    (whole, _hLevel, hInner: string | undefined, imgAttrs: string | undefined, selfClose: string | undefined) => {
+      if (imgAttrs !== undefined) {
+        return rewriteProseImg(imgAttrs, selfClose ?? "", lastHeading);
+      }
+      // It was a heading: remember its inner HTML for the next image, pass verbatim.
+      lastHeading = hInner ?? null;
+      return whole;
+    },
+  );
 }
 
 function str(v: string | undefined): string {

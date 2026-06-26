@@ -2,6 +2,346 @@
   "trailingSlash": true,
   "redirects": [
     {
+      "source": "/casino/kanuuna-casino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/kanuuna-casino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lucky-elektra",
+      "destination": "/casino/lucky-elektra-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lucky-elektra/",
+      "destination": "/casino/lucky-elektra-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lonkero",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lonkero/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/21-com-casino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/21-com-casino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/casino-winbig",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/casino-winbig/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/dbosses",
+      "destination": "/casino/dbosses-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/dbosses/",
+      "destination": "/casino/dbosses-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/flaksi",
+      "destination": "/casino/flaksi-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/flaksi/",
+      "destination": "/casino/flaksi-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/hillo-casino",
+      "destination": "/casino/hillo-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/hillo-casino/",
+      "destination": "/casino/hillo-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/jackie-jackpot",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/jackie-jackpot/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lucky-spins",
+      "destination": "/casino/lucky-spins-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lucky-spins/",
+      "destination": "/casino/lucky-spins-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lucky-trunk",
+      "destination": "/casino/lucky-trunk-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/lucky-trunk/",
+      "destination": "/casino/lucky-trunk-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/netbet",
+      "destination": "/casino/netbet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/netbet/",
+      "destination": "/casino/netbet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/nitrospins-casino",
+      "destination": "/casino/nitrospins-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/nitrospins-casino/",
+      "destination": "/casino/nitrospins-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/nova-jackpot",
+      "destination": "/casino/nova-jackpot-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/nova-jackpot/",
+      "destination": "/casino/nova-jackpot-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/nubet",
+      "destination": "/casino/nubet-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/nubet/",
+      "destination": "/casino/nubet-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/playdingo",
+      "destination": "/casino/playdingo-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/playdingo/",
+      "destination": "/casino/playdingo-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/rtbet",
+      "destination": "/casino/rtbet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/rtbet/",
+      "destination": "/casino/rtbet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/scarabet-casino",
+      "destination": "/casino/scarabet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/scarabet-casino/",
+      "destination": "/casino/scarabet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/samiland",
+      "destination": "/casino/samiland-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/samiland/",
+      "destination": "/casino/samiland-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/sisu-kasino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/sisu-kasino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/slots-hammer",
+      "destination": "/casino/slots-hammer-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/slots-hammer/",
+      "destination": "/casino/slots-hammer-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/slotuna-casino",
+      "destination": "/casino/slotuna-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/slotuna-casino/",
+      "destination": "/casino/slotuna-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/spinson-casino",
+      "destination": "/casino/spinson-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/spinson-casino/",
+      "destination": "/casino/spinson-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/spinz",
+      "destination": "/casino/spinz-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/spinz/",
+      "destination": "/casino/spinz-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/swiper-casino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/swiper-casino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/talismania-casino",
+      "destination": "/casino/talismania-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/talismania-casino/",
+      "destination": "/casino/talismania-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/taikaspins",
+      "destination": "/casino/taikaspins-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/taikaspins/",
+      "destination": "/casino/taikaspins-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/wazamba",
+      "destination": "/casino/wazamba-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/wazamba/",
+      "destination": "/casino/wazamba-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/winnerz",
+      "destination": "/casino/winnerz-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/winnerz/",
+      "destination": "/casino/winnerz-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/winota",
+      "destination": "/casino/winota-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/winota/",
+      "destination": "/casino/winota-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/yoyo-casino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/yoyo-casino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/zet-planet",
+      "destination": "/casino/zet-planet-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/zet-planet/",
+      "destination": "/casino/zet-planet-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/luckynordic-kasino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/luckynordic-kasino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/barz",
+      "destination": "/casino/barz-casino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/barz/",
+      "destination": "/casino/barz-casino/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false
