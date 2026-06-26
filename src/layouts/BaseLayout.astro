@@ -29,6 +29,7 @@ import { shouldNoindex } from "../lib/noindex";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import DisclosureBar from "../components/DisclosureBar.astro";
+import CroHook from "../components/CroHook.astro";
 
 interface Props {
   /** URL path of an EXISTING page → preserve its registered SEO head verbatim. */
@@ -211,6 +212,15 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
       type="text/partytown"
       src="https://www.googletagmanager.com/gtag/js?id=GT-5DCRZLHV"
     ></script>
+
+    {/*
+      CRO/A-B hook (PostHog) — env-gated + consent-aware. INERT by default:
+      renders NOTHING unless PUBLIC_POSTHOG_KEY is set at build time, so the
+      default build ships no extra tracking, no cookies, and keeps the current
+      consent posture. When enabled it runs cookieless (persistence:'memory',
+      autocapture off, DNT respected) in a Partytown worker. See CroHook.astro.
+    */}
+    <CroHook />
 
     <script>
       // Reveal-on-scroll: add .in to .reveal elements as they enter the

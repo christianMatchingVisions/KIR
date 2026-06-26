@@ -1,0 +1,149 @@
+---
+/**
+ * ReviewSources.astro — authoritative outbound citations ("Lähteet ja
+ * viranomaiset") for a casino review.
+ *
+ * WHY (E-E-A-T, finding: sourcing): the review page makes licensing / safety /
+ * responsible-gambling statements. Linking those claims to the REAL authoritative
+ * bodies (the licence regulator + the Finnish RG helpline Peluuri) is a trust
+ * signal Google's E-E-A-T guidance rewards. We surface only sources that are
+ * RELEVANT to THIS casino's facts:
+ *   - Peluuri          — always (the RG claim applies to every casino here).
+ *   - MGA              — when the licence string mentions Malta / MGA.
+ *   - Curaçao GCB      — when the licence string mentions Curaçao.
+ * When the licence is unknown we still show Peluuri (RG) so the block is never
+ * empty of its most important citation.
+ *
+ * COMPLIANCE (mandatory, do not weaken):
+ *   - Every link here is EXTERNAL and carries rel="nofollow noopener" +
+ *     target="_blank". These are E-E-A-T citations, NOT affiliate links.
+ *   - NONE of these are /go/ links — this component never renders an affiliate
+ *     CTA and never touches /go/ rel attributes.
+ *   - Factual, descriptive copy only; no first-hand / testing claims.
+ *
+ * Props:
+ *   license? : string | null   the casino's licence string (drives which
+ *                              regulator citation is shown).
+ *   name?    : string          casino display name (for a11y label only).
+ */
+import Icon from "../Icon.astro";
+
+interface Props {
+  license?: string | null;
+  name?: string;
+}
+
+const { license = null, name = "" } = Astro.props;
+
+interface Source {
+  label: string;
+  href: string;
+  note: string;
+}
+
+const lic = (license ?? "").toLowerCase();
+
+/* Peluuri is always relevant — the responsible-gambling citation applies to
+   every casino on this site. */
+const sources: Source[] = [
+  {
+    label: "Peluuri",
+    href: "https://www.peluuri.fi/",
+    note: "Maksuton tuki ja neuvonta rahapelihaittoihin Suomessa.",
+  },
+];
+
+/* Add the licence regulator citation that matches THIS casino's licence. */
+if (/\bmga\b|malta/.test(lic)) {
+  sources.push({
+    label: "Malta Gaming Authority",
+    href: "https://www.mga.org.mt/",
+    note: "Maltan pelilisenssiviranomainen.",
+  });
+}
+if (/cur[aâ]ç?[ao]/.test(lic) || lic.includes("curacao")) {
+  sources.push({
+    label: "Curaçao Gaming Control Board",
+    href: "https://www.gaming-curacao.com/",
+    note: "Curaçaon pelilisenssejä valvova taho.",
+  });
+}
+---
+
+<section class="rs" aria-label={`Lähteet ja viranomaiset${name ? ` – ${name}` : ""}`}>
+  <h2 class="rs__title">Lähteet ja viranomaiset</h2>
+  <p class="rs__lede">
+    Lisenssi-, turvallisuus- ja vastuullisuustiedot perustuvat virallisiin
+    lähteisiin. Tarkista kasinon lisenssi ja ehdot myös suoraan kasinon
+    omilta sivuilta.
+  </p>
+  <ul class="rs__list">
+    {sources.map((s) => (
+      <li class="rs__item">
+        <a class="rs__link" href={s.href} target="_blank" rel="nofollow noopener">
+          <Icon name="shield" size={16} class="rs__ico" />
+          <span class="rs__label">{s.label}</span>
+          <Icon name="arrow-right" size={14} class="rs__arrow" />
+        </a>
+        <span class="rs__note">{s.note}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .rs {
+    margin: 0;
+  }
+  .rs__title {
+    margin: 0 0 0.5rem;
+    color: var(--navy);
+    font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.45rem);
+  }
+  .rs__lede {
+    margin: 0 0 1rem;
+    color: var(--ink-2);
+    line-height: 1.6;
+    max-width: 62ch;
+    font-size: 0.95rem;
+  }
+  .rs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .rs__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 0.6rem;
+  }
+  .rs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .rs__link:hover {
+    color: var(--brand-dark);
+  }
+  .rs__ico {
+    color: var(--brand);
+    flex: none;
+  }
+  .rs__arrow {
+    flex: none;
+    opacity: 0.8;
+  }
+  .rs__note {
+    color: var(--ink-3);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+</style>

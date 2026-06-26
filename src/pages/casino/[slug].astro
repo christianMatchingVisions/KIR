@@ -46,6 +46,7 @@ import ReviewMethodology from "../../components/review/ReviewMethodology.astro";
 import PaymentMethods from "../../components/review/PaymentMethods.astro";
 import CasinoInfoGrid from "../../components/review/CasinoInfoGrid.astro";
 import ReviewFaq from "../../components/review/ReviewFaq.astro";
+import ReviewSources from "../../components/review/ReviewSources.astro";
 import CasinoCard from "../../components/CasinoCard.astro";
 import EditorialByline from "../../components/EditorialByline.astro";
 import RelatedLinks from "../../components/RelatedLinks.astro";
@@ -59,7 +60,7 @@ import {
 } from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
 import { optimizeProseImages, getPosts } from "../../lib/content";
-import { getCasinoSchemaBlocks } from "../../lib/casino-schema";
+import { getCasinoSchemaBlocks, getCasinoReviewDate } from "../../lib/casino-schema";
 import {
   relatedReviews as buildRelatedReviews,
   relatedGuides as buildRelatedGuides,
@@ -305,6 +306,14 @@ const schemaBlocks: string[] = review
     )
   : [];
 
+/* TRUST STAMP DATE (E-E-A-T freshness): the truthful "last reviewed/updated"
+ * date for THIS casino, pulled VERBATIM from its Review JSON-LD (dateModified,
+ * falling back to dateCreated) in the scraped body. Surfaced in the byline as
+ * "Päivitetty <fi-date>" so the visible page matches the indexed structured
+ * data. null when the fragment carries no parseable Review date → byline omits
+ * the date (never an invented/"Invalid Date" stamp). */
+const reviewModifiedDate = review ? getCasinoReviewDate(review.slug) : null;
+
 /* BreadcrumbList JSON-LD — mirrors the visible Murupolku rendered below
  * (Etusivu › Arvostelut › <Name>). The casino review pages carried no
  * breadcrumb structured data before; this brings them to parity with the
@@ -514,8 +523,11 @@ if (review && !review.showNoReview) {
           <section class="section--tight" id={PROSE_ANCHOR}>
             <div class="container--narrow">
               <h2 class="rev-prose__title">Arvostelu: {review.name}</h2>
-              {/* E-E-A-T byline → /toimitus/ (existing KIR-toimitus entity). */}
-              <EditorialByline variant="review" />
+              {/* E-E-A-T byline → /toimitus/ (existing KIR-toimitus entity).
+                  modified = the truthful Review dateModified/dateCreated from the
+                  scraped JSON-LD, so the visible "Päivitetty <date>" trust stamp
+                  matches the indexed structured data. */}
+              <EditorialByline variant="review" modified={reviewModifiedDate} />
               {review.reviewHtml && (
                 <div class="kir-prose" set:html={review.reviewHtml} />
               )}
@@ -545,6 +557,16 @@ if (review && !review.showNoReview) {
         <section class="section--tight band">
           <div class="container--narrow">
             <ReviewFaq review={review} />
+          </div>
+        </section>
+
+        {/* ---------------- LÄHTEET & VIRANOMAISET (authoritative citations) ----
+            E-E-A-T sourcing: links the page's licensing/safety/RG claims to the
+            real regulator(s) + Peluuri. All rel="nofollow noopener", external,
+            NEVER /go/ affiliate links. */}
+        <section class="section--tight">
+          <div class="container--narrow">
+            <ReviewSources license={review.license} name={review.name} />
           </div>
         </section>
 

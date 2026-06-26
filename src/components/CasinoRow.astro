@@ -121,6 +121,9 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
         href={ctaSlug}
         rel="sponsored nofollow"
         aria-label={ctaLabel}
+        data-experiment="toplist-cta"
+        data-cta-variant="control"
+        data-cta-rank={rank != null ? String(rank) : undefined}
       >
         Pelaa heti
       </a>

@@ -166,6 +166,18 @@ const leadText = firstParagraphText(introHtml);
         Suositellut kasinot
       </h2>
 
+      {/* Disclosure near the toplist (compliance + E-E-A-T): plain affiliate +
+          independence note. Links to the methodology page. Not a /go/ link. */}
+      <p class="money-list__disclosure">
+        <Icon name="info" size={15} class="money-list__disclosure-ico" />
+        <span>
+          Mainos: lista sisältää affiliate-linkkejä, joista voimme saada
+          komission. Tämä ei vaikuta järjestykseen eikä tuo sinulle
+          lisäkustannuksia. Mukana vain lisensoituja kasinoita.{" "}
+          <a href="/toimitus/">Näin arvostelemme</a>. 18+. Pelaa vastuullisesti.
+        </span>
+      </p>
+
       {casinos.length > 0 ? (
         <ol class="money-list__rows" role="list">
           {casinos.map((casino, i) => (
@@ -233,6 +245,29 @@ const leadText = firstParagraphText(introHtml);
     border-radius: 50%;
     background: var(--brand-soft);
     color: var(--brand);
+  }
+  .money-list__disclosure {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin: 0 0 clamp(1rem, 0.7rem + 1.2vw, 1.5rem);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+  .money-list__disclosure-ico {
+    flex: none;
+    margin-top: 2px;
+    color: var(--brand);
+  }
+  .money-list__disclosure a {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+  .money-list__disclosure a:hover {
+    color: var(--brand-dark);
   }
   .money-list__rows {
     display: flex;

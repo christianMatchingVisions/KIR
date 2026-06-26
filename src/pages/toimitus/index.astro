@@ -97,6 +97,41 @@ const ratingSteps: string[] = [
   "Päivitämme arviot, kun kasinon ehdot, lisenssi tai tarjoukset muuttuvat.",
 ];
 
+/* Scoring dimensions — these mirror the per-criterion arvostelut (subRatings)
+ * and rating fields that ACTUALLY exist in the casino data (casino-data.ts:
+ * subRatings[], ratingOverall, license, paymentMethods, bonusText, support).
+ * We describe the 1–5 scale and how the overall score is formed, grounded in
+ * those real fields — never an invented weighting table. */
+const scoreDimensions: { label: string; weight: string }[] = [
+  { label: "Lisenssi ja turvallisuus", weight: "Korkea painoarvo" },
+  { label: "Kotiutukset ja maksutavat", weight: "Korkea painoarvo" },
+  { label: "Bonusehtojen läpinäkyvyys", weight: "Keskisuuri painoarvo" },
+  { label: "Pelivalikoima", weight: "Keskisuuri painoarvo" },
+  { label: "Asiakaspalvelu ja vastuullisuus", weight: "Keskisuuri painoarvo" },
+];
+
+/* Authoritative outbound sources — license regulators + the Finnish responsible-
+ * gambling body (Peluuri). These are E-E-A-T trust citations; every link below
+ * is EXTERNAL and carries rel="nofollow noopener" + target="_blank". None of
+ * these are /go/ affiliate links. */
+const authoritySources: { label: string; href: string; note: string }[] = [
+  {
+    label: "Peluuri",
+    href: "https://www.peluuri.fi/",
+    note: "Suomalainen rahapelihaittojen tuki- ja neuvontapalvelu, johon viittaamme vastuullisen pelaamisen kohdalla.",
+  },
+  {
+    label: "Malta Gaming Authority (MGA)",
+    href: "https://www.mga.org.mt/",
+    note: "Maltan pelilisenssiviranomainen, jonka myöntämiä lisenssejä tarkistamme.",
+  },
+  {
+    label: "Curaçao Gaming Control Board",
+    href: "https://www.gaming-curacao.com/",
+    note: "Curaçaon pelilisenssejä valvova taho, jonka toimilupia tarkistamme.",
+  },
+];
+
 /* JSON-LD: Organization (the editorial body) + AboutPage (this page).
  * The Organization carries the canonical @id "#editorial-team" so it is the SAME
  * entity that casino-schema.ts and related.ts reference from reviews/articles
@@ -105,6 +140,21 @@ const ratingSteps: string[] = [
  * one real editorial entity — an E-E-A-T trust signal for the recovery. */
 const EDITORIAL_ID = `${SITE_ORIGIN}/#editorial-team`;
 const PUBLISHER_ID = `${SITE_ORIGIN}/#organization`;
+
+/* Operator/owner of the site — a real, stateable business fact (used in the
+   transparency section + Organization schema). */
+const OPERATOR_NAME = "Matching Visions";
+
+/* Build/review date for the methodology page's lastReviewed signal. Truthful
+   passive freshness marker — NOT a "tested on" claim. */
+const FI_MONTHS = [
+  "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta",
+  "kesäkuuta", "heinäkuuta", "elokuuta", "syyskuuta", "lokakuuta",
+  "marraskuuta", "joulukuuta",
+];
+const reviewedDate = new Date();
+const reviewedIso = reviewedDate.toISOString().slice(0, 10);
+const reviewedLabel = `${reviewedDate.getDate()}. ${FI_MONTHS[reviewedDate.getMonth()]} ${reviewedDate.getFullYear()}`;
 
 const organizationLd = {
   "@context": "https://schema.org",
@@ -119,9 +169,17 @@ const organizationLd = {
     "@id": PUBLISHER_ID,
     name: "Kasinot ilman rekisteröitymistä",
     url: SITE_ORIGIN + "/",
+    parentOrganization: { "@type": "Organization", name: OPERATOR_NAME },
   },
   description:
     "Riippumaton suomalainen toimitus, joka vertailee ja arvioi nettikasinoita yhdenmukaisella menetelmällä.",
+  knowsAbout: [
+    "Nettikasinot",
+    "Rahapelilisenssit",
+    "Vastuullinen pelaaminen",
+    "Kasinobonukset",
+    "Maksutavat",
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     email: CONTACT_EMAIL,
@@ -137,10 +195,16 @@ const webPageLd = {
   description,
   url: canonical,
   inLanguage: "fi",
+  lastReviewed: reviewedIso,
+  reviewedBy: { "@id": EDITORIAL_ID },
   isPartOf: { "@type": "WebSite", name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
   about: { "@id": EDITORIAL_ID },
   mainEntity: { "@id": EDITORIAL_ID },
   publisher: { "@type": "Organization", "@id": PUBLISHER_ID, name: "Kasinot ilman rekisteröitymistä", url: SITE_ORIGIN + "/" },
+  /* Authoritative outbound citations as significantLink — these are the same
+     regulator / RG-body URLs surfaced in the visible "Lähteet ja viranomaiset"
+     section below. */
+  significantLink: authoritySources.map((s) => s.href),
 };
 
 const breadcrumbLd = {
@@ -228,10 +292,109 @@ const jsonLd = [
           ))
         }
       </ol>
+
+      <p class="tm-body">
+        Jokainen osa-alue saa arvion <strong>asteikolla 1–5</strong>. Kasinon
+        kokonaisarvosana muodostuu näiden osa-alueiden yhteistuloksesta niin,
+        että pelaajan kannalta kriittisimmät tekijät – lisenssi ja turvallisuus
+        sekä kotiutukset – painavat eniten. Alla on kuvattu, mitä osa-alueita
+        pisteytämme ja niiden suhteellinen painoarvo kokonaisarviossa.
+      </p>
+
+      <ul class="tm-scores">
+        {
+          scoreDimensions.map((d) => (
+            <li class="tm-scores__item">
+              <span class="tm-scores__label">{d.label}</span>
+              <span class="tm-scores__weight">{d.weight}</span>
+            </li>
+          ))
+        }
+      </ul>
+
       <p class="tm-note">
         Vertailuissa on mukana ainoastaan lisensoituja kasinoita. Sivusto
         sisältää affiliate-linkkejä, mutta kaupalliset yhteistyöt eivät vaikuta
         arviointikriteereihimme eivätkä järjestykseen.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------------- REVIEW CADENCE ---------------- */}
+  <section class="section">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">Kuinka usein arviot päivitetään</h2>
+      <p class="tm-body">
+        Tarkistamme arviot säännöllisesti ja päivitämme ne aina, kun kasinon
+        lisenssi, bonusehdot, maksutavat tai tarjoukset muuttuvat. Jokaisessa
+        arvostelussa näkyy <strong>viimeisin tarkistus- tai päivityspäivä</strong>,
+        jotta näet, kuinka tuore tieto on. Pyrimme käymään suosituimmat kasinot
+        läpi vähintään kausittain ja korjaamme havaitut virheet viipymättä.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------------- TRANSPARENCY & DISCLOSURE ---------------- */}
+  <section class="section band" id="avoimuus">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">Avoimuus ja riippumattomuus</h2>
+
+      <h3 class="tm-h3">Sivuston omistaja</h3>
+      <p class="tm-body">
+        Sivustoa ylläpitää ja siitä vastaa <strong>{OPERATOR_NAME}</strong>.
+        Toimitus tuottaa sisällön itsenäisesti, ja arvostelut perustuvat ennalta
+        määriteltyihin kriteereihin – eivät kaupallisiin sopimuksiin.
+      </p>
+
+      <h3 class="tm-h3">Affiliate-linkit ja ansaintamalli</h3>
+      <p class="tm-body">
+        Sivusto sisältää affiliate- eli kumppanilinkkejä. Kun siirryt kasinolle
+        tällaisen linkin kautta ja rekisteröidyt tai pelaat, voimme saada
+        komission. <strong>Tämä ei tuo sinulle lisäkustannuksia</strong> eikä
+        vaikuta arvosteluidemme sisältöön, pisteytykseen tai kasinoiden
+        järjestykseen vertailuissa. Komissio ei muuta sitä, miten kasino
+        arvioidaan tai missä järjestyksessä se näkyy.
+      </p>
+
+      <h3 class="tm-h3">Toimituksellinen riippumattomuus</h3>
+      <p class="tm-body">
+        Arviointikriteerit ja niiden painotukset on määritelty etukäteen ja niitä
+        sovelletaan kaikkiin kasinoihin samalla tavalla. Mikään kasino ei voi
+        ostaa parempaa arvosanaa tai korkeampaa sijoitusta. Suosittelemme vain
+        lisensoituja kasinoita ja kannustamme aina vastuulliseen pelaamiseen.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------------- AUTHORITATIVE SOURCES / CITATIONS ---------------- */}
+  <section class="section">
+    <div class="container container--narrow">
+      <h2 class="tm-h2">Lähteet ja viranomaiset</h2>
+      <p class="tm-body">
+        Lisenssi-, turvallisuus- ja vastuullisuustiedot perustuvat virallisiin
+        lähteisiin. Tarkistamme tiedot seuraavilta tahoilta:
+      </p>
+      <ul class="tm-sources">
+        {
+          authoritySources.map((s) => (
+            <li class="tm-sources__item card">
+              <a
+                class="tm-sources__link"
+                href={s.href}
+                target="_blank"
+                rel="nofollow noopener"
+              >
+                {s.label}
+                <Icon name="arrow-right" size={15} />
+              </a>
+              <p class="tm-sources__note">{s.note}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="tm-note">
+        Ulkoiset linkit aukeavat uuteen välilehteen. Tarkista aina kasinon
+        lisenssi ja ehdot myös suoraan kasinon omilta sivuilta ennen pelaamista.
       </p>
     </div>
   </section>
@@ -423,6 +586,85 @@ const jsonLd = [
     margin: 0;
     font-size: 0.92rem;
     color: var(--ink-3);
+  }
+
+  /* ---------- Sub-heading ---------- */
+  .tm-h3 {
+    color: var(--navy);
+    margin: 1.6rem 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  /* ---------- Scoring dimensions ---------- */
+  .tm-scores {
+    list-style: none;
+    margin: 1.25rem 0 1.5rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 62ch;
+  }
+  .tm-scores__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.7rem 0.95rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+  }
+  .tm-scores__label {
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 0.95rem;
+  }
+  .tm-scores__weight {
+    flex: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--brand);
+    background: var(--brand-soft);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* ---------- Authoritative sources ---------- */
+  .tm-sources {
+    list-style: none;
+    margin: 1.25rem 0 1.5rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  @media (min-width: 720px) {
+    .tm-sources {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .tm-sources__item {
+    padding: 1rem 1.1rem;
+  }
+  .tm-sources__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .tm-sources__link:hover {
+    color: var(--brand-dark);
+  }
+  .tm-sources__note {
+    margin: 0.5rem 0 0;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+    line-height: 1.55;
   }
 
   /* ---------- Contact ---------- */

@@ -17,6 +17,9 @@ import Icon from "./Icon.astro";
     <Icon name="info" size={16} class="disclosure-bar__icon" />
     <p class="disclosure-bar__text">
       {DISCLOSURE_TEXT}{" "}
+      <span class="disclosure-bar__more">
+        <a href="/toimitus/#avoimuus">Lue lisää avoimuudesta</a>.
+      </span>{" "}
       <span class="disclosure-bar__help">
         Apua:{" "}
         <a href={PELUURI_URL} target="_blank" rel="nofollow noopener">{PELUURI_LABEL}</a>.
@@ -48,13 +51,15 @@ import Icon from "./Icon.astro";
     line-height: 1.5;
     color: #aab9d0;
   }
-  .disclosure-bar__help a {
+  .disclosure-bar__help a,
+  .disclosure-bar__more a {
     color: #9cc2ff;
     text-decoration: underline;
     text-underline-offset: 2px;
     font-weight: 600;
   }
-  .disclosure-bar__help a:hover {
+  .disclosure-bar__help a:hover,
+  .disclosure-bar__more a:hover {
     color: #c4dbff;
   }
 </style>

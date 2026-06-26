@@ -138,6 +138,8 @@ export const footerColumns: FooterColumn[] = [
     title: SITE_NAME_SHORT,
     links: [
       { label: "Meistä", href: "/meista/" },
+      { label: "Toimitus & menetelmä", href: "/toimitus/" },
+      { label: "Mainosvastuu & riippumattomuus", href: "/toimitus/#avoimuus" },
       { label: "Evästeet", href: "/meista/" },
       { label: "Sivukartta", href: "/sitemap-index.xml" },
     ],

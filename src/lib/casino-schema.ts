@@ -185,3 +185,31 @@ export { PUBLISHER_ID, EDITORIAL_ID };
 export function casinoHasReviewSchema(slug: string): boolean {
   return getCasinoBodyJsonLd(slug).some(blockHasReview);
 }
+
+/**
+ * Extract the casino Review's `dateModified` (or, failing that, its cleaned
+ * `dateCreated`) from the verbatim body JSON-LD — a TRUTHFUL, repo-sourced
+ * "last reviewed/updated" date for the visible trust stamp on the review page.
+ *
+ * WHY: 265 of the casino fragments carry a real Review block with a
+ * "dateModified":"YYYY-MM-DD" that the live WordPress site published. Surfacing
+ * that exact date in the byline ("Päivitetty <date>") is an E-E-A-T freshness
+ * signal that is consistent with the indexed structured data — never invented.
+ * Returns null when the fragment has no Review block / no parseable date, so the
+ * byline simply omits the date (no "Invalid Date", no fabricated stamp).
+ *
+ * Pure regex over the verbatim block (no JSON.parse) — the same byte-faithful
+ * approach the rest of this module uses. Accepts the leading-space / trailing-=
+ * scrape artifact on dateCreated that sanitizeCasinoReviewBlock also cleans.
+ */
+export function getCasinoReviewDate(slug: string): string | null {
+  const blocks = getCasinoBodyJsonLd(slug);
+  for (const block of blocks) {
+    if (!blockHasReview(block)) continue;
+    const mod = block.match(/"dateModified":"\s?(\d{4}-\d{2}-\d{2})=?"/);
+    if (mod) return mod[1];
+    const created = block.match(/"dateCreated":"\s?(\d{4}-\d{2}-\d{2})=?"/);
+    if (created) return created[1];
+  }
+  return null;
+}
