@@ -32,6 +32,13 @@
 import type { ToplistCasino } from "../lib/toplist";
 import Stars from "./Stars.astro";
 import Icon from "./Icon.astro";
+import { listCasinoSlugs } from "../lib/casino-data";
+
+// Set of slugs that actually have a /casino/<slug>/ review page. Memoized at
+// module scope (globalThis) so the readdir runs once per build, not per row.
+const __g = globalThis as unknown as { __kirReviewSlugs?: Set<string> };
+__g.__kirReviewSlugs ??= new Set(listCasinoSlugs());
+const reviewSlugs = __g.__kirReviewSlugs;
 
 interface Props {
   /** The cleaned casino row from getToplist(). */
@@ -63,6 +70,13 @@ const hasLicense = typeof license === "string" && license.trim().length > 0;
 const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
 const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
 const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
+
+// Internal review link — only when a review page exists for this casino's slug.
+// Plain follow link (NOT rel="sponsored"; that's only for /go/ affiliate CTAs).
+const slug = typeof casino.slug === "string" ? casino.slug : "";
+const reviewUrl = slug && reviewSlugs.has(slug) ? `/casino/${slug}/` : null;
+const hasReview = reviewUrl != null;
+const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
 ---
 
 <article class="casino-row card card--lift" class:list={{ "casino-row--ranked": rank != null }}>
@@ -71,23 +85,25 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
   )}
 
   <div class="casino-row__plate">
-    {hasLogo ? (
-      <img
-        class="casino-row__logo"
-        src={logoUrl}
-        alt={altText}
-        loading="lazy"
-        decoding="async"
-        width="120"
-        height="48"
-      />
+    {hasReview ? (
+      <a href={reviewUrl} class="casino-row__plate-link" aria-label={reviewLabel}>
+        {hasLogo ? (
+          <img class="casino-row__logo" src={logoUrl} alt={altText} loading="lazy" decoding="async" width="120" height="48" />
+        ) : (
+          <span class="casino-row__mono" aria-hidden="true">{monogram}</span>
+        )}
+      </a>
+    ) : hasLogo ? (
+      <img class="casino-row__logo" src={logoUrl} alt={altText} loading="lazy" decoding="async" width="120" height="48" />
     ) : (
       <span class="casino-row__mono" aria-hidden="true">{monogram}</span>
     )}
   </div>
 
   <div class="casino-row__body">
-    <h3 class="casino-row__name">{name}</h3>
+    <h3 class="casino-row__name">
+      {hasReview ? <a href={reviewUrl} class="casino-row__name-link">{name}</a> : name}
+    </h3>
     {hasBonus && <p class="casino-row__bonus">{bonusText}</p>}
     {(hasWagering || hasLicense) && (
       <ul class="casino-row__meta">
@@ -104,6 +120,11 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
           </li>
         )}
       </ul>
+    )}
+    {hasReview && (
+      <a class="casino-row__review-link" href={reviewUrl} aria-label={reviewLabel}>
+        Lue arvostelu <span aria-hidden="true">→</span>
+      </a>
     )}
   </div>
 
@@ -205,6 +226,38 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
     font-size: 1.05rem;
     margin: 0;
     line-height: 1.2;
+  }
+  /* Casino name links to its review; inherits heading colour, underlines on hover. */
+  .casino-row__name-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .casino-row__name-link:hover,
+  .casino-row__name-link:focus-visible {
+    text-decoration: underline;
+  }
+  /* Logo plate becomes a review link — keep it visually identical. */
+  .casino-row__plate-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  /* Explicit "Lue arvostelu →" secondary link under the meta. */
+  .casino-row__review-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin: 0.45rem 0 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: none;
+  }
+  .casino-row__review-link:hover,
+  .casino-row__review-link:focus-visible {
+    text-decoration: underline;
   }
   .casino-row__bonus {
     color: var(--ink);

@@ -26,6 +26,13 @@
  */
 import type { ToplistCasino } from "../lib/toplist";
 import Stars from "./Stars.astro";
+import { listCasinoSlugs } from "../lib/casino-data";
+
+// Slugs that actually have a /casino/<slug>/ review page. Memoized at module
+// scope (globalThis) so the readdir runs once per build, not per card.
+const __g = globalThis as unknown as { __kirReviewSlugs?: Set<string> };
+__g.__kirReviewSlugs ??= new Set(listCasinoSlugs());
+const reviewSlugs = __g.__kirReviewSlugs;
 
 interface Props {
   /** The cleaned casino row from getToplist(). */
@@ -56,6 +63,13 @@ const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
 const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
 // CTA accessible label names the casino so screen-reader users have context.
 const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
+
+// Internal review link — only when a /casino/<slug>/ review page exists for this
+// casino. Plain follow link (NOT rel="sponsored"; that's only for /go/ CTAs).
+const slug = typeof casino.slug === "string" ? casino.slug : "";
+const reviewUrl = slug && reviewSlugs.has(slug) ? `/casino/${slug}/` : null;
+const hasReview = reviewUrl != null;
+const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
 ---
 
 <article class="casino-card card card--lift">
@@ -64,23 +78,45 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
   )}
 
   <div class="casino-card__plate">
-    {hasLogo && (
-      <img
-        class="casino-card__logo"
-        src={logoUrl}
-        alt={altText}
-        loading="lazy"
-        decoding="async"
-        width="160"
-        height="64"
-        onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
-      />
+    {hasReview ? (
+      <a href={reviewUrl} class="casino-card__plate-link" aria-label={reviewLabel}>
+        {hasLogo && (
+          <img
+            class="casino-card__logo"
+            src={logoUrl}
+            alt={altText}
+            loading="lazy"
+            decoding="async"
+            width="160"
+            height="64"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+          />
+        )}
+        <span class="casino-card__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
+      </a>
+    ) : (
+      <>
+        {hasLogo && (
+          <img
+            class="casino-card__logo"
+            src={logoUrl}
+            alt={altText}
+            loading="lazy"
+            decoding="async"
+            width="160"
+            height="64"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+          />
+        )}
+        {/* Monogram: the fallback when no logo, OR when a logo URL 404s (onerror reveals it). */}
+        <span class="casino-card__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
+      </>
     )}
-    {/* Monogram: the fallback when no logo, OR when a logo URL 404s (onerror reveals it). */}
-    <span class="casino-card__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
   </div>
 
-  <h3 class="casino-card__name">{name}</h3>
+  <h3 class="casino-card__name">
+    {hasReview ? <a href={reviewUrl} class="casino-card__name-link">{name}</a> : name}
+  </h3>
 
   {hasBonus && <p class="casino-card__bonus">{bonusText}</p>}
 
@@ -104,6 +140,12 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
       <span class="casino-card__rating-label">Arvio</span>
       <Stars value={rating as number} showValue size={16} />
     </div>
+  )}
+
+  {hasReview && (
+    <a class="casino-card__review-link" href={reviewUrl} aria-label={reviewLabel}>
+      Lue arvostelu <span aria-hidden="true">→</span>
+    </a>
   )}
 </article>
 
@@ -175,6 +217,38 @@ const ctaLabel = name ? `Pelaa heti — ${name}` : "Pelaa heti";
     font-size: 1.05rem;
     margin: 0;
     line-height: 1.25;
+  }
+  /* Name links to the review; keeps the heading colour, underlines on hover. */
+  .casino-card__name-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .casino-card__name-link:hover,
+  .casino-card__name-link:focus-visible {
+    text-decoration: underline;
+  }
+  /* Logo plate becomes a review link — fill the plate, stay visually identical. */
+  .casino-card__plate-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  /* Secondary "Lue arvostelu →" link at the card foot. */
+  .casino-card__review-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: none;
+  }
+  .casino-card__review-link:hover,
+  .casino-card__review-link:focus-visible {
+    text-decoration: underline;
   }
 
   .casino-card__bonus {
