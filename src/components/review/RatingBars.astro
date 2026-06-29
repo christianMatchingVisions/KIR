@@ -155,21 +155,19 @@ function fi(v: number): string {
     line-height: 1;
   }
 
-  /* ---- Animated fill: grow from 0 → --w when the block reveals into view ----
-     The bars start collapsed; `.reveal.in` (added by the global observer) lets
-     the fill expand to its target width. The resting (no-observer / reduced-
-     motion) state below restores the correct width so values never read wrong. */
-  .rb__list.reveal .rb__fill {
-    width: 0;
-    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Fill renders at its correct width with NO JS dependency. (Previously the
+     fill was collapsed to width:0 and only restored when an IntersectionObserver
+     added `.reveal.in` — when that didn't fire, the bars showed empty. The
+     resting width is now always correct; the transition just keeps any change
+     smooth, and the observer's `.in` still gives a gentle grow-in when present.) */
+  .rb__fill {
+    transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .rb__list.reveal.in .rb__fill {
     width: var(--w);
   }
   @media (prefers-reduced-motion: reduce) {
-    .rb__list.reveal .rb__fill,
-    .rb__list.reveal.in .rb__fill {
-      width: var(--w);
+    .rb__fill {
       transition: none;
     }
   }

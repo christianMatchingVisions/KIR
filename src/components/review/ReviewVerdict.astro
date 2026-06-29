@@ -1,0 +1,142 @@
+---
+/**
+ * ReviewVerdict.astro — "Asiantuntijan tuomio" (expert verdict) box.
+ *
+ * An HONEST editorial verdict: the overall score (our own editorial rating), a
+ * derived verdict label, and a summary excerpt taken from the review's OWN
+ * "Yhteenveto" section (CasinoReview.verdict). NO user reviews, NO fabricated
+ * counts/testimonials — penalty-recovery safe. Renders only when there is a
+ * score and/or a summary; omitted otherwise.
+ *
+ * Props:
+ *   name    : string
+ *   rating  : number | null   (CasinoReview.ratingOverall)
+ *   verdict : string | null   (CasinoReview.verdict)
+ */
+import Stars from "../Stars.astro";
+
+interface Props {
+  name: string;
+  rating: number | null;
+  verdict: string | null;
+}
+
+const { name, rating, verdict } = Astro.props;
+const hasRating = rating != null && Number.isFinite(rating);
+const show = hasRating || (verdict != null && verdict.trim().length > 0);
+
+/** Finnish verdict label from the 0–5 score. */
+function label(r: number): string {
+  if (r >= 4.5) return "Erinomainen";
+  if (r >= 4.0) return "Vahva valinta";
+  if (r >= 3.5) return "Hyvä";
+  if (r >= 3.0) return "Kelpo";
+  return "Välttävä";
+}
+function fi(r: number): string {
+  return r.toFixed(1).replace(".", ",");
+}
+---
+
+{show && (
+  <section class="rv card" aria-label="Asiantuntijan tuomio">
+    {hasRating && (
+      <div class="rv__score">
+        <span class="rv__badge">Tuomio</span>
+        <span class="rv__num">{fi(rating as number)}<span class="rv__max">/5</span></span>
+        <Stars value={rating as number} size={18} />
+        <span class="rv__label">{label(rating as number)}</span>
+      </div>
+    )}
+    <div class="rv__body">
+      <h2 class="rv__title">Asiantuntijan tuomio: {name}</h2>
+      {verdict && <p class="rv__text">{verdict}</p>}
+      <p class="rv__meta">
+        Arvio perustuu toimituksen kriteereihin (lisenssi, bonusehdot,
+        maksutavat, pelivalikoima ja asiakaspalvelu). Pelaa vastuullisesti.
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .rv {
+    display: grid;
+    grid-template-columns: minmax(150px, 200px) 1fr;
+    align-items: start;
+    gap: clamp(1rem, 0.6rem + 1.5vw, 2rem);
+    padding: clamp(1.1rem, 0.8rem + 1vw, 1.6rem);
+    background: var(--brand-soft, var(--bg-band));
+    border: 1px solid var(--line);
+  }
+  /* Score column */
+  .rv__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    text-align: center;
+    padding-right: clamp(0.5rem, 0.3rem + 1vw, 1.5rem);
+    border-right: 1px solid var(--line);
+  }
+  .rv__badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand);
+  }
+  .rv__num {
+    font-size: clamp(2.4rem, 1.8rem + 2.5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--navy);
+  }
+  .rv__max {
+    font-size: 0.4em;
+    font-weight: 700;
+    color: var(--ink-3);
+  }
+  .rv__label {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--brand);
+  }
+  /* Body column */
+  .rv__body {
+    min-width: 0;
+  }
+  .rv__title {
+    margin: 0 0 0.6rem;
+    font-size: clamp(1.2rem, 1rem + 0.8vw, 1.5rem);
+  }
+  .rv__text {
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+  .rv__meta {
+    margin: 0.8rem 0 0;
+    font-size: 0.82rem;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .rv {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .rv__score {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 0.5rem 0.9rem;
+      padding-right: 0;
+      padding-bottom: 1rem;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

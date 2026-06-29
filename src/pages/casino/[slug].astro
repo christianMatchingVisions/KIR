@@ -44,6 +44,8 @@ import RatingBars from "../../components/review/RatingBars.astro";
 import ReviewHighlights from "../../components/review/ReviewHighlights.astro";
 import ReviewMethodology from "../../components/review/ReviewMethodology.astro";
 import PaymentMethods from "../../components/review/PaymentMethods.astro";
+import GameProviders from "../../components/review/GameProviders.astro";
+import ReviewVerdict from "../../components/review/ReviewVerdict.astro";
 import CasinoInfoGrid from "../../components/review/CasinoInfoGrid.astro";
 import ReviewFaq from "../../components/review/ReviewFaq.astro";
 import ReviewSources from "../../components/review/ReviewSources.astro";
@@ -518,6 +520,15 @@ if (review && !review.showNoReview) {
           </section>
         )}
 
+        {/* ---------------- GAME PROVIDERS ---------------- */}
+        {review.providers.length > 0 && (
+          <section class="section--tight band">
+            <div class="container">
+              <GameProviders providers={review.providers} />
+            </div>
+          </section>
+        )}
+
         {/* ---------------- REVIEW PROSE (+ Bonukset) ---------------- */}
         {(review.reviewHtml || review.bonusesHtml || review.summaryHtml) && (
           <section class="section--tight" id={PROSE_ANCHOR}>
@@ -528,6 +539,9 @@ if (review && !review.showNoReview) {
                   scraped JSON-LD, so the visible "Päivitetty <date>" trust stamp
                   matches the indexed structured data. */}
               <EditorialByline variant="review" modified={reviewModifiedDate} />
+              {/* Honest editorial verdict (score + label + summary from the
+                  review's own Yhteenveto) — NOT user reviews, no fabrication. */}
+              <ReviewVerdict name={review.name} rating={review.ratingOverall} verdict={review.verdict} />
               {review.reviewHtml && (
                 <div class="kir-prose" set:html={review.reviewHtml} />
               )}

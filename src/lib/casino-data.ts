@@ -124,6 +124,12 @@ export type CasinoReview = {
   license: string | null;
   /** Payment methods, split from the "Maksutavat" field. [] when absent. */
   paymentMethods: string[];
+  /** Game/software providers detected in the review prose (whitelist match,
+   *  canonical display names, deduped). [] when none found. */
+  providers: string[];
+  /** Plain-text verdict summary, extracted from the review's own "Yhteenveto"
+   *  section. Powers the editorial-verdict box. null when no summary found. */
+  verdict: string | null;
   /** Founded year as a string (e.g. "2023"), or null. */
   foundedYear: string | null;
   /** Minimum deposit text (e.g. "10 €"), or null (SPARSE). */
@@ -589,6 +595,86 @@ function parsePaymentMethods(arvosteluCard: string): string[] {
     .filter((s) => s.length > 0 && s.toLowerCase() !== "muut");
 }
 
+/**
+ * Game/software providers. The scraped fragments have NO structured provider
+ * list — providers are named in the review PROSE (under the "Pelivalikoima"
+ * section, e.g. "…tuottajilta, kuten Pragmatic Play, NetEnt, Evolution…"). So
+ * we whitelist-match a curated set of real casino studios against the prose and
+ * return canonical display names. The whitelist (and its order) was derived by
+ * scanning all 305 casino fragments; matching a fixed set avoids false
+ * positives and never invents a provider. Order = rough prevalence so the most
+ * common studios lead. Match is on the prose only (never the site nav, which
+ * lists every provider) so each casino shows just the studios it actually names.
+ */
+const PROVIDER_WHITELIST: ReadonlyArray<{ name: string; re: RegExp }> = [
+  { name: "Pragmatic Play", re: /pragmatic(?:\s*play)?/i },
+  { name: "Evolution", re: /evolution(?:\s*gaming)?/i },
+  { name: "NetEnt", re: /\bnetent\b/i },
+  { name: "Nolimit City", re: /\bno\s*limit\s*city|nolimit(?:\s*city)?\b/i },
+  { name: "Red Tiger", re: /red\s*tiger/i },
+  { name: "Hacksaw Gaming", re: /hacksaw(?:\s*gaming)?/i },
+  { name: "Relax Gaming", re: /relax\s*gaming/i },
+  { name: "Microgaming", re: /microgaming/i },
+  { name: "Big Time Gaming", re: /big\s*time\s*gaming/i },
+  { name: "Quickspin", re: /quickspin/i },
+  { name: "Push Gaming", re: /push\s*gaming/i },
+  { name: "Yggdrasil", re: /yggdrasil/i },
+  { name: "Thunderkick", re: /thunderkick/i },
+  { name: "Play'n GO", re: /play.?n.?go/i },
+  { name: "Blueprint Gaming", re: /blueprint(?:\s*gaming)?/i },
+  { name: "Betsoft", re: /betsoft/i },
+  { name: "Playson", re: /playson/i },
+  { name: "ELK Studios", re: /elk\s*studios/i },
+  { name: "Playtech", re: /playtech/i },
+  { name: "Spinomenal", re: /spinomenal/i },
+  { name: "BGaming", re: /bgaming/i },
+  { name: "iSoftBet", re: /isoftbet/i },
+  { name: "Print Studios", re: /print\s*studios/i },
+  { name: "Endorphina", re: /endorphina/i },
+  { name: "Kalamba Games", re: /kalamba/i },
+  { name: "Booming Games", re: /booming\s*games/i },
+  { name: "Wazdan", re: /wazdan/i },
+  { name: "Fantasma Games", re: /fantasma/i },
+  { name: "Games Global", re: /games\s*global/i },
+  { name: "Stakelogic", re: /stakelogic/i },
+  { name: "Habanero", re: /habanero/i },
+  { name: "AvatarUX", re: /avatarux/i },
+];
+
+/** Detect the casino's game providers from its review prose (whitelist match,
+ *  canonical names, deduped, in whitelist/prevalence order). [] when none. */
+function parseProviders(reviewHtml: string | null): string[] {
+  if (!reviewHtml) return [];
+  // Plain text only: strip tags + scripts so we never match inside hrefs/attrs.
+  const text = reviewHtml
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]+>/g, " ");
+  return PROVIDER_WHITELIST.filter((p) => p.re.test(text)).map((p) => p.name);
+}
+
+/**
+ * Editorial verdict summary. Extracted from the review's OWN "Yhteenveto …"
+ * section (the concluding H2 in the scraped prose) — never fabricated. Grabs the
+ * text between that H2 and the next H2/end, strips tags, decodes entities, and
+ * trims to a clean ~2-sentence excerpt ending on a sentence boundary. Returns
+ * null when there is no Yhteenveto section or it is empty.
+ */
+function parseVerdict(reviewHtml: string | null): string | null {
+  if (!reviewHtml) return null;
+  const m = reviewHtml.match(
+    /<h2\b[^>]*>\s*Yhteenveto[\s\S]*?<\/h2>([\s\S]*?)(?=<h2\b|$)/i,
+  );
+  if (!m) return null;
+  const text = stripTags(m[1]).trim();
+  if (text.length < 40) return null;
+  if (text.length <= 320) return text;
+  // Trim to <=320 chars, preferring to end at a sentence boundary.
+  const cut = text.slice(0, 320);
+  const lastStop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("! "), cut.lastIndexOf("? "));
+  if (lastStop > 140) return cut.slice(0, lastStop + 1).trim();
+  return cut.replace(/\s+\S*$/, "").trim() + "…";
+}
+
 function parseSupport(arvosteluCard: string): CasinoSupport | null {
   const support: CasinoSupport = {};
 
@@ -769,6 +855,8 @@ export function getCasino(slug: string): CasinoReview | null {
     })(),
     minDeposit: fieldFromList(arvosteluCard, MINDEP_LABELS),
     support: parseSupport(arvosteluCard),
+    providers: parseProviders(reviewHtml),
+    verdict: parseVerdict(reviewHtml),
     reviewHtml,
     bonusesHtml,
     showNoReview,
