@@ -90,6 +90,11 @@ export function contentEngineLoader(opts: {
       let cursor: string | null = null;
       let count = 0;
 
+      // FAIL-SOFT: a feed error (engine/DB down, 5xx, network) must NOT break the
+      // build. We log a warning and ship WITHOUT engine articles — the site's
+      // money pages, casino reviews and toplists all render from the filesystem,
+      // so only the /uutiset + /oppaat engine stream is (temporarily) empty.
+      try {
       do {
         const url = new URL(`${opts.apiUrl.replace(/\/$/, "")}/articles`);
         url.searchParams.set("status", "delivered");
@@ -99,7 +104,13 @@ export function contentEngineLoader(opts: {
         const res = await fetch(url, {
           headers: { authorization: `Bearer ${opts.apiKey}` },
         });
-        if (!res.ok) throw new Error(`Content Engine feed failed: ${res.status}`);
+        if (!res.ok) {
+          logger.warn(
+            `Content Engine feed returned ${res.status} — building WITHOUT engine ` +
+              `articles (the site still ships from the filesystem).`,
+          );
+          return;
+        }
         const page = (await res.json()) as FeedPage;
 
         for (const article of page.data) {
@@ -134,6 +145,13 @@ export function contentEngineLoader(opts: {
         }
         cursor = page.has_more ? page.next_cursor : null;
       } while (cursor);
+      } catch (err) {
+        logger.warn(
+          `Content Engine sync failed (${(err as Error).message}) — building WITHOUT ` +
+            `engine articles (the site still ships from the filesystem).`,
+        );
+        return;
+      }
 
       logger.info(`Content Engine sync done (${count} article(s) loaded).`);
     },
