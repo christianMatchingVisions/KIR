@@ -31,6 +31,7 @@ import Icon from "../../components/Icon.astro";
 import { getAllCasinos, type CasinoReview } from "../../lib/casino-data";
 import { breadcrumbJsonLd } from "../../lib/related";
 import { getSeoHead } from "../../lib/seo-head";
+import { collectionPageJsonLd, headHasCollectionSchema } from "../../lib/collection-schema";
 
 /* -------------------------------------------------------------------------- *
  * Build the review index: open casinos only, best-rated first.               *
@@ -71,11 +72,25 @@ const hubBreadcrumbLd = casinoHubHeadHasBreadcrumb
       ],
       "/casino/",
     );
+
+/* CollectionPage + ItemList JSON-LD (audit Phase 6) — the reviews hub as a
+ * ranked list, each ListItem pointing at its /casino/<slug>/ review. Capped at
+ * the top 50 (best-rated first) to keep the JSON-LD payload light on a 300+
+ * entry directory. Additive + deduped vs the preserved head. */
+const reviewsHubCollectionLd = headHasCollectionSchema(getSeoHead("/casino/")?.jsonLd)
+  ? ""
+  : collectionPageJsonLd({
+      url: "/casino/",
+      name: "Kasinoarvostelut",
+      items: reviews.slice(0, 50).map((c) => ({ name: c.name, url: c.url })),
+    });
 ---
 
 <BaseLayout seoPath="/casino/" bodyClass="reviews-hub">
   {/* BreadcrumbList structured data — Etusivu › Kasinoarvostelut. Additive. */}
   {hubBreadcrumbLd && <Fragment set:html={hubBreadcrumbLd} />}
+  {/* CollectionPage + ItemList — the reviews hub as a ranked list. Additive. */}
+  {reviewsHubCollectionLd && <Fragment set:html={reviewsHubCollectionLd} />}
   {/* ---------------- HERO ---------------- */}
   <section class="section--tight band-brand hub-hero" aria-labelledby="hub-title">
     <div class="container--narrow hub-hero__inner">

@@ -62,6 +62,7 @@ import {
 } from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
 import { optimizeProseImages, getPosts } from "../../lib/content";
+import { normalizeInternalHtmlLinks } from "../../lib/html-links";
 import { getCasinoSchemaBlocks, getCasinoReviewDate } from "../../lib/casino-schema";
 import {
   relatedReviews as buildRelatedReviews,
@@ -252,13 +253,14 @@ const review = rawReview
       // decoding="async". Never touches an above-the-fold/template image.
       return {
         ...b,
-        reviewHtml: optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.reviewHtml))),
-        bonusesHtml: optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.bonusesHtml))),
+        reviewHtml: normalizeInternalHtmlLinks(optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.reviewHtml)))),
+        bonusesHtml: normalizeInternalHtmlLinks(optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.bonusesHtml)))),
         // Engine summary prose runs through the SAME compliance guards as the
         // scraped prose: sponsored+nofollow on every /go/ link, no first-hand /
-        // testing claims, lazy below-the-fold images. undefined/null → no block.
+        // testing claims, lazy below-the-fold images, internal-link hygiene.
+        // undefined/null → no block.
         summaryHtml: b.summaryHtml
-          ? optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.summaryHtml)))
+          ? normalizeInternalHtmlLinks(optimizeProseImages(neutralizeFirstHand(ensureSponsored(b.summaryHtml))))
           : b.summaryHtml,
       };
     })()

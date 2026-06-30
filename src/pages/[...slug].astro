@@ -59,6 +59,7 @@ import {
   type RelatedLink,
 } from "../lib/related";
 import { getSeoHead } from "../lib/seo-head";
+import { normalizeInternalHtmlLinks } from "../lib/html-links";
 
 interface FragmentMeta {
   htmlAttrs?: string;
@@ -435,6 +436,14 @@ const moneyIntroOptimized = optimizeProseImages(moneyIntro);
 articleBody = demoteBodyH1(articleBody);
 const moneyIntroFinal = demoteBodyH1(moneyIntroOptimized);
 
+/* SEO (audit Phases 3+4): correct known-broken internal links to their live
+ * canonical URLs and add the trailing slash that trailingSlash:"always" needs,
+ * so in-prose internal links resolve directly (no 404, no 301 hop). Applied
+ * AFTER ensureSponsored so affiliate /go/ links (skipped by the normaliser) are
+ * untouched. Build-time + idempotent — durable across the daily WP re-sync. */
+articleBody = normalizeInternalHtmlLinks(articleBody);
+const moneyIntroNormalized = normalizeInternalHtmlLinks(moneyIntroFinal);
+
 /* -------------------------------------------------------------------------- *
  * E-E-A-T BYLINE + INTERNAL-LINK ARCHITECTURE (additive, finding H7 + links). *
  * -------------------------------------------------------------------------- *
@@ -523,7 +532,7 @@ if (isArticleEditorial) {
   <MoneyPage
     seoPath={path}
     title={moneyTitle}
-    introHtml={moneyIntroFinal || undefined}
+    introHtml={moneyIntroNormalized || undefined}
     toplistConfig={toplistConfig}
   />
 ) : (

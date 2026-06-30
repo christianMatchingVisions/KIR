@@ -1,0 +1,93 @@
+---
+/**
+ * AffiliateClickTracker.astro — GA4 outbound affiliate-click measurement.
+ *
+ * WHY (SEO audit Phase 1): GA4 showed 0 `affiliate_click` events, so there was
+ * no way to know WHICH landing pages actually produce outbound casino clicks —
+ * the single most important conversion signal for prioritising affiliate SEO.
+ *
+ * HOW: one main-thread, event-delegated listener (capture phase) catches every
+ * click on an <a> whose path contains "/go/" (our canonical affiliate-redirect
+ * shape) and fires a GA4 `affiliate_click` event with non-PII context. It does
+ * NOT call preventDefault, so navigation is never blocked.
+ *
+ * GA4 PLUMBING: BaseLayout loads gtag.js inside a Partytown WEB WORKER and
+ * astro.config.mjs sets `forward: ["dataLayer.push", "gtag"]`. Partytown
+ * therefore defines a forwarding `window.gtag` on the MAIN thread that proxies
+ * calls into the worker. This tracker runs on the main thread and simply calls
+ * `window.gtag(...)` — Partytown relays it to GA4. The dataLayer fallback keeps
+ * it working even if the forwarder is not yet wired when the click happens.
+ *
+ * COMPLIANCE: this is measurement only. It reads link metadata; it never alters
+ * rel="sponsored nofollow", never changes the href, and sends no personal data
+ * (no full URLs with query strings, no input values) — just the casino slug,
+ * the redirect path, the source page path, trimmed link text and a coarse
+ * on-page location. Idempotent: a window guard makes re-injection a no-op.
+ */
+---
+
+<script is:inline>
+  (() => {
+    if (window.__kirAffiliateClickTracker) return;
+    window.__kirAffiliateClickTracker = true;
+
+    /** Extract the casino slug from a "/go/<slug>/..." path, else "". */
+    function getGoSlug(pathname) {
+      const match = pathname.match(/\/go\/([^/]+)\/?/i);
+      return match ? match[1] : "";
+    }
+
+    /** Ensure a callable gtag exists (Partytown forwards it; this is a fallback). */
+    function ensureGtag() {
+      window.dataLayer = window.dataLayer || [];
+      if (typeof window.gtag !== "function") {
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+      }
+      return window.gtag;
+    }
+
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target;
+        const link =
+          target && target.closest ? target.closest("a[href]") : null;
+        if (!link) return;
+
+        const href = link.getAttribute("href") || "";
+        let parsed;
+        try {
+          parsed = new URL(href, window.location.origin);
+        } catch {
+          return;
+        }
+
+        // Only outbound affiliate redirects (absolute or relative /go/ URLs).
+        if (!/\/go\//i.test(parsed.pathname)) return;
+
+        const params = {
+          casino_slug: getGoSlug(parsed.pathname),
+          link_url: parsed.pathname,
+          outbound: true,
+          source_page: window.location.pathname,
+          link_text: (link.textContent || "").trim().slice(0, 80),
+          link_location:
+            (link.closest("[data-affiliate-location]") &&
+              link
+                .closest("[data-affiliate-location]")
+                .getAttribute("data-affiliate-location")) ||
+            (link.closest("main, header, footer, aside, nav") &&
+              link
+                .closest("main, header, footer, aside, nav")
+                .tagName.toLowerCase()) ||
+            "unknown",
+        };
+
+        ensureGtag()("event", "affiliate_click", params);
+      },
+      { capture: true }
+    );
+  })();
+</script>

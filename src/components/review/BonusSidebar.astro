@@ -62,7 +62,7 @@ if (paymentMethods.some((m) => /trustly/i.test(m))) facts.push("Trustly-talletuk
 if (paymentMethods.length > 0) facts.push("Turvalliset maksutavat");
 ---
 
-<aside class="bs card" aria-label={`${name} – bonus ja arvosana`}>
+<aside class="bs card" aria-label={`${name} – bonus ja arvosana`} data-affiliate-location="bonus-sidebar">
   <div class="bs__plate">
     {hasLogo && (
       <img

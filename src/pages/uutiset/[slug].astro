@@ -26,6 +26,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import RelatedCasinos from "../../components/RelatedCasinos.astro";
 import Icon from "../../components/Icon.astro";
 import { scrubFirstHandClaims, ensureSponsored, optimizeProseImages } from "../../lib/content";
+import { normalizeInternalHtmlLinks } from "../../lib/html-links";
 import { isGuideArticleType } from "../../lib/content-engine-loader";
 import { buildFaqLd } from "../../lib/faq-schema";
 
@@ -87,7 +88,7 @@ const rawHtml = (entry as unknown as { rendered?: { html?: string } }).rendered?
 // optimizeProseImages: lazy-load + de-prioritise large below-the-fold images
 // inside the article BODY only. The eager hero <img> lives in this template's
 // markup (outside .kir-prose / bodyHtml), so it is never affected.
-const bodyHtml = optimizeProseImages(ensureSponsored(scrubFirstHandClaims(rawHtml)));
+const bodyHtml = normalizeInternalHtmlLinks(optimizeProseImages(ensureSponsored(scrubFirstHandClaims(rawHtml))));
 
 const title = data.title;
 const description = data.description;

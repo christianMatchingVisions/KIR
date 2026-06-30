@@ -79,7 +79,7 @@ const hasReview = reviewUrl != null;
 const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
 ---
 
-<article class="casino-row card card--lift" class:list={{ "casino-row--ranked": rank != null }}>
+<article class="casino-row card card--lift" class:list={{ "casino-row--ranked": rank != null }} data-affiliate-location="casino-row">
   {rank != null && (
     <span class="casino-row__rank" aria-hidden="true">{rank}</span>
   )}

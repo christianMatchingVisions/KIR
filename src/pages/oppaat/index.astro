@@ -28,6 +28,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Icon from "../../components/Icon.astro";
 import { getPosts } from "../../lib/content";
 import { isGuideArticleType } from "../../lib/content-engine-loader";
+import { collectionPageJsonLd } from "../../lib/collection-schema";
 
 const SITE_URL = "https://kasinotilmanrekisteroitymista.com";
 
@@ -168,13 +169,26 @@ const breadcrumbJsonLd = `<script type="application/ld+json">${JSON.stringify({
     },
   ],
 })}</script>`;
+
+/* CollectionPage + ItemList JSON-LD (audit Phase 6) — the guides hub as a list
+ * of guide articles, each ListItem pointing at the guide's own page. Capped at
+ * the top 50 (newest-first) to keep the payload light. Brand-new page → emitted
+ * via the clean BaseLayout jsonLd prop (no preserved head to dedupe against). */
+const guidesCollectionLd = collectionPageJsonLd({
+  url: "/oppaat/",
+  name: "Oppaat ja vinkit",
+  items: posts.slice(0, 50).map((p) => ({
+    name: p.title.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(),
+    url: p.href,
+  })),
+});
 ---
 
 <BaseLayout
   title={PAGE_TITLE}
   description={PAGE_DESC}
   canonical={CANONICAL}
-  jsonLd={[breadcrumbJsonLd]}
+  jsonLd={[breadcrumbJsonLd, guidesCollectionLd].filter(Boolean)}
   bodyClass="guides-hub"
 >
   {/* ---------------- BREADCRUMB ---------------- */}

@@ -50,6 +50,8 @@ import Icon from "../components/Icon.astro";
 import { getToplist, type ToplistCasino } from "../lib/toplist";
 import { breadcrumbJsonLd, type Crumb } from "../lib/related";
 import { getSeoHead } from "../lib/seo-head";
+import { listCasinoSlugs } from "../lib/casino-data";
+import { collectionPageJsonLd, headHasCollectionSchema } from "../lib/collection-schema";
 
 interface Props {
   /** Real indexed URL of this page → preserves the registered SEO head verbatim. */
@@ -116,6 +118,25 @@ const casinos: ToplistCasino[] = getToplist(toplistConfig)
   .slice(0, LIMIT);
 
 /* -------------------------------------------------------------------------- *
+ * CollectionPage + ItemList JSON-LD (audit Phase 6). Declares this hub as a   *
+ * curated ranked list of casinos. Each ListItem points at the casino's own    *
+ * review page when one exists (never an affiliate /go/ link). Additive, body-  *
+ * placed, and DEDUPED against any CollectionPage/ItemList already in the       *
+ * preserved head so the schema is never doubled.                              *
+ * -------------------------------------------------------------------------- */
+const __reviewSlugs = new Set(listCasinoSlugs());
+const collectionLd = headHasCollectionSchema(getSeoHead(seoPath)?.jsonLd)
+  ? ""
+  : collectionPageJsonLd({
+      url: seoPath,
+      name: title,
+      items: casinos.map((c) => ({
+        name: c.name,
+        url: c.slug && __reviewSlugs.has(c.slug) ? `/casino/${c.slug}/` : undefined,
+      })),
+    });
+
+/* -------------------------------------------------------------------------- *
  * Hero lead — use the FIRST <p> of introHtml as the hero lead, then render    *
  * the FULL introHtml below the list. We do not strip it from the body copy    *
  * (the preserved prose stays intact); the lead is a light, derived preview.   *
@@ -146,6 +167,10 @@ const leadText = firstParagraphText(introHtml);
   {/* BreadcrumbList structured data — this category page's place in the site
       hierarchy (Etusivu › <title>). Additive, schema only. */}
   {breadcrumbLd && <Fragment set:html={breadcrumbLd} />}
+
+  {/* CollectionPage + ItemList structured data — this hub as a ranked casino
+      list. Additive, deduped vs the preserved head. */}
+  {collectionLd && <Fragment set:html={collectionLd} />}
 
   {/* ---------------- HERO ---------------- */}
   <section class="section--tight band-brand money-hero" aria-labelledby="money-title">

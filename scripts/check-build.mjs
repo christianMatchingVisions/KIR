@@ -42,6 +42,13 @@ function htmlFiles(dir) {
 
 const PLACEHOLDER_AUTHOR = /norskcasino_user3281/i;
 const UNRENDERED_ATTR = /(?:href|src)=["']\$\{/i;
+// Legacy WordPress sitemap path. The live + submitted sitemap is
+// `/sitemap-index.xml` (hyphen); the underscore form `/sitemap_index.xml` 404s
+// and a failed duplicate was sitting in Search Console. The new chrome links the
+// hyphen form, but the scraped fragment footers still carry the underscore one —
+// this guard fails the build if it ever leaks into RENDERED page HTML (outside
+// <script>/<style>), so a fragmentProse fallback can never re-surface it.
+const BAD_SITEMAP = /sitemap_index\.xml/i;
 
 function main() {
   if (!fs.existsSync(distDir)) {
@@ -65,6 +72,9 @@ function main() {
       .replace(/<style[\s\S]*?<\/style>/gi, "");
     if (UNRENDERED_ATTR.test(noScript)) {
       violations.push(`${rel}: unrendered template literal in href/src attribute`);
+    }
+    if (BAD_SITEMAP.test(noScript)) {
+      violations.push(`${rel}: references legacy sitemap_index.xml (use /sitemap-index.xml)`);
     }
   }
 

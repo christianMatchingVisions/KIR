@@ -30,6 +30,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import DisclosureBar from "../components/DisclosureBar.astro";
 import CroHook from "../components/CroHook.astro";
+import AffiliateClickTracker from "../components/AffiliateClickTracker.astro";
 
 interface Props {
   /** URL path of an EXISTING page → preserve its registered SEO head verbatim. */
@@ -221,6 +222,14 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
       autocapture off, DNT respected) in a Partytown worker. See CroHook.astro.
     */}
     <CroHook />
+
+    {/*
+      Outbound affiliate-click measurement (GA4 `affiliate_click`). Main-thread,
+      event-delegated, non-blocking; relies on Partytown's forwarded window.gtag.
+      Measurement only — never alters rel="sponsored nofollow" or the href, and
+      sends no personal data. See AffiliateClickTracker.astro.
+    */}
+    <AffiliateClickTracker />
 
     <script>
       // Reveal-on-scroll: add .in to .reveal elements as they enter the

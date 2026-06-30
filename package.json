@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/apply-offers.mjs && node scripts/apply-texts.mjs && node scripts/add-sitemap-lastmod.mjs && node scripts/check-build.mjs",
+    "build": "astro build && node scripts/apply-offers.mjs && node scripts/apply-texts.mjs && node scripts/add-sitemap-lastmod.mjs && node scripts/check-build.mjs && node scripts/audit-dist-links.mjs",
     "preview": "astro preview",
     "test:offers": "node scripts/test-apply-offers.mjs",
     "test:texts": "node scripts/test-apply-texts.mjs",

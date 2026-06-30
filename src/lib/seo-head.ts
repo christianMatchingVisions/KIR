@@ -59,6 +59,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { applySeoOverride } from "./seo-overrides";
 
 /** Parsed SEO head for a single page. */
 export interface SeoHead {
@@ -265,7 +266,10 @@ function buildRegistry(): Map<string, SeoHead> {
       continue;
     }
 
-    registry.set(normalizePath(meta.path), parseHead(html));
+    // Apply any intentional, auditable SEO override (title/description/OG only;
+    // canonical + robots are preserved) on top of the byte-faithful parsed head.
+    const np = normalizePath(meta.path);
+    registry.set(np, applySeoOverride(np, parseHead(html)));
   }
 
   return registry;
