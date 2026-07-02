@@ -214,7 +214,9 @@ const breadcrumbLd = breadcrumbJsonLd(breadcrumb, seoPath);
         {showSidebar && (
           <div class="art-side">
             <div class="art-side__sticky">
-              <RelatedCasinos limit={4} links={relatedLinks} />
+              {/* offset 5 → ranks 6–9, so the article sidebar fronts different
+                  brands than the top-5 the money pages/homepage already show. */}
+              <RelatedCasinos limit={4} offset={5} title="Suositellut kasinot" links={relatedLinks} />
             </div>
           </div>
         )}

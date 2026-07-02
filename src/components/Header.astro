@@ -253,7 +253,24 @@ import SearchBox from "./SearchBox.astro";
     visibility: hidden;
     transform: translateY(6px);
     transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+    /* Close forgiveness: when the pointer leaves the trigger/panel, wait a beat
+       before hiding so slow or slightly diagonal travel doesn't slam it shut. */
+    transition-delay: 0.18s;
     z-index: 20;
+  }
+  /* Invisible hover bridge over the 6px gap between trigger and panel. The
+     panel opens at top:calc(100% + 6px); without this, a pointer moving slowly
+     DOWN from the trigger crosses 6px of "nothing", :hover drops off the <li>
+     and the menu closes before it can be reached. The bridge is part of the
+     panel (hence of the <li>), so hover is continuous. visibility:hidden keeps
+     it inert while the menu is closed — it can never open the menu by itself. */
+  .dropdown::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
   }
   .primary-nav__item:hover > .dropdown,
   .primary-nav__item:focus-within > .dropdown,
@@ -261,6 +278,8 @@ import SearchBox from "./SearchBox.astro";
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    /* Open instantly — the delay above applies only to closing. */
+    transition-delay: 0s;
   }
   .dropdown__list {
     display: flex;

@@ -57,6 +57,15 @@ const topCasinos: ToplistCasino[] = (
   usedFallback ? getToplist(FALLBACK_CONFIG).filter(isOpen) : primary
 ).slice(0, 5);
 
+// Sidebar recommendations — deliberately DIFFERENT brands than the top-5 cards
+// (the sidebar used to mirror the exact same five, which reads as padding).
+// Pull from the full list, drop anything already fronted above, take the next 5.
+const topNames = new Set(topCasinos.map((c) => (c.name ?? "").trim().toLowerCase()));
+const sideCasinos: ToplistCasino[] = getToplist(FALLBACK_CONFIG)
+  .filter(isOpen)
+  .filter((c) => !topNames.has((c.name ?? "").trim().toLowerCase()))
+  .slice(0, 5);
+
 /* -------------------------------------------------------------------------- */
 /* Extract the existing long-form home copy from the body fragment            */
 /* -------------------------------------------------------------------------- */
@@ -307,7 +316,7 @@ const hasToc = toc.length > 1;
 
         <aside class="intro__side" aria-label="Sivun sisältö ja suositukset">
           <div class="intro__side-sticky">
-            <RelatedCasinos casinos={topCasinos} limit={5} />
+            <RelatedCasinos casinos={sideCasinos} limit={5} title="Suosittuja kasinoita" />
             {hasToc && (
               <nav class="intro-toc card" aria-label="Sisällys">
                 <h2 class="intro-toc__title">Sisällys</h2>

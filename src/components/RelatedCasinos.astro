@@ -52,6 +52,12 @@ interface Props {
   config?: string;
   /** Max rows to show (default 4). */
   limit?: number;
+  /**
+   * Skip the first N OPEN rows before slicing (default 0). Used to front
+   * DIFFERENT brands in the sidebar than the site's main top-5 toplists
+   * (offset 5 → the sidebar shows ranks 6+ instead of duplicating 1–4).
+   */
+  offset?: number;
   /** Heading for the mini-list. */
   title?: string;
   /** Optional related internal links rendered under the casino list. */
@@ -66,6 +72,7 @@ const {
   casinos,
   config = "search-service-casino",
   limit = 4,
+  offset = 0,
   title = "Parhaat kasinot",
   links = [],
   linksTitle = "Lue myös",
@@ -75,9 +82,10 @@ const {
 /** Hide closed/expired casinos so the sidebar never fronts a dead casino. */
 const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
 
+const from = Math.max(0, offset);
 const rows: ToplistCasino[] = (casinos ?? getToplist(config))
   .filter(isOpen)
-  .slice(0, Math.max(0, limit));
+  .slice(from, from + Math.max(0, limit));
 
 const hasLinks = links.length > 0;
 ---
