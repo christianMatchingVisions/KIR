@@ -22,9 +22,14 @@ export interface CollectionItem {
   url?: string;
 }
 
-/** JSON string-escape for values placed inside the JSON-LD literal. */
+/**
+ * JSON string-escape for values placed inside the JSON-LD literal. Also
+ * <-escapes "<" so a value containing a literal "</script>" (item names
+ * can originate from the external Content-Engine feed) can never close the
+ * JSON-LD block early.
+ */
 function esc(s: string): string {
-  return JSON.stringify(String(s ?? ""));
+  return JSON.stringify(String(s ?? "")).replace(/</g, "\\u003c");
 }
 
 /** Absolutise a root-relative internal path; pass through absolute URLs. */
@@ -47,6 +52,12 @@ export function collectionPageJsonLd(opts: {
   name: string;
   items: CollectionItem[];
   description?: string;
+  /**
+   * Semantic ordering of the list. Pass "descending" for RANKED lists (money
+   * hubs, best-rated-first indexes); omit for chronological/alphabetical
+   * listings — asserting a ranking that isn't one would be wrong schema.
+   */
+  order?: "descending" | "ascending";
 }): string {
   const items = (opts.items ?? []).filter((i) => i && i.name && i.name.trim());
   if (items.length === 0) return "";
@@ -62,6 +73,13 @@ export function collectionPageJsonLd(opts: {
     return `{${parts.join(",")}}`;
   });
 
+  const orderPart =
+    opts.order === "descending"
+      ? `"itemListOrder":"https://schema.org/ItemListOrderDescending",`
+      : opts.order === "ascending"
+        ? `"itemListOrder":"https://schema.org/ItemListOrderAscending",`
+        : "";
+
   const collection = [
     `"@context":"https://schema.org"`,
     `"@type":"CollectionPage"`,
@@ -69,7 +87,7 @@ export function collectionPageJsonLd(opts: {
     `"url":${esc(pageUrl)}`,
     `"name":${esc(opts.name)}`,
     opts.description ? `"description":${esc(opts.description)}` : null,
-    `"mainEntity":{"@type":"ItemList","itemListOrder":"https://schema.org/ItemListOrderDescending","numberOfItems":${items.length},"itemListElement":[${listItems.join(",")}]}`,
+    `"mainEntity":{"@type":"ItemList",${orderPart}"numberOfItems":${items.length},"itemListElement":[${listItems.join(",")}]}`,
   ]
     .filter(Boolean)
     .join(",");

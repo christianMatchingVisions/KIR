@@ -91,8 +91,10 @@ let preservedHeadHtml = seo ? renderSeoHeadHtml(seo) : "";
 // our explicit noindex,follow tag is the ONLY robots directive on the page.
 // (Real/indexable pages never enter this branch → byte-faithful head intact.)
 if (noindex && preservedHeadHtml) {
+  // Tag-based (not line-based) removal: a line-eating regex would strip
+  // unrelated content if the registry ever emitted two tags on one line.
   preservedHeadHtml = preservedHeadHtml.replace(
-    /[^\n]*<meta[^>]*\bname=["']robots["'][^>]*>[^\n]*\n?/gi,
+    /<meta[^>]*\bname=["']robots["'][^>]*>\s*/gi,
     "",
   );
 }
@@ -210,6 +212,7 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
       gtag('config', 'G-72MZEB7RDD');
     </script>
     <script
+      is:inline
       type="text/partytown"
       src="https://www.googletagmanager.com/gtag/js?id=GT-5DCRZLHV"
     ></script>

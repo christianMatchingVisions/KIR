@@ -49,6 +49,7 @@ import {
   getToplistConfigForSlug,
   optimizeProseImages,
   demoteBodyH1,
+  ensureSponsored,
   DEFAULT_TOPLIST_CONFIG,
 } from "../lib/content";
 import { getAllCasinos } from "../lib/casino-data";
@@ -77,21 +78,32 @@ export function getStaticPaths() {
     eager: true,
   });
 
-  // Fragments owned by dedicated light-theme routes (rendered there, not here).
-  const OWNED_ELSEWHERE = new Set([
-    "home", // src/pages/index.astro (light homepage owns "/")
-    "uutiset", // src/pages/uutiset/index.astro
-    "huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista", // World-Cup special page
-    "casino", // src/pages/casino/index.astro (the /casino/ hub)
+  // Routes owned by DEDICATED src/pages files — keyed by the fragment's
+  // RESOLVED path (meta.json `path`), NOT its directory name: the dir name is
+  // not guaranteed to match the emitted route, so a future re-sync could name
+  // a fragment dir anything while its `path` collides with a dedicated route
+  // and double-emit that page. Filtering on the real output path is durable.
+  const RESERVED_PATHS = new Set([
+    "/", // src/pages/index.astro (light homepage)
+    "/uutiset/", // src/pages/uutiset/index.astro
+    "/oppaat/", // src/pages/oppaat/index.astro
+    "/toimitus/", // src/pages/toimitus/index.astro
+    "/casino/", // src/pages/casino/index.astro (the /casino/ hub)
+    "/mm-kisat-2026-tilastot/", // dedicated stats page
+    "/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/", // World-Cup special page
   ]);
-
-  // The 305 casino__<slug> fragments are owned by src/pages/casino/[slug].astro.
-  const isCasinoFragment = (dirName: string) => dirName.startsWith("casino__");
+  const normalizeRoute = (p: unknown) => {
+    let s = String(p ?? "/");
+    if (!s.startsWith("/")) s = "/" + s;
+    if (!s.endsWith("/")) s += "/";
+    return s;
+  };
 
   return Object.entries(metas)
-    .filter(([metaPath]) => {
-      const dirName = metaPath.split("/").at(-2) ?? "";
-      return !OWNED_ELSEWHERE.has(dirName) && !isCasinoFragment(dirName);
+    .filter(([, metaModule]) => {
+      const p = normalizeRoute(metaModule.default?.path);
+      // /casino/<slug>/ reviews are owned by src/pages/casino/[slug].astro.
+      return !RESERVED_PATHS.has(p) && !p.startsWith("/casino/");
     })
     .map(([metaPath, metaModule]) => {
       const dir = metaPath.replace(/\/meta\.json$/, "");
@@ -184,32 +196,12 @@ function cleanTitle(t: string | null | undefined): string | null {
 }
 
 /* -------------------------------------------------------------------------- *
- * COMPLIANCE: force rel="sponsored nofollow" on every /go/ link in prose.     *
- * Mirrors the casino route's ensureSponsored(): adds the rel when missing and  *
- * merges sponsored+nofollow into an existing rel (dedup, order-stable).        *
- * Idempotent, attribute-level, non-/go/ links untouched.                       *
+ * COMPLIANCE: rel="sponsored nofollow" on every affiliate link in prose.      *
+ * Uses the SHARED ensureSponsored from src/lib/content.ts (same as the        *
+ * uutiset/oppaat routes) — it covers /go/ links AND direct external           *
+ * non-authority links, replacing a weaker local duplicate that only handled   *
+ * /go/. Regulator/authority citations keep their followed links.              *
  * -------------------------------------------------------------------------- */
-
-function ensureSponsored(html: string | null | undefined): string {
-  if (!html) return "";
-  return html.replace(
-    /<a\b([^>]*\bhref="\/go\/[^"]*"[^>]*)>/gi,
-    (_whole, attrs: string) => {
-      const relMatch = attrs.match(/\brel="([^"]*)"/i);
-      if (!relMatch) {
-        return `<a${attrs} rel="sponsored nofollow">`;
-      }
-      const tokens = new Set(
-        relMatch[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
-      );
-      tokens.add("sponsored");
-      tokens.add("nofollow");
-      const merged = [...tokens].join(" ");
-      const newAttrs = attrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`);
-      return `<a${newAttrs}>`;
-    },
-  );
-}
 
 /* -------------------------------------------------------------------------- *
  * B2 — RESTORE BODY JSON-LD (ht-faq Organization schema).                      *

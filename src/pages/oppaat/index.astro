@@ -138,11 +138,15 @@ const postCards: GuideCard[] = getPosts().map((p) => ({
   kicker: "",
 }));
 
-// Merge + dedupe by slug (engine wins), then newest-first (no-date sinks last).
-const bySlug = new Map<string, GuideCard>();
-for (const c of postCards) bySlug.set(c.slug, c);
-for (const c of engineCards) bySlug.set(c.slug, c);
-const posts: GuideCard[] = [...bySlug.values()].sort((a, b) =>
+// Merge + dedupe by HREF, then newest-first (no-date sinks last). Keyed by
+// href (not slug) on purpose: an engine guide (/oppaat/<slug>/) that happens
+// to share a slug with a scraped WP post (/<slug>/) is a DIFFERENT page —
+// keying by slug silently dropped the card linking to the live, indexed WP
+// post (its only inbound link from this hub). Identical hrefs still dedupe.
+const byHref = new Map<string, GuideCard>();
+for (const c of postCards) byHref.set(c.href, c);
+for (const c of engineCards) byHref.set(c.href, c);
+const posts: GuideCard[] = [...byHref.values()].sort((a, b) =>
   (b.date || "").localeCompare(a.date || ""),
 );
 const postCount = posts.length;
@@ -238,7 +242,7 @@ const guidesCollectionLd = collectionPageJsonLd({
                     </time>
                   )}
                 </span>
-                <h2 class="guide-card__title" set:html={p.title} />
+                <h2 class="guide-card__title" set:html={p.title.replace(/<[^>]*>/g, "")} />
                 {p.excerpt && <p class="guide-card__excerpt">{p.excerpt}</p>}
                 <span class="guide-card__cta">
                   Lue opas

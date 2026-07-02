@@ -103,6 +103,30 @@ const vercelPath = path.join(ROOT, 'vercel.json');
 const vercel = existsSync(vercelPath)
   ? JSON.parse(await readFile(vercelPath, 'utf8'))
   : {};
+
+// SANITY FLOOR: a transient WP hiccup (plugin momentarily deactivated, CPT
+// registration glitch, query mismatch) returns a normal 200 with a small/empty
+// thirstylink array — nothing throws, and without this guard every previously
+// working /go/ affiliate redirect would silently vanish from vercel.json on
+// the next deploy. Refuse to shrink the generated set by more than 20%
+// against what is currently deployed; a real mass link removal can be pushed
+// deliberately with FORCE_REDIRECTS=1.
+const prevGoCount = Array.isArray(vercel.redirects)
+  ? vercel.redirects.filter((r) => typeof r?.source === 'string' && r.source.startsWith('/go/')).length
+  : 0;
+if (
+  prevGoCount >= 20 &&
+  redirects.length < prevGoCount * 0.8 &&
+  process.env.FORCE_REDIRECTS !== '1'
+) {
+  console.error(
+    `FATAL: generated /go/ redirects collapsed from ${prevGoCount} to ${redirects.length} ` +
+      `(>20% drop). Refusing to overwrite vercel.json — this smells like a bad ` +
+      `thirstylink fetch, not a real link purge. Re-run with FORCE_REDIRECTS=1 to override.`,
+  );
+  process.exit(1);
+}
+
 vercel.redirects = [...staticRedirects, ...redirects];
 await writeFile(vercelPath, JSON.stringify(vercel, null, 2));
 console.log(`Wrote ${staticRedirects.length} static + ${redirects.length} /go/ redirect rules to vercel.json`);

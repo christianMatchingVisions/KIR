@@ -61,7 +61,7 @@ import {
   type CasinoReview,
 } from "../../lib/casino-data";
 import { getToplist, type ToplistCasino } from "../../lib/toplist";
-import { optimizeProseImages, getPosts } from "../../lib/content";
+import { optimizeProseImages, getPosts, ensureSponsored } from "../../lib/content";
 import { normalizeInternalHtmlLinks } from "../../lib/html-links";
 import { getCasinoSchemaBlocks, getCasinoReviewDate } from "../../lib/casino-schema";
 import {
@@ -145,36 +145,13 @@ function backfill(review: CasinoReview): CasinoReview & { logoAlt: string | null
   return { ...review, bonusText, license, logoUrl, logoAlt };
 }
 
-/**
- * COMPLIANCE GUARD for embedded prose. The scraped reviewHtml / bonusesHtml can
- * contain legacy affiliate links to /go/<slug>/ (e.g. banner-image links) that
- * do NOT carry rel="sponsored nofollow". This site is in penalty recovery and
- * the rule is strict: EVERY /go/ link must be sponsored+nofollow. We rewrite any
- * <a ... href="/go/..."> in the prose so it carries exactly that rel:
- *   - no rel attribute        → add rel="sponsored nofollow"
- *   - existing rel            → merge in sponsored + nofollow (dedup, keep order)
- * Non-/go/ links are left untouched. Idempotent and HTML-safe (attribute-level).
+/*
+ * COMPLIANCE GUARD for embedded prose: rel="sponsored nofollow" on every
+ * affiliate link. Uses the SHARED ensureSponsored from src/lib/content.ts
+ * (imported above, same as the uutiset/oppaat routes) — it covers /go/ links
+ * AND direct external non-authority links, replacing a weaker local duplicate
+ * that only handled /go/. Regulator/authority citations keep followed links.
  */
-function ensureSponsored(html: string | null): string | null {
-  if (!html) return html;
-  return html.replace(
-    /<a\b([^>]*\bhref="\/go\/[^"]*"[^>]*)>/gi,
-    (whole, attrs: string) => {
-      const relMatch = attrs.match(/\brel="([^"]*)"/i);
-      if (!relMatch) {
-        return `<a${attrs} rel="sponsored nofollow">`;
-      }
-      const tokens = new Set(
-        relMatch[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
-      );
-      tokens.add("sponsored");
-      tokens.add("nofollow");
-      const merged = [...tokens].join(" ");
-      const newAttrs = attrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`);
-      return `<a${newAttrs}>`;
-    },
-  );
-}
 
 /**
  * COMPLIANCE GUARD for first-hand / personal-testing language in scraped prose.
@@ -386,7 +363,13 @@ if (review && !review.showNoReview) {
 ---
 
 {!review ? (
-  <BaseLayout title="Kasinoa ei löytynyt — Kasinot ilman rekisteröitymistä">
+  <BaseLayout
+    title="Kasinoa ei löytynyt — Kasinot ilman rekisteröitymistä"
+    jsonLd={['<meta name="robots" content="noindex,follow" />']}
+  >
+    {/* noindex via the raw head-fragment channel (same pattern as 404.astro):
+        a thin fallback page must never be indexed on a penalty-recovering
+        domain, and shouldNoindex() doesn't know this synthetic path. */}
     <section class="section">
       <div class="container--narrow nf">
         <h1 class="nf__title">Kasinoa ei löytynyt</h1>

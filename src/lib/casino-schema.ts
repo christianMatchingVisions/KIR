@@ -141,7 +141,9 @@ function buildEeatBlock(casinoName: string): string {
       },
     ],
   };
-  return `<script type="application/ld+json">${JSON.stringify(graph)}</script>`;
+  // <-escape: JSON.stringify leaves "<" intact, so a literal "</script>"
+  // inside any value would close the JSON-LD block early (HTML injection).
+  return `<script type="application/ld+json">${JSON.stringify(graph).replace(/</g, "\\u003c")}</script>`;
 }
 
 /**

@@ -130,6 +130,7 @@ const collectionLd = headHasCollectionSchema(getSeoHead(seoPath)?.jsonLd)
   : collectionPageJsonLd({
       url: seoPath,
       name: title,
+      order: "descending", // ranked toplist
       items: casinos.map((c) => ({
         name: c.name,
         url: c.slug && __reviewSlugs.has(c.slug) ? `/casino/${c.slug}/` : undefined,

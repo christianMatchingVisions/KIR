@@ -102,7 +102,9 @@ const hasAny = reviewLinks.length > 0 || guideLinks.length > 0;
               <li>
                 <a class="rl__link" href={l.href}>
                   <Icon name="chevron-right" size={15} class="rl__link-ico" />
-                  <span set:html={l.label} />
+                  {/* set:html so scraped-title entities render; tags stripped
+                      so templated labels can't inject elements. */}
+                  <span set:html={l.label.replace(/<[^>]*>/g, "")} />
                 </a>
               </li>
             ))}

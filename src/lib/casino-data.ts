@@ -499,9 +499,13 @@ function getReviewProse(body: string): string | null {
   if (m) {
     inner = m[1];
   } else {
-    // Fallback: from wp-content-area to the next </aside> sibling boundary.
-    const alt = body.match(/<div class="wp-content-area">([\s\S]*?)<\/div>/i);
-    inner = alt ? alt[1] : null;
+    // Fallback: depth-counted slice from the wp-content-area open tag to ITS
+    // matching </div>. The old non-greedy regex stopped at the FIRST nested
+    // </div>, silently truncating any prose that contains a nested div (embed
+    // or image wrapper) — which also degraded parseVerdict/parseProviders,
+    // both derived from this prose.
+    const om = /<div class="wp-content-area">/i.exec(body);
+    inner = om ? sliceToMatchingDivClose(body, om.index + om[0].length) : null;
   }
   if (inner == null) return null;
   return cleanProse(inner);
@@ -545,8 +549,15 @@ function parseLogoUrl(reviewSection: string): string | null {
   const cardMatch = reviewSection.match(
     /<a href="\/go\/[^"]*"[^>]*>([\s\S]*?)<\/a>/i,
   );
-  const scope = cardMatch ? cardMatch[1] : reviewSection;
-  return firstLogoUrl(scope) ?? firstLogoUrl(reviewSection);
+  if (cardMatch) {
+    // Anchor found — trust its content only. Widening to the whole section
+    // when the anchor's SPAI payload fails to decode would pick up an
+    // UNRELATED image (payment icon, star SVG) as the casino's logo; a
+    // missing logo (monogram fallback) is the honest result there.
+    return firstLogoUrl(cardMatch[1]);
+  }
+  // Anchor not found at all — best-effort scan of the whole card section.
+  return firstLogoUrl(reviewSection);
 }
 
 function parseBonusText(reviewSection: string): string | null {

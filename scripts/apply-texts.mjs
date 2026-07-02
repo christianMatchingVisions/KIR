@@ -199,6 +199,26 @@ export async function applyTexts({ apiUrl, apiKey } = {}) {
   // --- kind "marker": data-mv-text elements (@custom pages only) -------------
   if (markerBlocks.size > 0) {
     const MARKER_RE = /<([a-zA-Z][a-zA-Z0-9-]*)\b[^>]*\bdata-mv-text="([^"]+)"[^>]*>/g;
+
+    /**
+     * Index of the CLOSING tag that matches the element opened just before
+     * `from`, tracking nested same-name tags. indexOf of the first `</tag>`
+     * would truncate at an inner element (e.g. a <div> icon inside a tagged
+     * <div>) and ship unbalanced HTML — tagged elements are EXPECTED to be
+     * leaves, but that constraint was never validated, so validate it here.
+     * Returns -1 when unbalanced.
+     */
+    const findMatchingClose = (src, tagName, from) => {
+      const pair = new RegExp(`<(/?)${tagName}\\b[^>]*>`, "gi");
+      pair.lastIndex = from;
+      let depth = 1;
+      let t;
+      while ((t = pair.exec(src)) !== null) {
+        depth += t[1] === "/" ? -1 : 1;
+        if (depth === 0) return t.index;
+      }
+      return -1;
+    };
     for (const file of walkHtml(distDir)) {
       let html = fs.readFileSync(file, "utf8");
       if (!html.includes("data-mv-text=")) continue;
@@ -213,9 +233,10 @@ export async function applyTexts({ apiUrl, apiKey } = {}) {
         const [openTag, tagName, key] = m;
         const block = markerBlocks.get(key);
         if (!block) continue;
-        // Tagged elements are leaves: replace their entire inner content.
+        // Replace the element's entire inner content, honouring nested
+        // same-name tags so the close tag we cut at is the MATCHING one.
         const innerStart = m.index + openTag.length;
-        const closeIdx = html.indexOf(`</${tagName}>`, innerStart);
+        const closeIdx = findMatchingClose(html, tagName, innerStart);
         if (closeIdx === -1) continue;
         out += html.slice(cursor, innerStart) + escapeHtml(block.currentText.trim());
         cursor = closeIdx;

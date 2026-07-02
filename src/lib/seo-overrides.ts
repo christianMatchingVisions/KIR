@@ -84,10 +84,21 @@ function escapeAttr(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }
 
-/** Replace the content="…" of a raw <meta> tag string (either attribute order). */
+/**
+ * Replace the content="…" of a raw <meta> tag string (either attribute order).
+ * Delimiter-aware: matches the ACTUAL quote char used, so a literal apostrophe
+ * inside a double-quoted value can't truncate the replacement and splice
+ * leftover old text after the new value.
+ */
 function replaceMetaContent(tag: string, value: string): string {
-  if (/\bcontent=["']/i.test(tag)) {
-    return tag.replace(/(\bcontent=["'])[^"']*(["'])/i, `$1${escapeAttr(value)}$2`);
+  if (/\bcontent\s*=\s*"/i.test(tag)) {
+    return tag.replace(/(\bcontent\s*=\s*")[^"]*(")/i, `$1${escapeAttr(value)}$2`);
+  }
+  if (/\bcontent\s*=\s*'/i.test(tag)) {
+    return tag.replace(
+      /(\bcontent\s*=\s*')[^']*(')/i,
+      `$1${escapeAttr(value).replace(/'/g, "&#39;")}$2`,
+    );
   }
   // No content attr (defensive) — inject one before the tag closes.
   return tag.replace(/\s*\/?>\s*$/, ` content="${escapeAttr(value)}" />`);

@@ -87,16 +87,37 @@ const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
   <div class="casino-row__plate">
     {hasReview ? (
       <a href={reviewUrl} class="casino-row__plate-link" aria-label={reviewLabel}>
-        {hasLogo ? (
-          <img class="casino-row__logo" src={logoUrl} alt={altText} loading="lazy" decoding="async" width="120" height="48" />
-        ) : (
-          <span class="casino-row__mono" aria-hidden="true">{monogram}</span>
+        {hasLogo && (
+          <img
+            class="casino-row__logo"
+            src={logoUrl}
+            alt={altText}
+            loading="lazy"
+            decoding="async"
+            width="120"
+            height="48"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+          />
         )}
+        {/* Monogram: fallback when no logo OR when the logo URL 404s (onerror reveals it). */}
+        <span class="casino-row__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
       </a>
-    ) : hasLogo ? (
-      <img class="casino-row__logo" src={logoUrl} alt={altText} loading="lazy" decoding="async" width="120" height="48" />
     ) : (
-      <span class="casino-row__mono" aria-hidden="true">{monogram}</span>
+      <>
+        {hasLogo && (
+          <img
+            class="casino-row__logo"
+            src={logoUrl}
+            alt={altText}
+            loading="lazy"
+            decoding="async"
+            width="120"
+            height="48"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
+          />
+        )}
+        <span class="casino-row__mono" aria-hidden="true" style={hasLogo ? "display:none" : undefined}>{monogram}</span>
+      </>
     )}
   </div>
 
@@ -160,13 +181,18 @@ const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
   .casino-row {
     position: relative;
     display: grid;
-    grid-template-columns: auto auto 1fr auto auto;
+    /* UNRANKED base: plate | body(1fr) | rating | action. The rank column is
+       added by --ranked below — a single fixed 5-column template relied on
+       DOM-order auto-placement, so omitting the optional rank badge shifted
+       every cell one track left and squeezed the name/bonus column. */
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
     align-items: center;
     gap: 1.1rem;
     padding: 1rem 1.25rem;
   }
   /* Reserve the rank column only when ranked. */
   .casino-row--ranked {
+    grid-template-columns: auto auto minmax(0, 1fr) auto auto;
     padding-left: 1rem;
   }
 
@@ -323,14 +349,20 @@ const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
   /* ---------- Tablet: drop the rating into the action column edge ---------- */
   @media (max-width: 860px) {
     .casino-row {
-      grid-template-columns: auto auto 1fr auto;
+      grid-template-columns: auto 1fr auto;
       gap: 0.9rem 1rem;
+    }
+    .casino-row--ranked {
+      grid-template-columns: auto auto 1fr auto;
     }
     /* Rating moves under the body, action stays on the right. */
     .casino-row__rating {
-      grid-column: 2 / 4;
+      grid-column: 1 / 3;
       flex-direction: row;
       justify-content: flex-start;
+    }
+    .casino-row--ranked .casino-row__rating {
+      grid-column: 2 / 4;
     }
   }
 
@@ -349,6 +381,11 @@ const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
       grid-row: 1;
       grid-column: 2;
       justify-self: start;
+    }
+    /* Unranked: no badge in column 1 — let the plate own the whole first row
+       so it doesn't sit behind a phantom rank-column gap. */
+    .casino-row:not(.casino-row--ranked) .casino-row__plate {
+      grid-column: 1 / -1;
     }
     .casino-row__body {
       grid-row: 2;

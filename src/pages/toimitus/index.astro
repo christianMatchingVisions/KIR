@@ -147,14 +147,8 @@ const OPERATOR_NAME = "Matching Visions";
 
 /* Build/review date for the methodology page's lastReviewed signal. Truthful
    passive freshness marker — NOT a "tested on" claim. */
-const FI_MONTHS = [
-  "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta",
-  "kesäkuuta", "heinäkuuta", "elokuuta", "syyskuuta", "lokakuuta",
-  "marraskuuta", "joulukuuta",
-];
 const reviewedDate = new Date();
 const reviewedIso = reviewedDate.toISOString().slice(0, 10);
-const reviewedLabel = `${reviewedDate.getDate()}. ${FI_MONTHS[reviewedDate.getMonth()]} ${reviewedDate.getFullYear()}`;
 
 const organizationLd = {
   "@context": "https://schema.org",

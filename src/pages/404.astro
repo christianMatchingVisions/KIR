@@ -21,8 +21,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
 
-const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
-
 // A 404 must never be indexed. BaseLayout has no dedicated "robots" prop, but
 // it injects any raw <script>/<meta> strings passed via `jsonLd` verbatim into
 // <head> (set:html). We reuse that slot to emit the noindex meta — it is a raw

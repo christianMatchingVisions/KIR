@@ -252,7 +252,9 @@ export function articleAuthorJsonLd(opts: {
   };
   if (opts.datePublished) node.datePublished = opts.datePublished;
   if (opts.dateModified) node.dateModified = opts.dateModified;
-  return `<script type="application/ld+json">${JSON.stringify(node)}</script>`;
+  // <-escape: JSON.stringify leaves "<" intact, so a literal "</script>"
+  // inside any value would close the JSON-LD block early (HTML injection).
+  return `<script type="application/ld+json">${JSON.stringify(node).replace(/</g, "\\u003c")}</script>`;
 }
 
 /* -------------------------------------------------------------------------- *
@@ -309,7 +311,8 @@ export function breadcrumbJsonLd(
     "@type": "BreadcrumbList",
     itemListElement,
   };
-  return `<script type="application/ld+json">${JSON.stringify(ld)}</script>`;
+  // <-escape — see articleAuthorJsonLd above.
+  return `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>`;
 }
 
 /* -------------------------------------------------------------------------- *

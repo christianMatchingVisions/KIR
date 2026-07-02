@@ -127,12 +127,27 @@ export function normalizePath(p: string): string {
 }
 
 /**
- * Extract the first match of `re` from `html` and return capture group 1,
- * trimmed, or null if not present.
+ * Extract the first match of `re` from `html` and return the first DEFINED
+ * capture group, trimmed, or null if not present. (Multiple groups support the
+ * quote-delimiter alternation below: `attr="…"` vs `attr='…'` capture into
+ * different groups.)
  */
 function firstCapture(html: string, re: RegExp): string | null {
   const m = re.exec(html);
-  return m ? m[1].trim() : null;
+  if (!m) return null;
+  const g = m.slice(1).find((v) => v !== undefined);
+  return (g ?? "").trim();
+}
+
+/**
+ * Regex fragment matching a quoted attribute value delimiter-aware:
+ * `attr="…"` (group A) or `attr='…'` (group B). The old `["']([^"']*)["']`
+ * shape excluded BOTH quote chars from the value, so a literal apostrophe
+ * inside a double-quoted value ("Casino's paras…") silently TRUNCATED the
+ * capture — corrupting the byte-faithful head this module exists to preserve.
+ */
+function attrVal(attr: string): string {
+  return `\\b${attr}=(?:"([^"]*)"|'([^']*)')`;
 }
 
 /**
@@ -185,18 +200,18 @@ function parseHead(html: string): SeoHead {
 
   // <link rel="canonical" href="…"> — also tolerate href-before-rel ordering.
   const canonical =
-    firstCapture(html, /<link[^>]*\brel=["']canonical["'][^>]*\bhref=["']([^"']*)["'][^>]*>/i) ??
-    firstCapture(html, /<link[^>]*\bhref=["']([^"']*)["'][^>]*\brel=["']canonical["'][^>]*>/i);
+    firstCapture(html, new RegExp(`<link[^>]*\\brel=["']canonical["'][^>]*${attrVal("href")}[^>]*>`, "i")) ??
+    firstCapture(html, new RegExp(`<link[^>]*${attrVal("href")}[^>]*\\brel=["']canonical["'][^>]*>`, "i"));
 
   // <meta name="description" content="…">
   const description =
-    firstCapture(html, /<meta[^>]*\bname=["']description["'][^>]*\bcontent=["']([^"']*)["'][^>]*>/i) ??
-    firstCapture(html, /<meta[^>]*\bcontent=["']([^"']*)["'][^>]*\bname=["']description["'][^>]*>/i);
+    firstCapture(html, new RegExp(`<meta[^>]*\\bname=["']description["'][^>]*${attrVal("content")}[^>]*>`, "i")) ??
+    firstCapture(html, new RegExp(`<meta[^>]*${attrVal("content")}[^>]*\\bname=["']description["'][^>]*>`, "i"));
 
   // <meta name="robots" content="…">
   const robots =
-    firstCapture(html, /<meta[^>]*\bname=["']robots["'][^>]*\bcontent=["']([^"']*)["'][^>]*>/i) ??
-    firstCapture(html, /<meta[^>]*\bcontent=["']([^"']*)["'][^>]*\bname=["']robots["'][^>]*>/i);
+    firstCapture(html, new RegExp(`<meta[^>]*\\bname=["']robots["'][^>]*${attrVal("content")}[^>]*>`, "i")) ??
+    firstCapture(html, new RegExp(`<meta[^>]*${attrVal("content")}[^>]*\\bname=["']robots["'][^>]*>`, "i"));
 
   // All OpenGraph (<meta property="og:*">) and Twitter (<meta name="twitter:*">)
   // tags, kept verbatim and in document order. Two passes, then re-sort by the

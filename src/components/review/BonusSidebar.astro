@@ -36,7 +36,6 @@ const { review } = Astro.props;
 const {
   name,
   logoUrl,
-  logoAlt,
   ctaSlug,
   ratingOverall,
   bonusText,
@@ -52,7 +51,8 @@ const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
 const ctaHref = hasCta ? `/go/${ctaSlug}/` : null;
 
 const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
-const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
+// CasinoReview carries no scraped logo alt — derive a neutral one from the name.
+const altText = name ? `${name} logo` : "Kasinon logo";
 const ctaLabel = `Pelaa nyt — ${name}`;
 
 /* Checklist of REAL facts only. */

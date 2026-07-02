@@ -186,7 +186,9 @@ const breadcrumbLd = breadcrumbJsonLd(breadcrumb, seoPath);
 
       <div class="art-hero__inner">
         {eyebrow && <span class="eyebrow">{eyebrow}</span>}
-        <h1 class="art-hero__title" set:html={title} />
+        {/* set:html so scraped-title ENTITIES (&#8217; …) render; tags are
+            stripped first so stray scrape markup can't inject elements. */}
+        <h1 class="art-hero__title" set:html={title.replace(/<[^>]*>/g, "")} />
         {freshnessDate && (
           <p class="art-hero__meta">
             <Icon name="clock" size={16} class="art-hero__meta-ico" />

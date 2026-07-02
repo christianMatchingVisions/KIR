@@ -73,8 +73,8 @@ if (!inner) {
 
 const dim = typeof size === "number" ? `${size}` : size;
 const a11y = title
-  ? { role: "img", "aria-label": title }
-  : { "aria-hidden": "true", focusable: "false" };
+  ? ({ role: "img", "aria-label": title } as const)
+  : ({ "aria-hidden": "true", focusable: "false" } as const);
 ---
 
 <svg

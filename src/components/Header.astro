@@ -515,6 +515,20 @@ import SearchBox from "./SearchBox.astro";
       if (open) panel.removeAttribute("data-open");
       else panel.setAttribute("data-open", "");
     });
+
+    // The dropdown ALSO opens via pure CSS (:hover / :focus-within), which the
+    // click handler never sees — without this, aria-expanded reported "false"
+    // while the panel was visibly open (broken ARIA state for AT users).
+    const syncExpanded = (open: boolean) => {
+      if (!open && panel.hasAttribute("data-open")) return; // click-open wins
+      trigger.setAttribute("aria-expanded", String(open));
+    };
+    dd.addEventListener("pointerenter", () => syncExpanded(true));
+    dd.addEventListener("pointerleave", () => syncExpanded(false));
+    dd.addEventListener("focusin", () => syncExpanded(true));
+    dd.addEventListener("focusout", (e) => {
+      if (!dd.contains(e.relatedTarget as Node)) syncExpanded(false);
+    });
   }
   document.addEventListener("click", (e) => {
     const t = e.target as Node;

@@ -137,13 +137,22 @@ function decodeLogoUrl(url: string | null | undefined): string | null {
   const trimmed = url.trim();
   if (!trimmed) return null;
 
-  // 1) ShortPixel CDN: drop `https://cdn.shortpixel.ai/spai/<params>/<origin>`.
-  const spai = trimmed.replace(
-    /^https?:\/\/cdn\.shortpixel\.ai\/spai\/[^/]+\/[^/]+/i,
-    "",
+  // 1) ShortPixel CDN: `https://cdn.shortpixel.ai/spai/<params>/<origin>/...`.
+  // Only strip down to a root-relative path when the origin segment is OUR
+  // host — blindly discarding a FOREIGN origin (e.g. a network-hosted logo)
+  // produced a root-relative path pointing at a file this site doesn't have.
+  const spaiMatch = trimmed.match(
+    /^https?:\/\/cdn\.shortpixel\.ai\/spai\/[^/]+\/([^/]+)(\/.*)$/i,
   );
-  if (spai !== trimmed) {
-    return spai.startsWith("/") ? spai : `/${spai}`;
+  if (spaiMatch) {
+    const [, origin, rest] = spaiMatch;
+    const selfHost = SITE_ORIGIN.replace(/^https?:\/\//, "").toLowerCase();
+    const o = origin.toLowerCase();
+    if (o === selfHost || o === `www.${selfHost}`) {
+      return rest;
+    }
+    // Foreign origin proxied via ShortPixel — keep the real absolute URL.
+    return `https://${origin}${rest}`;
   }
 
   // 2) Plain self-origin absolute URL → root-relative.

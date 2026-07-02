@@ -24,7 +24,6 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(repoRoot, "dist");
-const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
 
 function log(msg) {
   console.log(`[lastmod] ${msg}`);
@@ -59,6 +58,15 @@ function modifiedDateFromHtml(html) {
   for (const re of candidates) {
     const m = re.exec(html);
     if (m) {
+      // ISO-8601 source (the WP/Yoast norm): take the LOCAL calendar date
+      // straight from the string. Round-tripping through Date/toISOString()
+      // re-expresses the instant in UTC, which shifts any timestamp in the
+      // first hours of a +02:00/+03:00 (Finland) day to the PREVIOUS date —
+      // and the whole point of this script is that lastmod may never
+      // contradict the page's own visible dates.
+      const iso = /^(\d{4}-\d{2}-\d{2})([T ]|$)/.exec(m[1]);
+      if (iso) return iso[1];
+      // Non-ISO fallback (rare): best-effort parse.
       const d = new Date(m[1]);
       if (!Number.isNaN(d.getTime())) return d.toISOString().slice(0, 10);
     }

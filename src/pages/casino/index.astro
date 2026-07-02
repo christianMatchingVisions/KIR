@@ -82,6 +82,7 @@ const reviewsHubCollectionLd = headHasCollectionSchema(getSeoHead("/casino/")?.j
   : collectionPageJsonLd({
       url: "/casino/",
       name: "Kasinoarvostelut",
+      order: "descending", // best-rated first
       items: reviews.slice(0, 50).map((c) => ({ name: c.name, url: c.url })),
     });
 ---

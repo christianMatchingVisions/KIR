@@ -177,11 +177,13 @@ export function scrubFirstHandClaims(html: string): string {
   if (!html) return "";
   return (
     html
-      // "Testasin Oracle of Goldia …" → "Oracle of Goldia on arvioitu …"
-      // "Testasin peliä …"            → "Peliä on arvioitu …"
+      // "Testasin Oracle of Goldia -peliä …" → "Oracle of Goldia -peliä on arvioitu …"
+      // Capture the WHOLE object phrase up to sentence punctuation — a 1-2 word
+      // capture orphaned the rest of a multi-word object mid-sentence
+      // ("Oracle of on arvioitu Goldia -peliä").
       .replace(
-        /\bTestasin\s+([A-ZÅÄÖ][^\s.,;:]*(?:\s+[a-zäöå][^\s.,;:]*)?)\b/g,
-        (_m, obj) => `${obj} on arvioitu`,
+        /\bTestasin\s+([A-ZÅÄÖ][^.,;:!?\n]*)/g,
+        (_m, obj: string) => `${obj.trim()} on arvioitu`,
       )
       .replace(/\bTestasin\b/g, "Arvioinnissa")
       // First-person plural test verbs → passive.

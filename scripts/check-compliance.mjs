@@ -15,17 +15,20 @@
  *   2. EVERY affiliate out-link (/go/<slug>/) must SHIP rel="sponsored nofollow".
  *      In this repo the source fragments carry rel="nofollow" and the build-time
  *      helper `ensureSponsored()` (src/lib/content.ts) MERGES in `sponsored`
- *      (and re-adds `nofollow`) before render. So the SHIPPED link is always
- *      sponsored+nofollow. This gate models that exactly: for every /go/ anchor
- *      it re-derives the SHIPPED rel with the SAME merge rule and FAILS if the
- *      result would somehow lack either token (a guard against the merge wiring
- *      being removed or a malformed anchor the regex/merge can't repair).
+ *      (and re-adds `nofollow`) before render — but ONLY for anchors it can see:
+ *      its regex matches DOUBLE-QUOTED `href="/go/..."` forms. This gate
+ *      therefore FAILS on any /go/ anchor in a shape the merge cannot repair
+ *      (single-quoted/unquoted href) unless its source rel ALREADY carries both
+ *      tokens — those would ship non-compliant no matter what the build does.
+ *      (The shipped artifact itself is independently gated: check-build.mjs
+ *      scans dist/ and fails on any rendered /go/ link missing the tokens, so a
+ *      removed/bypassed ensureSponsored is caught there.)
  *
- *      It ALSO emits a non-fatal WARNING for any /go/ anchor whose RAW SOURCE rel
- *      does not already contain `nofollow` (e.g. an inline image link with no rel
- *      attribute). Those ship correctly only because of the build layer, so a
- *      re-sync that both drops the rel AND bypasses ensureSponsored would leak —
- *      the warning keeps them visible without blocking the known-good corpus.
+ *      It ALSO emits a non-fatal WARNING for any repairable /go/ anchor whose
+ *      RAW SOURCE rel does not already contain `nofollow` (e.g. an inline image
+ *      link with no rel attribute). Those ship correctly only because of the
+ *      build layer — the warning keeps them visible without blocking the
+ *      known-good corpus.
  *
  * USAGE:   node scripts/check-compliance.mjs
  * EXIT:    0 = PASS, 1 = FAIL (so it can wedge a CI / re-sync pipeline).
@@ -72,10 +75,23 @@ function relTokens(aTag) {
   return new Set(m[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()));
 }
 
-/** href value of an <a> tag string, or null. */
+/**
+ * href value of an <a> tag string (double-quoted, single-quoted or unquoted),
+ * or null. Broader than ensureSponsored()'s double-quote-only matcher on
+ * purpose: this gate must SEE the anchors the build layer cannot repair.
+ */
 function hrefOf(aTag) {
-  const m = aTag.match(/\bhref\s*=\s*"([^"]*)"/i);
-  return m ? m[1] : null;
+  const m = aTag.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/i);
+  return m ? (m[1] ?? m[2] ?? m[3]) : null;
+}
+
+/**
+ * Would ensureSponsored() (src/lib/content.ts) repair this anchor? Its regex
+ * only matches the double-quoted `href="/go/..."` shape — anything else ships
+ * exactly as authored.
+ */
+function isRepairableByBuild(aTag) {
+  return /\bhref="\/go\//i.test(aTag);
 }
 
 function lineOf(content, index) {
@@ -122,19 +138,21 @@ function main() {
       goLinkCount++;
       const tokens = relTokens(tag);
       const sourceHasNofollow = tokens ? tokens.has("nofollow") : false;
-      // Re-derive the SHIPPED rel exactly like ensureSponsored() does.
-      const effective = new Set(tokens ?? []);
-      effective.add("sponsored");
-      effective.add("nofollow");
-      const shippedOk = effective.has("sponsored") && effective.has("nofollow");
+      const sourceHasBoth =
+        tokens != null && tokens.has("sponsored") && tokens.has("nofollow");
       const where = {
         file: rel,
         line: lineOf(content, am.index),
         rel: tokens ? [...tokens].join(" ") : "(no rel attribute)",
       };
-      if (!shippedOk) {
-        goLinkHits.push(where);
+      if (!isRepairableByBuild(tag)) {
+        // ensureSponsored() cannot see this anchor shape — it ships as
+        // authored. FATAL unless the source rel is already fully compliant.
+        if (!sourceHasBoth) goLinkHits.push(where);
       } else if (!sourceHasNofollow) {
+        // Repairable: the build layer merges sponsored+nofollow in. Warn so a
+        // rel-less source stays visible (defence in depth; the shipped artifact
+        // is separately gated in check-build.mjs).
         goLinkWarns.push(where);
       }
     }
