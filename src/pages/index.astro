@@ -122,7 +122,22 @@ function cleanProse(html: string): string {
       // Remove ShortPixel placeholder images (no usable src in this build).
       .replace(/<img\b[^>]*\bsrc=["']data:image\/svg\+xml[^"']*["'][^>]*>/gi, "")
       // Remove the stray Google-translate widget div left in one FAQ answer.
-      .replace(/<div id="gtx-trans"[\s\S]*?<\/div>\s*<\/div>/gi, "</div>")
+      // The widget block is BALANCED (<div id=gtx-trans><div class=icon>
+      // </div></div>), so it must be removed cleanly: the old replacement
+      // emitted an extra </div>, which made the HTML parser close the FAQ
+      // <ul> early and eject the remaining 6 <li> out of the list (axe
+      // "listitem", serious).
+      .replace(/<div id="gtx-trans"[\s\S]*?<\/div>\s*<\/div>/gi, "")
+      // Wrap ORPHANED <li> runs in a <ul>: the scraped home FAQ items lost
+      // their list wrapper in extraction, shipping bare <li> children of a
+      // <div> (invalid semantics; axe "listitem", serious). Runs already
+      // inside an open <ul>/<ol> are left untouched.
+      .replace(/(?:<li\b[\s\S]*?<\/li>\s*)+/gi, (run, offset, full) => {
+        const before = full.slice(0, offset);
+        const lastOpen = Math.max(before.lastIndexOf("<ul"), before.lastIndexOf("<ol"));
+        const lastClose = Math.max(before.lastIndexOf("</ul>"), before.lastIndexOf("</ol>"));
+        return lastOpen > lastClose ? run : `<ul>${run}</ul>`;
+      })
   );
 }
 

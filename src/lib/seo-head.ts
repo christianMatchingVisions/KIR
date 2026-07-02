@@ -191,12 +191,42 @@ function sanitizePreservedJsonLd(block: string): string {
 }
 
 /**
+ * Decode HTML entities in TITLE text until stable (max 3 passes). The layout
+ * re-renders the title through Astro's own escaping, so a fragment title
+ * stored ENCODED ("…&amp;…") shipped DOUBLE-encoded ("…&amp;amp;…") — browser
+ * tabs and Google SERPs displayed a literal "&amp;" on ~20 pages. Decoding to
+ * plain text here restores the intended characters; ONLY <title> is affected
+ * (canonical / OG / JSON-LD stay byte-verbatim).
+ */
+function decodeTitleEntities(s: string): string {
+  const once = (t: string) =>
+    t
+      .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(parseInt(n, 10)))
+      .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&");
+  let out = s;
+  for (let i = 0; i < 3; i++) {
+    const next = once(out);
+    if (next === out) break;
+    out = next;
+  }
+  return out;
+}
+
+/**
  * Parse a single fragment's head.html into a SeoHead. Every field is optional
  * at the source — we return whatever exists and null for the rest.
  */
 function parseHead(html: string): SeoHead {
   // <title>…</title> — single line in this corpus, but allow newlines defensively.
-  const title = firstCapture(html, /<title[^>]*>([\s\S]*?)<\/title>/i) ?? "";
+  const title = decodeTitleEntities(
+    firstCapture(html, /<title[^>]*>([\s\S]*?)<\/title>/i) ?? "",
+  );
 
   // <link rel="canonical" href="…"> — also tolerate href-before-rel ordering.
   const canonical =

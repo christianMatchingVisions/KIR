@@ -37,7 +37,11 @@
   /* Ink */
   --ink: #0e1f3a;
   --ink-2: #33415c;
-  --ink-3: #64748b;
+  /* AA-safe muted ink: #64748b sat at ~4.49:1 on the blue band backgrounds
+     (--bg-band/--bg-band-2) — a hair under WCAG AA's 4.5:1 for the small text
+     this token styles (notes, labels, breadcrumbs). #5d6b80 clears ≥4.9:1 on
+     every site background while looking visually identical. */
+  --ink-3: #5d6b80;
 
   /* Lines / borders */
   --line: #e3e9f2;
@@ -284,7 +288,18 @@ a:active {
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--brand);
+  /* brand-dark: the lighter --brand fails AA (~4.4:1) for this small text on
+     the band backgrounds eyebrows usually sit on. */
+  color: var(--brand-dark);
+}
+
+/* Scraped-toplist leftovers: the rlaaf HTML ships an EMPTY "back to top"
+   anchor styled by Bootstrap classes (d-none) this rebuild doesn't load — it
+   rendered as an invisible 0-size but still-FOCUSABLE empty link (axe:
+   link-name). Hide it from layout, tab order and the a11y tree. */
+#back-to-top,
+.rlaaf-to-top {
+  display: none !important;
 }
 
 /* ---------- Cards ---------- */
@@ -388,14 +403,18 @@ a:active {
 }
 
 /* ---------- Reveal-on-scroll utility (IntersectionObserver fade-up) ---------- */
-.reveal {
+/* Reveal-on-scroll: the HIDDEN resting state applies ONLY when JS is running
+   (html.js is set by an inline head script in BaseLayout). Without the guard,
+   a no-JS visitor — or any environment where the IntersectionObserver script
+   fails — got a permanently BLANK page: every .reveal stayed at opacity 0. */
+html.js .reveal {
   opacity: 0;
   transform: translateY(14px);
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
-.reveal.in {
+html.js .reveal.in {
   opacity: 1;
   transform: none;
 }

@@ -125,6 +125,10 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* JS marker for progressive enhancement: the .reveal hidden state (and any
+        future JS-dependent styling) is gated on html.js so a no-JS visitor
+        gets fully visible content. Runs before first paint — no flash. */}
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <title>{resolvedTitle}</title>
 
     {/* Site icon — clears the /favicon.ico 404. SVG primary, .ico fallback. */}

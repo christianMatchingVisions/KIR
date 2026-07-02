@@ -668,6 +668,13 @@ const jsonLd = [
     gap: 0.5rem;
     margin: 1rem 0 0;
     font-weight: 700;
+    /* The long email address can't wrap on its own — without this it pushed
+       the page 19px wide on 375px screens (horizontal scroll). */
+    max-width: 100%;
+    min-width: 0;
+  }
+  .tm-contact a {
+    overflow-wrap: anywhere;
   }
   .tm-contact__ico {
     color: var(--brand);

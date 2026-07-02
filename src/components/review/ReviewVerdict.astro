@@ -84,7 +84,9 @@ function fi(r: number): string {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--brand);
+    /* brand-dark: the lighter --brand is 4.14:1 on the brand-soft card bg —
+       below WCAG AA for this small text. */
+    color: var(--brand-dark);
   }
   .rv__num {
     font-size: clamp(2.4rem, 1.8rem + 2.5vw, 3.2rem);
@@ -100,7 +102,8 @@ function fi(r: number): string {
   .rv__label {
     font-size: 0.95rem;
     font-weight: 800;
-    color: var(--brand);
+    /* brand-dark for AA on the brand-soft card bg (see .rv__badge). */
+    color: var(--brand-dark);
   }
   /* Body column */
   .rv__body {

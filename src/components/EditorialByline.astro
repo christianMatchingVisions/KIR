@@ -105,12 +105,14 @@ const modifiedIso =
   }
   .byline__author {
     font-weight: 700;
-    color: var(--brand);
+    /* brand-dark for AA contrast on the band backgrounds bylines sit on
+       (the lighter --brand measures ~4.4:1 there). */
+    color: var(--brand-dark);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
   .byline__author:hover {
-    color: var(--brand-dark);
+    color: var(--navy);
   }
   .byline__sep {
     margin: 0 0.35rem;
