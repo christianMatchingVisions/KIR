@@ -31,6 +31,7 @@
  * script scripts/audit-dist-links.mjs re-derives validity from dist/ instead.
  */
 import { resolveInternalPath } from "./internal-routes";
+import { staticRedirectTarget } from "./static-redirects";
 
 /** Bare host of the live site (no scheme). */
 const SITE_HOST = "kasinotilmanrekisteroitymista.com";
@@ -150,6 +151,13 @@ export function normalizeInternalHref(href: string): string {
 
   // 3. Excluded internal paths: keep the (possibly relativised) form, no slash.
   if (isExcludedInternalPath(pathPart)) return pathPart + suffix;
+
+  // 3.5. Retired page with a maintained 301 (doorway consolidation) → link-
+  // correct straight to the cluster survivor so the reader/crawler never takes
+  // the redirect hop. Destinations in data/static-redirects.json are never
+  // themselves redirect sources, so this stays idempotent.
+  const redirected = staticRedirectTarget(pathPart);
+  if (redirected) return redirected + suffix;
 
   // 4. Internal page → repair to a valid route + ensure trailing slash.
   return resolveInternalPath(pathPart) + suffix;

@@ -21,6 +21,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isRetiredPath } from "./static-redirects";
 
 /**
  * Where the captured WordPress REST dumps live: `data/rest`.
@@ -541,10 +542,17 @@ function mapPost(p: RawPost): Post {
   };
 }
 
-/** All blog posts, newest first (by publish date). */
+/**
+ * All blog posts, newest first (by publish date). Posts retired by the doorway
+ * consolidation (their URL is a 301 source in data/static-redirects.json) are
+ * excluded, so listings (/oppaat/, /uutiset/) and the related-links pools never
+ * link a URL whose route was removed — durable across the daily WP re-sync,
+ * which re-adds retired posts to posts.json.
+ */
 export function getPosts(): Post[] {
   return readJson<RawPost>("posts")
     .map(mapPost)
+    .filter((p) => !isRetiredPath(`/${p.slug}/`))
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 }
 

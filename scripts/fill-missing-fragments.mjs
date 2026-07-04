@@ -70,12 +70,32 @@ function buildHead({ slug, title, desc, date, modified }) {
   ].join("\n");
 }
 
+// Retired URLs (doorway consolidation): any post whose URL is a 301 source in
+// data/static-redirects.json must NEVER be regenerated — its fragment was
+// deliberately removed and the URL permanently redirects to its cluster
+// survivor. Without this guard the daily WP sync would resurrect the page
+// (the post is still "publish" in WordPress) and the route would shadow the 301.
+const RETIRED = new Set();
+try {
+  const rules = JSON.parse(
+    fs.readFileSync(path.join(ROOT, "data", "static-redirects.json"), "utf8"),
+  );
+  for (const r of rules) {
+    if (typeof r?.source === "string") {
+      RETIRED.add(r.source.replace(/\/+$/, "") + "/");
+    }
+  }
+} catch {
+  /* no static redirects file → nothing is retired */
+}
+
 const posts = JSON.parse(fs.readFileSync(path.join(REST, "posts.json"), "utf8"));
 let created = 0;
 for (const it of posts) {
   if (it.status !== "publish") continue;
   const slug = it.slug;
   if (!slug) continue;
+  if (RETIRED.has(`/${slug}/`)) continue; // retired → 301s to its survivor
   const dir = path.join(FRAG, slug);
   if (fs.existsSync(dir)) continue; // already has a page
 
