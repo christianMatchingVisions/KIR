@@ -37,7 +37,33 @@ import { getCasino } from "./casino-data";
  * (Normalized = single leading + trailing slash; see normalizePath below.)
  */
 const NOINDEX_PATHS: ReadonlySet<string> = new Set<string>([
-  // e.g. "/some-known-thin-page/"
+  /* --------------------------------------------------------------------
+   * OFF-NICHE TOPICAL DILUTION — 2026-07 recovery plan, item K4.
+   * Added 2026-07-04.
+   *
+   * These pages are off the site's casino/payments topic (crypto price
+   * analysis, esports history, a recipe-site listicle, streamer profiles,
+   * gaming-trend commentary, football tournament stats/news). During the
+   * penalty recovery we stop feeding them to Google so the indexed corpus
+   * stays topically tight. noindex,follow is deliberately REVERSIBLE (no
+   * deletion, no 301): remove an entry here and the page's original
+   * preserved head + sitemap entry come back exactly as before.
+   *
+   * Every path below was verified against its source of truth on
+   * 2026-07-04: the five fragment paths against src/fragments/<dir>/
+   * meta.json "path", the two football routes against their dedicated
+   * page dirs under src/pages/ (mm-kisat renders a clean head and gates
+   * its own robots meta on shouldNoindex — see its index.astro;
+   * huuhkajien forwards seoPath through ArticlePage → BaseLayout, which
+   * strips the preserved robots meta and emits the noindex).
+   * ------------------------------------------------------------------ */
+  "/bitcoin-hintaromahdus-syyt-analyysi/",
+  "/esportsin-ja-nettikasinoiden-historia-ja-kasvu-kasi-kadessa/",
+  "/atjkitchen-com-vaihtoehdot-6/",
+  "/parhaat-suomalaiset-nettikasinostriimaajat/",
+  "/pelitrendit-fortnitesta-peliautomaatteihin-mika-vetaa-pelaajia-puoleensa/",
+  "/mm-kisat-2026-tilastot/",
+  "/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/",
 ]);
 
 /**

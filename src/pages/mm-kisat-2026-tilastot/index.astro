@@ -18,6 +18,7 @@
 // are NO affiliate /go/ links on this page; the only external links are
 // verified references carrying rel="noopener".
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { shouldNoindex } from "../../lib/noindex";
 import dataModuleRaw from "../../../public/mm2026-data.js?raw";
 
 /* ---- Stats data: parse the localized data module (build-time) ---- */
@@ -185,8 +186,20 @@ const navChips = [
    (penalty recovery). */
 const ogImageAlt = "MM-kisat 2026 tilastoina: 48 joukkuetta, 104 ottelua ja 16 stadionia";
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+/* Centralized noindex policy (src/lib/noindex.ts, 2026-07 plan K4): this page
+   emits its OWN robots meta through the raw head channel, which BaseLayout's
+   noindex robots-stripping does NOT touch (that only covers preserved-registry
+   heads). So the index robots line below is gated here: when the path is in
+   NOINDEX_PATHS we omit it and BaseLayout's single noindex,follow tag becomes
+   the sole robots directive. Reversible — removing the path from
+   NOINDEX_PATHS restores the original robots meta byte-identically. */
+const noindexed = shouldNoindex("/mm-kisat-2026-tilastot/");
 const rawHead = [
-  `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />`,
+  ...(noindexed
+    ? []
+    : [
+        `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />`,
+      ]),
   `<meta property="og:locale" content="fi_FI" />`,
   `<meta property="og:type" content="article" />`,
   `<meta property="og:title" content="${esc(title)}" />`,
