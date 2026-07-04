@@ -402,6 +402,16 @@
       "permanent": true
     },
     {
+      "source": "/verovapaat-kasinot-vertailu-7",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/verovapaat-kasinot-vertailu-7/",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false

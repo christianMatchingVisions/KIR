@@ -398,5 +398,15 @@
     "source": "/nopeat-kasinot-kotiutusajat-vertailu-4/",
     "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
     "permanent": true
+  },
+  {
+    "source": "/verovapaat-kasinot-vertailu-7",
+    "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+    "permanent": true
+  },
+  {
+    "source": "/verovapaat-kasinot-vertailu-7/",
+    "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+    "permanent": true
   }
 ]
