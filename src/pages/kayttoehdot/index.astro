@@ -1,0 +1,295 @@
+---
+/**
+ * /kayttoehdot/ — terms of use (käyttöehdot).
+ *
+ * WHY (trust/E-E-A-T + compliance, 2026-07 plan): an affiliate comparison
+ * site in penalty recovery needs plainly stated terms: what the service is
+ * (information, not gambling), how it is funded (affiliate commissions), the
+ * 18+ requirement, and that offers change without notice. This is a
+ * brand-new URL (absent from the scraped SEO registry), so it builds a CLEAN
+ * head on BaseLayout exactly like /toimitus/: title + meta description +
+ * self-canonical + WebPage/Breadcrumb JSON-LD. Indexable, in sitemap.
+ *
+ * FACTUAL BOUNDARIES (do not weaken):
+ *  - This site is NOT a gambling operator and these terms must never imply
+ *    otherwise. No deposits, games or wagers happen here.
+ *  - The governing-law / legal-entity line is a visibly marked OWNER INPUT
+ *    placeholder, consistent with toimitus/index.astro — no company name,
+ *    business ID or jurisdictional entity is invented.
+ *  - 18+ / Peluuri responsible-gambling messaging mirrors the site-wide
+ *    constants in src/config/site-nav.ts (Peluuri 0800 100 101).
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { PELUURI_URL } from "../../config/site-nav";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+const canonical = `${SITE_ORIGIN}/kayttoehdot/`;
+const title = "Käyttöehdot – Kasinot ilman rekisteröitymistä";
+const description =
+  "Kasinot ilman rekisteröitymistä -sivuston käyttöehdot: sivusto on riippumaton vertailupalvelu, ei rahapelien tarjoaja. Affiliate-ansaintamalli, 18+ ikäraja, vastuunrajoitus ja vastuullinen pelaaminen.";
+
+/* Fixed last-updated date — bump manually when the terms change (see the
+   matching rationale in tietosuoja/index.astro). */
+const UPDATED_ISO = "2026-07-04";
+const UPDATED_FI = "4.7.2026";
+
+/* Operator of the site — same real, stateable fact /toimitus/ publishes. */
+const OPERATOR_NAME = "Matching Visions";
+
+const webPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: "fi",
+  dateModified: UPDATED_ISO,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Kasinot ilman rekisteröitymistä",
+    url: SITE_ORIGIN + "/",
+  },
+  publisher: {
+    "@type": "Organization",
+    "@id": `${SITE_ORIGIN}/#organization`,
+    name: "Kasinot ilman rekisteröitymistä",
+    url: SITE_ORIGIN + "/",
+  },
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Etusivu", item: `${SITE_ORIGIN}/` },
+    { "@type": "ListItem", position: 2, name: "Käyttöehdot", item: canonical },
+  ],
+};
+
+const jsonLd = [
+  `<script type="application/ld+json">${JSON.stringify(webPageLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`,
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  bodyClass="page-legal"
+>
+  <header class="lg-hero band">
+    <div class="container container--narrow">
+      <nav class="lg-crumbs" aria-label="Murupolku">
+        <ol class="crumbs">
+          <li class="crumbs__item"><a href="/">Etusivu</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item" aria-current="page">Käyttöehdot</li>
+        </ol>
+      </nav>
+      <span class="eyebrow">Ehdot</span>
+      <h1 class="lg-title">Käyttöehdot</h1>
+      <p class="lg-lead">
+        Käyttämällä Kasinot ilman rekisteröitymistä -sivustoa hyväksyt nämä
+        käyttöehdot. Lue ehdot huolellisesti — ne kertovat, mikä tämä sivusto
+        on, miten se ansaitsee ja mitä vastuita käyttöön liittyy.
+      </p>
+      <p class="lg-updated">Päivitetty {UPDATED_FI}</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container container--narrow lg-prose">
+      <h2>1. Palvelun luonne</h2>
+      <p>
+        Kasinot ilman rekisteröitymistä on riippumaton, tiedotusluonteinen
+        vertailu- ja arvostelusivusto. <strong>Sivusto ei ole rahapelien
+        tarjoaja eikä peliyhtiö</strong>: täällä ei voi pelata, tallettaa rahaa
+        eikä lyödä vetoa. Sivusto ainoastaan esittelee ja vertailee
+        kolmansien osapuolten ylläpitämiä, lisensoituja nettikasinoita sekä
+        julkaisee aiheeseen liittyviä oppaita ja uutisia. Sivustoa ylläpitää{" "}
+        <strong>{OPERATOR_NAME}</strong>; toimituksen menetelmä on kuvattu
+        sivulla <a href="/toimitus/">Toimitus &amp; menetelmä</a>.
+      </p>
+
+      <h2>2. Affiliate-ansaintamalli</h2>
+      <p>
+        Sivusto sisältää affiliate- eli kumppanilinkkejä. Jos siirryt kasinolle
+        sivuston linkin kautta ja rekisteröidyt tai pelaat, sivusto voi saada
+        kasinolta komission. Tämä ei aiheuta sinulle lisäkustannuksia.
+        Kaupalliset yhteistyöt eivät vaikuta arvosteluiden sisältöön tai
+        kasinoiden järjestykseen — riippumattomuusperiaate on kuvattu
+        tarkemmin <a href="/toimitus/#avoimuus">toimitussivulla</a>.
+      </p>
+
+      <h2>3. Ikäraja 18+</h2>
+      <p>
+        Sivuston sisältö on tarkoitettu vain täysi-ikäisille
+        (<strong>18+</strong>). Rahapelaaminen on Suomessa sallittu vain
+        täysi-ikäisille. Jos et ole täyttänyt 18 vuotta, älä käytä tätä
+        sivustoa äläkä sivuston esittelemiä pelipalveluita.
+      </p>
+
+      <h2>4. Tietojen ajantasaisuus — ei takuuta tarjouksista</h2>
+      <p>
+        Pyrimme pitämään arvostelut, bonustiedot ja vertailut ajan tasalla,
+        mutta <strong>kasinoiden tarjoukset, ehdot ja ominaisuudet muuttuvat
+        jatkuvasti</strong> ilman ennakkoilmoitusta. Emme takaa, että sivuston
+        tiedot ovat joka hetki virheettömiä tai täydellisiä. Tarkista aina
+        voimassa olevat bonusehdot, säännöt ja lisenssi suoraan kasinon omilta
+        sivuilta ennen pelaamista. Jos huomaat virheen, otamme korjauspyynnöt
+        kiitollisina vastaan <a href="/toimitus/">toimituksen kautta</a>.
+      </p>
+
+      <h2>5. Vastuullinen pelaaminen</h2>
+      <p>
+        Rahapelaamiseen liittyy aina taloudellinen riski, eikä pelaamista tule
+        koskaan käyttää ansaintakeinona tai talousongelmien ratkaisuna. Pelaa
+        vain rahalla, jonka voit varaa hävitä, ja hyödynnä kasinoiden
+        tarjoamat pelirajat. Jos oma tai läheisesi pelaaminen huolestuttaa,
+        maksutonta apua ja tukea tarjoaa{" "}
+        <a href={PELUURI_URL} target="_blank" rel="nofollow noopener">Peluuri</a>{" "}
+        — puhelin <strong>0800 100 101</strong>.
+      </p>
+
+      <h2>6. Immateriaalioikeudet</h2>
+      <p>
+        Sivuston sisältö (tekstit, vertailut, arvostelut ja sivuston oma
+        grafiikka) on suojattu tekijänoikeudella. Sisällön kopiointi tai
+        julkaiseminen muualla ilman lupaa on kielletty. Kasinoiden
+        tavaramerkit ja logot kuuluvat omistajilleen.
+      </p>
+
+      <h2>7. Vastuunrajoitus</h2>
+      <p>
+        Sivusto tarjotaan &rdquo;sellaisena kuin se on&rdquo;. Emme vastaa
+        vahingoista, jotka aiheutuvat sivuston tietojen käyttämisestä,
+        kolmansien osapuolten palveluista (mukaan lukien sivustolla
+        esitellyt kasinot) tai pelaamisesta syntyvistä tappioista. Siirtyessäsi
+        sivustolta kasinolle asioit kyseisen kasinon kanssa sen omilla
+        ehdoilla — lue ne aina ennen tallettamista.
+      </p>
+
+      <h2>8. Sovellettava laki</h2>
+      <p>
+        Näihin käyttöehtoihin sovelletaan Suomen lakia.
+      </p>
+      {/* OWNER INPUT REQUIRED — the legal entity these terms bind (official
+          company name, business ID, domicile) must be confirmed by the site
+          owner before this section can be finalized. Do NOT invent it. */}
+      <p class="lg-placeholder">
+        <strong>Täydennetään:</strong> ehtojen osapuolena toimivan yhtiön
+        virallinen nimi ja kotipaikka lisätään tähän, kun sivuston omistaja on
+        vahvistanut tiedot.
+      </p>
+
+      <h2>9. Muutokset ehtoihin</h2>
+      <p>
+        Voimme päivittää näitä ehtoja esimerkiksi lainsäädännön tai palvelun
+        muuttuessa. Ajantasainen versio on aina tällä sivulla, ja sivun
+        yläreunassa näkyy viimeisin päivityspäivä. Kävijöiden tietosuojasta
+        kerromme erikseen <a href="/tietosuoja/">tietosuojaselosteessa</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Shared "legal page" presentation — mirrors tietosuoja/index.astro so the
+     two policy pages read as one family. */
+  .lg-hero {
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  }
+  .lg-crumbs {
+    margin-bottom: 0.9rem;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+  .lg-title {
+    margin: 0.4rem 0 0;
+    color: var(--navy);
+    line-height: 1.12;
+  }
+  .lg-lead {
+    margin: 1rem 0 0;
+    max-width: 62ch;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .lg-updated {
+    margin: 0.9rem 0 0;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink-3);
+  }
+
+  .lg-prose {
+    max-width: 72ch;
+  }
+  .lg-prose h2 {
+    color: var(--navy);
+    margin: 2rem 0 0.7rem;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.55rem);
+  }
+  .lg-prose h2:first-child {
+    margin-top: 0;
+  }
+  .lg-prose p,
+  .lg-prose li {
+    color: var(--ink-2);
+    line-height: 1.75;
+  }
+  .lg-prose p + p {
+    margin-top: 0.85rem;
+  }
+  .lg-prose strong {
+    color: var(--ink);
+  }
+  .lg-prose a {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .lg-prose a:hover {
+    color: var(--brand-dark);
+  }
+
+  .lg-placeholder {
+    margin-top: 0.85rem;
+    padding: 0.8rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    font-size: 0.92rem;
+  }
+</style>

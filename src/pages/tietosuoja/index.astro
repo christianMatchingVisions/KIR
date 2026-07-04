@@ -1,0 +1,353 @@
+---
+/**
+ * /tietosuoja/ — privacy policy (tietosuojaseloste).
+ *
+ * WHY (trust/E-E-A-T + GDPR, 2026-07 plan): a recovering YMYL-adjacent domain
+ * that ships GA4 needs a real, findable privacy policy. This is a brand-new
+ * URL (absent from the scraped SEO registry), so it builds a CLEAN head on
+ * BaseLayout exactly like /toimitus/: title + meta description +
+ * self-canonical + WebPage/Breadcrumb JSON-LD. Indexable, in sitemap.
+ *
+ * FACTUAL BOUNDARIES (do not weaken):
+ *  - Every processing claim below describes what THIS build actually ships:
+ *    GA4 (G-72MZEB7RDD) via Partytown behind Google Consent Mode v2
+ *    (cookieless until the visitor accepts in the consent banner), an
+ *    OPTIONAL cookieless PostHog hook (env-gated, described only as "may be
+ *    used, cookieless"), and Vercel hosting/server logs. Nothing else is
+ *    claimed. If tracking changes, this page MUST change with it.
+ *  - NO legal entity details, addresses or business IDs are invented. The
+ *    registrar identity block is a visibly marked placeholder, consistent
+ *    with the OWNER INPUT REQUIRED convention on toimitus/index.astro.
+ *  - Contact routes through the /toimitus/ page (whose mailbox is itself an
+ *    owner-input placeholder) — no new email addresses are fabricated here.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+const canonical = `${SITE_ORIGIN}/tietosuoja/`;
+const title = "Tietosuojaseloste – Kasinot ilman rekisteröitymistä";
+const description =
+  "Kasinot ilman rekisteröitymistä -sivuston tietosuojaseloste: mitä tietoja keräämme (analytiikka, palvelinlokit), millä perusteella, kuinka kauan säilytämme ja mitkä ovat oikeutesi GDPR:n mukaan.";
+
+/* Fixed last-updated date for the policy text (a legal document's date must
+   not silently drift with every rebuild the way a build-time `new Date()`
+   would). Bump this manually whenever the policy content changes. */
+const UPDATED_ISO = "2026-07-04";
+const UPDATED_FI = "4.7.2026";
+
+/* Operator of the site — same real, stateable fact /toimitus/ publishes. */
+const OPERATOR_NAME = "Matching Visions";
+
+const webPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: "fi",
+  dateModified: UPDATED_ISO,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Kasinot ilman rekisteröitymistä",
+    url: SITE_ORIGIN + "/",
+  },
+  publisher: {
+    "@type": "Organization",
+    "@id": `${SITE_ORIGIN}/#organization`,
+    name: "Kasinot ilman rekisteröitymistä",
+    url: SITE_ORIGIN + "/",
+  },
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Etusivu", item: `${SITE_ORIGIN}/` },
+    { "@type": "ListItem", position: 2, name: "Tietosuojaseloste", item: canonical },
+  ],
+};
+
+const jsonLd = [
+  `<script type="application/ld+json">${JSON.stringify(webPageLd)}</script>`,
+  `<script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`,
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  bodyClass="page-legal"
+>
+  <header class="lg-hero band">
+    <div class="container container--narrow">
+      <nav class="lg-crumbs" aria-label="Murupolku">
+        <ol class="crumbs">
+          <li class="crumbs__item"><a href="/">Etusivu</a></li>
+          <li class="crumbs__sep" aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li class="crumbs__item" aria-current="page">Tietosuojaseloste</li>
+        </ol>
+      </nav>
+      <span class="eyebrow">Tietosuoja</span>
+      <h1 class="lg-title">Tietosuojaseloste</h1>
+      <p class="lg-lead">
+        Tällä sivulla kerromme, mitä tietoja Kasinot ilman rekisteröitymistä
+        -sivusto kerää kävijöistään, mihin tarkoituksiin tietoja käytetään ja
+        mitkä ovat oikeutesi EU:n yleisen tietosuoja-asetuksen (GDPR) mukaan.
+      </p>
+      <p class="lg-updated">Päivitetty {UPDATED_FI}</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container container--narrow lg-prose">
+      <h2>Rekisterinpitäjä</h2>
+      <p>
+        Sivustoa ylläpitää <strong>{OPERATOR_NAME}</strong>. Toimituksen
+        esittely ja yhteydenottotapa löytyvät sivulta{" "}
+        <a href="/toimitus/">Toimitus &amp; menetelmä</a>.
+      </p>
+      {/* OWNER INPUT REQUIRED — legal entity name, business ID (Y-tunnus /
+          company number) and registered address must be supplied by the site
+          owner. Do NOT invent them. */}
+      <p class="lg-placeholder">
+        <strong>Täydennetään:</strong> rekisterinpitäjän virallinen nimi,
+        yritystunnus ja osoite lisätään tähän, kun sivuston omistaja on
+        vahvistanut tiedot.
+      </p>
+
+      <h2>Mitä tietoja keräämme</h2>
+      <p>
+        Sivustolla ei ole käyttäjätilejä, kirjautumista eikä lomakkeita, joilla
+        kerättäisiin nimiä, sähköpostiosoitteita tai muita suoria
+        henkilötietoja. Keräämme ainoastaan seuraavia tietoja:
+      </p>
+      <ul>
+        <li>
+          <strong>Kävijäanalytiikka (Google Analytics 4).</strong> Käytämme
+          Googlen GA4-analytiikkaa ymmärtääksemme, miten sivustoa käytetään
+          (esim. suositut sivut, laitteen tyyppi, karkea maantieteellinen
+          sijainti). Analytiikka toimii Google Consent Mode v2 -tilassa:
+          <strong>ennen suostumustasi analytiikkaevästeitä ei aseteta</strong>{" "}
+          ja Googlelle lähtee vain evästeettömiä, anonyymejä signaaleja.
+          Analytiikkaevästeet otetaan käyttöön vasta, jos hyväksyt ne
+          evästeilmoituksesta.
+        </li>
+        <li>
+          <strong>Tuotekehitysanalytiikka (PostHog).</strong> Sivusto voi
+          käyttää evästeetöntä PostHog-analytiikkaa sivuston toimivuuden
+          parantamiseen. Jos se on käytössä, se ei aseta evästeitä eikä
+          tallenna pysyviä tunnisteita selaimeesi.
+        </li>
+        <li>
+          <strong>Palvelinlokit (Vercel).</strong> Sivusto toimii Vercelin
+          palvelualustalla, jonka palvelinlokeihin tallentuu tavanomaisia
+          teknisiä tietoja, kuten IP-osoite, selaintyyppi ja pyydetty sivu.
+          Lokeja käytetään vain palvelun toimivuuden ja tietoturvan
+          varmistamiseen.
+        </li>
+      </ul>
+
+      <h2>Käsittelyn tarkoitukset ja oikeusperusteet</h2>
+      <ul>
+        <li>
+          <strong>Analytiikka:</strong> sivuston käytön ymmärtäminen ja
+          sisällön parantaminen. Oikeusperuste on{" "}
+          <strong>suostumus</strong> (GDPR 6 artikla 1 a) — annat tai epäät
+          suostumuksen evästeilmoituksesta, ja voit peruuttaa sen milloin
+          tahansa.
+        </li>
+        <li>
+          <strong>Palvelinlokit:</strong> palvelun tekninen toimittaminen,
+          vikatilanteiden selvittäminen ja väärinkäytösten torjunta.
+          Oikeusperuste on <strong>oikeutettu etu</strong> (GDPR 6 artikla 1 f).
+        </li>
+      </ul>
+      <p>
+        Emme myy emmekä vuokraa kävijöitä koskevia tietoja kenellekään, emmekä
+        käytä tietoja mainonnan kohdentamiseen.
+      </p>
+
+      <h2 id="evasteet">Evästeet ja suostumuksen hallinta</h2>
+      <p>
+        Ensimmäisellä käynnilläsi sivusto näyttää evästeilmoituksen, josta voit
+        hyväksyä tai hylätä analytiikkaevästeet. Valintasi tallennetaan
+        selaimesi paikalliseen muistiin (localStorage), jotta ilmoitusta ei
+        näytetä joka käynnillä — tallenne sisältää vain valintasi, ei
+        henkilötietoja. Voit muuttaa valintaasi tyhjentämällä selaimen
+        sivustotiedot, jolloin ilmoitus näytetään uudelleen.
+      </p>
+
+      <h2>Säilytysajat</h2>
+      <ul>
+        <li>
+          Google Analytics -tapahtumatiedot säilyvät Googlen palvelussa
+          enintään <strong>14 kuukautta</strong>, minkä jälkeen ne poistuvat
+          automaattisesti.
+        </li>
+        <li>
+          Palvelinlokit säilyvät vain lyhyen, palveluntarjoajan käytännön
+          mukaisen ajan.
+        </li>
+        <li>
+          Evästevalintasi säilyy selaimessasi, kunnes poistat sen itse.
+        </li>
+      </ul>
+
+      <h2>Tietojen vastaanottajat ja siirrot EU:n ulkopuolelle</h2>
+      <p>
+        Analytiikkatietoja käsittelee puolestamme Google (Google Ireland Ltd /
+        Google LLC) ja sivuston teknisestä alustasta vastaa Vercel Inc.
+        Siltä osin kuin tietoja siirtyy EU:n ulkopuolelle (esim.
+        Yhdysvaltoihin), siirrot perustuvat EU:n hyväksymiin
+        siirtomekanismeihin, kuten EU–US Data Privacy Framework -järjestelyyn.
+        Googlen omat tietosuojakäytännöt löydät osoitteesta{" "}
+        <a
+          href="https://policies.google.com/privacy"
+          target="_blank"
+          rel="nofollow noopener"
+        >policies.google.com/privacy</a>.
+      </p>
+
+      <h2>Oikeutesi</h2>
+      <p>GDPR:n mukaan sinulla on oikeus:</p>
+      <ul>
+        <li>saada tieto siitä, käsittelemmekö sinua koskevia henkilötietoja, ja saada niistä jäljennös</li>
+        <li>pyytää virheellisen tiedon oikaisua tai tietojen poistamista</li>
+        <li>rajoittaa käsittelyä tai vastustaa oikeutettuun etuun perustuvaa käsittelyä</li>
+        <li>peruuttaa antamasi suostumus milloin tahansa (peruutus ei vaikuta ennen sitä tehdyn käsittelyn lainmukaisuuteen)</li>
+        <li>tehdä valitus valvontaviranomaiselle — Suomessa{" "}
+          <a
+            href="https://tietosuoja.fi/"
+            target="_blank"
+            rel="nofollow noopener"
+          >Tietosuojavaltuutetun toimistolle</a>.
+        </li>
+      </ul>
+      <p>
+        Huomaathan, että koska emme tunnista yksittäisiä kävijöitä (analytiikka
+        on anonyymiä eikä sivustolla ole käyttäjätilejä), emme välttämättä
+        pysty yhdistämään pyyntöä tiettyihin tietoihin. Oikeuksien
+        käyttämiseen liittyvät yhteydenotot voi osoittaa toimitukselle sivun{" "}
+        <a href="/toimitus/">Toimitus &amp; menetelmä</a> kautta.
+      </p>
+
+      <h2>Muutokset tähän selosteeseen</h2>
+      <p>
+        Päivitämme tätä selostetta, jos sivuston tietojenkäsittely muuttuu.
+        Ajantasainen versio on aina tällä sivulla, ja sivun yläreunassa näkyy
+        viimeisin päivityspäivä.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .lg-hero {
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  }
+  .lg-crumbs {
+    margin-bottom: 0.9rem;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+  .crumbs__item a {
+    color: var(--ink-3);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .crumbs__item a:hover {
+    color: var(--brand);
+  }
+  .crumbs__item[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink-3);
+    opacity: 0.7;
+  }
+  .lg-title {
+    margin: 0.4rem 0 0;
+    color: var(--navy);
+    line-height: 1.12;
+  }
+  .lg-lead {
+    margin: 1rem 0 0;
+    max-width: 62ch;
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .lg-updated {
+    margin: 0.9rem 0 0;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink-3);
+  }
+
+  /* ---------- Legal prose ---------- */
+  .lg-prose {
+    max-width: 72ch;
+  }
+  .lg-prose h2 {
+    color: var(--navy);
+    margin: 2rem 0 0.7rem;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.55rem);
+  }
+  .lg-prose h2:first-child {
+    margin-top: 0;
+  }
+  .lg-prose p,
+  .lg-prose li {
+    color: var(--ink-2);
+    line-height: 1.75;
+  }
+  .lg-prose p + p {
+    margin-top: 0.85rem;
+  }
+  .lg-prose strong {
+    color: var(--ink);
+  }
+  .lg-prose ul {
+    margin: 0.85rem 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .lg-prose a {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .lg-prose a:hover {
+    color: var(--brand-dark);
+  }
+
+  /* Visibly marked owner-input placeholder (matches the site convention of
+     flagging unverified legal facts instead of inventing them). */
+  .lg-placeholder {
+    margin-top: 0.85rem;
+    padding: 0.8rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    font-size: 0.92rem;
+  }
+</style>

@@ -140,7 +140,14 @@ export const footerColumns: FooterColumn[] = [
       { label: "Meistä", href: "/meista/" },
       { label: "Toimitus & menetelmä", href: "/toimitus/" },
       { label: "Mainosvastuu & riippumattomuus", href: "/toimitus/#avoimuus" },
-      { label: "Evästeet", href: "/meista/" },
+      // /tietosuoja/ + /kayttoehdot/ are net-new legal pages (2026-07 plan);
+      // "Evästeet" now points at the cookie/consent section of the privacy
+      // policy (it previously fell back to /meista/, whose legacy blurb only
+      // covers cookies generically — the consent mechanics live on
+      // /tietosuoja/#evasteet).
+      { label: "Tietosuojaseloste", href: "/tietosuoja/" },
+      { label: "Käyttöehdot", href: "/kayttoehdot/" },
+      { label: "Evästeet", href: "/tietosuoja/#evasteet" },
       { label: "Sivukartta", href: "/sitemap-index.xml" },
     ],
   },
