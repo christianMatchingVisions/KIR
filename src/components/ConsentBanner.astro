@@ -1,0 +1,238 @@
+---
+/**
+ * ConsentBanner.astro — Finnish analytics-consent banner (Consent Mode v2).
+ *
+ * WHY (2026-07 plan, GDPR/ePrivacy): BaseLayout's Partytown gtag block now
+ * boots with gtag('consent','default', … denied …) so GA4 runs cookieless
+ * until the visitor decides. This banner is the visitor-facing half: it
+ * offers accept/decline, persists the choice in localStorage
+ * ("kir-consent-v1"), and on accept upgrades analytics_storage to granted.
+ *
+ * GA4 PLUMBING (same as AffiliateClickTracker): gtag.js lives in a Partytown
+ * WEB WORKER; astro.config.mjs forwards ["dataLayer.push","gtag"], so the
+ * main thread gets a forwarding window.gtag that relays into the worker. This
+ * script runs on the main thread and calls that forwarded gtag; the dataLayer
+ * fallback keeps the consent update queued even if the forwarder is not yet
+ * wired at click time.
+ *
+ * SCOPE (do not widen silently): the site runs analytics only — no ad tags —
+ * so Accept grants ONLY analytics_storage. ad_storage / ad_user_data /
+ * ad_personalization stay denied either way. A `consent_update` GA4 event is
+ * fired with the outcome so acceptance rates are measurable.
+ *
+ * UX/A11Y: position:fixed (zero layout shift), role="dialog" (non-modal — the
+ * page stays fully usable, so no focus trap), <button> controls (keyboard
+ * accessible by default), visible focus states, links to /tietosuoja/.
+ * Respects prefers-reduced-motion. Returning visitors with a stored choice
+ * never see the banner; a stored "granted" is replayed to gtag on load.
+ * window.kirResetConsent() re-opens the banner (for the privacy page).
+ */
+---
+
+<div
+  id="kir-consent"
+  class="consent"
+  hidden
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="kir-consent-title"
+  aria-describedby="kir-consent-desc"
+>
+  <div class="consent__inner">
+    <div class="consent__content">
+      <h2 id="kir-consent-title" class="consent__title">Evästeet ja analytiikka</h2>
+      <p id="kir-consent-desc" class="consent__desc">
+        Käytämme analytiikkaevästeitä sivuston käytön ymmärtämiseen ja
+        parantamiseen. Ilman hyväksyntää analytiikka toimii evästeettömästi.
+        Lue lisää <a href="/tietosuoja/">tietosuojaselosteesta</a>.
+      </p>
+    </div>
+    <div class="consent__actions">
+      <button type="button" id="kir-consent-decline" class="consent__btn consent__btn--decline">
+        Hylkää
+      </button>
+      <button type="button" id="kir-consent-accept" class="consent__btn consent__btn--accept">
+        Hyväksy
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Fixed overlay — never participates in layout, so no CLS. Light-theme
+     tokens to match the site chrome; sits above DisclosureBar. */
+  .consent {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: 660px;
+    margin-inline: auto;
+    z-index: 400;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius, 12px);
+    box-shadow: 0 12px 36px rgba(9, 30, 66, 0.18);
+    padding: 1rem 1.15rem;
+    animation: consent-in 0.3s ease;
+  }
+  @keyframes consent-in {
+    from {
+      transform: translateY(12px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .consent {
+      animation: none;
+    }
+  }
+
+  .consent__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.9rem 1.25rem;
+  }
+  .consent__content {
+    flex: 1 1 320px;
+    min-width: 240px;
+  }
+  .consent__title {
+    margin: 0 0 0.25rem;
+    font-size: 0.98rem;
+    color: var(--navy);
+  }
+  .consent__desc {
+    margin: 0;
+    font-size: 0.87rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .consent__desc a {
+    color: var(--brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .consent__desc a:hover {
+    color: var(--brand-dark);
+  }
+
+  .consent__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex: none;
+  }
+  .consent__btn {
+    padding: 0.55rem 1.05rem;
+    border-radius: var(--radius-sm, 8px);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+  }
+  .consent__btn:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+  .consent__btn--decline {
+    background: transparent;
+    color: var(--ink-2);
+    border-color: var(--line);
+  }
+  .consent__btn--decline:hover {
+    color: var(--ink);
+    border-color: var(--ink-3);
+  }
+  .consent__btn--accept {
+    background: var(--brand);
+    color: #ffffff;
+    border-color: var(--brand);
+  }
+  .consent__btn--accept:hover {
+    background: var(--brand-dark, var(--brand));
+    border-color: var(--brand-dark, var(--brand));
+  }
+
+  @media (max-width: 540px) {
+    .consent {
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+    }
+    .consent__actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    if (window.__kirConsentBanner) return;
+    window.__kirConsentBanner = true;
+
+    var STORAGE_KEY = "kir-consent-v1";
+    var banner = document.getElementById("kir-consent");
+    var acceptBtn = document.getElementById("kir-consent-accept");
+    var declineBtn = document.getElementById("kir-consent-decline");
+
+    /** Ensure a callable gtag exists (Partytown forwards it; this is a fallback). */
+    function ensureGtag() {
+      window.dataLayer = window.dataLayer || [];
+      if (typeof window.gtag !== "function") {
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+      }
+      return window.gtag;
+    }
+
+    /** Relay the choice to GA4. Analytics-only site: ad_* stays denied. */
+    function applyConsent(state) {
+      ensureGtag()("consent", "update", {
+        analytics_storage: state,
+      });
+    }
+
+    function storeAndApply(state) {
+      try {
+        localStorage.setItem(STORAGE_KEY, state);
+      } catch (e) {}
+      applyConsent(state);
+      // Measurable outcome (cookieless ping when declined — still counted).
+      ensureGtag()("event", "consent_update", { consent_state: state });
+      if (banner) banner.hidden = true;
+    }
+
+    var stored = null;
+    try {
+      stored = localStorage.getItem(STORAGE_KEY);
+    } catch (e) {}
+
+    if (stored === "granted" || stored === "denied") {
+      // Replay a previous choice; the banner stays hidden. Re-sending
+      // "denied" is a harmless no-op (it matches the default) but keeps the
+      // logic symmetric and self-healing if the default ever changes.
+      applyConsent(stored);
+    } else if (banner) {
+      banner.hidden = false;
+    }
+
+    if (acceptBtn) acceptBtn.addEventListener("click", function () { storeAndApply("granted"); });
+    if (declineBtn) declineBtn.addEventListener("click", function () { storeAndApply("denied"); });
+
+    /** Re-open the banner (linked from /tietosuoja/ if the owner wants it). */
+    window.kirResetConsent = function () {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      if (banner) banner.hidden = false;
+    };
+  })();
+</script>
