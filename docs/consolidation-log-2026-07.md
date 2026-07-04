@@ -23,5 +23,7 @@ restore the fragment from git, remove the redirect pair from
 
 | # | Removed URL | Survivor (301 target) | Action | Cluster | Date |
 |---|---|---|---|---|---|
+| 1 | `/suosituimmat-kasinot-ilman-rekisteroitymista-5/` | `/parhaat-kasinot-ilman-rekisteroitymista-5/` | 301 (no merge) | 1 — best no-reg listicles | 2026-07-04 |
+| 2 | `/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021/` | `/parhaat-kasinot-ilman-rekisteroitymista-5/` | 301 (no merge) | 1 — best no-reg listicles | 2026-07-04 |
 
 <!-- Batches appended below as they are executed. -->

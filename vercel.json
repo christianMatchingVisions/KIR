@@ -342,6 +342,26 @@
       "permanent": true
     },
     {
+      "source": "/suosituimmat-kasinot-ilman-rekisteroitymista-5",
+      "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+      "permanent": true
+    },
+    {
+      "source": "/suosituimmat-kasinot-ilman-rekisteroitymista-5/",
+      "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+      "permanent": true
+    },
+    {
+      "source": "/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021",
+      "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+      "permanent": true
+    },
+    {
+      "source": "/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021/",
+      "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false

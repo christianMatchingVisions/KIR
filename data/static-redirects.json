@@ -338,5 +338,25 @@
     "source": "/casino/barz/",
     "destination": "/casino/barz-casino/",
     "permanent": true
+  },
+  {
+    "source": "/suosituimmat-kasinot-ilman-rekisteroitymista-5",
+    "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+    "permanent": true
+  },
+  {
+    "source": "/suosituimmat-kasinot-ilman-rekisteroitymista-5/",
+    "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+    "permanent": true
+  },
+  {
+    "source": "/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021",
+    "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+    "permanent": true
+  },
+  {
+    "source": "/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021/",
+    "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
+    "permanent": true
   }
 ]
