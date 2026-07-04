@@ -358,5 +358,25 @@
     "source": "/parhaat-kasinot-ilman-rekisteroitymista-vuonna-2021/",
     "destination": "/parhaat-kasinot-ilman-rekisteroitymista-5/",
     "permanent": true
+  },
+  {
+    "source": "/top-pikakasinot-suomi-5",
+    "destination": "/top-pikakasinot-vertailu-6/",
+    "permanent": true
+  },
+  {
+    "source": "/top-pikakasinot-suomi-5/",
+    "destination": "/top-pikakasinot-vertailu-6/",
+    "permanent": true
+  },
+  {
+    "source": "/top-pikakasinot-suomi-7",
+    "destination": "/top-pikakasinot-vertailu-6/",
+    "permanent": true
+  },
+  {
+    "source": "/top-pikakasinot-suomi-7/",
+    "destination": "/top-pikakasinot-vertailu-6/",
+    "permanent": true
   }
 ]

@@ -362,6 +362,26 @@
       "permanent": true
     },
     {
+      "source": "/top-pikakasinot-suomi-5",
+      "destination": "/top-pikakasinot-vertailu-6/",
+      "permanent": true
+    },
+    {
+      "source": "/top-pikakasinot-suomi-5/",
+      "destination": "/top-pikakasinot-vertailu-6/",
+      "permanent": true
+    },
+    {
+      "source": "/top-pikakasinot-suomi-7",
+      "destination": "/top-pikakasinot-vertailu-6/",
+      "permanent": true
+    },
+    {
+      "source": "/top-pikakasinot-suomi-7/",
+      "destination": "/top-pikakasinot-vertailu-6/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false
