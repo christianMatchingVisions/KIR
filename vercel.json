@@ -412,6 +412,16 @@
       "permanent": true
     },
     {
+      "source": "/top-mobiilikasinot-ilman-tilia-5",
+      "destination": "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/",
+      "permanent": true
+    },
+    {
+      "source": "/top-mobiilikasinot-ilman-tilia-5/",
+      "destination": "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false
