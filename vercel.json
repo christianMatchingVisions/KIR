@@ -382,6 +382,26 @@
       "permanent": true
     },
     {
+      "source": "/nopeat-kotiutukset-kasinot-vertailu-6",
+      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "permanent": true
+    },
+    {
+      "source": "/nopeat-kotiutukset-kasinot-vertailu-6/",
+      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "permanent": true
+    },
+    {
+      "source": "/nopeat-kasinot-kotiutusajat-vertailu-4",
+      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "permanent": true
+    },
+    {
+      "source": "/nopeat-kasinot-kotiutusajat-vertailu-4/",
+      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false

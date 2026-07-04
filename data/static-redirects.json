@@ -378,5 +378,25 @@
     "source": "/top-pikakasinot-suomi-7/",
     "destination": "/top-pikakasinot-vertailu-6/",
     "permanent": true
+  },
+  {
+    "source": "/nopeat-kotiutukset-kasinot-vertailu-6",
+    "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/nopeat-kotiutukset-kasinot-vertailu-6/",
+    "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/nopeat-kasinot-kotiutusajat-vertailu-4",
+    "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+    "permanent": true
+  },
+  {
+    "source": "/nopeat-kasinot-kotiutusajat-vertailu-4/",
+    "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+    "permanent": true
   }
 ]
