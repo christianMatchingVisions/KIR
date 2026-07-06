@@ -41,4 +41,79 @@ restore the fragment from git, remove the redirect pair from
 - Cluster 10 (`/atjkitchen-com-vaihtoehdot-6/`): orphan-intent, map says no action without data (page still earns zero GSC impressions — candidate for a future batch).
 - **All of Part B (Clusters I–L, ~14 URLs):** the map's own instruction — "Defer Part B consolidation until Part A is validated stable" / "must NOT be touched without per-URL GSC data".
 
+---
+
+# Batch A.5 — GSC "crawled – currently not indexed" refusal sets (2026-07-06)
+
+Evidence: `reports/gsc-indexation-audit-2026-07.md` §4–§5 (GSC Page indexing
+report, last update 2026-06-30). Google crawled and **declined to index** every
+retired URL below, so consolidation carries zero traffic risk by definition.
+Re-validated 2026-07-06 against Ahrefs GSC (project 1943203,
+2026-04-01→2026-07-03): **0 clicks on every retire candidate**; the only one
+with any impressions is `turvallinen-ja-varma-…` (18 impressions, 0 clicks,
+avg pos 58 on "luotettavat nettikasinot") — noise, not a ranking to preserve,
+and its 301 target is exactly the money hub that SHOULD own that query.
+Same mechanism as batch A (fragment deleted + both slash-variant 301s in
+`data/static-redirects.json` → `vercel.json`; build-time link correction +
+listing/regeneration exclusion). Same rollback procedure.
+
+Survivor-choice method: no safety/edut/how-to page on the site earns GSC
+impressions (indexed or not), so "strongest indexed page" was decided by
+intent match + comprehensiveness + freshness among pages that ARE indexed
+(i.e. absent from every GSC not-indexed bucket). Retired URLs were mapped to
+sub-intent-precise survivors rather than one catch-all, to keep 301 relevance
+(and thus equity transfer) high:
+
+- **Choose/verify a safe casino** → `/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/`
+  (2,010 w, 2026-05-13, indexed; checklist/selection intent).
+- **"Luotettavat nettikasinot"** → `/nettikasinot-luotettavat-kasinot/` (money
+  hub; the retiree's only GSC impressions were on exactly this query).
+- **Safety requirements** → `/tilittomien-kasinoiden-turvallisuusvaatimukset/`
+  (1,930 w, 2026-05-15, indexed; exact "turvallisuusvaatimukset" head term).
+- **Safety at no-account/pika casinos** → `/turvallisuus-kasinot-ilman-tilia/`
+  (1,867 w, indexed; clean head-term slug for the niche safety intent).
+- **Responsible gaming / RG tools** → `/vastuullinen-pelaaminen-tilittomilla-kasinoilla/`
+  (1,663 w, 2026-03-23, indexed).
+- **Benefits of no-registration play** → `/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/`
+  (1,827 w, modified 2026-06-04, indexed) — all three "edut" triplet members
+  are refused by Google, so the indexed equivalent wins over the (thicker but
+  unindexed) `kasino-ilman-rekisteroitymista-edut-suomalaisille`.
+- **Step-by-step / how-to-play** → `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/`
+  — every member of this set (map Cluster L + the two `kuinka-pelata-*`
+  variants) is refused, so per the batch rule the most comprehensive member
+  (1,766 w, the map's own Cluster-L KEEP) survives. NOTE: this survivor is
+  itself currently unindexed; consolidating 6 URLs → 1 is the recovery play.
+  Monitor — if it is still unindexed after Part A validation, fold it into an
+  indexed how-works guide (map Cluster J outcome).
+
+## Cluster A — "turvallinen/turvallisuus" refusal set (GSC audit §4)
+
+| # | Removed URL | Survivor (301 target) | Action | Cluster | Date |
+|---|---|---|---|---|---|
+| 10 | `/7-kohdan-turvallisen-kasinon-tarkistuslista/` | `/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/` | 301 (no merge) | A.5-A — safe-casino choice | 2026-07-06 |
+| 11 | `/opas-turvallisen-kasinon-valintaan/` | `/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/` | 301 (no merge) | A.5-A — safe-casino choice | 2026-07-06 |
+| 12 | `/turvallinen-ja-varma-kuinka-tunnistaa-luotettavat-suomalaiset-nettikasinot/` | `/nettikasinot-luotettavat-kasinot/` | 301 (no merge) | A.5-A — luotettavat hub | 2026-07-06 |
+| 13 | `/turvallisuusvaatimukset-nettikasinoilla-2026/` | `/tilittomien-kasinoiden-turvallisuusvaatimukset/` | 301 (no merge) | A.5-A — safety requirements | 2026-07-06 |
+| 14 | `/turvallisuusvaatimukset-suomalaisilla-nettikasinoilla/` | `/tilittomien-kasinoiden-turvallisuusvaatimukset/` | 301 (no merge) | A.5-A — safety requirements | 2026-07-06 |
+| 15 | `/turvallinen-kasinopelaaminen-ilman-rekisteroitymista-2026/` | `/turvallisuus-kasinot-ilman-tilia/` | 301 (no merge) | A.5-A — no-account safety | 2026-07-06 |
+| 16 | `/turvallinen-rekisteroitymisvapaa-kasino-2026-opas/` | `/turvallisuus-kasinot-ilman-tilia/` | 301 (no merge) | A.5-A — no-account safety | 2026-07-06 |
+| 17 | `/turvallisuus-kasinolla-ilman-tilia-opas-suomalaisille/` | `/turvallisuus-kasinot-ilman-tilia/` | 301 (no merge) | A.5-A — no-account safety | 2026-07-06 |
+| 18 | `/turvallisuus-pikakasinoilla-2026-90-pelaajista-luottaa-nopeuteen/` | `/turvallisuus-kasinot-ilman-tilia/` | 301 (no merge) | A.5-A — no-account safety | 2026-07-06 |
+| 19 | `/turvallisuus-pikakasinoilla-selitettyna/` | `/turvallisuus-kasinot-ilman-tilia/` | 301 (no merge) | A.5-A — no-account safety | 2026-07-06 |
+| 20 | `/turvallinen-pelaaminen-vertailu-kasinot-tarjoaa-vastuullisuuden/` | `/vastuullinen-pelaaminen-tilittomilla-kasinoilla/` | 301 (no merge) | A.5-A — responsible gaming | 2026-07-06 |
+
+**Skipped (Cluster A):** `turvalliset-maksutavat-nettikasinoilla-kattava-opas`
+— the GSC audit lists it only as "related"; its intent is payment-method
+safety (payments cluster), not safe-casino guidance, so no unambiguous
+survivor exists in this batch. Left untouched pending a payments-cluster
+review. `turvallisen-kasinopelaamisen-vinkit`, `vinkit-turvalliseen-*`,
+`vinkkeja-turvalliseen-*`, `nain-pelaat-turvallisesti-*`,
+`opas-turvalliseen-kasinopelaamiseen-*`, `turvallisuuden-tarkistuslista-*`,
+`turvallinen-peliprosessi-*`, `tunnista-turvalliset-kasinot-*`,
+`valitse-turvallinen-tillitton-*`, `turvallisen-tilittoman-kasinon-valinta-*`,
+`turvallisen-pikakasinon-tarkistuslista-*`, `top-turvalliset-pikakasinot-4`:
+NOT in any GSC not-indexed bucket (treated as indexed) — out of scope for this
+zero-risk batch, even though the safety tail remains dense. Candidates for a
+data-gated batch B review.
+
 <!-- Batches appended below as they are executed. -->
