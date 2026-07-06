@@ -155,4 +155,27 @@ data-gated batch B review.
   because the map's "per-URL GSC data" precondition is now met (all members
   empirically at zero).
 
+## Cluster C — off-architecture /pragmatic-play/ slot pages (GSC audit §8)
+
+Not retired — added to `NOINDEX_PATHS` in `src/lib/noindex.ts` (2026-07-06,
+noindex,follow + sitemap exclusion; reversible, nothing deleted). Google
+already refuses them and they sit outside the casino/payments architecture;
+revisit if a slots strategy emerges. GSC listed them under legacy WP slugs
+(`great-rhino-megaways-arvostelu`, `sweet-bonanza-2`, `wolf-gold-2`, mixed-case
+John-Hunter); the live static routes below were verified against each
+fragment's `meta.json` and their rendered `noindex,follow` meta + sitemap
+absence verified in `dist/` post-build:
+
+- `/pragmatic-play/great-rhino-megaways/`
+- `/pragmatic-play/sweet-bonanza-arvostelu/`
+- `/pragmatic-play/wolf-gold-arvostelu/`
+- `/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/`
+
+The `/pragmatic-play/` hub and `/pragmatic-play/the-dog-house-arvostelu/`
+(absent from the GSC refusal list) stay indexable.
+
+**Batch A.5 totals:** 20 fragments retired (11 + 9), 21 redirect sources
+(42 slash-variant rules) added, 4 pages noindexed. Sitemap: 504 → 481 URLs.
+Build after every commit: check-build + audit-dist-links PASS.
+
 <!-- Batches appended below as they are executed. -->

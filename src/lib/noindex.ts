@@ -64,6 +64,24 @@ const NOINDEX_PATHS: ReadonlySet<string> = new Set<string>([
   "/pelitrendit-fortnitesta-peliautomaatteihin-mika-vetaa-pelaajia-puoleensa/",
   "/mm-kisat-2026-tilastot/",
   "/huuhkajien-jatko-em-jalkapalloturnauksessa-riippuu-tuurista/",
+
+  /* --------------------------------------------------------------------
+   * OFF-ARCHITECTURE SLOT PAGES — batch A.5 cluster C (GSC audit §8).
+   * Added 2026-07-06.
+   *
+   * The four /pragmatic-play/<game>/ slot reviews sit outside the site's
+   * casino/payments architecture and Google already refuses them (GSC
+   * "Crawled – currently not indexed", report of 2026-06-30 — listed there
+   * under their legacy WP slugs great-rhino-megaways-arvostelu /
+   * sweet-bonanza-2 / wolf-gold-2; the paths below are the live routes the
+   * static build actually emits, per each fragment's meta.json). NOT
+   * deleted: noindex,follow keeps them reversible if a slots strategy
+   * emerges. The /pragmatic-play/ hub itself stays indexable.
+   * ------------------------------------------------------------------ */
+  "/pragmatic-play/great-rhino-megaways/",
+  "/pragmatic-play/sweet-bonanza-arvostelu/",
+  "/pragmatic-play/wolf-gold-arvostelu/",
+  "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
 ]);
 
 /**
