@@ -432,6 +432,96 @@
       "permanent": true
     },
     {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/feed",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/feed/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+/feed",
+      "destination": "/:path+/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+/feed/",
+      "destination": "/:path+/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+/embed",
+      "destination": "/:path+/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+/embed/",
+      "destination": "/:path+/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/kunkku-casino",
+      "destination": "/casino/kunkku-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/kunkku-casino/",
+      "destination": "/casino/kunkku-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/scibet",
+      "destination": "/casino/scibet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/scibet/",
+      "destination": "/casino/scibet-kasino/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/swiper-kasino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/swiper-kasino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/kaahus-casino",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/casino/kaahus-casino/",
+      "destination": "/kaikki-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen-arvostelu",
+      "destination": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
+      "permanent": true
+    },
+    {
+      "source": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen-arvostelu/",
+      "destination": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
+      "permanent": true
+    },
+    {
       "source": "/go/superonni",
       "destination": "https://affitrck2.com/C.ashx?btag=a_563b_3c_&affid=94&siteid=563&adid=3&c=",
       "permanent": false
