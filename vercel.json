@@ -542,6 +542,106 @@
       "permanent": true
     },
     {
+      "source": "/kasinon-edut-ilman-rekisterointia",
+      "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinon-edut-ilman-rekisterointia/",
+      "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kasino-ilman-rekisteroitymista-edut-suomalaisille",
+      "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kasino-ilman-rekisteroitymista-edut-suomalaisille/",
+      "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinoiden-edut-ilman-rekisteroitymista",
+      "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinoiden-edut-ilman-rekisteroitymista/",
+      "destination": "/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen",
+      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/",
+      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "permanent": true
+    },
+    {
+      "source": "/kasino-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen",
+      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "permanent": true
+    },
+    {
+      "source": "/kasino-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/",
+      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-rekisteroitymattoman-kasinon-kaytto-2026",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-rekisteroitymattoman-kasinon-kaytto-2026/",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-rekisteroitymaton-kasino",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-rekisteroitymaton-kasino/",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-rekisteroitymattomalla-kasinolla-pelaaminen",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-rekisteroitymattomalla-kasinolla-pelaaminen/",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/kuinka-pelata-kasino-ilman-rekisteroitymista",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/kuinka-pelata-kasino-ilman-rekisteroitymista/",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/kuinka-pelata-kasinoilla-ilman-tilia",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/kuinka-pelata-kasinoilla-ilman-tilia/",
+      "destination": "/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/",
+      "permanent": true
+    },
+    {
       "source": "/home",
       "destination": "/",
       "permanent": true

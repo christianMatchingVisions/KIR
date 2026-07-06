@@ -116,4 +116,43 @@ NOT in any GSC not-indexed bucket (treated as indexed) — out of scope for this
 zero-risk batch, even though the safety tail remains dense. Candidates for a
 data-gated batch B review.
 
+## Cluster B — duplicate-intent variants Google refuses (GSC audit §5)
+
+| # | Removed URL | Survivor (301 target) | Action | Cluster | Date |
+|---|---|---|---|---|---|
+| 21 | `/kasinon-edut-ilman-rekisterointia/` | `/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/` | 301 (no merge) | A.5-B — no-reg benefits | 2026-07-06 |
+| 22 | `/kasino-ilman-rekisteroitymista-edut-suomalaisille/` | `/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/` | 301 (no merge) | A.5-B — no-reg benefits | 2026-07-06 |
+| 23 | `/kasinoiden-edut-ilman-rekisteroitymista/` | `/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/` | 301 (no merge) | A.5-B — no-reg benefits | 2026-07-06 |
+| 24 | `/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/` | `/vastuullinen-pelaaminen-tilittomilla-kasinoilla/` | 301 (no merge) | A.5-B — responsible gaming | 2026-07-06 |
+| 25 | `/kasino-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/` | `/vastuullinen-pelaaminen-tilittomilla-kasinoilla/` | 301 only (ghost URL) | A.5-B — responsible gaming | 2026-07-06 |
+| 26 | `/askel-askeleelta-rekisteroitymattoman-kasinon-kaytto-2026/` | `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/` | 301 (no merge) | A.5-B — step-by-step how-to (map L) | 2026-07-06 |
+| 27 | `/askel-askeleelta-rekisteroitymaton-kasino/` | `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/` | 301 (no merge) | A.5-B — step-by-step how-to (map L) | 2026-07-06 |
+| 28 | `/askel-askeleelta-rekisteroitymattomalla-kasinolla-pelaaminen/` | `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/` | 301 (no merge) | A.5-B — step-by-step how-to (map L) | 2026-07-06 |
+| 29 | `/kuinka-pelata-kasino-ilman-rekisteroitymista/` | `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/` | 301 (no merge) | A.5-B — step-by-step how-to | 2026-07-06 |
+| 30 | `/kuinka-pelata-kasinoilla-ilman-tilia/` | `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/` | 301 (no merge) | A.5-B — step-by-step how-to | 2026-07-06 |
+
+**Cluster B notes:**
+
+- **"Edut" triplet:** all three members are in the GSC refusal set (0 clicks,
+  0 impressions), so instead of keeping the thickest refused member
+  (`kasino-ilman-rekisteroitymista-edut-suomalaisille`, 2,161 w) the whole
+  intent 301s to the INDEXED equivalent
+  `/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/` (1,827 w,
+  modified 2026-06-04). The adjacent `5-syyta-miksi-pelata-*` (listicle angle)
+  and `pay-n-play-kasinoiden-edut-*` / `tilivapaiden-kasinoiden-edut-opas-2026`
+  (different qualifier, map Cluster K — deferred) stay untouched.
+- **Vastuullinen singular/plural pair:** the plan said "keep one, 301 the
+  other", but the would-be keeper (plural) is a 354-word 2024 stub Google
+  already refuses — both go to the indexed 1,663-word RG guide instead.
+  The singular variant exists ONLY in GSC (no fragment, no REST entry — a
+  ghost URL that 404s on the static site): redirect-only rule, nothing to
+  delete. `vastuullinen-pelaaminen-hauskuuden-ja-riskin-tasapaino-*` (367 w,
+  2023) is NOT in any GSC bucket → out of zero-risk scope, left for review.
+- **Step-by-step / kuinka-pelata set:** one intent ("how to play at a no-reg
+  casino"), six interchangeable titles, ALL refused by Google → single
+  survivor = the most comprehensive member (see batch header note on its own
+  unindexed status). This executes map Part B Cluster L early — justified
+  because the map's "per-URL GSC data" precondition is now met (all members
+  empirically at zero).
+
 <!-- Batches appended below as they are executed. -->
