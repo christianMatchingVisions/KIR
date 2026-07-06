@@ -175,7 +175,9 @@ The `/pragmatic-play/` hub and `/pragmatic-play/the-dog-house-arvostelu/`
 (absent from the GSC refusal list) stay indexable.
 
 **Batch A.5 totals:** 20 fragments retired (11 + 9), 21 redirect sources
-(42 slash-variant rules) added, 4 pages noindexed. Sitemap: 504 → 481 URLs.
-Build after every commit: check-build + audit-dist-links PASS.
+(42 slash-variant rules) added, 4 pages noindexed. Sitemap measured per
+commit: 494 after cluster A → 485 after B → 481 after C (implied pre-batch
+baseline 505; the batch-A log recorded 504, off by one). Build after every
+commit: check-build + audit-dist-links PASS.
 
 <!-- Batches appended below as they are executed. -->
