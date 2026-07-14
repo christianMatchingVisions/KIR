@@ -55,6 +55,19 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Casino Vice -arvostelu: lisenssi, bonusehdot, cashback, kotiutusajat ja maksutavat. Puolueeton katsaus suomalaispelaajille 2026.",
   },
 
+  // --- News hub (informational intent; H1 "Uutiset" renders independently) ---
+  // GSC (2026-07): the hub ranks pos ~5.7 for "suomalainen nettikasino uutiset"
+  // and its child licensing-reform articles rank pos 3-5 ("rahapelit suomi
+  // lisenssijärjestelmä 2026"). The preserved title was the generic
+  // "Uutiset - <domain>". Aligning the hub with the licensing-reform topic KIR
+  // is genuinely winning — informational intent where CTR converts, unlike the
+  // brand-navigational review pages. Truthful (the hub aggregates exactly this).
+  "/uutiset/": {
+    title: "Nettikasinouutiset 2026 – Suomen rahapelit, lisenssit & kasinot",
+    description:
+      "Tuoreimmat nettikasinouutiset Suomessa: rahapelien lisenssiuudistus 2026, uudet kasinot, bonukset ja alan muutokset. Seuraa KIR-toimituksen uutisointia.",
+  },
+
   // --- Money hubs (<title> and H1 share the value → reads as a heading too) ---
   "/nettikasinot-luotettavat-kasinot/": {
     title: "Luotettavat nettikasinot 2026 – vertailu ja kokemukset",
