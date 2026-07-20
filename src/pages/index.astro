@@ -29,6 +29,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import HomeHero from "../components/HomeHero.astro";
 import FeatureStrip from "../components/FeatureStrip.astro";
 import CasinoCard from "../components/CasinoCard.astro";
+import CasinoRow from "../components/CasinoRow.astro";
 import RelatedCasinos from "../components/RelatedCasinos.astro";
 import Icon from "../components/Icon.astro";
 import { getToplist, type ToplistCasino } from "../lib/toplist";
@@ -37,33 +38,58 @@ import { getToplist, type ToplistCasino } from "../lib/toplist";
 import homeBody from "../fragments/home/body.html?raw";
 
 /* -------------------------------------------------------------------------- */
-/* Toplist (top 5, with graceful fallback)                                    */
+/* Toplist (top 5, curated) + Top 10 (below, curated lead + backfill)         */
 /* -------------------------------------------------------------------------- */
 
-const PRIMARY_CONFIG = "search-two-casino-selected";
 const FALLBACK_CONFIG = "search-service-casino";
 
 // Exclude closed/expired casinos (names flagged "Suljettu") so the homepage
-// never fronts a casino that no longer accepts players. Filter BEFORE slicing
-// to 5 so a closed row doesn't eat a slot.
+// never fronts a casino that no longer accepts players.
 const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
 
-const primary = getToplist(PRIMARY_CONFIG).filter(isOpen);
-const primaryHasRating = primary.some((c) => c.rating != null);
+// Single pool every curated list below is drawn from — the full captured
+// casino roster, open only.
+const pool: ToplistCasino[] = getToplist(FALLBACK_CONFIG).filter(isOpen);
+const bySlug = new Map(pool.map((c) => [c.slug, c]));
 
-// Fall back only when the primary list is too short OR has no ratings at all.
-const usedFallback = primary.length < 5 || !primaryHasRating;
-const topCasinos: ToplistCasino[] = (
-  usedFallback ? getToplist(FALLBACK_CONFIG).filter(isOpen) : primary
-).slice(0, 5);
+// Curated top-5 (replaces the previous data-driven picks).
+const TOP5_SLUGS = [
+  "tikkari-casino",
+  "urho-casino",
+  "spinnair",
+  "kumobet-ccasino",
+  "jackburst-casino",
+];
+const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => bySlug.get(s)).filter(
+  (c): c is ToplistCasino => c != null,
+);
+
+// Top-10 section: the curated addition (Pelipeto) + the five casinos bumped
+// out of the top-5 by the swap above, backfilled from the pool to reach 10.
+const TOP10_LEAD_SLUGS = [
+  "pelipeto-kasino",
+  "mahti-kasino",
+  "lucky-spins-kasino",
+  "slotsi-kasino",
+  "buusti-kasino",
+  "nopein-kasino",
+];
+const top10Lead: ToplistCasino[] = TOP10_LEAD_SLUGS.map((s) => bySlug.get(s)).filter(
+  (c): c is ToplistCasino => c != null,
+);
+const usedSlugs = new Set([...TOP5_SLUGS, ...top10Lead.map((c) => c.slug)]);
+const top10Backfill = pool
+  .filter((c) => !usedSlugs.has(c.slug))
+  .slice(0, Math.max(0, 10 - top10Lead.length));
+const top10Casinos: ToplistCasino[] = [...top10Lead, ...top10Backfill].slice(0, 10);
 
 // Sidebar recommendations — deliberately DIFFERENT brands than the top-5 cards
-// (the sidebar used to mirror the exact same five, which reads as padding).
-// Pull from the full list, drop anything already fronted above, take the next 5.
-const topNames = new Set(topCasinos.map((c) => (c.name ?? "").trim().toLowerCase()));
-const sideCasinos: ToplistCasino[] = getToplist(FALLBACK_CONFIG)
-  .filter(isOpen)
-  .filter((c) => !topNames.has((c.name ?? "").trim().toLowerCase()))
+// AND the top-10 list below (the sidebar used to mirror the same brands,
+// which reads as padding). Pull from the full list, drop anything already
+// fronted above, take the next 5.
+const frontedSlugs = new Set([...usedSlugs, ...top10Backfill.map((c) => c.slug)]);
+const sideCasinos: ToplistCasino[] = pool
+  .filter((c) => !frontedSlugs.has(c.slug))
   .slice(0, 5);
 
 /* -------------------------------------------------------------------------- */
@@ -290,6 +316,29 @@ const hasToc = toc.length > 1;
     </div>
   </section>
 
+  {/* ---------------- TOP 10 ---------------- */}
+  {top10Casinos.length > 0 && (
+    <section class="section top10" id="top10" aria-labelledby="top10-title">
+      <div class="container">
+        <div class="toplist__head">
+          <h2 id="top10-title" class="toplist__title">
+            <span class="toplist__title-icon" aria-hidden="true">
+              <Icon name="trophy" size={26} />
+            </span>
+            Top 10 kasinot ilman rekisteröitymistä
+          </h2>
+        </div>
+        <ul class="top10__list" role="list">
+          {top10Casinos.map((casino, i) => (
+            <li class="top10__item reveal">
+              <CasinoRow casino={casino} rank={i + 1} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
   {/* ---------------- FEATURE STRIP ---------------- */}
   <FeatureStrip />
 
@@ -508,6 +557,13 @@ const hasToc = toc.length > 1;
     .toplist__grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* ---------------- Top 10 section ---------------- */
+  .top10__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   /* ---------------- Intro long-form prose ---------------- */
