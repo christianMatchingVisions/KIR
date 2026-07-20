@@ -255,8 +255,15 @@ import SearchBox from "./SearchBox.astro";
     transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
     /* Close forgiveness: when the pointer leaves the trigger/panel, wait a beat
        before hiding so slow or slightly diagonal travel doesn't slam it shut. */
-    transition-delay: 0.18s;
+    transition-delay: 0.08s;
     z-index: 20;
+  }
+  /* Decisive close (outside click / Escape / trigger re-toggle) skips the
+     hover-forgiveness delay entirely — the delay is only for ambiguous
+     pointer travel, not for an explicit close action. Set by JS right before
+     clearing data-open, removed once the close transition finishes. */
+  .dropdown[data-close-instant] {
+    transition-delay: 0s !important;
   }
   /* Invisible hover bridge over the 6px gap between trigger and panel. The
      panel opens at top:calc(100% + 6px); without this, a pointer moving slowly
@@ -500,7 +507,17 @@ import SearchBox from "./SearchBox.astro";
       const trigger = dd.querySelector<HTMLButtonElement>("[data-dropdown-trigger]");
       const panel = dd.querySelector<HTMLElement>("[data-dropdown-panel]");
       trigger?.setAttribute("aria-expanded", "false");
-      panel?.removeAttribute("data-open");
+      if (panel?.hasAttribute("data-open")) {
+        // Decisive close: skip the hover-forgiveness delay so the panel
+        // doesn't visibly linger after an explicit close action.
+        panel.setAttribute("data-close-instant", "");
+        panel.removeAttribute("data-open");
+        panel.addEventListener(
+          "transitionend",
+          () => panel.removeAttribute("data-close-instant"),
+          { once: true }
+        );
+      }
     }
   };
   for (const dd of dropdowns) {
