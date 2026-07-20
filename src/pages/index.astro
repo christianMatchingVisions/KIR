@@ -83,11 +83,19 @@ const top10Backfill = pool
   .slice(0, Math.max(0, 10 - top10Lead.length));
 const top10Casinos: ToplistCasino[] = [...top10Lead, ...top10Backfill].slice(0, 10);
 
+// "Load more" extension: the NEXT 10 casinos from the pool, rendered in the
+// DOM but visually clamped until the button is clicked (same progressive-
+// enhancement approach as the intro-prose clamp below — full content always
+// present for crawlers/no-JS, JS only controls what's visible up front).
+const shownSlugs = new Set([...usedSlugs, ...top10Backfill.map((c) => c.slug)]);
+const top10More: ToplistCasino[] = pool.filter((c) => !shownSlugs.has(c.slug)).slice(0, 10);
+const top20Casinos: ToplistCasino[] = [...top10Casinos, ...top10More];
+
 // Sidebar recommendations — deliberately DIFFERENT brands than the top-5 cards
-// AND the top-10 list below (the sidebar used to mirror the same brands,
+// AND the top-20 list below (the sidebar used to mirror the same brands,
 // which reads as padding). Pull from the full list, drop anything already
 // fronted above, take the next 5.
-const frontedSlugs = new Set([...usedSlugs, ...top10Backfill.map((c) => c.slug)]);
+const frontedSlugs = new Set([...shownSlugs, ...top10More.map((c) => c.slug)]);
 const sideCasinos: ToplistCasino[] = pool
   .filter((c) => !frontedSlugs.has(c.slug))
   .slice(0, 5);
@@ -329,15 +337,44 @@ const hasToc = toc.length > 1;
           </h2>
         </div>
         <ul class="top10__list" role="list">
-          {top10Casinos.map((casino, i) => (
-            <li class="top10__item reveal">
+          {top20Casinos.map((casino, i) => (
+            <li
+              class="top10__item reveal"
+              class:list={[{ "top10__item--extra": i >= 10 }]}
+              hidden={i >= 10}
+            >
               <CasinoRow casino={casino} rank={i + 1} />
             </li>
           ))}
         </ul>
+        {top10More.length > 0 && (
+          <button
+            type="button"
+            class="btn-outline top10__load-more"
+            data-load-more="top10"
+          >
+            Lataa lisää kasinoita
+          </button>
+        )}
       </div>
     </section>
   )}
+
+  <script>
+    // Progressive enhancement: the extra 10 rows always render server-side
+    // (crawlers/no-JS see the full list); JS just hides them up front and
+    // reveals them on click, matching the intro-prose clamp's philosophy.
+    (() => {
+      const btn = document.querySelector<HTMLButtonElement>('[data-load-more="top10"]');
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        document
+          .querySelectorAll<HTMLElement>(".top10__item--extra[hidden]")
+          .forEach((el) => el.removeAttribute("hidden"));
+        btn.remove();
+      });
+    })();
+  </script>
 
   {/* ---------------- FEATURE STRIP ---------------- */}
   <FeatureStrip />
@@ -564,6 +601,10 @@ const hasToc = toc.length > 1;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+  }
+  .top10__load-more {
+    display: flex;
+    margin: 1.1rem auto 0;
   }
 
   /* ---------------- Intro long-form prose ---------------- */
