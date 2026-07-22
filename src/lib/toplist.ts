@@ -170,12 +170,30 @@ function toRootRelative(url: string | null | undefined): string | null {
   if (!url || typeof url !== "string") return null;
   const trimmed = url.trim();
   if (!trimmed) return null;
-  if (trimmed.startsWith(SITE_ORIGIN)) {
-    const rel = trimmed.slice(SITE_ORIGIN.length);
-    return rel.startsWith("/") ? rel : `/${rel}`;
+  let rel = trimmed;
+  if (rel.startsWith(SITE_ORIGIN)) {
+    rel = rel.slice(SITE_ORIGIN.length);
+    if (!rel.startsWith("/")) rel = `/${rel}`;
   }
-  return trimmed;
+  // The vercel.json /go/ redirect rules are case-sensitive routes, but the
+  // captured cta values occasionally carry a differently-cased slug (e.g.
+  // "/go/Wunderwins/" vs the registered "/go/wunderwins/") — a silent 404 on
+  // click. /go/ slugs are always lowercase by convention, so normalize here
+  // rather than special-casing individual casinos.
+  if (/^\/go\//i.test(rel)) rel = rel.toLowerCase();
+  return rel;
 }
+
+/**
+ * Casinos confirmed closed but not yet reflected in the captured toplist data
+ * (the daily WP re-sync hasn't caught up, or the source never marked them).
+ * Appending the site's own " - Suljettu" convention here makes every existing
+ * isOpen() filter (homepage, related-casino sidebars) drop them automatically
+ * — no per-page changes needed. Keyed by post_name (toplist slug).
+ *
+ *   simplecasino — confirmed closed 2026-07-22; no live affiliate destination.
+ */
+const MANUALLY_CLOSED_SLUGS: ReadonlySet<string> = new Set(["simplecasino"]);
 
 /** Parse the rlaaf `rating` field (a string like "4.7" or "") into a number. */
 function parseRating(raw: string | number | null | undefined): number | null {
@@ -229,9 +247,15 @@ function mapItem(item: RawItem): ToplistCasino {
   const bannerText =
     isTruthy(meta.show_banner_text) && bannerSource ? bannerSource : null;
 
+  const slug = str(item.post_name);
+  let name = str(item.post_title);
+  if (MANUALLY_CLOSED_SLUGS.has(slug) && !/\bsuljettu\b/i.test(name)) {
+    name = `${name} - Suljettu`;
+  }
+
   return {
-    name: str(item.post_title),
-    slug: str(item.post_name),
+    name,
+    slug,
     logoUrl: decodeLogoUrl(typeof card === "object" ? card.url : undefined),
     logoAlt: str(typeof card === "object" ? card.alt : "") || null,
     ctaSlug: toRootRelative(meta.cta),
