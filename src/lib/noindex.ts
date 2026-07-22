@@ -82,6 +82,16 @@ const NOINDEX_PATHS: ReadonlySet<string> = new Set<string>([
   "/pragmatic-play/sweet-bonanza-arvostelu/",
   "/pragmatic-play/wolf-gold-arvostelu/",
   "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
+
+  /* --------------------------------------------------------------------
+   * CLOSED CASINO — confirmed closed 2026-07-22, not yet reflected in the
+   * scraped review body (no "Suljettu" in its H1, so the showNoReview rule
+   * above doesn't catch it) or the captured toplist data (see
+   * MANUALLY_CLOSED_SLUGS in toplist.ts, which drops it from every homepage/
+   * sidebar listing). No live affiliate destination — noindex,follow keeps
+   * the page reachable but out of Google while it's dead.
+   * ------------------------------------------------------------------ */
+  "/casino/simplecasino/",
 ]);
 
 /**
