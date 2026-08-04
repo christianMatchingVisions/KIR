@@ -307,16 +307,17 @@ export function getToplist(config: string, limit?: number): ToplistCasino[] {
 /**
  * Casinos added directly (not yet captured by the WP toplist scrape/sync —
  * they're new brands, not in any public/rlaaf-data/<config> dump). Each has
- * a live /go/ affiliate redirect (see vercel.json) but no logo/bonus/rating
- * data yet; the card/row components degrade gracefully for all three
- * (monogram plate, no bonus line, no rating row). Added 2026-07-28.
+ * a live /go/ affiliate redirect (see vercel.json) and a real logo (supplied
+ * directly, saved to public/wp-content/uploads/); still no bonus/rating data
+ * — the card/row components degrade gracefully for those (no bonus line, no
+ * rating row). Added 2026-07-28, logos added 2026-08-05.
  */
 export const MANUAL_CASINOS: readonly ToplistCasino[] = [
   {
     name: "Titaani",
     slug: "titaani",
-    logoUrl: null,
-    logoAlt: null,
+    logoUrl: "/wp-content/uploads/titaani-casino-logo.png",
+    logoAlt: "Titaani logo",
     ctaSlug: "/go/titaani/",
     rating: null,
     bonusText: "",
@@ -328,8 +329,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
   {
     name: "Pelifantti",
     slug: "pelifantti",
-    logoUrl: null,
-    logoAlt: null,
+    logoUrl: "/wp-content/uploads/pelifantti-kasino-logo.png",
+    logoAlt: "Pelifantti logo",
     ctaSlug: "/go/pelifantti/",
     rating: null,
     bonusText: "",
@@ -341,8 +342,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
   {
     name: "Andromedasino",
     slug: "andromedasino",
-    logoUrl: null,
-    logoAlt: null,
+    logoUrl: "/wp-content/uploads/andromedasino-logo.png",
+    logoAlt: "Andromedasino logo",
     ctaSlug: "/go/andromedasino/",
     rating: null,
     bonusText: "",
