@@ -195,6 +195,17 @@ function toRootRelative(url: string | null | undefined): string | null {
  */
 const MANUALLY_CLOSED_SLUGS: ReadonlySet<string> = new Set(["simplecasino"]);
 
+/**
+ * Editorial overall ratings not (yet) present in the captured toplist scrape.
+ * Applied only when the scraped `rating` field is empty, so a real captured
+ * value always wins. Mirrors the same number set on each casino's own Arviot
+ * card in its review fragment — keep both in sync when updating either.
+ */
+const MANUAL_RATING_OVERRIDES: ReadonlyMap<string, number> = new Map([
+  ["urho-casino", 4.0],
+  ["hupislots", 3.5],
+]);
+
 /** Parse the rlaaf `rating` field (a string like "4.7" or "") into a number. */
 function parseRating(raw: string | number | null | undefined): number | null {
   if (raw == null) return null;
@@ -259,7 +270,7 @@ function mapItem(item: RawItem): ToplistCasino {
     logoUrl: decodeLogoUrl(typeof card === "object" ? card.url : undefined),
     logoAlt: str(typeof card === "object" ? card.alt : "") || null,
     ctaSlug: toRootRelative(meta.cta),
-    rating: parseRating(meta.rating),
+    rating: parseRating(meta.rating) ?? MANUAL_RATING_OVERRIDES.get(slug) ?? null,
     bonusText: str(meta.casino_bonus_description),
     noDeposit: str(meta.no_deposit),
     wagering: str(meta.wagering_value),
