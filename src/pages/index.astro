@@ -58,13 +58,14 @@ const manualBySlug = new Map(MANUAL_CASINOS.map((c) => [c.slug, c]));
 const anyBySlug = (slug: string): ToplistCasino | undefined =>
   bySlug.get(slug) ?? manualBySlug.get(slug);
 
-// Curated top-5: Titaani/Pelifantti/Andromedasino (new brands) take ranks
-// 1-3, bumping Tikkari/Urho/Spinnair down into the top-10 lead below.
+// Curated top-5: Titaani/Pelifantti take ranks 1-2, Tikkari holds rank 3
+// (Andromedasino is held back — andromedasino.com has no live data yet, see
+// MANUAL_CASINOS in toplist.ts — until it has a real review/bonus to show).
 // KumoBet/Jackburst keep ranks 4-5.
 const TOP5_SLUGS = [
   "titaani",
   "pelifantti",
-  "andromedasino",
+  "tikkari-casino",
   "kumobet-ccasino",
   "jackburst-casino",
 ];
@@ -72,11 +73,10 @@ const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
 );
 
-// Top-10 section: Tikkari/Urho/Spinnair (bumped from the top-5) take ranks
-// 1-3, followed by the previous lead (Pelipeto + the five earlier bumped
+// Top-10 section: Urho/Spinnair (bumped from the top-5 earlier) take ranks
+// 1-2, followed by the previous lead (Pelipeto + the five earlier bumped
 // casinos), backfilled from the pool to reach 10.
 const TOP10_LEAD_SLUGS = [
-  "tikkari-casino",
   "urho-casino",
   "spinnair",
   "pelipeto-kasino",
