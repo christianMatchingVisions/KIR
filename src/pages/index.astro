@@ -32,7 +32,7 @@ import CasinoCard from "../components/CasinoCard.astro";
 import CasinoRow from "../components/CasinoRow.astro";
 import RelatedCasinos from "../components/RelatedCasinos.astro";
 import Icon from "../components/Icon.astro";
-import { getToplist, type ToplistCasino } from "../lib/toplist";
+import { getToplist, MANUAL_CASINOS, type ToplistCasino } from "../lib/toplist";
 
 // Raw home body fragment (build-time only; ?raw keeps it out of the client).
 import homeBody from "../fragments/home/body.html?raw";
@@ -89,10 +89,13 @@ const top10Casinos: ToplistCasino[] = [...top10Lead, ...top10Backfill].slice(0, 
 // present for crawlers/no-JS, JS only controls what's visible up front).
 const shownSlugs = new Set([...usedSlugs, ...top10Backfill.map((c) => c.slug)]);
 const top10More: ToplistCasino[] = pool.filter((c) => !shownSlugs.has(c.slug)).slice(0, 10);
-const top20Casinos: ToplistCasino[] = [...top10Casinos, ...top10More];
+
+// New brands with no captured data yet (see MANUAL_CASINOS in toplist.ts) —
+// appended after the pool-backed 20, ranks 21-23, same clamp/reveal behaviour.
+const top23Casinos: ToplistCasino[] = [...top10Casinos, ...top10More, ...MANUAL_CASINOS];
 
 // Sidebar recommendations — deliberately DIFFERENT brands than the top-5 cards
-// AND the top-20 list below (the sidebar used to mirror the same brands,
+// AND the top-20+ list below (the sidebar used to mirror the same brands,
 // which reads as padding). Pull from the full list, drop anything already
 // fronted above, take the next 5.
 const frontedSlugs = new Set([...shownSlugs, ...top10More.map((c) => c.slug)]);
@@ -325,7 +328,7 @@ const hasToc = toc.length > 1;
   </section>
 
   {/* ---------------- TOP 10 ---------------- */}
-  {top10Casinos.length > 0 && (
+  {top23Casinos.length > 0 && (
     <section class="section top10" id="top10" aria-labelledby="top10-title">
       <div class="container">
         <div class="toplist__head">
@@ -337,7 +340,7 @@ const hasToc = toc.length > 1;
           </h2>
         </div>
         <ul class="top10__list" role="list">
-          {top20Casinos.map((casino, i) => (
+          {top23Casinos.map((casino, i) => (
             <li
               class="top10__item reveal"
               class:list={[{ "top10__item--extra": i >= 10 }]}
@@ -347,7 +350,7 @@ const hasToc = toc.length > 1;
             </li>
           ))}
         </ul>
-        {top10More.length > 0 && (
+        {top23Casinos.length > 10 && (
           <button
             type="button"
             class="btn-outline top10__load-more"
