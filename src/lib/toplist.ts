@@ -304,6 +304,55 @@ export function getToplist(config: string, limit?: number): ToplistCasino[] {
   return out;
 }
 
+/**
+ * Casinos added directly (not yet captured by the WP toplist scrape/sync —
+ * they're new brands, not in any public/rlaaf-data/<config> dump). Each has
+ * a live /go/ affiliate redirect (see vercel.json) but no logo/bonus/rating
+ * data yet; the card/row components degrade gracefully for all three
+ * (monogram plate, no bonus line, no rating row). Added 2026-07-28.
+ */
+export const MANUAL_CASINOS: readonly ToplistCasino[] = [
+  {
+    name: "Titaani",
+    slug: "titaani",
+    logoUrl: null,
+    logoAlt: null,
+    ctaSlug: "/go/titaani/",
+    rating: null,
+    bonusText: "",
+    noDeposit: "",
+    wagering: "",
+    license: "",
+    bannerText: null,
+  },
+  {
+    name: "Pelifantti",
+    slug: "pelifantti",
+    logoUrl: null,
+    logoAlt: null,
+    ctaSlug: "/go/pelifantti/",
+    rating: null,
+    bonusText: "",
+    noDeposit: "",
+    wagering: "",
+    license: "",
+    bannerText: null,
+  },
+  {
+    name: "Andromedasino",
+    slug: "andromedasino",
+    logoUrl: null,
+    logoAlt: null,
+    ctaSlug: "/go/andromedasino/",
+    rating: null,
+    bonusText: "",
+    noDeposit: "",
+    wagering: "",
+    license: "",
+    bannerText: null,
+  },
+];
+
 /** List all available toplist config directory names (sorted). */
 export function listToplistConfigs(): string[] {
   try {

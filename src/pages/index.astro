@@ -32,7 +32,7 @@ import CasinoCard from "../components/CasinoCard.astro";
 import CasinoRow from "../components/CasinoRow.astro";
 import RelatedCasinos from "../components/RelatedCasinos.astro";
 import Icon from "../components/Icon.astro";
-import { getToplist, type ToplistCasino } from "../lib/toplist";
+import { getToplist, MANUAL_CASINOS, type ToplistCasino } from "../lib/toplist";
 
 // Raw home body fragment (build-time only; ?raw keeps it out of the client).
 import homeBody from "../fragments/home/body.html?raw";
@@ -51,22 +51,34 @@ const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
 // casino roster, open only.
 const pool: ToplistCasino[] = getToplist(FALLBACK_CONFIG).filter(isOpen);
 const bySlug = new Map(pool.map((c) => [c.slug, c]));
+// MANUAL_CASINOS aren't in the captured pool (new brands, no scrape data
+// yet) — merge them into the same lookup so curated slug lists below can
+// reference either source interchangeably.
+const manualBySlug = new Map(MANUAL_CASINOS.map((c) => [c.slug, c]));
+const anyBySlug = (slug: string): ToplistCasino | undefined =>
+  bySlug.get(slug) ?? manualBySlug.get(slug);
 
-// Curated top-5 (replaces the previous data-driven picks).
+// Curated top-5: Titaani/Pelifantti/Andromedasino (new brands) take ranks
+// 1-3, bumping Tikkari/Urho/Spinnair down into the top-10 lead below.
+// KumoBet/Jackburst keep ranks 4-5.
 const TOP5_SLUGS = [
-  "tikkari-casino",
-  "urho-casino",
-  "spinnair",
+  "titaani",
+  "pelifantti",
+  "andromedasino",
   "kumobet-ccasino",
   "jackburst-casino",
 ];
-const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => bySlug.get(s)).filter(
+const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
 );
 
-// Top-10 section: the curated addition (Pelipeto) + the five casinos bumped
-// out of the top-5 by the swap above, backfilled from the pool to reach 10.
+// Top-10 section: Tikkari/Urho/Spinnair (bumped from the top-5) take ranks
+// 1-3, followed by the previous lead (Pelipeto + the five earlier bumped
+// casinos), backfilled from the pool to reach 10.
 const TOP10_LEAD_SLUGS = [
+  "tikkari-casino",
+  "urho-casino",
+  "spinnair",
   "pelipeto-kasino",
   "mahti-kasino",
   "lucky-spins-kasino",
@@ -74,7 +86,7 @@ const TOP10_LEAD_SLUGS = [
   "buusti-kasino",
   "nopein-kasino",
 ];
-const top10Lead: ToplistCasino[] = TOP10_LEAD_SLUGS.map((s) => bySlug.get(s)).filter(
+const top10Lead: ToplistCasino[] = TOP10_LEAD_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
 );
 const usedSlugs = new Set([...TOP5_SLUGS, ...top10Lead.map((c) => c.slug)]);
@@ -325,7 +337,7 @@ const hasToc = toc.length > 1;
   </section>
 
   {/* ---------------- TOP 10 ---------------- */}
-  {top10Casinos.length > 0 && (
+  {top20Casinos.length > 0 && (
     <section class="section top10" id="top10" aria-labelledby="top10-title">
       <div class="container">
         <div class="toplist__head">
@@ -347,7 +359,7 @@ const hasToc = toc.length > 1;
             </li>
           ))}
         </ul>
-        {top10More.length > 0 && (
+        {top20Casinos.length > 10 && (
           <button
             type="button"
             class="btn-outline top10__load-more"
