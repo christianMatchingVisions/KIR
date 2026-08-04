@@ -204,6 +204,11 @@ const MANUALLY_CLOSED_SLUGS: ReadonlySet<string> = new Set(["simplecasino"]);
 const MANUAL_RATING_OVERRIDES: ReadonlyMap<string, number> = new Map([
   ["urho-casino", 4.0],
   ["hupislots", 3.5],
+  ["tikkari-casino", 3.8],
+  ["kumobet-ccasino", 4.0],
+  ["spinnair", 4.2],
+  ["superonni", 3.0],
+  ["quickz-casino", 3.7],
 ]);
 
 /** Parse the rlaaf `rating` field (a string like "4.7" or "") into a number. */
