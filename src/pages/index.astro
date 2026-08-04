@@ -51,22 +51,34 @@ const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
 // casino roster, open only.
 const pool: ToplistCasino[] = getToplist(FALLBACK_CONFIG).filter(isOpen);
 const bySlug = new Map(pool.map((c) => [c.slug, c]));
+// MANUAL_CASINOS aren't in the captured pool (new brands, no scrape data
+// yet) — merge them into the same lookup so curated slug lists below can
+// reference either source interchangeably.
+const manualBySlug = new Map(MANUAL_CASINOS.map((c) => [c.slug, c]));
+const anyBySlug = (slug: string): ToplistCasino | undefined =>
+  bySlug.get(slug) ?? manualBySlug.get(slug);
 
-// Curated top-5 (replaces the previous data-driven picks).
+// Curated top-5: Titaani/Pelifantti/Andromedasino (new brands) take ranks
+// 1-3, bumping Tikkari/Urho/Spinnair down into the top-10 lead below.
+// KumoBet/Jackburst keep ranks 4-5.
 const TOP5_SLUGS = [
-  "tikkari-casino",
-  "urho-casino",
-  "spinnair",
+  "titaani",
+  "pelifantti",
+  "andromedasino",
   "kumobet-ccasino",
   "jackburst-casino",
 ];
-const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => bySlug.get(s)).filter(
+const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
 );
 
-// Top-10 section: the curated addition (Pelipeto) + the five casinos bumped
-// out of the top-5 by the swap above, backfilled from the pool to reach 10.
+// Top-10 section: Tikkari/Urho/Spinnair (bumped from the top-5) take ranks
+// 1-3, followed by the previous lead (Pelipeto + the five earlier bumped
+// casinos), backfilled from the pool to reach 10.
 const TOP10_LEAD_SLUGS = [
+  "tikkari-casino",
+  "urho-casino",
+  "spinnair",
   "pelipeto-kasino",
   "mahti-kasino",
   "lucky-spins-kasino",
@@ -74,7 +86,7 @@ const TOP10_LEAD_SLUGS = [
   "buusti-kasino",
   "nopein-kasino",
 ];
-const top10Lead: ToplistCasino[] = TOP10_LEAD_SLUGS.map((s) => bySlug.get(s)).filter(
+const top10Lead: ToplistCasino[] = TOP10_LEAD_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
 );
 const usedSlugs = new Set([...TOP5_SLUGS, ...top10Lead.map((c) => c.slug)]);
@@ -89,13 +101,10 @@ const top10Casinos: ToplistCasino[] = [...top10Lead, ...top10Backfill].slice(0, 
 // present for crawlers/no-JS, JS only controls what's visible up front).
 const shownSlugs = new Set([...usedSlugs, ...top10Backfill.map((c) => c.slug)]);
 const top10More: ToplistCasino[] = pool.filter((c) => !shownSlugs.has(c.slug)).slice(0, 10);
-
-// New brands with no captured data yet (see MANUAL_CASINOS in toplist.ts) —
-// appended after the pool-backed 20, ranks 21-23, same clamp/reveal behaviour.
-const top23Casinos: ToplistCasino[] = [...top10Casinos, ...top10More, ...MANUAL_CASINOS];
+const top20Casinos: ToplistCasino[] = [...top10Casinos, ...top10More];
 
 // Sidebar recommendations — deliberately DIFFERENT brands than the top-5 cards
-// AND the top-20+ list below (the sidebar used to mirror the same brands,
+// AND the top-20 list below (the sidebar used to mirror the same brands,
 // which reads as padding). Pull from the full list, drop anything already
 // fronted above, take the next 5.
 const frontedSlugs = new Set([...shownSlugs, ...top10More.map((c) => c.slug)]);
@@ -328,7 +337,7 @@ const hasToc = toc.length > 1;
   </section>
 
   {/* ---------------- TOP 10 ---------------- */}
-  {top23Casinos.length > 0 && (
+  {top20Casinos.length > 0 && (
     <section class="section top10" id="top10" aria-labelledby="top10-title">
       <div class="container">
         <div class="toplist__head">
@@ -340,7 +349,7 @@ const hasToc = toc.length > 1;
           </h2>
         </div>
         <ul class="top10__list" role="list">
-          {top23Casinos.map((casino, i) => (
+          {top20Casinos.map((casino, i) => (
             <li
               class="top10__item reveal"
               class:list={[{ "top10__item--extra": i >= 10 }]}
@@ -350,7 +359,7 @@ const hasToc = toc.length > 1;
             </li>
           ))}
         </ul>
-        {top23Casinos.length > 10 && (
+        {top20Casinos.length > 10 && (
           <button
             type="button"
             class="btn-outline top10__load-more"
