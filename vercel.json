@@ -5520,36 +5520,6 @@
       "source": "/go/playojo/",
       "destination": "https://site.gotoplayojo.com/index.php?aname=klusionz&cg=finnish",
       "permanent": false
-    },
-    {
-      "source": "/go/titaani",
-      "destination": "https://go.fruitypartners.com/visit/?bta=35310&brand=titaani&utm_campaign=FITIT",
-      "permanent": false
-    },
-    {
-      "source": "/go/titaani/",
-      "destination": "https://go.fruitypartners.com/visit/?bta=35310&brand=titaani&utm_campaign=FITIT",
-      "permanent": false
-    },
-    {
-      "source": "/go/pelifantti",
-      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTXwFyzdGofsLGNd7ZgqdRLk/12731/",
-      "permanent": false
-    },
-    {
-      "source": "/go/pelifantti/",
-      "destination": "https://record.njordaffiliates.com/_2_zhgQ_2nTXwFyzdGofsLGNd7ZgqdRLk/12731/",
-      "permanent": false
-    },
-    {
-      "source": "/go/andromedasino",
-      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=9431&utm_campaign=FIANDROM",
-      "permanent": false
-    },
-    {
-      "source": "/go/andromedasino/",
-      "destination": "https://go.infinitystarspartners.com/visit/?bta=38165&nci=9431&utm_campaign=FIANDROM",
-      "permanent": false
     }
   ],
   "headers": [
