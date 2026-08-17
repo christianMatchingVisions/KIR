@@ -52,6 +52,7 @@ import { breadcrumbJsonLd, type Crumb } from "../lib/related";
 import { getSeoHead } from "../lib/seo-head";
 import { listCasinoSlugs } from "../lib/casino-data";
 import { collectionPageJsonLd, headHasCollectionSchema } from "../lib/collection-schema";
+import { buildFaqLd } from "../lib/faq-schema";
 
 interface Props {
   /** Real indexed URL of this page → preserves the registered SEO head verbatim. */
@@ -138,6 +139,18 @@ const collectionLd = headHasCollectionSchema(getSeoHead(seoPath)?.jsonLd)
     });
 
 /* -------------------------------------------------------------------------- *
+ * FAQPage JSON-LD — extracted verbatim from introHtml when it carries real   *
+ * Q&A content (either the Heroic FAQs accordion markup or "?"-ending          *
+ * headings; see faq-schema.ts). Most money pages have neither and this is    *
+ * simply null — never fabricated. Deduped against the preserved head so a    *
+ * page that already carries FAQPage schema there never gets a second block.  *
+ * -------------------------------------------------------------------------- */
+const headHasFaqSchema = (getSeoHead(seoPath)?.jsonLd ?? []).some((b) =>
+  /"@type"\s*:\s*"FAQPage"/.test(b),
+);
+const faqLd = headHasFaqSchema ? null : buildFaqLd(introHtml ?? "");
+
+/* -------------------------------------------------------------------------- *
  * Hero lead — use the FIRST <p> of introHtml as the hero lead, then render    *
  * the FULL introHtml below the list. We do not strip it from the body copy    *
  * (the preserved prose stays intact); the lead is a light, derived preview.   *
@@ -172,6 +185,10 @@ const leadText = firstParagraphText(introHtml);
   {/* CollectionPage + ItemList structured data — this hub as a ranked casino
       list. Additive, deduped vs the preserved head. */}
   {collectionLd && <Fragment set:html={collectionLd} />}
+
+  {/* FAQPage structured data — only when introHtml carries real Q&A content
+      (see faq-schema.ts). Additive, deduped vs the preserved head. */}
+  {faqLd && <Fragment set:html={faqLd} />}
 
   {/* ---------------- HERO ---------------- */}
   <section class="section--tight band-brand money-hero" aria-labelledby="money-title">

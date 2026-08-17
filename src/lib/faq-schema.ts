@@ -48,14 +48,60 @@ interface Heading {
 }
 
 /**
+ * Extract Q&A pairs from the scraped "Heroic FAQs" accordion format
+ * (`<ul class="hfaqlist">`, each item a `.hfaq__text[itemprop=name]` +
+ * `.hfaq__answercontent[itemprop=text]` pair) — the same WP plugin markup
+ * home/body.html and a handful of other fragments carry. Already
+ * microdata-tagged by the source, so this is even safer than the heading
+ * heuristic below: we're just re-expressing existing itemprop-tagged
+ * question/answer content as JSON-LD, never inventing anything.
+ */
+function extractHfaqPairs(bodyHtml: string): { q: string; a: string }[] {
+  const items: { q: string; a: string }[] = [];
+  const questionRe =
+    /<span\b[^>]*\bclass="[^"]*\bhfaq__text\b[^"]*"[^>]*>([\s\S]*?)<\/span>\s*(?:<\/[a-z]+>\s*)*<div\b[^>]*\bclass="[^"]*\bhfaq__answercontent\b[^"]*"[^>]*>([\s\S]*?)<\/div>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = questionRe.exec(bodyHtml)) !== null) {
+    const q = toText(m[1]);
+    let a = toText(m[2]);
+    if (!q || a.length < 15) continue;
+    if (a.length > 1200) a = a.slice(0, 1200).replace(/\s+\S*$/, "") + "…";
+    items.push({ q, a });
+  }
+  return items;
+}
+
+function toFaqLd(items: { q: string; a: string }[]): string | null {
+  if (items.length < 2) return null;
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question",
+      name: it.q,
+      acceptedAnswer: { "@type": "Answer", text: it.a },
+    })),
+  };
+  // <-escape: JSON.stringify leaves "<" intact, so a literal "</script>"
+  // inside any value would close the JSON-LD block early (HTML injection).
+  return `<script type="application/ld+json">${JSON.stringify(faqLd).replace(/</g, "\\u003c")}</script>`;
+}
+
+/**
  * Build a FAQPage JSON-LD <script> string from an article's rendered body HTML,
  * or null if fewer than two question/answer pairs are found.
  *
- * A "question" is any <h2>/<h3>/<h4> whose visible text ends with "?". Its
- * answer is the body text between that heading and the next heading (any level).
+ * Tries the microdata-tagged Heroic FAQs accordion format first (safest —
+ * already explicitly tagged as Q&A by the source); falls back to treating any
+ * <h2>/<h3>/<h4> whose visible text ends with "?" as a question, with the body
+ * text up to the next heading as its answer.
  */
 export function buildFaqLd(bodyHtml: string): string | null {
   if (!bodyHtml) return null;
+
+  const hfaqItems = extractHfaqPairs(bodyHtml);
+  const hfaqLd = toFaqLd(hfaqItems);
+  if (hfaqLd) return hfaqLd;
 
   const headingRe = /<(h[2-4])\b[^>]*>([\s\S]*?)<\/\1>/gi;
   const headings: Heading[] = [];
@@ -86,19 +132,5 @@ export function buildFaqLd(bodyHtml: string): string | null {
     items.push({ q, a });
   }
 
-  if (items.length < 2) return null;
-
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: items.map((it) => ({
-      "@type": "Question",
-      name: it.q,
-      acceptedAnswer: { "@type": "Answer", text: it.a },
-    })),
-  };
-
-  // <-escape: JSON.stringify leaves "<" intact, so a literal "</script>"
-  // inside any value would close the JSON-LD block early (HTML injection).
-  return `<script type="application/ld+json">${JSON.stringify(faqLd).replace(/</g, "\\u003c")}</script>`;
+  return toFaqLd(items);
 }
