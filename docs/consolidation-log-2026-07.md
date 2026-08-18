@@ -180,4 +180,77 @@ commit: 494 after cluster A → 485 after B → 481 after C (implied pre-batch
 baseline 505; the batch-A log recorded 504, off by one). Build after every
 commit: check-build + audit-dist-links PASS.
 
+---
+
+# Part A stability check + Batch B (2026-08-18)
+
+**Evidence:** native Google Search Console "Performance on Search" export
+(kasinotilmanrekisteroitymista.com property, Web search, last 16 months,
+downloaded 2026-08-18) — 520 URLs with real per-URL clicks/impressions/CTR/
+position. This is the site's own first-party GSC data (not the Ahrefs-mirrored
+project used for the 07-04/07-06 batches), so it doubles as an independent
+cross-check of those batches as well as the data source for this one.
+
+**Part A stability check (map step 6: monitor 4–8 weeks, roll back losers).**
+Batch A (07-04) is ~6.5 weeks live, batch A.5 (07-06) ~6 weeks live —
+inside the monitoring window. Checked every survivor from both batches
+against this export: no survivor shows fewer impressions or a worse position
+than the retire candidate it absorbed; most retire candidates now carry zero
+or residual (pre-redirect) impressions only. One low-signal case reviewed
+explicitly: Cluster 6 survivor `verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet`
+shows 0 impressions in the export while the retired `verovapaat-kasinot-vertailu-7`
+shows 1 impression at position 5 — a single-impression data point is not a
+reliable ranking signal (site-wide average is 613 clicks / 1.3M impressions
+across 520 URLs over 16 months), and it doesn't override the 07-04 Ahrefs
+validation that already cleared this pair. **Verdict: Part A is stable. No
+rollback.**
+
+**Batch B — 2 Part-A stragglers + Part B Clusters I/J/K.** The map's Part B
+gate ("must NOT be touched without per-URL GSC data") is now satisfied by the
+export above (Cluster L was already executed early in batch A.5-B). Same
+mechanism as prior batches: fragment deleted, both slash-variant 301s added to
+`data/static-redirects.json` → folded into `vercel.json` via
+`node scripts/sync-static-redirects.mjs`. Internal links, listing exclusion,
+and WP-resync protection are automatic (`src/lib/html-links.ts` +
+`src/lib/content.ts`'s `isRetiredPath` + `scripts/fill-missing-fragments.mjs`
+guard, all keyed off the same redirect map — no manual link edits needed).
+
+| # | Removed URL | Survivor (301 target) | Evidence | Cluster |
+|---|---|---|---|---|
+| 31 | `/nopeat-kotiutukset-kasinolla-95-prosenttia-nopeammin/` | `/nopeat-kasino-kotiutusajat-opas-suomalaisille/` | 0 impressions in 16mo (was review-gated in batch A pending exactly this data) | 5 — fast withdrawals |
+| 32 | `/parhaat-esimerkit-pikakasinoista-suomessa-2026/` | `/top-pikakasinot-vertailu-6/` | 0 impressions in 16mo (was "review, not unambiguous" in batch A) | 9 — best examples fast → C2 |
+| 33 | `/miksi-valita-tiliton-kasino-pelaajan-opas-2026/` | `/miksi-valita-tiliton-kasino-opas-2026/` | 0 impressions; survivor has 7 impr / pos 10.29, only member with signal | I — why choose no-account |
+| 34 | `/miksi-valita-kasino-ilman-tilia-vuonna-2026/` | `/miksi-valita-tiliton-kasino-opas-2026/` | 0 impressions | I — why choose no-account |
+| 35 | `/mita-ovat-tilittomat-kasinot-selkea-opas-2026/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` | 0 impressions — the map's baseline "what-is" KEEP is dead; survivor swapped to the surviving evergreen definition page (31 impr, most volume in cluster) | J — what-is/how-works |
+| 36 | `/tilittoman-kasinon-toiminta-2026-opas-pelaajille/` | `/miten-tilittomat-kasinot-toimivat-opas-2026/` | 2 impr / pos 13.5 vs survivor's 2 impr / pos 6.5 — survivor has the better position for the "how it works" angle | J — what-is/how-works |
+| 37 | `/esimerkkeja-tilittomista-kasinoista-opas-2026/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` | 2 impr / pos 8.5, listicle-ish "examples" angle folded into the definition canonical (no dedicated toplist twin exists to absorb it instead) | J — what-is/how-works |
+| 38 | `/tilivapaiden-kasinoiden-kayttovinkit-2026/` | `/tilivapaiden-kasinoiden-edut-opas-2026/` | Both members 0 impressions — no traffic signal either direction, default to map's baseline KEEP (benefits over tips) | K — tilivapaa benefits/tips |
+
+**Outcome for cluster J:** matches the map's own predicted result ("keep 1
+what-is + 1 how-works + retire the rest"), confirmed by data — with the KEEP
+for the definition/what-is angle swapped from the map's baseline guess
+(`mita-ovat-tilittomat-kasinot-selkea-opas-2026`, word-count-only baseline)
+to the page real search data actually supports
+(`mika-on-tiliton-kasino-ja-miten-se-toimii`).
+
+**Skipped (left untouched, per data):**
+- Cluster 10 `/atjkitchen-com-vaihtoehdot-6/`: the map and batch-A.5 both
+  recorded it at zero GSC impressions; this export shows 2 impressions at
+  position 6 — a small but real signal it has picked up since. Per the map's
+  own rule ("if it ranks for the brand-alternative term, keep as-is"), no
+  action.
+- Cluster 5 `/nopeat-kotiutukset-nettikasinoilta/`: reconfirmed as the
+  cluster's real prize, not a merge candidate — 4,336 impressions (by far the
+  largest in this entire dataset) at position ~80. Left standalone exactly as
+  batch A already decided; the fix this page needs is a ranking recovery, not
+  a redirect.
+- Part B Cluster K's own baseline KEEP (`tilivapaiden-kasinoiden-edut-opas-2026`)
+  and Cluster J's `miten-tilittomat-kasinot-toimivat-opas-2026` were left as
+  live survivors, not retired, consistent with the table above.
+
+**Batch B totals:** 8 fragments retired, 8 redirect sources (16 slash-variant
+rules) added — `data/static-redirects.json` now 162 rules total (was 146).
+Build after commit: `npm run build` → check-build OK, audit-dist-links PASS,
+559 pages.
+
 <!-- Batches appended below as they are executed. -->
