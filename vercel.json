@@ -730,6 +730,86 @@
       "source": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen-arvostelu/",
       "destination": "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
       "permanent": true
+    },
+    {
+      "source": "/nopeat-kotiutukset-kasinolla-95-prosenttia-nopeammin",
+      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "permanent": true
+    },
+    {
+      "source": "/nopeat-kotiutukset-kasinolla-95-prosenttia-nopeammin/",
+      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "permanent": true
+    },
+    {
+      "source": "/parhaat-esimerkit-pikakasinoista-suomessa-2026",
+      "destination": "/top-pikakasinot-vertailu-6/",
+      "permanent": true
+    },
+    {
+      "source": "/parhaat-esimerkit-pikakasinoista-suomessa-2026/",
+      "destination": "/top-pikakasinot-vertailu-6/",
+      "permanent": true
+    },
+    {
+      "source": "/miksi-valita-tiliton-kasino-pelaajan-opas-2026",
+      "destination": "/miksi-valita-tiliton-kasino-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/miksi-valita-tiliton-kasino-pelaajan-opas-2026/",
+      "destination": "/miksi-valita-tiliton-kasino-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/miksi-valita-kasino-ilman-tilia-vuonna-2026",
+      "destination": "/miksi-valita-tiliton-kasino-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/miksi-valita-kasino-ilman-tilia-vuonna-2026/",
+      "destination": "/miksi-valita-tiliton-kasino-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/mita-ovat-tilittomat-kasinot-selkea-opas-2026",
+      "destination": "/mika-on-tiliton-kasino-ja-miten-se-toimii/",
+      "permanent": true
+    },
+    {
+      "source": "/mita-ovat-tilittomat-kasinot-selkea-opas-2026/",
+      "destination": "/mika-on-tiliton-kasino-ja-miten-se-toimii/",
+      "permanent": true
+    },
+    {
+      "source": "/tilittoman-kasinon-toiminta-2026-opas-pelaajille",
+      "destination": "/miten-tilittomat-kasinot-toimivat-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/tilittoman-kasinon-toiminta-2026-opas-pelaajille/",
+      "destination": "/miten-tilittomat-kasinot-toimivat-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/esimerkkeja-tilittomista-kasinoista-opas-2026",
+      "destination": "/mika-on-tiliton-kasino-ja-miten-se-toimii/",
+      "permanent": true
+    },
+    {
+      "source": "/esimerkkeja-tilittomista-kasinoista-opas-2026/",
+      "destination": "/mika-on-tiliton-kasino-ja-miten-se-toimii/",
+      "permanent": true
+    },
+    {
+      "source": "/tilivapaiden-kasinoiden-kayttovinkit-2026",
+      "destination": "/tilivapaiden-kasinoiden-edut-opas-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/tilivapaiden-kasinoiden-kayttovinkit-2026/",
+      "destination": "/tilivapaiden-kasinoiden-edut-opas-2026/",
+      "permanent": true
     }
   ],
   "headers": [
