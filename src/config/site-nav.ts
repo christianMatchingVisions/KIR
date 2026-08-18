@@ -58,6 +58,12 @@ export const TRUST_LOGOS: TrustLogo[] = [
     width: 400,
     height: 400,
   },
+  {
+    src: "/badges/18-plus.svg",
+    alt: "Ikäraja 18 vuotta — rahapelit sallittu vain täysi-ikäisille",
+    width: 120,
+    height: 120,
+  },
 ];
 
 /* --------------------------------------------------------------------------
