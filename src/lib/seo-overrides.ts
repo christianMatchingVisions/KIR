@@ -69,6 +69,18 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   },
 
   // --- Money hubs (<title> and H1 share the value → reads as a heading too) ---
+  // GSC (2026-09): the page's own top query is "ilmaiskierrokset ilman
+  // talletusta 2022" and it ranks pos ~10-11 for the "2021"-suffixed variants
+  // specifically — because the preserved title/description literally say
+  // "2021" ("vuodelle 2021"). Meanwhile the real-volume undated query
+  // ("ilmaiskierroksia ilman talletusta", 2,293 impressions) sits at pos ~60.
+  // Body content (2,391 words) is not date-specific and needs no change —
+  // only the 5-year-stale title/description are the problem.
+  "/ilmaiskierroksia-ilman-talletusta/": {
+    title: "Ilmaiskierroksia ilman talletusta 2026 – täydellinen opas",
+    description:
+      "Vertaile parhaat ilmaiskierrokset ilman talletusta 2026: ehdot, kierrätysvaatimukset ja luotettavat kasinot suomalaispelaajille.",
+  },
   "/nettikasinot-luotettavat-kasinot/": {
     title: "Luotettavat nettikasinot 2026 – vertailu ja kokemukset",
     description:
