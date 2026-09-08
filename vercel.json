@@ -810,6 +810,66 @@
       "source": "/tilivapaiden-kasinoiden-kayttovinkit-2026/",
       "destination": "/tilivapaiden-kasinoiden-edut-opas-2026/",
       "permanent": true
+    },
+    {
+      "source": "/kryptokasinoiden-suosio-kasvussa-mika-selittaa-ilmion",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kryptokasinoiden-suosio-kasvussa-mika-selittaa-ilmion/",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kryptokasinoiden-turvallisuus",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kryptokasinoiden-turvallisuus/",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kryptokasinot-nettikasinoiden-tulevaisuus-vai-pelkka-muoti-ilmio",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kryptokasinot-nettikasinoiden-tulevaisuus-vai-pelkka-muoti-ilmio/",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kuinka-pelaat-kryptokasinoilla",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/kuinka-pelaat-kryptokasinoilla/",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/mitka-ovat-kryptovaluuttojen-edut-nettikasinolla-pelattaessa",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/mitka-ovat-kryptovaluuttojen-edut-nettikasinolla-pelattaessa/",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/suomalaiset-nettikasinot-ja-kryptovaluutta",
+      "destination": "/kryptokasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/suomalaiset-nettikasinot-ja-kryptovaluutta/",
+      "destination": "/kryptokasinot/",
+      "permanent": true
     }
   ],
   "headers": [
