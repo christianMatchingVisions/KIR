@@ -253,4 +253,54 @@ rules) added — `data/static-redirects.json` now 162 rules total (was 146).
 Build after commit: `npm run build` → check-build OK, audit-dist-links PASS,
 559 pages.
 
+---
+
+# Kryptokasinot cluster consolidation (2026-09-08)
+
+**Evidence:** live Ahrefs GSC data (project 1943203), 6-month window
+(2026-03-01 → 2026-09-08). This cluster was flagged as a consolidation
+candidate on 2026-08-18 (during Part B execution) but deliberately NOT
+touched then — new content was recommended against it at the time
+specifically because it looked like near-duplicate cannibalization, and
+that call is now confirmed with real per-URL data.
+
+The `/kryptokasinot/` money hub is the **only** member of this 7-page
+cluster with any search presence at all: 19,135 impressions, position
+31.4, 1 click, 34 associated keywords, top query "kryptokasinot." The
+other 6 — all informational articles on adjacent crypto-casino angles —
+have **zero impressions each** over the full 6-month window. No
+diverging queries to preserve, no ambiguity: textbook consolidation
+case, cleaner than any Part A/B cluster (those all had at least some
+residual signal to weigh).
+
+**301 relevance check:** confirmed `/kryptokasinot/`'s own body content
+already covers every retired page's angle directly — "Mikä on krypto
+casino?" / "Miten kryptovaluutta toimii?" (definition), "Kuinka pelata
+kryptoilla" + deposit/withdraw sections (how-to-play), "Bitcoin kasino –
+plussat ja miinukset" (benefits), "Krypto kasinoiden turvallisuus ja
+lisensointi" (safety), "Kryptokasinot ja tulevaisuus" (future outlook).
+Not equity-dumping — the destination genuinely answers each retired
+page's intent.
+
+Same mechanism as every prior batch: fragment deleted, both slash-variant
+301s added to `data/static-redirects.json` → folded into `vercel.json`
+via `sync-static-redirects.mjs`. Internal links, listing exclusion, and
+WP-resync protection all automatic (same `isRetiredPath`/redirect-map
+machinery, no manual edits needed).
+
+| # | Removed URL | Survivor | Evidence |
+|---|---|---|---|
+| 39 | `/kryptokasinoiden-suosio-kasvussa-mika-selittaa-ilmion/` | `/kryptokasinot/` | 0 impressions in 6mo |
+| 40 | `/kryptokasinoiden-turvallisuus/` | `/kryptokasinot/` | 0 impressions in 6mo |
+| 41 | `/kryptokasinot-nettikasinoiden-tulevaisuus-vai-pelkka-muoti-ilmio/` | `/kryptokasinot/` | 0 impressions in 6mo |
+| 42 | `/kuinka-pelaat-kryptokasinoilla/` | `/kryptokasinot/` | 0 impressions in 6mo |
+| 43 | `/mitka-ovat-kryptovaluuttojen-edut-nettikasinolla-pelattaessa/` | `/kryptokasinot/` | 0 impressions in 6mo |
+| 44 | `/suomalaiset-nettikasinot-ja-kryptovaluutta/` | `/kryptokasinot/` | 0 impressions in 6mo |
+
+**Totals:** 6 fragments retired, 6 redirect sources (12 slash-variant
+rules) added — `data/static-redirects.json` now 174 rules total (was
+162). `/kryptokasinot/` itself untouched (already carries its own
+Phase-5 title/description override, richest member at 3,046 words —
+stays exactly as-is).
+
 <!-- Batches appended below as they are executed. -->
