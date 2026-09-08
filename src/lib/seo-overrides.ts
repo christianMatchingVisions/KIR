@@ -59,9 +59,15 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   // truncation risk) — title-only, description untouched (not flagged). ---
   "/casino/vegazone/": {
     title: "VegaZone arvostelu 2026 – bonukset ja Zimpler-maksut",
+    // description also flagged "too long" (170 chars) in the same audit.
+    description:
+      "VegaZone arvostelu: bonukset, pelit, maksut, mobiilikäyttö ja turvallisuus. Onko futuristinen VegaZone kokeilemisen arvoinen?",
   },
   "/casino/taika-spinni-kasino/": {
     title: "Taika Spinni arvostelu 2026 – bonukset ja kotiutukset",
+    // description also flagged "too long" (166 chars) in the same audit.
+    description:
+      "Taika Spinni arvostelu: bonukset, pelit, maksut, mobiilikäyttö ja turvallisuus. Onko uusi Taika Spinni kokeilemisen arvoinen?",
   },
 
   // --- News hub (informational intent; H1 "Uutiset" renders independently) ---
@@ -116,6 +122,9 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   },
   "/opas-parhaan-kasinobonuksen-loytamiseen/": {
     title: "Opas parhaan kasinobonuksen löytämiseen 2026",
+    // description also flagged "too long" (184 chars) in the same audit.
+    description:
+      "Asiantuntijaopas parhaan kasinobonuksen löytämiseen: non sticky -bonukset 100 % talletuksella ja alhaisella kierrätyksellä.",
   },
 
   // --- Ahrefs Site Audit (2026-09-08), "Title too short" — generic
@@ -132,6 +141,210 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     title: "Usein kysytyt kysymykset – Kasinot ilman rekisteröitymistä",
     description:
       "Vastauksia yleisimpiin kysymyksiin kasinoista ilman rekisteröitymistä: rekisteröityminen, talletukset, kotiutukset ja turvallisuus.",
+  },
+
+  // --- Ahrefs Site Audit (2026-09-08), "Meta description too long"
+  // (>~160 chars, SERP truncation risk) — description-only, condensed
+  // without dropping any real claim, titles untouched (not flagged). ---
+  "/pragmatic-play-pelit-monipuolista-viihdetta/": {
+    description:
+      "Tutustu Pragmatic Playn pelivalikoimaan: kolikkopelit, livekasino, crash-pelit, bingo ja raaputusarvat. Suosikkeja: Gates of Olympus, Spaceman.",
+  },
+  "/le-cowboy-arvostelu/": {
+    description:
+      "Le Cowboy on Hacksaw Gamingin korkean volatiliteetin videoslotti villin lännen teemalla. Lue arvostelu ja katso voittopotentiaali.",
+  },
+  "/casino/lucky-fruits-casino/": {
+    description:
+      "Lucky Fruits Casino on Zimpler-pikakasino: 100% non-sticky bonus 300 euroon asti, päivittäinen cashback ja nopeat kotiutukset. Lue arvostelu.",
+  },
+  "/kimppa-talletukset-nettikasinoilla/": {
+    description:
+      "Kimppa-talletukset ovat uusi trendi: pelaajat tekevät yhteisiä talletuksia kasinolle. Lue miten ne toimivat sekä hyödyt ja riskit.",
+  },
+  "/live-blackjack-strategiat/": {
+    description:
+      "Tutustu parhaisiin live blackjack -strategioihin: perusstrategia ja panostustaktiikat, jotka minimoivat talon edun ja parantavat voittomahdollisuuksia.",
+  },
+  "/live-game-show-pelit/": {
+    description:
+      "Tutustu live game show -peleihin: Crazy Time, Monopoly Live ja Sweet Bonanza CandyLand. Opi pelaamaan niitä fiksusti.",
+  },
+  "/oracle-of-gold-arvostelu/": {
+    description:
+      "Oracle of Gold on Pragmatic Playn 6x6 cluster-slotti nousevalla globaalikertoimella, joka maksaa parhaimmillaan 10 000x. Lue arvostelu.",
+  },
+  "/gamification-nettikasinoilla/": {
+    description:
+      "Mitä gamification eli pelillistäminen nettikasinoilla tarkoittaa? Tutustu tasoihin, tehtäviin ja palkintoihin viihdyttävämmässä pelikokemuksessa.",
+  },
+  "/pikakasinot/": {
+    description:
+      "Pikakasinot ovat nopeita kasinoita ilman rekisteröitymistä: tunnistaudu verkkopankilla (Trustly, Zimpler, BRITE) ja kotiuta voitot minuuteissa.",
+  },
+  "/kolikkopelien-eri-rtp-vaihtoehdot/": {
+    description:
+      "Samalla kolikkopelillä voi olla useita RTP-versioita. Mitä 92%, 94% ja 96% RTP tarkoittavat ja miten teet fiksumpia valintoja?",
+  },
+  "/parhaat-klassikkoslotit/": {
+    description:
+      "Esittelyssä kolme parasta klassikkoslottia: Break Da Bank, Emerald Diamond ja Mega Joker. Katso miksi ne ovat yhä pelaajien suosikkeja.",
+  },
+  "/ilmaiskierrokset-bonukset-ilman/": {
+    description:
+      "Ilmaiskierrokset ja bonukset ilman talletusta antavat mahdollisuuden testata kasinoita riskittä. Lue miten tarjoukset toimivat.",
+  },
+  "/kuinka-valita-oikea-kolikkopeli/": {
+    description:
+      "Etsitkö sopivaa kolikkopeliä? Opas parhaan slotin valintaan RTP:n, volatiliteetin, teeman ja bonusominaisuuksien perusteella.",
+  },
+  "/yleisimmat-ongelmat-nettikasinoilla-ja-kuinka-ratkaiset-ne/": {
+    description:
+      "Törmäätkö hitaaseen kotiutukseen tai epäselviin bonusehtoihin? Käymme läpi yleisimmät nettikasino-ongelmat ja niiden ratkaisut.",
+  },
+  "/miten-pikakasinot-toimivat-nopea-ja-turvallinen-opas-2026/": {
+    description:
+      "Opi miten pikakasinot toimivat ilman rekisteröitymistä: verkkopankkitunnistautuminen, turvallisuus ja nopeat rahansiirrot 2026.",
+  },
+  "/mika-tekee-nettikasinopelaamisesta-niin-hauskaa/": {
+    description:
+      "Nettikasinopelaaminen on muutakin kuin voittojen jahtaamista. Lue mitkä tekijät tekevät pelaamisesta viihdyttävää.",
+  },
+  "/nettikasino-ilman-rekisteroitymista/": {
+    description:
+      "Nettikasino ilman rekisteröitymistä tarkoittaa pelaamista verkkopankkitunnuksilla ilman käyttäjätiliä. Vertaa parhaita vaihtoehtoja 2026.",
+  },
+  "/maksutapojen-merkitys-tilittomilla-kasinoilla-valitse/": {
+    description:
+      "Opi valitsemaan paras maksutapa tilittömälle kasinolle. Vertailu: Trustly, Zimpler ja muut — nopeus, turvallisuus ja käytännön vinkit.",
+  },
+  "/casino/berriez-casino/": {
+    description:
+      "Berriez Casino on suomalaisille suunnattu pikakasino: välittömät kotiutukset, päivittäinen cashback ja matalat kierrätysvaatimukset.",
+  },
+  "/kolikkopelien-teemat-mika-niissa-viehattaa/": {
+    description:
+      "Kolikkopelien teemat luovat tunnelman ja houkuttelevat pelaamaan. Katso mitkä teemat toimivat parhaiten ja miksi.",
+  },
+  "/casino/pelipeto-kasino/": {
+    description:
+      "Pelipeto Kasino on syksyllä 2025 avattu Zimpler-pikakasino: kierrätysvapaat bonukset, VIP-edut ja verovapaat voitot.",
+  },
+  "/casino/casinoist/": {
+    description:
+      "Casinoist on uusi Pay N Play -kasino: 100% tervetulobonus, yli 7000 slottia ja nopeat kotiutukset. Lue arvostelu.",
+  },
+  "/kolikkopelien-erikoisominaisuudet-mita-kannattaa-tietaa/": {
+    description:
+      "Kolikkopelien erikoisominaisuudet, kuten laajenevat symbolit ja kertoimet, tuovat jännitystä. Lue miten hyödynnät niitä.",
+  },
+  "/pragmatic-play-nettikasinopelien-edellakavija/": {
+    description:
+      "Tutustu Pragmatic Playhin, alan johtavaan pelivalmistajaan: historia, innovatiiviset ominaisuudet ja suosion syyt.",
+  },
+  "/casino/joki-kasino/": {
+    description:
+      "Joki Kasino on verovapaa Brite Pay N Play -kasino: 200% talletusbonus 1000 euroon asti. Lue arvostelu bonusehdoista ja peleistä.",
+  },
+  "/kasinot-ilman-rekisteroitymista-2026-70-turvallisempia-pelaajia/": {
+    description:
+      "Kasinot ilman rekisteröitymistä 2026: 70% turvallisempia pankkitunnistuksella, nopeat kotiutukset ja selkeät bonukset.",
+  },
+  "/casino/speedz-casino/": {
+    description:
+      "Speedz Casino on Trumo-pikakasino: yli 4000 peliä, nopeat kotiutukset ja 300 ilmaiskierrosta alkuun. Lue arvostelu.",
+  },
+  "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/": {
+    description:
+      "Opi vastuullisen pelaamisen periaatteet tilittömillä kasinoilla: self-exclusion-työkalut ja impulsiivisuuden hallinta.",
+  },
+  "/casino/flamez-kasino/": {
+    description:
+      "Flamez Kasino on uusi TrumoPay-pikakasino: 200 ilmaiskierroksen tervetuliaisbonus, 20% cashback ja yli 5400 peliä.",
+  },
+  "/miksi-valita-kasino-ilman-rekisteroitymista/": {
+    description:
+      "Miksi valita kasino ilman rekisteröitymistä 2026: tärkeimmät edut, maksutavat, bonukset ja turvallisuus suomalaispelaajille.",
+  },
+  "/sisarkasinot-vs-itsenaiset-kasinot-kumpi-sopii-sinulle-paremmin/": {
+    description:
+      "Sisarkasinot vs. itsenäiset kasinot: hyödyt, haitat ja kumpi tarjoaa paremman pelikokemuksen juuri sinulle.",
+  },
+  "/turvallisen-tilittoman-kasinon-valinta-2026/": {
+    description:
+      "Opi valitsemaan turvallinen tilitön kasino 2026: tarkista lisenssit ja maksutavat, vältä yleisimmät virheet.",
+  },
+
+  // --- Ahrefs Site Audit (2026-09-08), "Meta description too short"
+  // (<~70 chars, or a broken/placeholder scrape artifact) —
+  // description-only, titles untouched (not flagged). 10 of these were the
+  // SAME identical templated line across 10 different casinos ("Lue X
+  // Kasino arvostelu joka kertoo kasinon bonustiedot, promo koodin, ja
+  // pelaajien kokemuksia.") — a duplicate-content problem, not just a
+  // length one. Replaced with real per-casino copy, sourced only from
+  // facts already published in each page's own <title> (no new claims). ---
+  "/kasino-ilman-arvostelut/": {
+    // was a broken scrape artifact literally containing a raw URL path
+    // ("Kasino Ilman Arvostelut - /kolikkopelien-ostobonukset-hitti-vai-huti/").
+    // This is the site's A-Z casino index page.
+    description:
+      "Aakkosellinen listaus kaikista sivuston kasinoista. Selaa nettikasinot ilman rekisteröitymistä ja siirry suoraan haluamasi kasinon arvosteluun.",
+  },
+  "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/": {
+    description:
+      "Mitkä maksutavat ovat turvallisia nettikasinoilla? Kattava opas rahansiirtoihin: Trustly, Zimpler, Brite ja muut suomalaispelaajille.",
+  },
+  // /parhaat-kasinot-ilman-rekisteroitymista-5/ is Cluster 1's KEEP
+  // survivor from the doorway consolidation (docs/doorway-consolidation-map.md)
+  // and the site's single best-ranking page (pos ~2.3) — worth a properly
+  // crafted description, not just a length patch.
+  "/parhaat-kasinot-ilman-rekisteroitymista-5/": {
+    description:
+      "Vertaile 5 parasta kasinoa ilman rekisteröitymistä 2026: bonukset, nopeat kotiutukset ja luotettavat maksutavat suomalaispelaajille.",
+  },
+  "/casino/huippukasino/": {
+    description:
+      "Huippukasino-arvostelu: bonustiedot, pelivalikoima ja pelaajien kokemukset. Lue kattava katsaus ennen rekisteröitymistä.",
+  },
+  "/casino/reipas/": {
+    description:
+      "Reipas Kasino on uutuuskasino 500 % tervetulobonuksella. Lue arvostelu bonusehdoista, peleistä ja pelaajien kokemuksista.",
+  },
+  "/casino/pelikioski/": {
+    description:
+      "Pelikioski Kasino -arvostelu: bonukset, pelivalikoima, maksutavat ja asiakaspalvelu. Kattava katsaus suomalaispelaajille.",
+  },
+  "/casino/tuohi-kasino/": {
+    description:
+      "Tuohi Kasino tarjoaa kierrätysvapaita bonuksia. Lue arvostelu bonusehdoista, pelivalikoimasta ja kotiutuksista.",
+  },
+  "/casino/betizy-kasino/": {
+    description:
+      "Betizy Kasino -arvostelu: jopa 500 ilmaiskierrosta talletuksella. Bonusehdot, pelivalikoima ja kotiutusajat läpikäytynä.",
+  },
+  "/casino/rioace/": {
+    description:
+      "RioAce Kasino -arvostelu: nappaa jopa 1500 euroa bonusta. Lue bonusehdot, pelivalikoima ja pelaajien kokemukset.",
+  },
+  "/casino/moana-kasino/": {
+    description:
+      "Moana Kasino tarjoaa kolme talletusbonusta uusille pelaajille. Lue arvostelu bonusehdoista, peleistä ja kotiutuksista.",
+  },
+  "/casino/valtti-kasino/": {
+    description:
+      "Valtti Kasino -arvostelu: nappaa 150 % tervetulobonus. Lue bonusehdot, pelivalikoima ja pelaajien kokemukset.",
+  },
+  "/casino/klikki-kasino/": {
+    description:
+      "Klikki Kasino on uusi pikakasino 200 % tervetulobonuksella. Lue arvostelu bonusehdoista ja nopeista kotiutuksista.",
+  },
+  "/casino/icebet-casino/": {
+    description:
+      "IceBet Casino -arvostelu: non-sticky bonus jopa 300 euroon asti. Lue bonusehdot, pelivalikoima ja kotiutusajat.",
+  },
+  "/casino/winz/": {
+    description:
+      "Winz-kasino tarjoaa yli 5000 peliä. Lue arvostelu bonuksista, RTP-tiedoista ja pelaajien kokemuksista.",
   },
 };
 
