@@ -191,6 +191,25 @@ function sanitizePreservedJsonLd(block: string): string {
 }
 
 /**
+ * Fix ImageObject width/height typed as strings instead of numbers in
+ * preserved JSON-LD (e.g. the site-wide Organization → logo block:
+ * `"width": "1855"`). Schema.org/Google's Rich Results validator expects a
+ * number here — the Phase-1 WP scrape (Rank Math) emitted a quoted numeral on
+ * every fragment, which an Ahrefs Site Audit crawl (2026-09-08) flagged as a
+ * structured-data validation error on ~526 pages (the same shared block,
+ * duplicated per-fragment). Fixed centrally here rather than hand-editing
+ * hundreds of head.html files. Scoped tightly to the "width"/"height" keys
+ * only (not a general quoted-number stripper) and — like
+ * sanitizePreservedJsonLd above — a targeted string replacement, never
+ * JSON.parse/restringify, so key order/escaping stays byte-identical to what
+ * Google has already indexed. Idempotent: a no-op wherever the value is
+ * already a bare number.
+ */
+function fixJsonLdImageDimensionStrings(block: string): string {
+  return block.replace(/"(width|height)":\s*"(\d+)"/g, '"$1": $2');
+}
+
+/**
  * Decode HTML entities in TITLE text until stable (max 3 passes). The layout
  * re-renders the title through Astro's own escaping, so a fragment title
  * stored ENCODED ("…&amp;…") shipped DOUBLE-encoded ("…&amp;amp;…") — browser
@@ -260,12 +279,12 @@ function parseHead(html: string): SeoHead {
   const ogTags = ordered.map((o) => o.tag);
 
   // Every <script type="application/ld+json">…</script> block, VERBATIM —
-  // except the placeholder-author neutralisation (sanitizePreservedJsonLd),
-  // which is a targeted string replacement that preserves key order/escaping.
+  // except two targeted string-replacement fixes (sanitizePreservedJsonLd,
+  // fixJsonLdImageDimensionStrings) that preserve key order/escaping.
   const jsonLd = allMatches(
     html,
     /<script[^>]*\btype=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi
-  ).map(sanitizePreservedJsonLd);
+  ).map(sanitizePreservedJsonLd).map(fixJsonLdImageDimensionStrings);
 
   return { title, canonical, description, robots, ogTags, jsonLd };
 }
