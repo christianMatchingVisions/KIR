@@ -106,18 +106,24 @@ const emitCleanDescription = !seo && Boolean(description);
 const cleanJsonLd = !seo ? jsonLd : [];
 
 // ---- OG default for net-new hub pages (finding L2) ----
-// /oppaat/ is a brand-new hub rendered without a preserved head and without its
-// own OpenGraph data, so it gets a generic OG card (+ og:title + index robots)
-// here. /toimitus/ is excluded: it supplies its OWN purpose-written og tags via
-// the jsonLd head slot, so adding the default here would double the og:image.
-// The 582 pages with preserved heads are untouched (seo is set, so this skips).
+// /oppaat/, /kayttoehdot/, /tietosuoja/ are brand-new pages rendered without a
+// preserved head and without their own OpenGraph data, so they get a generic
+// OG card (+ index robots) here. /toimitus/ is excluded: it supplies its OWN
+// purpose-written og tags via the jsonLd head slot, so adding the default
+// here would double the og:image. The 582 pages with preserved heads are
+// untouched (seo is set, so this skips). /kayttoehdot/ + /tietosuoja/ added
+// 2026-09-08 (Ahrefs Site Audit: "Open Graph tags missing" + "X (Twitter)
+// card missing") — both already pass a real `description` prop, so it's
+// included here too (og:description/twitter:description), unlike the
+// original /oppaat/-only block.
 const normalizedPath = (() => {
   let s = pathForPolicy.split(/[?#]/)[0];
   if (!s.startsWith("/")) s = "/" + s;
   if (!s.endsWith("/")) s = s + "/";
   return s.replace(/\/{2,}/g, "/");
 })();
-const isOgDefaultHub = !seo && normalizedPath === "/oppaat/";
+const OG_DEFAULT_PATHS = new Set(["/oppaat/", "/kayttoehdot/", "/tietosuoja/"]);
+const isOgDefaultHub = !seo && OG_DEFAULT_PATHS.has(normalizedPath);
 const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png";
 ---
 
@@ -162,6 +168,9 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
         <>
           {!noindex && <meta name="robots" content="index,follow" />}
           <meta property="og:title" content={resolvedTitle} />
+          {description && (
+            <meta property="og:description" content={description} />
+          )}
           <meta property="og:type" content="website" />
           <meta
             property="og:url"
@@ -170,6 +179,9 @@ const ogDefaultImage = "https://kasinotilmanrekisteroitymista.com/og/default.png
           <meta property="og:image" content={ogDefaultImage} />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={resolvedTitle} />
+          {description && (
+            <meta name="twitter:description" content={description} />
+          )}
         </>
       )
     }

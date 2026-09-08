@@ -55,6 +55,15 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Casino Vice -arvostelu: lisenssi, bonusehdot, cashback, kotiutusajat ja maksutavat. Puolueeton katsaus suomalaispelaajille 2026.",
   },
 
+  // --- Ahrefs Site Audit (2026-09-08), "Title too long" (>60 chars, SERP
+  // truncation risk) — title-only, description untouched (not flagged). ---
+  "/casino/vegazone/": {
+    title: "VegaZone arvostelu 2026 – bonukset ja Zimpler-maksut",
+  },
+  "/casino/taika-spinni-kasino/": {
+    title: "Taika Spinni arvostelu 2026 – bonukset ja kotiutukset",
+  },
+
   // --- News hub (informational intent; H1 "Uutiset" renders independently) ---
   // GSC (2026-07): the hub ranks pos ~5.7 for "suomalainen nettikasino uutiset"
   // and its child licensing-reform articles rank pos 3-5 ("rahapelit suomi
@@ -95,6 +104,34 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     title: "Zimpler-pikakasinot 2026 – Pay N Play ja nopeat kotiutukset",
     description:
       "Parhaat Zimpler-pikakasinot 2026: Pay N Play ilman rekisteröitymistä, nopeat kotiutukset ja bonukset. Vertaile ja valitse luotettava kasino.",
+  },
+
+  // --- Ahrefs Site Audit (2026-09-08), "Title too long" — informational
+  // articles, title-only, description untouched (not flagged). ---
+  "/tilittomien-kasinoiden-turvallisuusvaatimukset/": {
+    title: "Tilittömien kasinoiden turvallisuusvaatimukset 2026",
+  },
+  "/kasinoiden-lisenssivaatimukset-turvallisuus-ja-pelivalinta/": {
+    title: "Kasinoiden lisenssivaatimukset 2026 – turvallisuusopas",
+  },
+  "/opas-parhaan-kasinobonuksen-loytamiseen/": {
+    title: "Opas parhaan kasinobonuksen löytämiseen 2026",
+  },
+
+  // --- Ahrefs Site Audit (2026-09-08), "Title too short" — generic
+  // one/two-word preserved titles carrying no real keyword context. ---
+  "/pragmatic-play/": {
+    title: "Pragmatic Play kasinopelit 2026 – kolikkopelit ja livekasino",
+  },
+  "/hacksaw-gaming/": {
+    title: "Hacksaw Gaming kasinopelit 2026 – parhaat pelit ja voitot",
+  },
+  "/ht-faq/": {
+    // description was also a placeholder ("FAQs Archive - <domain>") —
+    // fixed alongside the title since both were equally uninformative.
+    title: "Usein kysytyt kysymykset – Kasinot ilman rekisteröitymistä",
+    description:
+      "Vastauksia yleisimpiin kysymyksiin kasinoista ilman rekisteröitymistä: rekisteröityminen, talletukset, kotiutukset ja turvallisuus.",
   },
 };
 
