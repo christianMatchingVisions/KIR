@@ -868,5 +868,25 @@
     "source": "/suomalaiset-nettikasinot-ja-kryptovaluutta/",
     "destination": "/kryptokasinot/",
     "permanent": true
+  },
+  {
+    "source": "/casino/pelikaani-kasino",
+    "destination": "/kaikki-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/casino/pelikaani-kasino/",
+    "destination": "/kaikki-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/casino/pelikioski",
+    "destination": "/kaikki-kasinot/",
+    "permanent": true
+  },
+  {
+    "source": "/casino/pelikioski/",
+    "destination": "/kaikki-kasinot/",
+    "permanent": true
   }
 ]

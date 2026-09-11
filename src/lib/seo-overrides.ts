@@ -310,10 +310,6 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Reipas Kasino on uutuuskasino 500 % tervetulobonuksella. Lue arvostelu bonusehdoista, peleistä ja pelaajien kokemuksista.",
   },
-  "/casino/pelikioski/": {
-    description:
-      "Pelikioski Kasino -arvostelu: bonukset, pelivalikoima, maksutavat ja asiakaspalvelu. Kattava katsaus suomalaispelaajille.",
-  },
   "/casino/tuohi-kasino/": {
     description:
       "Tuohi Kasino tarjoaa kierrätysvapaita bonuksia. Lue arvostelu bonusehdoista, pelivalikoimasta ja kotiutuksista.",

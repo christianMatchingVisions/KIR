@@ -61,6 +61,7 @@ import {
 } from "../lib/related";
 import { getSeoHead } from "../lib/seo-head";
 import { normalizeInternalHtmlLinks } from "../lib/html-links";
+import { stripRetiredBrands } from "../lib/retired-brands";
 
 interface FragmentMeta {
   htmlAttrs?: string;
@@ -428,13 +429,21 @@ const moneyIntroOptimized = optimizeProseImages(moneyIntro);
 articleBody = demoteBodyH1(articleBody);
 const moneyIntroFinal = demoteBodyH1(moneyIntroOptimized);
 
+/* COMMERCIAL: drop brands we no longer carry (ended affiliate deals) from
+ * scraped prose — index list items, WP oEmbed cards and outbound links to the
+ * operator's own domain. Runs BEFORE the link normaliser so the original
+ * /casino/<slug>/ hrefs are still there to match on, and at build time because
+ * the prose lives in data/rest/*.json, which the daily WP-sync regenerates. */
+articleBody = stripRetiredBrands(articleBody);
+const moneyIntroDebranded = stripRetiredBrands(moneyIntroFinal);
+
 /* SEO (audit Phases 3+4): correct known-broken internal links to their live
  * canonical URLs and add the trailing slash that trailingSlash:"always" needs,
  * so in-prose internal links resolve directly (no 404, no 301 hop). Applied
  * AFTER ensureSponsored so affiliate /go/ links (skipped by the normaliser) are
  * untouched. Build-time + idempotent — durable across the daily WP re-sync. */
 articleBody = normalizeInternalHtmlLinks(articleBody);
-const moneyIntroNormalized = normalizeInternalHtmlLinks(moneyIntroFinal);
+const moneyIntroNormalized = normalizeInternalHtmlLinks(moneyIntroDebranded);
 
 /* -------------------------------------------------------------------------- *
  * E-E-A-T BYLINE + INTERNAL-LINK ARCHITECTURE (additive, finding H7 + links). *

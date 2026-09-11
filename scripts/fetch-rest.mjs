@@ -109,6 +109,22 @@ const goManual = existsSync(goManualPath)
 
 const mergedGoRedirects = { ...goManual, ...goRedirects };
 
+// BLOCKED SLUGS: brands whose affiliate deal has ended. Their ThirstyAffiliates
+// entries usually still exist in WP, so deleting a slug from
+// data/go-redirects.json by hand is NOT durable — the next sync would restore
+// it and quietly resume sending clicks to a dead programme. Stripping them here
+// (after the merge, so neither the generated nor the manual set can reintroduce
+// one) makes the removal survive every re-sync. middleware.ts has no entry to
+// match, so /go/<slug>/ falls through to a normal 404.
+const goBlockedPath = path.join(ROOT, 'data', 'go-redirects-blocked.json');
+const goBlocked = existsSync(goBlockedPath)
+  ? JSON.parse(await readFile(goBlockedPath, 'utf8'))
+  : [];
+for (const slug of goBlocked) delete mergedGoRedirects[String(slug).toLowerCase()];
+if (goBlocked.length > 0) {
+  console.log(`Blocked ${goBlocked.length} /go/ slug(s) (ended affiliate deals): ${goBlocked.join(', ')}`);
+}
+
 // SANITY FLOOR: a transient WP hiccup (plugin momentarily deactivated, CPT
 // registration glitch, query mismatch) returns a normal 200 with a small/empty
 // thirstylink array — nothing throws, and without this guard every previously
