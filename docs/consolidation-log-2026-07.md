@@ -396,4 +396,87 @@ pos ~48; Wildz/Chipz/Spinz ≤ 9 each).
   rewrite around live brands renders again automatically. The page keeps its
   live 10-casino toplist.
 
+---
+
+# Batch C — no-registration head-term cluster (2026-09-15)
+
+**Why now:** GSC page history shows the whole site dropped in one week
+(week of 2025-12-15: homepage pos ~17 → ~40 → ~80, `/kryptokasinot/`
+~45 → ~80, Igni ~38 → ~90) and never recovered. After the drop, Feb–Jun
+2026 added a wave of templated guides all aimed at the homepage's own head
+term ("kasino ilman rekisteröitymistä" / tilitön / pikakasino / Pay N Play),
+several with invented statistics in the title ("60% Bonuksia & 40%
+Nopeampi", "70% turvallisempi"). They compete with the homepage and the
+hubs, and signal scaled low-value content to a site already under a
+quality demotion.
+
+**Evidence (all 25 retired URLs):**
+- Ahrefs GSC (project 1943203), 16-month window 2025-05-01 → 2026-09-15:
+  **0 clicks**; impressions 0 on 23 of 25, 8 on `modernit-pikakasinot-mobiili-edella`
+  (pos ~36) and 1 brand-query impression on `pikakasinoiden-kasvava-suosio-…`.
+- Ahrefs pages-by-backlinks (top 150 URLs by referring domains): **none**
+  of the 25 has external referring domains.
+- Survivor relevance checked against each survivor's own H2s:
+  - `/mika-on-tiliton-kasino-ja-miten-se-toimii/` (the only guide in the
+    cluster with GSC signal: 114 impressions, pos ~21) covers definition,
+    safety, pros/cons and how play works → absorbs the what-is / why /
+    how-to / benefits guides.
+  - `/` covers "Top 10 kasinot ilman rekisteröitymistä", how it works,
+    how we rate, pros/cons, bonuses → absorbs the "best casinos" listicles.
+  - `/pikakasinot/` covers what/how/pros-cons/choosing/licences → absorbs
+    the pikakasino explainers.
+  - `/parhaat-esimerkit-pay-n-play-kasinoista/` (map Cluster 8 KEEP) covers
+    how Pay N Play works, strengths/weaknesses, tax/licences → absorbs the
+    Pay N Play explainers.
+
+**Chain prevention:** five earlier survivors are retired here
+(`rekisteroitymisvapaan-pelaamisen-edut-…`, `askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026`,
+`miksi-valita-tiliton-kasino-opas-2026`, `miten-tilittomat-kasinot-toimivat-opas-2026`,
+`tilivapaiden-kasinoiden-edut-opas-2026`), so the 24 existing rules that
+pointed at them were repointed straight to the new survivor — no two-hop
+redirects.
+
+Same mechanism as every prior batch: fragment deleted, both slash-variant
+301s in `data/static-redirects.json` → `vercel.json` via
+`sync-static-redirects.mjs`; internal links, listings and WP-resync
+protection automatic.
+
+| # | Removed URL | Survivor (301 target) |
+|---|---|---|
+| 45 | `/kasino-ilman-rekisteroitymista-suomi/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 46 | `/miksi-valita-kasino-ilman-rekisteroitymista/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 47 | `/miksi-valita-tiliton-kasino-opas-2026/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 48 | `/miten-tilittomat-kasinot-toimivat-opas-2026/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 49 | `/kasino-ilman-rekisteroitymista-ohje/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 50 | `/nain-aloitat-rekisteroitymattoman-pelaamisen-helposti/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 51 | `/askel-askeleelta-rekisteroitymaton-kasinopelaaminen-2026/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 52 | `/rekisteroitymisvapaan-pelaamisen-edut-nopeus-ja-turvallisuus/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 53 | `/kasinot-ilman-tilia-suurimmat-edut-pelaajalle/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 54 | `/tilivapaiden-kasinoiden-edut-opas-2026/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 55 | `/kasinoiden-edut-vuonna-2026-pelaajan-opas/` | `/mika-on-tiliton-kasino-ja-miten-se-toimii/` |
+| 56 | `/kasino-ilman-rekisteroitymista-60-bonuksia-40-nopeampi/` | `/` |
+| 57 | `/kasinot-ilman-rekisteroitymista-2026-70-turvallisempia-pelaajia/` | `/` |
+| 58 | `/esimerkkeja-nettikasinoista-ilman-tilia-2026-valintakriteerit-ja-suositukset/` | `/` |
+| 59 | `/parhaat-kasinot-listalla-turvallisimmat-ja-helpoimmat/` | `/` |
+| 60 | `/mika-on-pikakasino-nopea-turvallinen/` | `/pikakasinot/` |
+| 61 | `/miten-pikakasinot-toimivat-nopea-ja-turvallinen-opas-2026/` | `/pikakasinot/` |
+| 62 | `/siksi-valitset-pikakasinon-nopeat-ja-turvalliset-pelit/` | `/pikakasinot/` |
+| 63 | `/miksi-valita-nopea-kasino-valitonta-pelaamista-suomalaisille/` | `/pikakasinot/` |
+| 64 | `/modernit-pikakasinot-mobiili-edella/` | `/pikakasinot/` |
+| 65 | `/kuinka-pikakasinot-takaavat-reilun-pelin/` | `/pikakasinot/` |
+| 66 | `/pikakasinoiden-kasvava-suosio-kuinka-kasinot-ilman-rekisteroitymista-muuttavat-alaa/` | `/pikakasinot/` |
+| 67 | `/pay-n-play-kasinon-toimintaperiaate/` | `/parhaat-esimerkit-pay-n-play-kasinoista/` |
+| 68 | `/pay-n-play-kasinoiden-edut-nopeus-turvallisuus/` | `/parhaat-esimerkit-pay-n-play-kasinoista/` |
+| 69 | `/turvallisuus-pay-n-play-kasinoilla-opas/` | `/parhaat-esimerkit-pay-n-play-kasinoista/` |
+
+**Deliberately kept:** `/5-syyta-miksi-pelata-kasinoilla-ilman-rekisteroitymista/`
+(2,174 impressions, 2 referring domains); `/parhaat-kasinot-ilman-rekisteroitymista-5/`
+(earlier Cluster 1 KEEP, left for a later review); the safety, payments,
+licence and tax-free guide tails (same pattern, separate batch).
+
+**Open question, not actioned:** `/nettikasino-ilman-rekisteroitymista/`
+(hub added 2026-06-24) targets the exact head term the homepage owns and has
+0 impressions since launch — itself a likely cannibal of `/`. Needs an owner
+decision before retiring.
+
 <!-- Batches appended below as they are executed. -->
