@@ -46,6 +46,7 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { loadEngineReviews, type EngineReview } from "./engine-casino-loader";
+import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
 
 export type { EngineReview } from "./engine-casino-loader";
 
@@ -839,10 +840,12 @@ export function getCasino(slug: string): CasinoReview | null {
       engine.rating_overall != null ||
       (engine.summary_html != null && engine.summary_html.trim().length > 0));
 
-  // "No review" when closed, OR when there is no prose AND no sub-ratings AND
-  // no overall score (i.e. an empty stub page) AND the engine has nothing.
+  // "No review" when closed (by H1 or confirmed closed in closed-casinos.ts),
+  // OR when there is no prose AND no sub-ratings AND no overall score (i.e. an
+  // empty stub page) AND the engine has nothing.
   const showNoReview =
     closedByTitle ||
+    MANUALLY_CLOSED_SLUGS.has(slug) ||
     (reviewHtml == null &&
       subRatings.length === 0 &&
       ratingOverall == null &&

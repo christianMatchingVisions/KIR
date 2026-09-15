@@ -24,6 +24,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isRetiredPath } from "./static-redirects";
+import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
 
 /**
  * Root of the captured toplist dumps: `public/rlaaf-data`.
@@ -185,16 +186,6 @@ function toRootRelative(url: string | null | undefined): string | null {
   return rel;
 }
 
-/**
- * Casinos confirmed closed but not yet reflected in the captured toplist data
- * (the daily WP re-sync hasn't caught up, or the source never marked them).
- * Appending the site's own " - Suljettu" convention here makes every existing
- * isOpen() filter (homepage, related-casino sidebars) drop them automatically
- * — no per-page changes needed. Keyed by post_name (toplist slug).
- *
- *   simplecasino — confirmed closed 2026-07-22; no live affiliate destination.
- */
-const MANUALLY_CLOSED_SLUGS: ReadonlySet<string> = new Set(["simplecasino"]);
 
 /**
  * Editorial overall ratings not (yet) present in the captured toplist scrape.

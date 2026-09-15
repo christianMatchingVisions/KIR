@@ -84,12 +84,11 @@ const NOINDEX_PATHS: ReadonlySet<string> = new Set<string>([
   "/pragmatic-play/john-hunter-and-the-tomb-of-the-scarab-queen/",
 
   /* --------------------------------------------------------------------
-   * CLOSED CASINO — confirmed closed 2026-07-22, not yet reflected in the
-   * scraped review body (no "Suljettu" in its H1, so the showNoReview rule
-   * above doesn't catch it) or the captured toplist data (see
-   * MANUALLY_CLOSED_SLUGS in toplist.ts, which drops it from every homepage/
-   * sidebar listing). No live affiliate destination — noindex,follow keeps
-   * the page reachable but out of Google while it's dead.
+   * CLOSED CASINO — confirmed closed 2026-07-22. Now also covered by the
+   * showNoReview rule via MANUALLY_CLOSED_SLUGS in closed-casinos.ts (which
+   * is where new closures go); this explicit entry is kept as a belt-and-
+   * braces duplicate. noindex,follow keeps the page reachable but out of
+   * Google while it's dead.
    * ------------------------------------------------------------------ */
   "/casino/simplecasino/",
 ]);
