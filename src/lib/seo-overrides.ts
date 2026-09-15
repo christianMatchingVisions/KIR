@@ -448,19 +448,47 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   // Money hubs: <title> doubles as the visible H1 here, so these read as a
   // heading. Both hubs render the live toplist, so the current year is honest.
   "/suomen-parhaat-nettikasinot/": {
-    title: "Suomen Parhaat Nettikasinot 2026 – Kasinot Ilman Rekisteröitymistä",
+    // Shortened from 66 chars (truncated in SERPs) — hub CTR batch 2026-09-15.
+    title: "Suomen parhaat nettikasinot 2026 – top kasinot suomalaisille",
     description:
-      "Suomen Parhaat Nettikasinot - Mitkä ovat parhaat suomalaisten nettikasinot vuonna 2026? Lue tästä suomalaisille sopivista kasinoista ja bonuksista!",
+      "Suomen parhaat nettikasinot 2026 vertailussa: lisensoidut MGA- ja Curaçao-kasinot, bonukset, kierrätysehdot ja nopeat kotiutukset.",
   },
   // Was "Uudet kasinot valloittavat Internetin vuonna 2022 | Ei rekisteröintiä";
   // GSC's top query for this page was literally "kasinot 2022".
   "/uudet-kasinot/": {
     title: "Uudet kasinot 2026 – uusimmat kasinot ilman rekisteröintiä",
   },
-  // MGA hub: title already says 2026, description still said 2025.
+  // --- Money-hub CTR batch (2026-09-15). GSC 2026-08-15 → 09-15: these hubs
+  // get impressions, zero clicks. Titles lead with the exact query wording
+  // (e.g. "trustly nettikasinot", "mga lisenssi", "käteispalautus"); <title> is
+  // also the visible H1. Year is honest — each hub renders the live toplist.
+  // Claims (tax status, no-wagering cashback, Trustly speed) are stated in
+  // each page's own body copy. ---
   "/mga-kasinot/": {
+    title: "MGA kasinot 2026 – parhaat MGA-lisenssin nettikasinot",
     description:
-      "Kun puhutaan vuoden 2026 parhaista MGA kasinoista, puhutaan innovaatiosta, käyttäjäystävällisyydestä ja ennen kaikkea pelaajien turvallisuudesta",
+      "Parhaat MGA-kasinot 2026: Maltan MGA-lisenssi tarkoittaa EU-valvontaa ja verovapaita voittoja suomalaisille. Vertaa bonuksia ja kotiutuksia.",
+  },
+  "/cashback-kasinot/": {
+    title: "Cashback kasinot 2026 – parhaat käteispalautus-bonukset",
+    description:
+      "Parhaat cashback-kasinot 2026: käteispalautus palauttaa osan tappioista, yleensä ilman kierrätysvaatimusta. Vertaa tarjouksia ilman rekisteröitymistä.",
+  },
+  // Old title was ungrammatical ("Parhaat trustly nettikasino").
+  "/trustly-kasinot/": {
+    title: "Trustly nettikasinot 2026 – parhaat Trustly kasinot",
+    description:
+      "Parhaat Trustly-nettikasinot 2026: talletus ja kotiutus suoraan pankkitililtä, usein muutamassa minuutissa. Vertaa kasinoita, bonuksia ja kotiutuksia.",
+  },
+  "/curacao-kasinot/": {
+    title: "Curacao kasinot 2026 – parhaat Curacao-lisenssin nettikasinot",
+    description:
+      "Curacao-kasinot 2026: laajat pelivalikoimat ja isot bonukset. Huom: Curacaon lisenssin kasinoilla voitot ovat Suomessa veronalaisia – lue ennen pelaamista.",
+  },
+  "/apple-pay-casinot/": {
+    title: "Apple Pay kasinot 2026 – nettikasinot Apple Pay -talletuksella",
+    description:
+      "Apple Pay kasinot 2026: talleta iPhonella nopeasti ja turvallisesti, vahvistus Face ID:llä tai sormenjäljellä. Vertaa Apple Pay -nettikasinoita ja bonuksia.",
   },
   // Static articles: year DROPPED rather than bumped — the prose is not
   // live-updated, so claiming 2026 would fake freshness.
