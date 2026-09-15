@@ -34,6 +34,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { fixScrapedJsonLdTypes } from "./seo-head";
 
 /** Site origin (matches casino-data.ts / astro.config site). */
 const SITE_URL = "https://kasinotilmanrekisteroitymista.com";
@@ -101,7 +102,12 @@ export function getCasinoBodyJsonLd(slug: string): string[] {
   } catch {
     return [];
   }
-  return (body.match(LD_JSON_RE) ?? []).map(sanitizeCasinoReviewBlock);
+  // fixScrapedJsonLdTypes: the Organization block here carries logo
+  // width/height as strings and `brand` as bare text — the ~297-page
+  // schema.org validation error the head-only fix (seo-head.ts) never reached.
+  return (body.match(LD_JSON_RE) ?? [])
+    .map(sanitizeCasinoReviewBlock)
+    .map(fixScrapedJsonLdTypes);
 }
 
 /**

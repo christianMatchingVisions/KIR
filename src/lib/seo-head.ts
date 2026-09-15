@@ -205,8 +205,17 @@ function sanitizePreservedJsonLd(block: string): string {
  * Google has already indexed. Idempotent: a no-op wherever the value is
  * already a bare number.
  */
-function fixJsonLdImageDimensionStrings(block: string): string {
-  return block.replace(/"(width|height)":\s*"(\d+)"/g, '"$1": $2');
+export function fixScrapedJsonLdTypes(block: string): string {
+  return (
+    block
+      .replace(/"(width|height)":\s*"(\d+)"/g, '"$1": $2')
+      // `brand` must be a Brand or Organization, not bare text. The same
+      // scraped Organization block (~530 fragment BODIES, re-emitted on casino
+      // reviews and /ht-faq/ pages) carries "brand":"<site name>". Wrap the
+      // original value verbatim — escapes included — in a Brand node. Once
+      // wrapped the value starts with "{" and no longer matches: idempotent.
+      .replace(/"brand":\s*"((?:[^"\\]|\\.)*)"/g, '"brand":{"@type":"Brand","name":"$1"}')
+  );
 }
 
 /**
@@ -280,11 +289,11 @@ function parseHead(html: string): SeoHead {
 
   // Every <script type="application/ld+json">…</script> block, VERBATIM —
   // except two targeted string-replacement fixes (sanitizePreservedJsonLd,
-  // fixJsonLdImageDimensionStrings) that preserve key order/escaping.
+  // fixScrapedJsonLdTypes) that preserve key order/escaping.
   const jsonLd = allMatches(
     html,
     /<script[^>]*\btype=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi
-  ).map(sanitizePreservedJsonLd).map(fixJsonLdImageDimensionStrings);
+  ).map(sanitizePreservedJsonLd).map(fixScrapedJsonLdTypes);
 
   return { title, canonical, description, robots, ogTags, jsonLd };
 }

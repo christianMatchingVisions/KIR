@@ -59,7 +59,7 @@ import {
   articleAuthorJsonLd,
   type RelatedLink,
 } from "../lib/related";
-import { getSeoHead } from "../lib/seo-head";
+import { getSeoHead, fixScrapedJsonLdTypes } from "../lib/seo-head";
 import { normalizeInternalHtmlLinks } from "../lib/html-links";
 import { stripRetiredBrands } from "../lib/retired-brands";
 
@@ -410,9 +410,12 @@ const moneyIntro = isMoneyPage
  * -------------------------------------------------------------------------- */
 const headJsonLdKeys = new Set((seo?.jsonLd ?? []).map(jsonLdKey));
 const restoredBodyJsonLd: string[] = isHtFaqPath
-  ? extractBodyJsonLd(fragmentBodyHtml).filter(
-      (block) => !headJsonLdKeys.has(jsonLdKey(block)),
-    )
+  ? extractBodyJsonLd(fragmentBodyHtml)
+      // Same type fixes the head gets (string width/height, bare-text brand).
+      // Applied BEFORE the dedupe so it compares like with like — the head
+      // blocks in seo.jsonLd are already fixed by seo-head.ts.
+      .map(fixScrapedJsonLdTypes)
+      .filter((block) => !headJsonLdKeys.has(jsonLdKey(block)))
   : [];
 
 /* PERFORMANCE: lazy-load + de-prioritise the large below-the-fold prose images
@@ -452,7 +455,7 @@ const moneyIntroNormalized = normalizeInternalHtmlLinks(moneyIntroDebranded);
  * index/items, provider stubs or money pages) we:
  *   1. show the "KIR-toimitus" byline → /toimitus/ (links the page to the
  *      existing editorial entity, a reviewer/E-E-A-T trust signal), and
- *   2. emit ONE additive Article JSON-LD block whose author/reviewedBy point at
+ *   2. emit ONE additive Article JSON-LD block whose author points at
  *      the same #editorial-team Organization (deduped vs the preserved head), and
  *   3. compute contextual "Aiheeseen liittyvät" links — related guides + topic
  *      money pages + related casino reviews — to raise incoming links to the
@@ -515,7 +518,7 @@ if (isArticleEditorial) {
   // Sidebar "Lue myös": the curated topic/money links (most useful in a rail).
   sidebarLinks = (topicMatches.length > 0 ? topicMatches : relatedGuides).slice(0, 4);
 
-  // Additive Article author JSON-LD (author/reviewedBy → #editorial-team),
+  // Additive Article author JSON-LD (author → #editorial-team),
   // deduped against the preserved head so we never double-declare.
   const candidate = articleAuthorJsonLd({
     title: articleTitle,
@@ -558,6 +561,6 @@ if (isArticleEditorial) {
 {restoredBodyJsonLd.map((block) => (
   <Fragment set:html={block} />
 ))}
-{/* E-E-A-T: additive Article author JSON-LD (author/reviewedBy → KIR-toimitus
+{/* E-E-A-T: additive Article author JSON-LD (author → KIR-toimitus
     #editorial-team), deduped vs the preserved head. Empty → renders nothing. */}
 {articleAuthorBlock && <Fragment set:html={articleAuthorBlock} />}
