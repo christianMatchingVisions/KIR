@@ -303,4 +303,57 @@ rules) added — `data/static-redirects.json` now 174 rules total (was
 Phase-5 title/description override, richest member at 3,046 words —
 stays exactly as-is).
 
+---
+
+# Ended-affiliate-deal brand removals (2026-09-11)
+
+Not an SEO consolidation — a **commercial** removal. Five brands were
+named for removal; three of them (BigWin, Potmanni, Spinokkio) do not
+exist anywhere on the site (checked fragments, `data/rest/casino.json`,
+the captured `public/rlaaf-data` toplists, the `/go/` affiliate map and
+the redirect map — the only "big win" hits are prose on the unrelated
+"Casino Win Big" brand). Two had a real footprint, plus one
+outbound-link-only mention:
+
+| Brand | Footprint found | Action |
+|---|---|---|
+| Pelikaani | `/casino/pelikaani-kasino/` review, `/go/pelikaani/`, 3 captured toplists, 2 in-prose internal links | Full retire |
+| Pelikioski | `/casino/pelikioski/` review, `/go/pelikioski/`, 4 captured toplists, 1 in-prose internal link | Full retire |
+| Pottila | One outbound external link to `pottilakasino.fi` in `/miten-tilittomat-kasinot-toimivat-opas-2026/` — no page, no affiliate link | Link removed |
+
+**Reason:** affiliate deals ended. Both brands were still *open* (no
+"Suljettu"), indexable and actively promoted, so this is deliberately
+NOT the closed-casino path — `MANUALLY_CLOSED_SLUGS` would have
+mislabelled them "Suljettu", which is not true. Search value forgone is
+negligible (Pelikioski 62 impressions at position ~69; Pelikaani
+effectively zero).
+
+**Mechanism (four independent paths had to be cut, not just the page):**
+
+1. **Review pages** — fragments deleted, both slash variants 301'd to
+   `/kaikki-kasinot/` in `data/static-redirects.json`. In-prose internal
+   links correct themselves at build time via `src/lib/html-links.ts`,
+   same as every prior batch.
+2. **Toplist cards** — `getToplist()` in `src/lib/toplist.ts` now skips
+   any casino whose `/casino/<slug>/` is a 301 source, reusing
+   `isRetiredPath()` — the SAME source of truth `getPosts()` already
+   uses for retired posts. No second hardcoded list: adding the redirect
+   is what removes the card, so a retirement can't be half-applied, and
+   it survives the daily WP re-sync that rewrites `public/rlaaf-data`
+   (which stays a pristine snapshot, never hand-edited).
+3. **Affiliate redirects** — the two slugs were removed from
+   `data/go-redirects.json` AND added to a new
+   `data/go-redirects-blocked.json`, applied in `scripts/fetch-rest.mjs`
+   after the manual/generated merge. This matters: the ThirstyAffiliates
+   entries still exist in WP, so a hand-deletion alone would be undone by
+   the next sync and quietly resume sending clicks to a dead programme.
+   `middleware.ts` then has no entry to match and `/go/<slug>/` 404s.
+4. **Stale SEO override** — the `/casino/pelikioski/` description entry
+   added in PR #28 was removed along with its page.
+
+**Rollback:** restore the fragments from git, drop the four redirect
+pairs from `data/static-redirects.json`, remove the two slugs from
+`data/go-redirects-blocked.json` (the next WP sync restores their `/go/`
+entries automatically), re-run `node scripts/sync-static-redirects.mjs`.
+
 <!-- Batches appended below as they are executed. -->

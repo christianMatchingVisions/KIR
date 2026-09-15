@@ -23,6 +23,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isRetiredPath } from "./static-redirects";
 
 /**
  * Root of the captured toplist dumps: `public/rlaaf-data`.
@@ -313,6 +314,16 @@ export function getToplist(config: string, limit?: number): ToplistCasino[] {
       continue; // skip unreadable/corrupt page file
     }
     for (const item of page.results ?? []) {
+      // Drop casinos whose review URL is a 301 source in
+      // data/static-redirects.json (retired brands — ended affiliate deals,
+      // consolidations). Reuses the SAME retired-path source of truth as
+      // getPosts() in content.ts rather than a second hardcoded list, so a
+      // retirement can never be half-applied: adding the redirect removes the
+      // card from every captured toplist automatically, and it survives the
+      // daily WP re-sync that rewrites public/rlaaf-data. The captured dumps
+      // themselves stay a pristine WP snapshot (never hand-edited).
+      const slug = str(item.post_name);
+      if (slug && isRetiredPath(`/casino/${slug}/`)) continue;
       out.push(mapItem(item));
       if (limit != null && out.length >= limit) return out;
     }
