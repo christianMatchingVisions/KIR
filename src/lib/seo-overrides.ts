@@ -35,6 +35,13 @@ export interface SeoOverride {
   ogTitle?: string;
   /** Explicit og:description / twitter:description, if it should differ from `description`. */
   ogDescription?: string;
+  /**
+   * og:image / twitter:image, ONLY appended when the preserved head has
+   * neither already (never replaces an existing image — some fragments do
+   * carry a real scraped og:image and that stays untouched). No fabricated
+   * imagery: this must be a real, already-hosted site asset.
+   */
+  ogImage?: string;
 }
 
 export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
@@ -181,6 +188,11 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   "/pikakasinot/": {
     description:
       "Pikakasinot ovat nopeita kasinoita ilman rekisteröitymistä: tunnistaudu verkkopankilla (Trustly, Zimpler, BRITE) ja kotiuta voitot minuuteissa.",
+    // og:image also missing (2026-09-08 audit, "OG tags incomplete") — the
+    // scrape never carried one for this page. Reuses the site's existing
+    // default social-card asset (same one BaseLayout.astro's net-new-page
+    // fallback uses), append-only, never replaces a real image.
+    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
   },
   "/kolikkopelien-eri-rtp-vaihtoehdot/": {
     description:
@@ -213,6 +225,9 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   "/nettikasino-ilman-rekisteroitymista/": {
     description:
       "Nettikasino ilman rekisteröitymistä tarkoittaa pelaamista verkkopankkitunnuksilla ilman käyttäjätiliä. Vertaa parhaita vaihtoehtoja 2026.",
+    // og:image also missing, same "OG tags incomplete" finding — see
+    // /pikakasinot/ above for the rationale.
+    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
   },
   "/maksutapojen-merkitys-tilittomilla-kasinoilla-valitse/": {
     description:
@@ -330,6 +345,26 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Winz-kasino tarjoaa yli 5000 peliä. Lue arvostelu bonuksista, RTP-tiedoista ja pelaajien kokemuksista.",
   },
+
+  // --- Ahrefs Site Audit (2026-09-08), "Open Graph tags incomplete" —
+  // og:image (and consequently twitter:image) missing on all 6 flagged
+  // pages; every other OG/Twitter tag was already present and correct.
+  // The scrape simply never carried an image for these. All 6 reuse the
+  // site's existing default social-card asset — same real, already-hosted
+  // PNG BaseLayout.astro's net-new-page fallback uses — append-only via
+  // the new `ogImage` override field, never replacing a real image. ---
+  "/maksutapojen-rooli-kasinoilla-2026-opas-pelaajille/": {
+    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
+  },
+  "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/": {
+    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
+  },
+  "/mika-on-tiliton-kasino-ja-miten-se-toimii/": {
+    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
+  },
+  "/miten-bonusehdot-toimivat-kasinoilla-2026/": {
+    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
+  },
 };
 
 /* -------------------------------------------------------------------------- */
@@ -410,6 +445,18 @@ export function applySeoOverride(normalizedPath: string, seo: SeoHead): SeoHead 
   }
   if (ogDescription != null && !sawOgDesc) {
     ogTags.push(`<meta property="og:description" content="${escapeAttr(ogDescription)}" />`);
+  }
+
+  // og:image / twitter:image — append-only, never replace a real scraped image.
+  if (ov.ogImage != null) {
+    const hasOgImage = ogTags.some((t) => /\bproperty=["']og:image["']/i.test(t));
+    const hasTwImage = ogTags.some((t) => /\bname=["']twitter:image["']/i.test(t));
+    if (!hasOgImage) {
+      ogTags.push(`<meta property="og:image" content="${escapeAttr(ov.ogImage)}" />`);
+    }
+    if (!hasTwImage) {
+      ogTags.push(`<meta name="twitter:image" content="${escapeAttr(ov.ogImage)}" />`);
+    }
   }
 
   return { ...seo, title, description, ogTags };
