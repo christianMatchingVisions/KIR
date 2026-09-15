@@ -247,8 +247,11 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Pelipeto Kasino on syksyllä 2025 avattu Zimpler-pikakasino: kierrätysvapaat bonukset, VIP-edut ja verovapaat voitot.",
   },
   "/casino/casinoist/": {
+    // 2026-09-15: the earlier "100% tervetulobonus" (lifted from the old
+    // scraped title) no longer matched the captured toplist offer.
+    title: "Casinoist Kasino arvostelu & kokemuksia 2026",
     description:
-      "Casinoist on uusi Pay N Play -kasino: 100% tervetulobonus, yli 7000 slottia ja nopeat kotiutukset. Lue arvostelu.",
+      "Casinoist on Pay N Play -kasino: 225 % bonus jopa 1 500 € + 500 ilmaiskierrosta, yli 7000 slottia ja nopeat kotiutukset. Lue arvostelu.",
   },
   "/kolikkopelien-erikoisominaisuudet-mita-kannattaa-tietaa/": {
     description:
@@ -333,8 +336,10 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "RioAce Kasino -arvostelu: nappaa jopa 1500 euroa bonusta. Lue bonusehdot, pelivalikoima ja pelaajien kokemukset.",
   },
   "/casino/moana-kasino/": {
+    // 2026-09-15 CTR batch — see the review-title block at the end of the map.
+    title: "Moana Kasino kokemuksia 2026 – 100 % bonus 250 € + 50 IK",
     description:
-      "Moana Kasino tarjoaa kolme talletusbonusta uusille pelaajille. Lue arvostelu bonusehdoista, peleistä ja kotiutuksista.",
+      "Moana Kasino -arvostelu: 100 % bonus jopa 250 € + 50 ilmaiskierrosta, 35x kierrätys. Kolikkopelit, kotiutus ja pelaajien kokemukset.",
   },
   "/casino/valtti-kasino/": {
     description:
@@ -394,7 +399,10 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     title: "Lysti Casino Arvostelu 2026 - 15% Päivittäinen Käteispalautus",
   },
   "/casino/kunkku-kasino/": {
-    title: "Kunkku Kasino Arvostelu 2026 | Nappaa 500€ bonus",
+    // 2026-09-15 CTR batch — see the review-title block at the end of the map.
+    title: "Kunkku Casino kokemuksia 2026 – 125 % bonus 500 € asti",
+    description:
+      "Kunkku Kasino (KunkkuKasino) -arvostelu: MGA-kasino, 125 % bonus jopa 500 € + 50 ilmaiskierrosta, 40x kierrätys. Lue kokemukset ja kotiutukset.",
   },
   "/casino/spinit-kasino/": {
     title: "Spinit Kasino - Arvostelu ja Kokemuksia 2026",
@@ -462,6 +470,72 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   "/verovapaus-nettikasinoilla/": {
     description:
       "Nauti pelaamisen tuomasta jännityksestä ja valitse uudet kasinot. Suuntaa verovapaille nettikasinoille ja iloitse voittorahoistasi ilman verottajaa.",
+  },
+
+  // --- Review-page CTR batch (2026-09-15). Open reviews ranking ~pos 10-35
+  // with real impressions (GSC 2026-08-15 → 09-15) but generic or stale
+  // titles. Same formula as the Phase-5 Vasy/Igni titles: brand + the query
+  // modifier GSC actually shows ("kokemuksia", "kotiutus") + the CURRENT
+  // offer. Every bonus/wagering/license figure is taken from the captured
+  // toplist data (public/rlaaf-data) — the same numbers the site's own cards
+  // show — never from memory or the old scraped titles, two of which were
+  // wrong (Rebellion's "3000€", Casinoist's "100%" above). Brand spelling
+  // variants people search ("Jack Burst", "Casino Loots") go in descriptions.
+  "/casino/jackburst-casino/": {
+    title: "Jackburst Casino kokemuksia 2026 – 100 % bonus 500 € asti",
+    description:
+      "Jackburst Casino (Jack Burst) -arvostelu: 100 % bonus jopa 500 € + 50 ilmaiskierrosta, 30x kierrätys ja Curaçao-lisenssi. Lue kotiutukset ja pelit.",
+  },
+  "/casino/kiekka-kasino/": {
+    title: "Kiekka Casino kokemuksia 2026 – 20 % cashback & kotiutus",
+    description:
+      "Kiekka Kasino -arvostelu: 300 ilmaiskierrosta, 20 % päivittäinen cashback, 35x kierrätys ja Curaçao-lisenssi. Lue kotiutusajat ja kokemukset.",
+  },
+  "/casino/samiland-casino/": {
+    title: "Samiland Casino kokemuksia 2026 – 300 % bonus 1000 € asti",
+    description:
+      "Samiland Casino -arvostelu: 300 % tervetulobonus jopa 1000 €, 30x kierrätys ja Curaçao-lisenssi. Lue bonusehdot, pelit ja kotiutukset.",
+  },
+  "/casino/slotsi-kasino/": {
+    title: "Slotsi Casino kokemuksia 2026 – 125 % bonus 500 € asti",
+    description:
+      "Slotsi Kasino -arvostelu: White Hat Gamingin MGA-pikakasino, 125 % bonus jopa 500 € (40x kierrätys). Kolikkopelit, kotiutukset ja kokemukset.",
+  },
+  "/casino/kaleo-casino/": {
+    // description already specific; title swaps generic "bonukset, pelit ja
+    // kotiutukset" for the concrete offer (ranks pos ~12-13).
+    title: "Kaleo Casino arvostelu 2026 – 100 % bonus 250 € + 50 IK",
+  },
+  "/casino/casinoloots/": {
+    // description was truncated mid-sentence ("Lue Casinoloots arvostelu, kokemuksia,").
+    title: "Casinoloots kokemuksia 2026 – 100 % bonus 250 € + 50 IK",
+    description:
+      "Casinoloots (Casino Loots) on Trumo-pikakasino suomalaisille: 100 % bonus jopa 250 € + 50 ilmaiskierrosta, 30x kierrätys. Lue arvostelu ja kokemukset.",
+  },
+  "/casino/mr-fortune-casino/": {
+    // was a generic slogan ("Avaa polkusi kasinomenestykseen").
+    title: "Mr Fortune kokemuksia 2026 – 100 % bonus 700 € & kotiutus",
+    description:
+      "Mr Fortune Kasino -arvostelu: MGA-lisensoitu kasino, 100 % bonus jopa 700 € + 50 ilmaiskierrosta (40x kierrätys). Lue kotiutusajat ja kokemukset.",
+  },
+  "/casino/trada-casino/": {
+    // "trada casino kotiutus" already ranks pos ~4 — lead with it.
+    title: "Trada Casino kokemuksia 2026 – kotiutus, bonus ja 150 IK",
+    description:
+      "Trada Casino -arvostelu: MGA-lisensoitu kasino, 100 % bonus jopa 100 € + 150 ilmaiskierrosta. Lue kotiutusajat, kolikkopelit ja kokemukset.",
+  },
+  "/casino/spinnair/": {
+    // was the bare scraped "Spinnair - kasinotilmanrekisteroitymista.com".
+    title: "Spinnair Kasino arvostelu 2026 – 200 IK & 20 % cashback",
+  },
+  "/casino/rebellion-casino/": {
+    // old title promised "Jopa 3000€ Bonus"; the current offer is 1000 €.
+    title: "Rebellion Casino kokemuksia 2026 – bonus 1000 € + 100 IK",
+  },
+  "/casino/slottimonsteri-kasino/": {
+    title: "SlottiMonsteri Casino kokemuksia 2026 – bonus 500 € + 100 IK",
+    description:
+      "SlottiMonsteri Kasino -arvostelu: 100 % bonus jopa 500 € + 100 ilmaiskierrosta, 35x kierrätys ja Curaçao-lisenssi. Lue kotiutus ja kokemukset.",
   },
 };
 
