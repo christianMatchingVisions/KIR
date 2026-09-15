@@ -121,12 +121,6 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
 
   // --- Ahrefs Site Audit (2026-09-08), "Title too long" — informational
   // articles, title-only, description untouched (not flagged). ---
-  "/tilittomien-kasinoiden-turvallisuusvaatimukset/": {
-    title: "Tilittömien kasinoiden turvallisuusvaatimukset 2026",
-  },
-  "/kasinoiden-lisenssivaatimukset-turvallisuus-ja-pelivalinta/": {
-    title: "Kasinoiden lisenssivaatimukset 2026 – turvallisuusopas",
-  },
   "/opas-parhaan-kasinobonuksen-loytamiseen/": {
     title: "Opas parhaan kasinobonuksen löytämiseen 2026",
     // description also flagged "too long" (184 chars) in the same audit.
@@ -219,10 +213,6 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Törmäätkö hitaaseen kotiutukseen tai epäselviin bonusehtoihin? Käymme läpi yleisimmät nettikasino-ongelmat ja niiden ratkaisut.",
   },
-  "/miten-pikakasinot-toimivat-nopea-ja-turvallinen-opas-2026/": {
-    description:
-      "Opi miten pikakasinot toimivat ilman rekisteröitymistä: verkkopankkitunnistautuminen, turvallisuus ja nopeat rahansiirrot 2026.",
-  },
   "/mika-tekee-nettikasinopelaamisesta-niin-hauskaa/": {
     description:
       "Nettikasinopelaaminen on muutakin kuin voittojen jahtaamista. Lue mitkä tekijät tekevät pelaamisesta viihdyttävää.",
@@ -233,10 +223,6 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     // og:image also missing, same "OG tags incomplete" finding — see
     // /pikakasinot/ above for the rationale.
     ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
-  },
-  "/maksutapojen-merkitys-tilittomilla-kasinoilla-valitse/": {
-    description:
-      "Opi valitsemaan paras maksutapa tilittömälle kasinolle. Vertailu: Trustly, Zimpler ja muut — nopeus, turvallisuus ja käytännön vinkit.",
   },
   "/kolikkopelien-teemat-mika-niissa-viehattaa/": {
     description:
@@ -265,25 +251,9 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Joki Kasino on verovapaa Brite Pay N Play -kasino: 200% talletusbonus 1000 euroon asti. Lue arvostelu bonusehdoista ja peleistä.",
   },
-  "/kasinot-ilman-rekisteroitymista-2026-70-turvallisempia-pelaajia/": {
-    description:
-      "Kasinot ilman rekisteröitymistä 2026: 70% turvallisempia pankkitunnistuksella, nopeat kotiutukset ja selkeät bonukset.",
-  },
-  "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/": {
-    description:
-      "Opi vastuullisen pelaamisen periaatteet tilittömillä kasinoilla: self-exclusion-työkalut ja impulsiivisuuden hallinta.",
-  },
-  "/miksi-valita-kasino-ilman-rekisteroitymista/": {
-    description:
-      "Miksi valita kasino ilman rekisteröitymistä 2026: tärkeimmät edut, maksutavat, bonukset ja turvallisuus suomalaispelaajille.",
-  },
   "/sisarkasinot-vs-itsenaiset-kasinot-kumpi-sopii-sinulle-paremmin/": {
     description:
       "Sisarkasinot vs. itsenäiset kasinot: hyödyt, haitat ja kumpi tarjoaa paremman pelikokemuksen juuri sinulle.",
-  },
-  "/turvallisen-tilittoman-kasinon-valinta-2026/": {
-    description:
-      "Opi valitsemaan turvallinen tilitön kasino 2026: tarkista lisenssit ja maksutavat, vältä yleisimmät virheet.",
   },
 
   // --- Ahrefs Site Audit (2026-09-08), "Meta description too short"
@@ -365,16 +335,10 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   // site's existing default social-card asset — same real, already-hosted
   // PNG BaseLayout.astro's net-new-page fallback uses — append-only via
   // the new `ogImage` override field, never replacing a real image. ---
-  "/maksutapojen-rooli-kasinoilla-2026-opas-pelaajille/": {
-    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
-  },
   "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/": {
     ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
   },
   "/mika-on-tiliton-kasino-ja-miten-se-toimii/": {
-    ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
-  },
-  "/miten-bonusehdot-toimivat-kasinoilla-2026/": {
     ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
   },
 

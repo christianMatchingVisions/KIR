@@ -57,19 +57,21 @@ const BROKEN_LINK_FIXES: Readonly<Record<string, string>> = {
   // /uutiset/ articles that were never published → most relevant LIVE guide.
   "/uutiset/kierratysvaatimukset-selkokielella/":
     "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+  // Targets re-pointed to the batch-D consolidation survivors (2026-09-15) —
+  // the original targets are now retired 301 sources.
   "/uutiset/pikakasinoiden-kotiutusnopeudet-vertailu/":
-    "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+    "/nopeat-kotiutukset-nettikasinoilta/",
   "/uutiset/mga-lisenssi-vs-viron-lisenssi/": "/mga-kasinot/",
   "/uutiset/verovapaat-kasinovoitot-2026-eta-alueen-lisenssit/":
-    "/nain-verovapaus-vaikuttaa-nettikasinopelaamiseen/",
+    "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
   // Casino review linked without the /casino/ prefix.
   "/ultra-casino": "/casino/ultra-casino/",
   "/ultra-casino/": "/casino/ultra-casino/",
   // Renamed guide slugs (singular→plural / reworded) → current canonical page.
   "/kasino-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen":
-    "/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/",
+    "/kuinka-pelaat-vastuullisesti/",
   "/nettikasinot-ilman-rekisterointia-ja-vastuullinen-pelaaminen":
-    "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+    "/kuinka-pelaat-vastuullisesti/",
   "/kasinoiden-bonustarjonnat-minkalaisia-tarjouksia-pikakasinot-tarjoavat":
     "/kasinot-ilman-rekisterointia-ja-bonukset-minkalaisia-tarjouksia-pikakasinot-tarjoavat/",
 };
