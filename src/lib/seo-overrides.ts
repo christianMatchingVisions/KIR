@@ -516,18 +516,20 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Mr Fortune Kasino -arvostelu: MGA-lisensoitu kasino, 100 % bonus jopa 700 € + 50 ilmaiskierrosta (40x kierrätys). Lue kotiutusajat ja kokemukset.",
   },
   "/casino/trada-casino/": {
-    // "trada casino kotiutus" already ranks pos ~4 — lead with it.
-    title: "Trada Casino kokemuksia 2026 – kotiutus, bonus ja 150 IK",
+    // Closed 2026-09-15 (closed-casinos.ts) — replaces the bonus title.
+    title: "Trada Casino on suljettu – katso avoimet vaihtoehdot",
     description:
-      "Trada Casino -arvostelu: MGA-lisensoitu kasino, 100 % bonus jopa 100 € + 150 ilmaiskierrosta. Lue kotiutusajat, kolikkopelit ja kokemukset.",
+      "Trada Casino on suljettu eikä ota enää vastaan pelaajia. Katso avoimet kasinot ilman rekisteröitymistä.",
   },
   "/casino/spinnair/": {
     // was the bare scraped "Spinnair - kasinotilmanrekisteroitymista.com".
     title: "Spinnair Kasino arvostelu 2026 – 200 IK & 20 % cashback",
   },
   "/casino/rebellion-casino/": {
-    // old title promised "Jopa 3000€ Bonus"; the current offer is 1000 €.
-    title: "Rebellion Casino kokemuksia 2026 – bonus 1000 € + 100 IK",
+    // Closed 2026-09-15 (closed-casinos.ts) — replaces the bonus title.
+    title: "Rebellion Casino on suljettu – katso avoimet vaihtoehdot",
+    description:
+      "Rebellion Casino on suljettu eikä ota enää vastaan pelaajia. Katso avoimet kasinot ilman rekisteröitymistä.",
   },
   "/casino/slottimonsteri-kasino/": {
     title: "SlottiMonsteri Casino kokemuksia 2026 – bonus 500 € + 100 IK",
