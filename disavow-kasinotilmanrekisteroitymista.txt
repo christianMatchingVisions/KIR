@@ -2,7 +2,7 @@
 #  GOOGLE DISAVOW FILE
 #  Domain: kasinotilmanrekisteroitymista.com
 #  Generated: 2026-06-23
-#  Last refreshed: 2026-06-25  (+7 new toxic domains; attack ongoing)
+#  Last refreshed: 2026-09-15  (+267 new toxic domains; attack ongoing)
 #
 #  WHAT THIS IS:
 #  Domain-level disavow targeting a confirmed NEGATIVE-SEO toxic-link cluster.
@@ -18,7 +18,7 @@
 #    - anchors: confirmed Telegram-vendor + exact-match money-anchor spam clusters.
 #    - all 741 entries below appear in Ahrefs data or are audit-verified spam.
 #
-#  TOTAL DOMAINS DISAVOWED: 748  (all entries are domain-level: domain:example.com)
+#  TOTAL DOMAINS DISAVOWED: 1015  (all entries are domain-level: domain:example.com)
 #
 #  >>> REVIEW THIS FILE BEFORE UPLOADING TO GOOGLE SEARCH CONSOLE. <<<
 #  Disavow is a powerful, blunt tool. Spot-check entries before submission.
@@ -788,3 +788,290 @@ domain:linkbarn.shop
 domain:modern-studio-outrank-hq-blogger.store
 domain:backlinkmart.shop
 domain:buyseobacklinks.shop
+
+# =========================================================================
+# REFRESH 2026-09-15: +267 new domains (attack ONGOING - newest first-seen 2026-09-15)
+#   Source: Ahrefs referring-domains, first_seen >= 2026-06-20 (272 rows).
+#   250 flagged is_spam=true; 18 of the 22 unflagged are the same link-shop
+#   network by name or zero-traffic unrelated sites. 1 was already listed.
+#   Deliberately NOT disavowed (legitimate / owner-related, review manually):
+#     zimplerkasinot.io (topical FI casino site), fruitypartners.com (affiliate
+#     network of a listed casino), allspins1.co (casino site, unclear),
+#     onlinecasinoperu.com (owner's own site).
+# =========================================================================
+# --- Numbered .xyz network (37486xxx.xyz) (11 domains) ---
+domain:37486109.xyz
+domain:37486161.xyz
+domain:37486173.xyz
+domain:37486209.xyz
+domain:37486309.xyz
+domain:37486312.xyz
+domain:37486319.xyz
+domain:37486339.xyz
+domain:37486439.xyz
+domain:37486460.xyz
+domain:37486462.xyz
+
+# --- PBN networks: link-legion / seo-anomaly-top (.xyz) (41 domains) ---
+domain:link-legion-211.xyz
+domain:link-legion-212.xyz
+domain:link-legion-213.xyz
+domain:link-legion-214.xyz
+domain:link-legion-215.xyz
+domain:link-legion-216.xyz
+domain:link-legion-217.xyz
+domain:link-legion-218.xyz
+domain:link-legion-219.xyz
+domain:link-legion-220.xyz
+domain:link-legion-221.xyz
+domain:link-legion-222.xyz
+domain:link-legion-223.xyz
+domain:link-legion-224.xyz
+domain:link-legion-225.xyz
+domain:link-legion-226.xyz
+domain:link-legion-227.xyz
+domain:link-legion-228.xyz
+domain:link-legion-229.xyz
+domain:link-legion-230.xyz
+domain:link-legion-4.xyz
+domain:seo-anomaly-top-121.xyz
+domain:seo-anomaly-top-122.xyz
+domain:seo-anomaly-top-123.xyz
+domain:seo-anomaly-top-124.xyz
+domain:seo-anomaly-top-125.xyz
+domain:seo-anomaly-top-126.xyz
+domain:seo-anomaly-top-127.xyz
+domain:seo-anomaly-top-128.xyz
+domain:seo-anomaly-top-129.xyz
+domain:seo-anomaly-top-130.xyz
+domain:seo-anomaly-top-131.xyz
+domain:seo-anomaly-top-132.xyz
+domain:seo-anomaly-top-133.xyz
+domain:seo-anomaly-top-134.xyz
+domain:seo-anomaly-top-135.xyz
+domain:seo-anomaly-top-136.xyz
+domain:seo-anomaly-top-137.xyz
+domain:seo-anomaly-top-138.xyz
+domain:seo-anomaly-top-139.xyz
+domain:seo-anomaly-top-140.xyz
+
+# --- Link-seller shops (.shop / .store / .site / .top link-selling domains) (158 domains) ---
+domain:advanced-saas-seo-directory-outrank-hq.store
+domain:advanced-services-for-crawl-budget-and-niche-edit.store
+domain:agile-footer-link-system-link-baron.store
+domain:analyticshaven.top
+domain:authority-do-follow-and-do-follow-network.store
+domain:backlinkbuilders.shop
+domain:backlinkengine.shop
+domain:backlinkinsights.shop
+domain:backlinkmasters.shop
+domain:backlinkpartners.shop
+domain:backlinkshop.site
+domain:backlinksplace.site
+domain:balrio.shop
+domain:bramo.shop
+domain:brilko.shop
+domain:brinto.shop
+domain:bripto.shop
+domain:cinvo.shop
+domain:click-through-link-equity-and-authority-link-services.store
+domain:cluster-rank-forge-academy.store
+domain:digital-pr-and-domain-rating-premium-experts.store
+domain:digital-pr-keyword-rank-and-crawl-budget-experts.store
+domain:digitalboost.site
+domain:domainrankacademy.shop
+domain:domainrankagency.shop
+domain:domainrankboost.shop
+domain:domainrankexperts.shop
+domain:domainrankexpress.shop
+domain:domainrankpartners.shop
+domain:domainrankprovider.shop
+domain:domainrankresults.shop
+domain:dynamic-cooperative-link-baron-saas-seo.store
+domain:editorial-link-link-building-and-organic-traffic-hub.store
+domain:elite-crawl-budget-and-link-velocity-marketplace.store
+domain:expert-partners-for-niche-edit-and-authority-link.store
+domain:flagship-digital-pr-and-editorial-link-central.store
+domain:forum-provider-link-baron.store
+domain:forvi.shop
+domain:fralto.shop
+domain:googleseoauthority.shop
+domain:googleseocompany.shop
+domain:googleseocraft.shop
+domain:googleseoexperts.shop
+domain:googleseopoint.shop
+domain:guestpostlinks.shop
+domain:high-da-and-crawl-budget-strategic-exchange.store
+domain:juvex.shop
+domain:link-baron-agile-on-page-directory.store
+domain:link-baron-innovative-press-release-house.store
+domain:link-baron-luxury-anchor-text-partners.store
+domain:link-baron-wiki-leading-system.store
+domain:link-equity-guest-posting-and-click-through-studio.store
+domain:link-juice-traffic-surge-and-traffic-surge-collective.store
+domain:linkcollective.shop
+domain:linkcrate.shop
+domain:linkdepot.shop
+domain:linkgrowthauthority.shop
+domain:linkgrowthcompany.shop
+domain:linkgrowthsource.shop
+domain:linkseoauthority.shop
+domain:linkseoinsights.shop
+domain:linkseonetwork.shop
+domain:linkseoprovider.shop
+domain:linkseoservice.shop
+domain:linksnexa.shop
+domain:master-bureau-for-index-rate-and-backlink-pro.store
+domain:master-link-juice-and-editorial-link-agency.store
+domain:master-white-hat-and-do-follow-solutions.store
+domain:mervi.shop
+domain:mokra.shop
+domain:nivira.shop
+domain:official-center-outrank-hq-search.store
+domain:optimizeflow.top
+domain:organicrankexpress.shop
+domain:organicranknetwork.shop
+domain:organicrankservice.shop
+domain:organicranksystems.shop
+domain:organictraffic.site
+domain:orvelo.shop
+domain:outrank-hq-anchor-text-center.store
+domain:outrank-hq-prime-blogger.store
+domain:pageseocollective.shop
+domain:pageseoexpress.shop
+domain:pageseomasters.shop
+domain:pageseoresults.shop
+domain:pageseoservice.shop
+domain:pageseosystems.shop
+domain:plavo.shop
+domain:plurio.shop
+domain:premium-network-for-digital-pr-and-crawl-budget.store
+domain:premium-studio-for-white-hat-and-index-rate.store
+domain:proven-network-for-ranking-signal-and-keyword-rank.store
+domain:proven-serp-boost-and-outreach-pro-services.store
+domain:rankboostly.shop
+domain:rankbox.shop
+domain:rankchest.shop
+domain:rankcollective.shop
+domain:rankgrowthagency.shop
+domain:rankgrowthboost.shop
+domain:rankgrowthgroup.shop
+domain:rankgrowthinsights.shop
+domain:rankgrowthpartners.shop
+domain:rankgrowthservice.shop
+domain:rankgrowthsolutions.shop
+domain:ranking-signal-and-authority-link-authority-alliance.store
+domain:rankpicks.shop
+domain:rankseoalliance.shop
+domain:rankseocollective.shop
+domain:rankseojunction.shop
+domain:rankseomasters.shop
+domain:rankseopartners.shop
+domain:rankseoprovider.shop
+domain:rankseoservice.shop
+domain:rankseotoolkit.shop
+domain:searchrankcentral.shop
+domain:searchrankexperts.shop
+domain:searchrankinsights.shop
+domain:searchrankpipeline.shop
+domain:seobazaar.shop
+domain:seoboostagency.shop
+domain:seoboostcompany.shop
+domain:seoboostexchange.shop
+domain:seoboostresults.shop
+domain:seoboostsystems.shop
+domain:seobox.shop
+domain:seogrowthalliance.shop
+domain:seogrowthengine.shop
+domain:seogrowthprovider.shop
+domain:seogrowthresults.shop
+domain:seogrowthstudio.shop
+domain:seolinkcentral.shop
+domain:seolinkcompany.shop
+domain:seolinkexpress.shop
+domain:seolinkfactory.shop
+domain:serpcollective.shop
+domain:siterankacademy.shop
+domain:siterankbuilders.shop
+domain:siterankexpress.shop
+domain:siterankprovider.shop
+domain:siterankservice.shop
+domain:siteranksolutions.shop
+domain:siteranktoolkit.shop
+domain:strategic-bureau-for-white-hat-and-outreach-pro.store
+domain:tier-one-and-link-velocity-global-solutions.store
+domain:toprankacademy.shop
+domain:toprankalliance.shop
+domain:toprankauthority.shop
+domain:toprankmasters.shop
+domain:toprankpartners.shop
+domain:toprankprovider.shop
+domain:toprankresults.shop
+domain:toprankservice.shop
+domain:traffic-surge-ranking-signal-and-crawl-budget-partners.store
+domain:ultimate-ranking-signal-and-link-velocity-bureau.store
+domain:webrankinsights.shop
+domain:webrankprovider.shop
+domain:webrankresults.shop
+domain:webranksystems.shop
+
+# --- Other is_spam-flagged domains (hacked / unrelated sites with injected links, spam directories) (40 domains) ---
+domain:archive-hu.com
+domain:bestnz-poker-casinoslot.com
+domain:betulcrime.com
+domain:bitbuzz.org
+domain:bitproperty.online
+domain:blogerreviewers.com
+domain:canadapsilocybin.com
+domain:cartermanageus.com
+domain:cgpa2percentag.com
+domain:cvillico.com
+domain:digitalchatni.com
+domain:domains.com.bz
+domain:dupurgeniefr.com
+domain:fashionclothingnews.com
+domain:fastlifesite.com
+domain:five.co.in
+domain:homesforsaleoldgreenwichct.com
+domain:hwnerds.com
+domain:indexaward.com
+domain:itsyourgold.com
+domain:kkinsider.com
+domain:lawyerinjeddah.com
+domain:libyanatravel.com
+domain:m98ufa.com
+domain:midlandwindows.ie
+domain:mylisthero.com
+domain:plrdownloadshub.com
+domain:plumeriamarketing.com
+domain:primenewsartical.com
+domain:quotesblom.com
+domain:sahammurah.com
+domain:stelario34.co
+domain:stelario35.co
+domain:theforbestimes.com
+domain:toponlinegamblingcasinos.online
+domain:uncledspizza.com
+domain:way2check.art
+domain:webworthchecker.cv
+domain:wecelebrities.com
+domain:youtoo.in
+
+# --- Not flagged is_spam by Ahrefs, but same link-shop network by name / zero-traffic injected-link sites (17 domains) ---
+domain:agroinsursas.com
+domain:backlink-pro-click-through-and-link-building-depot.store
+domain:backlinkon.com
+domain:backlinksbank.com
+domain:bold-outrank-hq-serp-workshop.store
+domain:domainrankteam.shop
+domain:elite-editorial-outrank-hq.store
+domain:epic-link-baron-hub.store
+domain:findinfo.in
+domain:link-building-contextual-link-and-anchor-text-network.store
+domain:linkgrowthinsights.shop
+domain:optimal-website-outrank-hq.store
+domain:ranking-signal-link-velocity-and-do-follow-partners.store
+domain:revan-me.com
+domain:seochest.shop
+domain:seogo.shop
+domain:seolinktoolkit.shop
