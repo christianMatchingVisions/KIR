@@ -356,4 +356,44 @@ pairs from `data/static-redirects.json`, remove the two slugs from
 `data/go-redirects-blocked.json` (the next WP sync restores their `/go/`
 entries automatically), re-run `node scripts/sync-static-redirects.mjs`.
 
+---
+
+# Ended-affiliate-deal brand removals, batch 2 (2026-09-15)
+
+Same reason and same mechanism as the 2026-09-11 batch above. Nine brands
+named; checked against fragments, `data/rest/*.json`, the captured rlaaf
+toplists, the `/go/` map and the redirect map.
+
+| Brand | Footprint found | Action |
+|---|---|---|
+| Berriez | review, `/go/berriez/`, 5 toplist cards, A-Z index link | Full retire |
+| Speedz | review, `/go/speedz/`, 5 toplist cards, A-Z index link | Full retire |
+| Flamez | review, `/go/flamez/`, 4 toplist cards, A-Z index link | Full retire |
+| Wildz | review, `/go/wildz/`, 5 toplist cards, 2 in-prose links (Euteller hub, Christmas article) | Full retire |
+| Spinz | review, `/go/spinz/`, 9 toplist cards, A-Z index link (legacy `/casino/spinz/` form) | Full retire |
+| Chipz | review, `/go/chipz/`, 6 toplist cards, A-Z index link | Full retire |
+| Wheelz | `/go/wheelz/` only (no page; mentioned as a sister site inside the Wildz/Chipz reviews removed here) | Affiliate link blocked |
+| Caxino | nothing anywhere | — |
+| Tuplaus | **not a brand on this site** — every hit is the Finnish word "tuplaus" (doubling: "bonustuplaus", "Talletuksen TUPLAUS", "tuplausjärjestelmä"). Deliberately untouched. | — |
+
+Search value forgone: zero clicks on all six review pages over 2026-03 →
+2026-09 (Berriez 1,595 impressions pos ~49; Flamez 1,049 pos ~54; Speedz 790
+pos ~48; Wildz/Chipz/Spinz ≤ 9 each).
+
+**Extra detail vs batch 1:**
+- The existing `/casino/spinz` → `/casino/spinz-casino/` rules were
+  repointed straight to `/kaikki-kasinot/`, so retiring the target doesn't
+  create a two-hop redirect chain.
+- Closed Casino Room's review card still carries `/go/chipz/` CTA buttons in
+  its scraped fragment. Not an issue: the closed-casino template renders no
+  CTAs (`casino/[slug].astro`), so those never reach the page.
+- `/euteller-kasinot/` had a "Parhaat Euteller Kasinot" section — the team's
+  two picks, #1 Wildz and #2 Tournaverse (already closed). Unlike the
+  retrospective Christmas-article prose (kept, unlinked), this was an active
+  recommendation with no valid entries left, so the whole section is removed
+  at build time via `RETIRED_SECTIONS` in `retired-brands.ts`. Guarded: it
+  only drops while the section still links a retired review, so a future WP
+  rewrite around live brands renders again automatically. The page keeps its
+  live 10-casino toplist.
+
 <!-- Batches appended below as they are executed. -->

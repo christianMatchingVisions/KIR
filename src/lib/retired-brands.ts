@@ -40,10 +40,21 @@ export interface RetiredBrand {
 /**
  * Brands removed for commercial reasons, newest first.
  *
+ * 2026-09-15 — affiliate deals ended for the Berriez/Speedz/Flamez and
+ * Wildz/Spinz/Chipz sister brands. /casino/spinz/ is listed alongside
+ * /casino/spinz-casino/ because the A-Z index still links the short legacy
+ * form, and this pass runs before html-links.ts resolves it.
+ *
  * 2026-09-11 — affiliate deals ended (see docs/consolidation-log-2026-07.md).
  * Pottila has no review page on this site, only an outbound link.
  */
 export const RETIRED_BRANDS: readonly RetiredBrand[] = [
+  { paths: ["/casino/berriez-casino/"], domains: [] },
+  { paths: ["/casino/speedz-casino/"], domains: [] },
+  { paths: ["/casino/flamez-kasino/"], domains: [] },
+  { paths: ["/casino/wildz-casino/"], domains: [] },
+  { paths: ["/casino/spinz-casino/", "/casino/spinz/"], domains: [] },
+  { paths: ["/casino/chipz-casino/"], domains: [] },
   { paths: ["/casino/pelikaani-kasino/"], domains: ["pelikaanicasino-online.com"] },
   { paths: ["/casino/pelikioski/"], domains: [] },
   { paths: [], domains: ["pottilakasino.fi"] },
@@ -56,6 +67,18 @@ function esc(s: string): string {
 
 const RETIRED_PATHS: readonly string[] = RETIRED_BRANDS.flatMap((b) => [...b.paths]);
 const RETIRED_DOMAINS: readonly string[] = RETIRED_BRANDS.flatMap((b) => [...b.domains]);
+
+/**
+ * Whole `<h2>` recommendation sections to drop, matched by exact heading text.
+ * A section is removed only while it still links a retired review path, so if
+ * the WP source is later rewritten around live brands it renders again with
+ * no code change.
+ *
+ * "Parhaat Euteller Kasinot" (/euteller-kasinot/, 2026-09-15): a two-item
+ * "our team's picks" list of #1 Wildz (retired above) and #2 Tournaverse
+ * (closed). Neither pick is valid; the page keeps its live toplist above.
+ */
+export const RETIRED_SECTIONS: readonly string[] = ["Parhaat Euteller Kasinot"];
 
 /**
  * Path alternation that tolerates the trailing slash being absent, and any
@@ -82,6 +105,17 @@ function pathPattern(): string {
 export function stripRetiredBrands(html: string | null | undefined): string {
   if (!html) return "";
   let out = html;
+
+  // 0. whole recommendation sections built around retired brands — heading
+  // through to the next <h2> (or end). Runs first, while the retired hrefs the
+  // guard checks are still present (later rules unlink them). Matches both the
+  // relative fragment hrefs and the absolute ones in the REST dump.
+  for (const heading of RETIRED_SECTIONS) {
+    out = out.replace(
+      new RegExp(`<h2\\b[^>]*>\\s*${esc(heading)}\\s*</h2>[\\s\\S]*?(?=<h2\\b|$)`, "gi"),
+      (section) => (RETIRED_PATHS.some((p) => section.includes(p)) ? "" : section),
+    );
+  }
 
   if (RETIRED_PATHS.length > 0) {
     const p = pathPattern();

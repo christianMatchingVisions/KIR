@@ -218,10 +218,6 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Opi valitsemaan paras maksutapa tilittömälle kasinolle. Vertailu: Trustly, Zimpler ja muut — nopeus, turvallisuus ja käytännön vinkit.",
   },
-  "/casino/berriez-casino/": {
-    description:
-      "Berriez Casino on suomalaisille suunnattu pikakasino: välittömät kotiutukset, päivittäinen cashback ja matalat kierrätysvaatimukset.",
-  },
   "/kolikkopelien-teemat-mika-niissa-viehattaa/": {
     description:
       "Kolikkopelien teemat luovat tunnelman ja houkuttelevat pelaamaan. Katso mitkä teemat toimivat parhaiten ja miksi.",
@@ -250,17 +246,9 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Kasinot ilman rekisteröitymistä 2026: 70% turvallisempia pankkitunnistuksella, nopeat kotiutukset ja selkeät bonukset.",
   },
-  "/casino/speedz-casino/": {
-    description:
-      "Speedz Casino on Trumo-pikakasino: yli 4000 peliä, nopeat kotiutukset ja 300 ilmaiskierrosta alkuun. Lue arvostelu.",
-  },
   "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/": {
     description:
       "Opi vastuullisen pelaamisen periaatteet tilittömillä kasinoilla: self-exclusion-työkalut ja impulsiivisuuden hallinta.",
-  },
-  "/casino/flamez-kasino/": {
-    description:
-      "Flamez Kasino on uusi TrumoPay-pikakasino: 200 ilmaiskierroksen tervetuliaisbonus, 20% cashback ja yli 5400 peliä.",
   },
   "/miksi-valita-kasino-ilman-rekisteroitymista/": {
     description:
