@@ -210,7 +210,7 @@ const PUBLISHER_ID = `${SITE_URL}/#organization`;
 const EDITORIAL_ID = `${SITE_URL}/#editorial-team`;
 
 /**
- * One additive Article JSON-LD block whose `author` + `reviewedBy` reference the
+ * One additive Article JSON-LD block whose `author` references the
  * EXISTING editorial Organization (`#editorial-team`, "KIR-toimitus") — never a
  * fabricated Person. Emitted in the BODY for article/guide pages whose preserved
  * <head> does not already declare an author (most blog guides). The publisher is
@@ -241,7 +241,10 @@ export function articleAuthorJsonLd(opts: {
       name: "KIR-toimitus",
       url: `${SITE_URL}/toimitus/`,
     },
-    reviewedBy: { "@id": EDITORIAL_ID },
+    // No `reviewedBy` here: schema.org defines it on WebPage, not Article, so
+    // it failed validation on every article page (Ahrefs Site Audit
+    // 2026-09-15). `author` already links #editorial-team, and /toimitus/
+    // declares reviewedBy validly on its own AboutPage.
     publisher: {
       "@type": "Organization",
       "@id": PUBLISHER_ID,

@@ -948,5 +948,25 @@
     "source": "/casino/chipz-casino/",
     "destination": "/kaikki-kasinot/",
     "permanent": true
+  },
+  {
+    "source": "/Arvostelut",
+    "destination": "/casino/",
+    "permanent": true
+  },
+  {
+    "source": "/Arvostelut/",
+    "destination": "/casino/",
+    "permanent": true
+  },
+  {
+    "source": "/arvostelut",
+    "destination": "/casino/",
+    "permanent": true
+  },
+  {
+    "source": "/arvostelut/",
+    "destination": "/casino/",
+    "permanent": true
   }
 ]
