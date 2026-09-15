@@ -479,4 +479,109 @@ licence and tax-free guide tails (same pattern, separate batch).
 0 impressions since launch — itself a likely cannibal of `/`. Needs an owner
 decision before retiring.
 
+---
+
+# Batch D — safety, responsible-gaming, payments, Trustly, licence, tax, withdrawals, bonus tails (2026-09-15)
+
+**Context:** Search Console Manual actions and Security issues both report no
+issues (owner check, 2026-09-15), so the December 2025 drop is algorithmic.
+Recovery lever = fewer weak pages, not a reconsideration request. Batch C
+(PR #36) is live and verified (one-hop 301s).
+
+**Evidence (all 49 retired URLs):**
+- Ahrefs GSC (project 1943203), 16-month window 2025-05-01 → 2026-09-15:
+  **0 clicks** on every page; impressions 0 on 43 of 49, the rest ≤ 8
+  (`rahat-tilille-viiveetta-…` 8, `mika-on-hyva-kierratysvaatimus` 5,
+  `verkkopankkimaksut-kasinoilla-2026-…` 3, `parhaat-verovapaat-pay-n-play-…` 3,
+  `bonusten-kierratysvaatimukset-…` 2, `opas-turvalliseen-rahansiirtoon-…` 1).
+- Ahrefs pages-by-backlinks: none of the 49 appears among pages with
+  external referring domains.
+- Every survivor is the page in its topic with the most search signal (or,
+  where no page has any, the evergreen / earlier-KEEP guide), and its own
+  H2s cover the retired intents:
+
+| Survivor | 16-mo impressions | Absorbs |
+|---|---|---|
+| `/nettikasinot-luotettavat-kasinot/` (money hub, "Miten valita turvalliset nettikasinot?") | 72,490 | 15 safe-casino guides / checklists / tips |
+| `/turvalliset-maksutavat-nettikasinoilla-kattava-opas/` (all methods + comparison) | 18 | 10 payment-method and verkkopankki guides |
+| `/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-…/` | 359 | 6 licence / regulation guides |
+| `/trustly-kasinot/` (money hub) | 45,002 | 4 Trustly guides |
+| `/kuinka-pelaat-vastuullisesti/` (evergreen RG guide) | 2 | 3 responsible-gaming guides |
+| `/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/` (Cluster 6 KEEP) | 0 | 3 tax-free guides |
+| `/kierratysvaatimus-opas-bonusten-kierratykseen/` | 1,119 | 3 wagering guides |
+| `/nopeat-kotiutukset-nettikasinoilta/` | 4,141 | 2 withdrawal guides |
+| `/kasinobonukset/` (money hub) | 12,021 | 2 bonus explainers |
+| `/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/` | 18 | 1 mobile how-to |
+
+**Chain prevention:** five earlier survivors are retired here
+(`nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026`,
+`tilittomien-kasinoiden-turvallisuusvaatimukset`, `turvallisuus-kasinot-ilman-tilia`,
+`vastuullinen-pelaaminen-tilittomilla-kasinoilla`, `nopeat-kasino-kotiutusajat-opas-suomalaisille`);
+the 30 existing rules pointing at them were repointed straight to the new
+survivor. Stale `SEO_OVERRIDES` entries for pages retired in batches C and D
+removed. Four `BROKEN_LINK_FIXES` targets in `src/lib/html-links.ts` pointed
+at now-retired pages (the build's internal-404 audit caught two of them on
+`/pikakasinot/` and `/nettikasino-ilman-rekisteroitymista/`); all four
+re-pointed to the final survivors.
+
+**Retired URLs** (fragment deleted + both slash-variant 301s):
+
+- → `/nettikasinot-luotettavat-kasinot/`: `turvallisuus-kasinot-ilman-tilia`,
+  `turvallisen-kasinopelaamisen-vinkit`, `turvallisen-tilittoman-kasinon-valinta-2026`,
+  `turvallisen-pikakasinon-tarkistuslista-pelaa-huolettomasti`,
+  `valitse-turvallinen-tillitton-kasino-opas`,
+  `opas-turvalliseen-kasinopelaamiseen-suojaat-pelisi-netissa`,
+  `tunnista-turvalliset-kasinot-sailtyseet-lisenssit`,
+  `vinkit-turvalliseen-kasinopelaamiseen-ilman-tilia`, `top-turvalliset-pikakasinot-4`,
+  `nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026`,
+  `nain-pelaat-turvallisesti-rekisteroimattomilla-kasinoilla`,
+  `tilittomien-kasinoiden-turvallisuusvaatimukset`,
+  `turvallisuuden-tarkistuslista-kasinoille-2026`,
+  `turvallinen-peliprosessi-2026-opas-pelaajille`,
+  `vinkit-turvalliseen-kasinopelaamiseen-2026`
+- → `/kuinka-pelaat-vastuullisesti/`: `vastuullinen-pelaaminen-tilittomilla-kasinoilla`,
+  `vinkkeja-turvalliseen-pelaamiseen-nettikasinoilla`,
+  `vastuullinen-pelaaminen-hauskuuden-ja-riskin-tasapaino-pikakasinoiden-maailmassa`
+- → `/turvalliset-maksutavat-nettikasinoilla-kattava-opas/`:
+  `maksutapojen-merkitys-tilittomilla-kasinoilla-valitse`,
+  `maksutapojen-merkitys-online-kasinolla-nopeus-turvallisuus`,
+  `nettikasinon-maksutavat-selitetty-nopeus-ja-turvallisuus`,
+  `suosituimmat-maksutavat-kasinoilla-nopein-turvallisin`,
+  `maksutapojen-rooli-kasinoilla-2026-opas-pelaajille`,
+  `opas-turvalliseen-rahansiirtoon-kasinolla-2026`,
+  `rooli-verkkopankkimaksuissa-mobiilikasinoilla`,
+  `verkkopankkimaksut-kasinoilla-2026-nopea-ja-turvallinen-opas`,
+  `verkkopankkimaksujen-rooli-kasinoilla-nopeus-pelaajalle`,
+  `verkkopankkimaksujen-merkitys-kasinoilla-suomalaisille`
+- → `/trustly-kasinot/`: `trustly-casino-nopeus-turvallisuus-suomi`,
+  `askel-askeleelta-trustly-kasinoilla-pelaaminen-opas`,
+  `rooli-trustly-maksutavoissa-opas-suomalaisille-pelaajille`,
+  `miksi-valita-trustly-maksu-kasinoille-2026`
+- → `/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/`:
+  `miten-kasinoiden-lisenssit-muuttuvat-suomessa-2026`,
+  `kasinoiden-lisenssivaatimukset-turvallisuus-ja-pelivalinta`,
+  `regulation-importance-online-casino-speed-security`,
+  `lisensoinnin-merkitys-suomalaisille-pikakasinoille`,
+  `kasinolisenssien-selitys-suomessa-2026`, `mita-tarkoittaa-pelilisenssi-opas-pelaajille`
+- → `/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/`:
+  `nain-verovapaus-vaikuttaa-nettikasinopelaamiseen`,
+  `nain-kaytat-verovapaita-kasinoita-helposti-turvallisesti`,
+  `parhaat-verovapaat-pay-n-play-kasinot-suomalaisille`
+- → `/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/`: `mobiilikasinolle-helposti-askel-askeleelta-opas`
+- → `/nopeat-kotiutukset-nettikasinoilta/`: `nopeat-kasino-kotiutusajat-opas-suomalaisille`,
+  `rahat-tilille-viiveetta-yleisimmat-ongelmat-nettikasinoiden-kotiutuksissa-ja-kuinka-selvittaa-ne`
+- → `/kierratysvaatimus-opas-bonusten-kierratykseen/`: `miten-bonusehdot-toimivat-kasinoilla-2026`,
+  `bonusten-kierratysvaatimukset-kuinka-paihittaa-ne`, `mika-on-hyva-kierratysvaatimus`
+- → `/kasinobonukset/`: `kasinoiden-bonukset-selitetty-suomalaisille-pelaajille`,
+  `opas-nopeisiin-nettikasino-bonuksiin-2026`
+
+**Deliberately kept (real search signal):** `non-sticky-bonus` (34,016 impr),
+`katevasti-mobiililla-apple-pay-ja-google-pay-…` (5,979, pos ~33),
+`mita-bonuskoodit-ovat-ja-miksi-niita-kaytetaan` (2,133),
+`euteller-vs-zimpler-ja-brite-…` (318), `veikkauksen-monopoli-murtuu` (258),
+`onnenpyora-bonukset-uusin-bonusmalli` (138), `uudet-maksutavat-nettikasinoilla` (66),
+`opas-parhaan-kasinobonuksen-loytamiseen` (33).
+Overlapping but not merged (flag for later): `/verovapaus-nettikasinoilla/`
+(2021, same tax-free intent as the Cluster 6 KEEP, 0 impressions).
+
 <!-- Batches appended below as they are executed. -->

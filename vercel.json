@@ -383,22 +383,22 @@
     },
     {
       "source": "/nopeat-kotiutukset-kasinot-vertailu-6",
-      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
       "permanent": true
     },
     {
       "source": "/nopeat-kotiutukset-kasinot-vertailu-6/",
-      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
       "permanent": true
     },
     {
       "source": "/nopeat-kasinot-kotiutusajat-vertailu-4",
-      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
       "permanent": true
     },
     {
       "source": "/nopeat-kasinot-kotiutusajat-vertailu-4/",
-      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
       "permanent": true
     },
     {
@@ -433,22 +433,22 @@
     },
     {
       "source": "/7-kohdan-turvallisen-kasinon-tarkistuslista",
-      "destination": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/7-kohdan-turvallisen-kasinon-tarkistuslista/",
-      "destination": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/opas-turvallisen-kasinon-valintaan",
-      "destination": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/opas-turvallisen-kasinon-valintaan/",
-      "destination": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
@@ -463,82 +463,82 @@
     },
     {
       "source": "/turvallisuusvaatimukset-nettikasinoilla-2026",
-      "destination": "/tilittomien-kasinoiden-turvallisuusvaatimukset/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuusvaatimukset-nettikasinoilla-2026/",
-      "destination": "/tilittomien-kasinoiden-turvallisuusvaatimukset/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuusvaatimukset-suomalaisilla-nettikasinoilla",
-      "destination": "/tilittomien-kasinoiden-turvallisuusvaatimukset/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuusvaatimukset-suomalaisilla-nettikasinoilla/",
-      "destination": "/tilittomien-kasinoiden-turvallisuusvaatimukset/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallinen-kasinopelaaminen-ilman-rekisteroitymista-2026",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallinen-kasinopelaaminen-ilman-rekisteroitymista-2026/",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallinen-rekisteroitymisvapaa-kasino-2026-opas",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallinen-rekisteroitymisvapaa-kasino-2026-opas/",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuus-kasinolla-ilman-tilia-opas-suomalaisille",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuus-kasinolla-ilman-tilia-opas-suomalaisille/",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuus-pikakasinoilla-2026-90-pelaajista-luottaa-nopeuteen",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuus-pikakasinoilla-2026-90-pelaajista-luottaa-nopeuteen/",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuus-pikakasinoilla-selitettyna",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallisuus-pikakasinoilla-selitettyna/",
-      "destination": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
       "permanent": true
     },
     {
       "source": "/turvallinen-pelaaminen-vertailu-kasinot-tarjoaa-vastuullisuuden",
-      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
       "permanent": true
     },
     {
       "source": "/turvallinen-pelaaminen-vertailu-kasinot-tarjoaa-vastuullisuuden/",
-      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
       "permanent": true
     },
     {
@@ -573,22 +573,22 @@
     },
     {
       "source": "/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen",
-      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
       "permanent": true
     },
     {
       "source": "/kasinot-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/",
-      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
       "permanent": true
     },
     {
       "source": "/kasino-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen",
-      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
       "permanent": true
     },
     {
       "source": "/kasino-ilman-rekisteroitymista-ja-vastuullinen-pelaaminen-kuinka-pikakasinot-panostavat-turvallisuuteen/",
-      "destination": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
       "permanent": true
     },
     {
@@ -733,12 +733,12 @@
     },
     {
       "source": "/nopeat-kotiutukset-kasinolla-95-prosenttia-nopeammin",
-      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
       "permanent": true
     },
     {
       "source": "/nopeat-kotiutukset-kasinolla-95-prosenttia-nopeammin/",
-      "destination": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
       "permanent": true
     },
     {
@@ -1219,6 +1219,496 @@
     {
       "source": "/turvallisuus-pay-n-play-kasinoilla-opas/",
       "destination": "/parhaat-esimerkit-pay-n-play-kasinoista/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisuus-kasinot-ilman-tilia",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisuus-kasinot-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisen-kasinopelaamisen-vinkit",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisen-kasinopelaamisen-vinkit/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisen-tilittoman-kasinon-valinta-2026",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisen-tilittoman-kasinon-valinta-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisen-pikakasinon-tarkistuslista-pelaa-huolettomasti",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisen-pikakasinon-tarkistuslista-pelaa-huolettomasti/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/valitse-turvallinen-tillitton-kasino-opas",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/valitse-turvallinen-tillitton-kasino-opas/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/opas-turvalliseen-kasinopelaamiseen-suojaat-pelisi-netissa",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/opas-turvalliseen-kasinopelaamiseen-suojaat-pelisi-netissa/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/tunnista-turvalliset-kasinot-sailtyseet-lisenssit",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/tunnista-turvalliset-kasinot-sailtyseet-lisenssit/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/vinkit-turvalliseen-kasinopelaamiseen-ilman-tilia",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/vinkit-turvalliseen-kasinopelaamiseen-ilman-tilia/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/top-turvalliset-pikakasinot-4",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/top-turvalliset-pikakasinot-4/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-valitset-turvallisen-nettikasinon-nopeasti-vuonna-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-pelaat-turvallisesti-rekisteroimattomilla-kasinoilla",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-pelaat-turvallisesti-rekisteroimattomilla-kasinoilla/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/tilittomien-kasinoiden-turvallisuusvaatimukset",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/tilittomien-kasinoiden-turvallisuusvaatimukset/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisuuden-tarkistuslista-kasinoille-2026",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallisuuden-tarkistuslista-kasinoille-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallinen-peliprosessi-2026-opas-pelaajille",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/turvallinen-peliprosessi-2026-opas-pelaajille/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/vinkit-turvalliseen-kasinopelaamiseen-2026",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/vinkit-turvalliseen-kasinopelaamiseen-2026/",
+      "destination": "/nettikasinot-luotettavat-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
+      "permanent": true
+    },
+    {
+      "source": "/vastuullinen-pelaaminen-tilittomilla-kasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
+      "permanent": true
+    },
+    {
+      "source": "/vinkkeja-turvalliseen-pelaamiseen-nettikasinoilla",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
+      "permanent": true
+    },
+    {
+      "source": "/vinkkeja-turvalliseen-pelaamiseen-nettikasinoilla/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
+      "permanent": true
+    },
+    {
+      "source": "/vastuullinen-pelaaminen-hauskuuden-ja-riskin-tasapaino-pikakasinoiden-maailmassa",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
+      "permanent": true
+    },
+    {
+      "source": "/vastuullinen-pelaaminen-hauskuuden-ja-riskin-tasapaino-pikakasinoiden-maailmassa/",
+      "destination": "/kuinka-pelaat-vastuullisesti/",
+      "permanent": true
+    },
+    {
+      "source": "/maksutapojen-merkitys-tilittomilla-kasinoilla-valitse",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/maksutapojen-merkitys-tilittomilla-kasinoilla-valitse/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/maksutapojen-merkitys-online-kasinolla-nopeus-turvallisuus",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/maksutapojen-merkitys-online-kasinolla-nopeus-turvallisuus/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/nettikasinon-maksutavat-selitetty-nopeus-ja-turvallisuus",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/nettikasinon-maksutavat-selitetty-nopeus-ja-turvallisuus/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/suosituimmat-maksutavat-kasinoilla-nopein-turvallisin",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/suosituimmat-maksutavat-kasinoilla-nopein-turvallisin/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/maksutapojen-rooli-kasinoilla-2026-opas-pelaajille",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/maksutapojen-rooli-kasinoilla-2026-opas-pelaajille/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/opas-turvalliseen-rahansiirtoon-kasinolla-2026",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/opas-turvalliseen-rahansiirtoon-kasinolla-2026/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/rooli-verkkopankkimaksuissa-mobiilikasinoilla",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/rooli-verkkopankkimaksuissa-mobiilikasinoilla/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/verkkopankkimaksut-kasinoilla-2026-nopea-ja-turvallinen-opas",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/verkkopankkimaksut-kasinoilla-2026-nopea-ja-turvallinen-opas/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/verkkopankkimaksujen-rooli-kasinoilla-nopeus-pelaajalle",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/verkkopankkimaksujen-rooli-kasinoilla-nopeus-pelaajalle/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/verkkopankkimaksujen-merkitys-kasinoilla-suomalaisille",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/verkkopankkimaksujen-merkitys-kasinoilla-suomalaisille/",
+      "destination": "/turvalliset-maksutavat-nettikasinoilla-kattava-opas/",
+      "permanent": true
+    },
+    {
+      "source": "/trustly-casino-nopeus-turvallisuus-suomi",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/trustly-casino-nopeus-turvallisuus-suomi/",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-trustly-kasinoilla-pelaaminen-opas",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/askel-askeleelta-trustly-kasinoilla-pelaaminen-opas/",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/rooli-trustly-maksutavoissa-opas-suomalaisille-pelaajille",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/rooli-trustly-maksutavoissa-opas-suomalaisille-pelaajille/",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/miksi-valita-trustly-maksu-kasinoille-2026",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/miksi-valita-trustly-maksu-kasinoille-2026/",
+      "destination": "/trustly-kasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/miten-kasinoiden-lisenssit-muuttuvat-suomessa-2026",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/miten-kasinoiden-lisenssit-muuttuvat-suomessa-2026/",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinoiden-lisenssivaatimukset-turvallisuus-ja-pelivalinta",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinoiden-lisenssivaatimukset-turvallisuus-ja-pelivalinta/",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/regulation-importance-online-casino-speed-security",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/regulation-importance-online-casino-speed-security/",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/lisensoinnin-merkitys-suomalaisille-pikakasinoille",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/lisensoinnin-merkitys-suomalaisille-pikakasinoille/",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinolisenssien-selitys-suomessa-2026",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinolisenssien-selitys-suomessa-2026/",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/mita-tarkoittaa-pelilisenssi-opas-pelaajille",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/mita-tarkoittaa-pelilisenssi-opas-pelaajille/",
+      "destination": "/suomi-siirtyy-rahapelien-lisenssijarjestelmaan-2026-miten-se-muuttaa-pelaamista-ja-mainontaa/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-verovapaus-vaikuttaa-nettikasinopelaamiseen",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-verovapaus-vaikuttaa-nettikasinopelaamiseen/",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-kaytat-verovapaita-kasinoita-helposti-turvallisesti",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/nain-kaytat-verovapaita-kasinoita-helposti-turvallisesti/",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/parhaat-verovapaat-pay-n-play-kasinot-suomalaisille",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/parhaat-verovapaat-pay-n-play-kasinot-suomalaisille/",
+      "destination": "/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/",
+      "permanent": true
+    },
+    {
+      "source": "/mobiilikasinolle-helposti-askel-askeleelta-opas",
+      "destination": "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/",
+      "permanent": true
+    },
+    {
+      "source": "/mobiilikasinolle-helposti-askel-askeleelta-opas/",
+      "destination": "/parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas/",
+      "permanent": true
+    },
+    {
+      "source": "/nopeat-kasino-kotiutusajat-opas-suomalaisille",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
+      "permanent": true
+    },
+    {
+      "source": "/nopeat-kasino-kotiutusajat-opas-suomalaisille/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
+      "permanent": true
+    },
+    {
+      "source": "/rahat-tilille-viiveetta-yleisimmat-ongelmat-nettikasinoiden-kotiutuksissa-ja-kuinka-selvittaa-ne",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
+      "permanent": true
+    },
+    {
+      "source": "/rahat-tilille-viiveetta-yleisimmat-ongelmat-nettikasinoiden-kotiutuksissa-ja-kuinka-selvittaa-ne/",
+      "destination": "/nopeat-kotiutukset-nettikasinoilta/",
+      "permanent": true
+    },
+    {
+      "source": "/miten-bonusehdot-toimivat-kasinoilla-2026",
+      "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+      "permanent": true
+    },
+    {
+      "source": "/miten-bonusehdot-toimivat-kasinoilla-2026/",
+      "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+      "permanent": true
+    },
+    {
+      "source": "/bonusten-kierratysvaatimukset-kuinka-paihittaa-ne",
+      "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+      "permanent": true
+    },
+    {
+      "source": "/bonusten-kierratysvaatimukset-kuinka-paihittaa-ne/",
+      "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+      "permanent": true
+    },
+    {
+      "source": "/mika-on-hyva-kierratysvaatimus",
+      "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+      "permanent": true
+    },
+    {
+      "source": "/mika-on-hyva-kierratysvaatimus/",
+      "destination": "/kierratysvaatimus-opas-bonusten-kierratykseen/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinoiden-bonukset-selitetty-suomalaisille-pelaajille",
+      "destination": "/kasinobonukset/",
+      "permanent": true
+    },
+    {
+      "source": "/kasinoiden-bonukset-selitetty-suomalaisille-pelaajille/",
+      "destination": "/kasinobonukset/",
+      "permanent": true
+    },
+    {
+      "source": "/opas-nopeisiin-nettikasino-bonuksiin-2026",
+      "destination": "/kasinobonukset/",
+      "permanent": true
+    },
+    {
+      "source": "/opas-nopeisiin-nettikasino-bonuksiin-2026/",
+      "destination": "/kasinobonukset/",
       "permanent": true
     }
   ],
