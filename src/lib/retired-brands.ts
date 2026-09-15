@@ -40,10 +40,21 @@ export interface RetiredBrand {
 /**
  * Brands removed for commercial reasons, newest first.
  *
+ * 2026-09-15 — affiliate deals ended for the Berriez/Speedz/Flamez and
+ * Wildz/Spinz/Chipz sister brands. /casino/spinz/ is listed alongside
+ * /casino/spinz-casino/ because the A-Z index still links the short legacy
+ * form, and this pass runs before html-links.ts resolves it.
+ *
  * 2026-09-11 — affiliate deals ended (see docs/consolidation-log-2026-07.md).
  * Pottila has no review page on this site, only an outbound link.
  */
 export const RETIRED_BRANDS: readonly RetiredBrand[] = [
+  { paths: ["/casino/berriez-casino/"], domains: [] },
+  { paths: ["/casino/speedz-casino/"], domains: [] },
+  { paths: ["/casino/flamez-kasino/"], domains: [] },
+  { paths: ["/casino/wildz-casino/"], domains: [] },
+  { paths: ["/casino/spinz-casino/", "/casino/spinz/"], domains: [] },
+  { paths: ["/casino/chipz-casino/"], domains: [] },
   { paths: ["/casino/pelikaani-kasino/"], domains: ["pelikaanicasino-online.com"] },
   { paths: ["/casino/pelikioski/"], domains: [] },
   { paths: [], domains: ["pottilakasino.fi"] },
