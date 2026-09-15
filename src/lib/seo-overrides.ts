@@ -46,10 +46,12 @@ export interface SeoOverride {
 
 export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   // --- Casino reviews (H1 = casino name; <title> safe to keyword-optimise) ---
+  // Closed 2026-09-15 (closed-casinos.ts). The page is noindexed, but the
+  // preserved WP head still called it a "stylish new casino" — say it's closed.
   "/casino/vasy-casino/": {
-    title: "Vasy Casino kokemuksia 2026 – bonus, lisenssi ja kotiutus",
+    title: "Vasy Casino on suljettu – katso avoimet vaihtoehdot",
     description:
-      "Vasy Casino -arvostelu: lisenssi, bonusehdot, kierrätys, kotiutusajat ja maksutavat. Puolueeton katsaus suomalaispelaajille 2026.",
+      "Vasy Casino on suljettu eikä ota enää vastaan pelaajia. Katso avoimet kasinot ilman rekisteröitymistä.",
   },
   "/casino/igni-casino/": {
     title: "Igni Casino kokemuksia 2026 – bonus, lisenssi ja luotettavuus",
