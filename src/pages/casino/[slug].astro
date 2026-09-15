@@ -257,6 +257,18 @@ const others: ToplistCasino[] = review
 
 const PROSE_ANCHOR = "arvostelu";
 
+// Closed casinos render their old review prose, which can still carry
+// affiliate links (e.g. a clickable bonus banner). A closed page must never
+// send players to the operator, so unwrap every /go/ anchor — the inner text
+// or image stays, only the link goes.
+const closedProseHtml =
+  review?.showNoReview && review.reviewHtml
+    ? review.reviewHtml.replace(
+        /<a\b[^>]*\bhref="(?:https?:\/\/kasinotilmanrekisteroitymista\.com)?\/go\/[^"]*"[^>]*>([\s\S]*?)<\/a>/gi,
+        "$1",
+      )
+    : null;
+
 /**
  * Does the assessment block have a ratings column? RatingBars renders when there
  * are sub-ratings OR an overall score; when neither exists we drop column 1 and
@@ -447,11 +459,11 @@ if (review && !review.showNoReview) {
             </p>
           </div>
 
-          {review.reviewHtml && (
+          {closedProseHtml && (
             <div
               class="kir-prose closed__prose"
               id={PROSE_ANCHOR}
-              set:html={review.reviewHtml}
+              set:html={closedProseHtml}
             />
           )}
         </div>

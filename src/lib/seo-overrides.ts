@@ -321,9 +321,12 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Klikki Kasino on uusi pikakasino 200 % tervetulobonuksella. Lue arvostelu bonusehdoista ja nopeista kotiutuksista.",
   },
+  // Closed 2026-09-15 (closed-casinos.ts) — the old description advertised a
+  // bonus that no longer exists.
   "/casino/icebet-casino/": {
+    title: "IceBet Casino on suljettu – katso avoimet vaihtoehdot",
     description:
-      "IceBet Casino -arvostelu: non-sticky bonus jopa 300 euroon asti. Lue bonusehdot, pelivalikoima ja kotiutusajat.",
+      "IceBet Casino on suljettu eikä ota enää vastaan pelaajia. Katso avoimet kasinot ilman rekisteröitymistä.",
   },
   "/casino/winz/": {
     description:
