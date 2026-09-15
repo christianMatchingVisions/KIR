@@ -387,5 +387,13 @@ pos ~48; Wildz/Chipz/Spinz ≤ 9 each).
 - Closed Casino Room's review card still carries `/go/chipz/` CTA buttons in
   its scraped fragment. Not an issue: the closed-casino template renders no
   CTAs (`casino/[slug].astro`), so those never reach the page.
+- `/euteller-kasinot/` had a "Parhaat Euteller Kasinot" section — the team's
+  two picks, #1 Wildz and #2 Tournaverse (already closed). Unlike the
+  retrospective Christmas-article prose (kept, unlinked), this was an active
+  recommendation with no valid entries left, so the whole section is removed
+  at build time via `RETIRED_SECTIONS` in `retired-brands.ts`. Guarded: it
+  only drops while the section still links a retired review, so a future WP
+  rewrite around live brands renders again automatically. The page keeps its
+  live 10-casino toplist.
 
 <!-- Batches appended below as they are executed. -->
