@@ -162,6 +162,8 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Le Cowboy on Hacksaw Gamingin korkean volatiliteetin videoslotti villin lännen teemalla. Lue arvostelu ja katso voittopotentiaali.",
   },
   "/casino/lucky-fruits-casino/": {
+    // year tag refreshed 2026-09-15 (was 2025) — see outdated-years block below.
+    title: "Lucky Fruits Casino Arvostelu 2026 – 100% Non-sticky Bonus + 100 IK",
     description:
       "Lucky Fruits Casino on Zimpler-pikakasino: 100% non-sticky bonus 300 euroon asti, päivittäinen cashback ja nopeat kotiutukset. Lue arvostelu.",
   },
@@ -199,6 +201,9 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Samalla kolikkopelillä voi olla useita RTP-versioita. Mitä 92%, 94% ja 96% RTP tarkoittavat ja miten teet fiksumpia valintoja?",
   },
   "/parhaat-klassikkoslotit/": {
+    // "2025" dropped rather than bumped (2026-09-15): static article prose,
+    // not live-updated — a current-year tag would fake freshness.
+    title: "Parhaat klassikkoslotit - Tutustu kolikkopeli klassikkoihin",
     description:
       "Esittelyssä kolme parasta klassikkoslottia: Break Da Bank, Emerald Diamond ja Mega Joker. Katso miksi ne ovat yhä pelaajien suosikkeja.",
   },
@@ -306,6 +311,8 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Vertaile 5 parasta kasinoa ilman rekisteröitymistä 2026: bonukset, nopeat kotiutukset ja luotettavat maksutavat suomalaispelaajille.",
   },
   "/casino/huippukasino/": {
+    // year tag refreshed 2026-09-15 (was "(2025)") — see outdated-years block below.
+    title: "Huippukasino Arvostelu & Bonustiedot (2026)",
     description:
       "Huippukasino-arvostelu: bonustiedot, pelivalikoima ja pelaajien kokemukset. Lue kattava katsaus ennen rekisteröitymistä.",
   },
@@ -364,6 +371,97 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
   },
   "/miten-bonusehdot-toimivat-kasinoilla-2026/": {
     ogImage: "https://kasinotilmanrekisteroitymista.com/og/default.png",
+  },
+
+  // --- Outdated years (2026-09-15), casino reviews. Titles like "Arvostelu
+  // 2024" were freshness tags that now signal stale content. Review pages
+  // render live toplist data (bonus, rating), so the tag should read current
+  // — same convention as the Phase-5 "kokemuksia 2026" titles above. Only
+  // the year token changes; the rest is the preserved title verbatim (one
+  // exception: Fruta's "Upouusi" — "brand new" — dropped, since a 2024
+  // casino is not brand new in 2026). Years that state a FACT ("vuonna 2023
+  // avattu", launch/founding years) are deliberately left alone everywhere. ---
+  "/casino/raketti-kasino/": {
+    title: "Raketti Kasino - Arvostelu ja Kokemuksia 2026",
+  },
+  "/casino/slotti-casino/": {
+    title: "Slotti Casino Arvostelu ja Kokemukset 2026",
+  },
+  "/casino/mammona-kasino/": {
+    title: "Mammona Kasino - Arvostelu ja Kokemuksia 2026",
+  },
+  "/casino/lysti-casino/": {
+    title: "Lysti Casino Arvostelu 2026 - 15% Päivittäinen Käteispalautus",
+  },
+  "/casino/kunkku-kasino/": {
+    title: "Kunkku Kasino Arvostelu 2026 | Nappaa 500€ bonus",
+  },
+  "/casino/spinit-kasino/": {
+    title: "Spinit Kasino - Arvostelu ja Kokemuksia 2026",
+  },
+  "/casino/kaahaus-kasino/": {
+    title: "Kaahaus Kasino Arvostelu 2026 - Kokemuksia ja Bonustiedot",
+  },
+  "/casino/taikawin-kasino/": {
+    title: "Taikawin Kasino Arvostelu 2026 - 15% Käteispalautus!",
+  },
+  "/casino/fruta-kasino/": {
+    title: "Fruta Kasino Arvostelu 2026 | Pikakasino",
+  },
+  "/casino/netbet-kasino/": {
+    title: "NetBet Kasino - Arvostelu 2026",
+  },
+  "/casino/pelaanyt/": {
+    title: "Pelaanyt Kasino Arvostelu & Kokemuksia 2026!",
+  },
+  "/casino/puzzle-casino/": {
+    title: "Puzzle Casino Arvostelu (2026) | 120% bonus 200€ asti!",
+  },
+  "/casino/rullat/": {
+    title: "Rullat Kasino Arvostelu & Kokemuksia 2026",
+  },
+  "/casino/scarabet-kasino/": {
+    title: "Scarabet Kasino Arvostelu 2026 - Ota 200€ Bonus",
+  },
+  "/casino/slots-hammer-casino/": {
+    title: "Slots Hammer Casino Arvostelu (2026) | 120% bonus 200€ asti!",
+  },
+  "/casino/twin-casino/": {
+    // description keeps "avattiin uudelleen vuonna 2023" — a fact, not a tag.
+    title: "Twin Casino Arvostelu 2026 | 100% etu 300% asti!",
+  },
+  "/casino/hurmio-kasino/": {
+    // "(2025)" was a bare year tag on the description; removed, not bumped.
+    description:
+      "Hurmio Kasino on Curacaon lisensoitu pikakasino, Brite Pay N Playllä, minimitalletus 1 €, päivittäinen jopa 15% cashback. Lue arvostelusta lisää!",
+  },
+
+  // --- Outdated years (2026-09-15), hubs + static articles. ---
+  // Money hubs: <title> doubles as the visible H1 here, so these read as a
+  // heading. Both hubs render the live toplist, so the current year is honest.
+  "/suomen-parhaat-nettikasinot/": {
+    title: "Suomen Parhaat Nettikasinot 2026 – Kasinot Ilman Rekisteröitymistä",
+    description:
+      "Suomen Parhaat Nettikasinot - Mitkä ovat parhaat suomalaisten nettikasinot vuonna 2026? Lue tästä suomalaisille sopivista kasinoista ja bonuksista!",
+  },
+  // Was "Uudet kasinot valloittavat Internetin vuonna 2022 | Ei rekisteröintiä";
+  // GSC's top query for this page was literally "kasinot 2022".
+  "/uudet-kasinot/": {
+    title: "Uudet kasinot 2026 – uusimmat kasinot ilman rekisteröintiä",
+  },
+  // MGA hub: title already says 2026, description still said 2025.
+  "/mga-kasinot/": {
+    description:
+      "Kun puhutaan vuoden 2026 parhaista MGA kasinoista, puhutaan innovaatiosta, käyttäjäystävällisyydestä ja ennen kaikkea pelaajien turvallisuudesta",
+  },
+  // Static articles: year DROPPED rather than bumped — the prose is not
+  // live-updated, so claiming 2026 would fake freshness.
+  "/parhaat-livekasinopelit-2024/": {
+    title: "Parhaat livekasinopelit - Top livepelit",
+  },
+  "/verovapaus-nettikasinoilla/": {
+    description:
+      "Nauti pelaamisen tuomasta jännityksestä ja valitse uudet kasinot. Suuntaa verovapaille nettikasinoille ja iloitse voittorahoistasi ilman verottajaa.",
   },
 };
 
