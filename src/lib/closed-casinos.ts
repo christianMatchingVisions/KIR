@@ -33,6 +33,20 @@
  *     millionpot-casino  domain now a UK bonus portal
  *     casiplay           domain now a UK casino portal
  *     slotsnplay         domain now a UK casino portal
+ *
+ *   Second batch — flagged "unclear" by the same check (affiliate link dead
+ *   or site unreachable), then checked by the site owner from Finland via a
+ *   Finnish VPN on 2026-09-15: none of the sites work.
+ *     rebellion-casino   affiliate landing "Page Not Found"
+ *     trada-casino       tracking domain gone; site unreachable
+ *     mrvegascasino      server down (toplist post_name: mr-vegas)
+ *     royal-panda        partner redirect returns a server error
+ *     dbosses-kasino     affiliate link now lands on BluVegas
+ *     betoriginal-casino tracking domain gone; site unreachable
+ *
+ *   Note: a failed connection from outside Finland alone is NOT a closure
+ *   signal — many operators geo-block non-FI traffic (Superonni and Kumobet
+ *   looked dead from abroad but are live). Confirm from Finland first.
  */
 export const MANUALLY_CLOSED_SLUGS: ReadonlySet<string> = new Set([
   "simplecasino",
@@ -49,4 +63,11 @@ export const MANUALLY_CLOSED_SLUGS: ReadonlySet<string> = new Set([
   "millionpot-casino",
   "casiplay",
   "slotsnplay",
+  "rebellion-casino",
+  "trada-casino",
+  "mrvegascasino",
+  "mr-vegas",
+  "royal-panda",
+  "dbosses-kasino",
+  "betoriginal-casino",
 ]);
