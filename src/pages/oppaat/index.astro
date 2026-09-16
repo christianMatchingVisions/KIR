@@ -27,6 +27,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Icon from "../../components/Icon.astro";
 import { getPosts } from "../../lib/content";
+import { MANUAL_ARTICLES } from "../../lib/manual-articles";
 import { isGuideArticleType } from "../../lib/content-engine-loader";
 import { collectionPageJsonLd } from "../../lib/collection-schema";
 
@@ -143,9 +144,21 @@ const postCards: GuideCard[] = getPosts().map((p) => ({
 // to share a slug with a scraped WP post (/<slug>/) is a DIFFERENT page —
 // keying by slug silently dropped the card linking to the live, indexed WP
 // post (its only inbound link from this hub). Identical hrefs still dedupe.
+// (c) Hand-written repo articles (src/lib/manual-articles.ts) → /<slug>/.
+const manualCards: GuideCard[] = MANUAL_ARTICLES.map((a) => ({
+  slug: a.slug,
+  href: `/${a.slug}/`,
+  title: a.title,
+  date: a.date,
+  dateLabel: fiDate(a.date),
+  excerpt: a.excerpt,
+  kicker: "Arvostelu",
+}));
+
 const byHref = new Map<string, GuideCard>();
 for (const c of postCards) byHref.set(c.href, c);
 for (const c of engineCards) byHref.set(c.href, c);
+for (const c of manualCards) byHref.set(c.href, c);
 const posts: GuideCard[] = [...byHref.values()].sort((a, b) =>
   (b.date || "").localeCompare(a.date || ""),
 );

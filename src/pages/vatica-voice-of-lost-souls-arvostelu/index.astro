@@ -1,0 +1,167 @@
+---
+// @custom — hand-written article; converters/scrapers must not overwrite it.
+//
+// /vatica-voice-of-lost-souls-arvostelu/ — slot review, written in-repo
+// (2026-09-16), not synced from WordPress. Metadata lives in
+// src/lib/manual-articles.ts, which also lists it on the /oppaat/ hub.
+//
+// NET-NEW URL: there is no preserved registry head, so ArticlePage forwards a
+// clean head (description, self-canonical, Article + OG JSON-LD) to BaseLayout.
+//
+// FACTS: cross-checked against bigwinboard.com and slotcatalog.com. Details
+// the sources disagreed on or did not state (exact scatter count, wild
+// multiplier range, exact release day) are deliberately left out.
+//
+// COMPLIANCE: original text; no first-hand "we played / tested" claims
+// (scrubFirstHandClaims runs anyway); no affiliate links in the prose; 18+ /
+// Peluuri reminder at the end; affiliate disclosure comes from the layout.
+import ArticlePage from "../../layouts/ArticlePage.astro";
+import { scrubFirstHandClaims, ensureSponsored } from "../../lib/content";
+import { articleAuthorJsonLd } from "../../lib/related";
+import { buildFaqLd } from "../../lib/faq-schema";
+import { getManualArticle } from "../../lib/manual-articles";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+const article = getManualArticle("vatica-voice-of-lost-souls-arvostelu");
+const seoPath = `/${article.slug}/`;
+const canonical = `${SITE_ORIGIN}${seoPath}`;
+
+const body = `
+<p>Vatica – Voice of Lost Souls on Good Times Studiosin syyskuussa 2026 julkaisema kolikkopeli, joka yhdistää tumman manalateeman ja klusterivoitot. Pelin kiinnostavin idea on muisti: ruudukko "muistaa", missä voitot ovat syntyneet, ja pelin nimihahmo Vatica voi myöhemmin muuttaa nuo kohdat samaksi symboliksi. Käymme tässä artikkelissa läpi, miten mekaniikka toimii, mitä peli maksaa bonusostoina ja kenelle se sopii.</p>
+
+<h2>Pelin perustiedot</h2>
+<table>
+  <thead><tr><th>Ominaisuus</th><th>Tieto</th></tr></thead>
+  <tbody>
+    <tr><td>Pelinvalmistaja</td><td>Good Times Studios</td></tr>
+    <tr><td>Julkaisu</td><td>Syyskuu 2026</td></tr>
+    <tr><td>Pelialue</td><td>6 × 5, klusterivoitot (cluster pays)</td></tr>
+    <tr><td>RTP</td><td>96,27 % (myös 94,26 % versio käytössä)</td></tr>
+    <tr><td>Volatiliteetti</td><td>Keskitaso</td></tr>
+    <tr><td>Osumatiheys</td><td>noin 34 %</td></tr>
+    <tr><td>Maksimivoitto</td><td>10 000 × panos</td></tr>
+    <tr><td>Panokset</td><td>0,10–100 €</td></tr>
+    <tr><td>Bonusostot</td><td>3×, 50×, 100× ja 300× panos (saatavuus vaihtelee)</td></tr>
+  </tbody>
+</table>
+
+<h2>Miten klusterivoitot ja kirotut merkit toimivat</h2>
+<p>Vatica ei käytä perinteisiä voittolinjoja. Voitto syntyy, kun vähintään viisi samaa symbolia koskettaa toisiaan ruudukossa vaaka- tai pystysuunnassa. Voittaneet symbolit poistuvat, uudet putoavat tilalle ja sama kierros voi jatkua useilla peräkkäisillä voitoilla. Jos <a href="/grid-slotit/">ruudukkopohjaiset slotit</a> ovat sinulle uusia, niiden perusidea on sama kuin tässä pelissä.</p>
+<p>Jokaisen voittavan klusterin kohdalle jää <strong>kirottu merkki</strong> (Cursed Mark). Merkit säilyvät saman kierroksen pudotusten ajan, joten mitä useampi voitto ketjussa syntyy, sitä enemmän merkittyjä ruutuja pelialueelle kertyy.</p>
+
+<h2>Vatican ote – pelin ydinmekaniikka</h2>
+<p>Kun <strong>Vatica-symboli</strong> ilmestyy ruudukkoon ja merkittyjä ruutuja on olemassa, Vatica ja kaikki merkityt kohdat muuttuvat samaksi, satunnaisesti valituksi maksavaksi symboliksi. Hajanainen ruudukko voi näin muuttua yhdeksi suureksi klusteriksi, joka käynnistää uusia pudotuksia.</p>
+<p>Mekaniikan arvo riippuu kahdesta asiasta:</p>
+<ul>
+  <li><strong>Ajoitus:</strong> Vatica hyödyttää eniten silloin, kun merkkejä on ehtinyt kertyä useita.</li>
+  <li><strong>Sijainti:</strong> hajallaan olevat merkit eivät välttämättä muodosta yhtenäistä klusteria, vaikka ne muuttuisivat samaksi symboliksi.</li>
+</ul>
+<p>Siksi peli tuntuu välillä hiljaiselta ja välillä räjähtävältä – tyypillistä keskivolatiliteetin peleille.</p>
+
+<h2>Ilmaiskierrokset: kaksi bonuspeliä</h2>
+<p>Ilmaiskierrokset käynnistyvät scatter-symboleilla, ja kierroksen aikana kolme uutta scatteria antaa lisäkierroksen. Bonuspelejä on kaksi.</p>
+<h3>Relics of Eternity</h3>
+<p>Kirotut merkit <strong>säilyvät kierroksesta toiseen</strong> koko bonuksen ajan, kunnes Vatica "lunastaa" ne. Vatican ote muuttaa merkityt ruudut mihin tahansa maksavaan symboliin. Tämä on pelin tasaisempi bonus.</p>
+<h3>Judgement of the Underworld</h3>
+<p>Vahvempi ja kalliimpi tila. Täällä Vatican ote ei muuta merkkejä tavallisiksi symboleiksi, vaan <strong>villeiksi symboleiksi, kertoimellisiksi villeiksi tai lisäkierrossymboleiksi</strong>. Suurimmat voitot ovat mahdollisia juuri tässä tilassa – samoin suurimmat vaihtelut.</p>
+
+<h2>Bonusostot ja FeatureSpins</h2>
+<p>Pelissä on neljä tapaa maksaa ominaisuuksista, jos kasino sallii bonusostot:</p>
+<table>
+  <thead><tr><th>Vaihtoehto</th><th>Hinta</th><th>Mitä saat</th></tr></thead>
+  <tbody>
+    <tr><td>BonusHunt FeatureSpins</td><td>3 × panos / kierros</td><td>Tavallista suurempi todennäköisyys bonukseen</td></tr>
+    <tr><td>Oracles FeatureSpins</td><td>50 × panos / kierros</td><td>Taattu voitto ja vähintään yksi Vatica-symboli</td></tr>
+    <tr><td>Relics of Eternity</td><td>100 × panos</td><td>Suora pääsy ensimmäiseen bonukseen</td></tr>
+    <tr><td>Judgement of the Underworld</td><td>300 × panos</td><td>Suora pääsy vahvempaan bonukseen</td></tr>
+  </tbody>
+</table>
+<p>Bonusosto ei muuta pelin pitkän aikavälin palautusta sinun eduksesi – se vain nopeuttaa pääsyä ominaisuuksiin ja kasvattaa panosta. Lue lisää siitä, <a href="/kolikkopelien-ostobonukset-hitti-vai-huti/">kannattavatko ostobonukset</a> ja miten ne eroavat <a href="/ostobonukset-vs-featurespinnit/">FeatureSpins-kierroksista</a>. Huomaa myös, että kaikki kasinot eivät tarjoa bonusostoja.</p>
+
+<h2>RTP: tarkista, mikä versio kasinolla on käytössä</h2>
+<p>Pelistä on olemassa kaksi palautusprosenttia: <strong>96,27 %</strong> ja <strong>94,26 %</strong>. Kasino päättää, kumpaa versiota se käyttää, eikä ero näy pelin ulkoasussa. Kahden prosenttiyksikön ero kuulostaa pieneltä, mutta pitkällä aikavälillä se tarkoittaa selvästi pienempää palautusta. Tarkista luku pelin infosivulta ennen kuin pelaat – <a href="/kolikkopelien-eri-rtp-vaihtoehdot/">kolikkopelien RTP-versioista</a> kerromme tarkemmin omassa oppaassaan.</p>
+
+<h2>Kenelle peli sopii</h2>
+<p><strong>Sopii, jos:</strong></p>
+<ul>
+  <li>pidät klusterivoitoista ja pudotusmekaniikasta</li>
+  <li>haluat pelin, jossa kierrokset rakentuvat toistensa päälle eivätkä ole irrallisia</li>
+  <li>etsit keskivolatiliteetin peliä, jossa on silti 10 000× maksimivoitto</li>
+</ul>
+<p><strong>Ei välttämättä sovi, jos:</strong></p>
+<ul>
+  <li>haluat yksinkertaisen linjapelin ilman seurattavia mekaniikkoja</li>
+  <li>pelaat pienellä budjetilla ja houkuttelevat kalliit bonusostot (100×–300×)</li>
+</ul>
+
+<h2>Yhteenveto</h2>
+<p>Vatica – Voice of Lost Souls erottuu tavallisista klusteripeleistä muistimekaniikallaan: kirotut merkit ja Vatican ote tekevät kierroksista ketjuja, joissa aiemmat voitot vaikuttavat seuraaviin. Kaksi erilaista bonuspeliä antaa valinnanvaraa tasaisemman ja rajumman pelityylin välillä. Ennen pelaamista kannattaa tarkistaa kaksi asiaa: kasinon käyttämä RTP-versio ja se, ovatko bonusostot ylipäätään saatavilla.</p>
+<p>Löydät muita pelejä ja pelinvalmistajia <a href="/kasinopelit-netissa/">kasinopelien oppaastamme</a> ja <a href="/pelivalmistajat/">pelinvalmistajien listalta</a>.</p>
+
+<h2>Usein kysytyt kysymykset</h2>
+<h3>Mikä on Vatica – Voice of Lost Souls -pelin RTP?</h3>
+<p>Pelin palautusprosentti on 96,27 %, mutta osa kasinoista käyttää 94,26 % versiota. Tarkista luku pelin tiedoista.</p>
+<h3>Mikä on pelin maksimivoitto?</h3>
+<p>Maksimivoitto on 10 000 kertaa panos.</p>
+<h3>Voiko pelissä ostaa bonuksen?</h3>
+<p>Kyllä, jos kasino sallii sen. Vaihtoehtoja on neljä, hinnat 3×, 50×, 100× ja 300× panos.</p>
+<h3>Mitä kirotut merkit tekevät?</h3>
+<p>Ne merkitsevät ruudut, joissa voitto syntyi. Kun Vatica-symboli ilmestyy, merkityt ruudut muuttuvat samaksi symboliksi – bonuspeleissä myös villeiksi.</p>
+
+<hr />
+<p><em>Pelaa vastuullisesti. Rahapelit on tarkoitettu vain täysi-ikäisille (18+). Jos pelaaminen alkaa huolestuttaa, apua saa maksutta <a href="https://www.peluuri.fi/" rel="noopener" target="_blank">Peluurista</a>. Lue myös <a href="/kuinka-pelaat-vastuullisesti/">vastuullisen pelaamisen oppaamme</a>.</em></p>
+`;
+
+const bodyHtml = ensureSponsored(scrubFirstHandClaims(body));
+
+const ogTags = [
+  `<meta property="og:type" content="article" />`,
+  `<meta property="og:title" content="${article.title}" />`,
+  `<meta property="og:description" content="${article.description}" />`,
+  `<meta property="og:url" content="${canonical}" />`,
+  `<meta property="og:image" content="${SITE_ORIGIN}/og/default.png" />`,
+  `<meta name="twitter:card" content="summary_large_image" />`,
+  `<meta name="twitter:title" content="${article.title}" />`,
+  `<meta name="twitter:description" content="${article.description}" />`,
+  `<meta name="twitter:image" content="${SITE_ORIGIN}/og/default.png" />`,
+];
+
+const faqLd = buildFaqLd(bodyHtml);
+const jsonLd = [
+  articleAuthorJsonLd({
+    title: article.title,
+    url: canonical,
+    datePublished: article.date,
+    dateModified: article.modified,
+  }),
+  ...(faqLd ? [faqLd] : []),
+  ...ogTags,
+];
+
+const breadcrumb = [
+  { label: "Etusivu", href: "/" },
+  { label: "Oppaat", href: "/oppaat/" },
+  { label: article.title, href: "" },
+];
+
+const relatedLinks = [
+  { label: "Kasinopelit netissä", href: "/kasinopelit-netissa/" },
+  { label: "Ostobonukset – hitti vai huti?", href: "/kolikkopelien-ostobonukset-hitti-vai-huti/" },
+  { label: "Kolikkopelien RTP-versiot", href: "/kolikkopelien-eri-rtp-vaihtoehdot/" },
+  { label: "Kaikki oppaat", href: "/oppaat/" },
+];
+---
+
+<ArticlePage
+  seoPath={seoPath}
+  title={article.title}
+  bodyHtml={bodyHtml}
+  date={article.date}
+  modified={article.modified}
+  eyebrow="Kolikkopeliarvostelu"
+  breadcrumb={breadcrumb}
+  relatedLinks={relatedLinks}
+  description={article.description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+/>
