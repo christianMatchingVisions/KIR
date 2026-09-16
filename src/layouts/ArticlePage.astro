@@ -95,6 +95,15 @@ interface Props {
   relatedReviews?: RelatedLink[];
   /** Related guides/topic pages for the in-content "Aiheeseen liittyvät" module. */
   relatedGuides?: RelatedLink[];
+  /**
+   * NET-NEW pages only (no preserved registry head for `seoPath`): clean-head
+   * meta description, self-canonical and raw head tags (JSON-LD / OG) passed
+   * straight to BaseLayout. BaseLayout ignores all three when a preserved head
+   * exists, so registry-backed pages are unaffected.
+   */
+  description?: string;
+  canonical?: string;
+  jsonLd?: string[];
 }
 
 const {
@@ -111,6 +120,9 @@ const {
   bylineVariant = "article",
   relatedReviews = [],
   relatedGuides = [],
+  description,
+  canonical,
+  jsonLd,
 } = Astro.props;
 
 /** Whether the in-content related-links module has anything to show. */
@@ -156,7 +168,14 @@ const hasCrumbs = breadcrumb.length > 0;
 const breadcrumbLd = breadcrumbJsonLd(breadcrumb, seoPath);
 ---
 
-<BaseLayout seoPath={seoPath} title={title} bodyClass="article">
+<BaseLayout
+  seoPath={seoPath}
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  bodyClass="article"
+>
   {/* BreadcrumbList structured data (mirrors the rendered Murupolku). */}
   {breadcrumbLd && <Fragment set:html={breadcrumbLd} />}
   {/* ---------------- HERO BAND ---------------- */}
