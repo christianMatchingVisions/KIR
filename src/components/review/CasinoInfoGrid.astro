@@ -93,7 +93,7 @@ const compact = rows.length <= 4;
           <dt class="ig__label">{r.label}</dt>
           <dd class="ig__value">
             {r.href ? (
-              <a class="ig__link" href={r.href} rel="sponsored nofollow">{r.value}</a>
+              <a class="ig__link" href={r.href} target="_blank" rel="sponsored nofollow noopener">{r.value}</a>
             ) : (
               r.value
             )}

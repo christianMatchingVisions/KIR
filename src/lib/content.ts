@@ -227,8 +227,11 @@ export function scrubFirstHandClaims(html: string): string {
  *      own origin — daily AI content can link straight to an operator.
  *
  * Behaviour per matched <a>:
- *   - no rel attribute → add rel="sponsored nofollow"
- *   - existing rel     → merge in sponsored + nofollow (dedup, order-stable)
+ *   - no rel attribute → add rel="sponsored nofollow noopener"
+ *   - existing rel     → merge in sponsored + nofollow + noopener (dedup,
+ *                        order-stable)
+ *   - target="_blank" added when absent — casino links open in a new tab so
+ *     the reader keeps this site open (same as the CasinoCard/CasinoRow CTAs).
  * Same-origin and root-relative non-/go/ links (internal navigation) are left
  * untouched. Idempotent, attribute-level, HTML-safe. Shared by the catch-all
  * route, the casino route, and the Content-Engine loader so daily content is
@@ -237,17 +240,19 @@ export function scrubFirstHandClaims(html: string): string {
 const SELF_ORIGIN_HOST = SITE_ORIGIN.replace(/^https?:\/\//, "");
 
 function mergeSponsoredRel(attrs: string): string {
-  const relMatch = attrs.match(/\brel="([^"]*)"/i);
-  if (!relMatch) {
-    return `<a${attrs} rel="sponsored nofollow">`;
-  }
+  let newAttrs = attrs;
+  const relMatch = newAttrs.match(/\brel="([^"]*)"/i);
   const tokens = new Set(
-    relMatch[1].split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
+    (relMatch ? relMatch[1] : "").split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()),
   );
   tokens.add("sponsored");
   tokens.add("nofollow");
+  tokens.add("noopener");
   const merged = [...tokens].join(" ");
-  const newAttrs = attrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`);
+  newAttrs = relMatch
+    ? newAttrs.replace(/\brel="[^"]*"/i, `rel="${merged}"`)
+    : `${newAttrs} rel="${merged}"`;
+  if (!/\btarget=/i.test(newAttrs)) newAttrs += ` target="_blank"`;
   return `<a${newAttrs}>`;
 }
 
