@@ -36,6 +36,7 @@ import { getToplist, MANUAL_CASINOS, type ToplistCasino } from "../lib/toplist";
 
 // Raw home body fragment (build-time only; ?raw keeps it out of the client).
 import homeBody from "../fragments/home/body.html?raw";
+import { cleanHomeProse } from "../lib/home-prose";
 
 /* -------------------------------------------------------------------------- */
 /* Toplist (top 5, curated) + Top 10 (below, curated lead + backfill)         */
@@ -228,7 +229,9 @@ function balanceDivs(html: string): string {
 }
 
 const introHtml = balanceDivs(cleanProse(extractDivByClass(homeBody, "intro-paragraph")));
-const rawContentHtml = balanceDivs(cleanProse(extractDivByClass(homeBody, "wp-content-area")));
+const rawContentHtml = cleanHomeProse(
+  balanceDivs(cleanProse(extractDivByClass(homeBody, "wp-content-area"))),
+);
 
 /* -------------------------------------------------------------------------- */
 /* Build a "Sisällys" (table of contents) from the prose <h2> headings, and   */
