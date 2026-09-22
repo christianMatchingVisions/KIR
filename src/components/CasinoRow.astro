@@ -33,6 +33,7 @@ import type { ToplistCasino } from "../lib/toplist";
 import Stars from "./Stars.astro";
 import Icon from "./Icon.astro";
 import { listCasinoSlugs } from "../lib/casino-data";
+import { licenseInfo } from "../lib/license-tier";
 
 // Set of slugs that actually have a /casino/<slug>/ review page. Memoized at
 // module scope (globalThis) so the readdir runs once per build, not per row.
@@ -66,6 +67,8 @@ const hasBonus = typeof bonusText === "string" && bonusText.trim().length > 0;
 const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
 const hasWagering = typeof wagering === "string" && wagering.trim().length > 0;
 const hasLicense = typeof license === "string" && license.trim().length > 0;
+// Licence tier — colour + the Finnish tax consequence. See license-tier.ts.
+const lic = licenseInfo(license);
 
 const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
 const altText = logoAlt || (name ? `${name} logo` : "Kasinon logo");
@@ -136,8 +139,11 @@ const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
         )}
         {hasLicense && (
           <li class="casino-row__meta-item">
-            <Icon name="shield" size={15} class="casino-row__meta-ico" />
-            <span><span class="casino-row__meta-label">Lisenssi:</span> {license}</span>
+            <span class={`lic lic--${lic.tier}`} title={lic.title}>
+              <Icon name="shield" size={14} class="lic__ico" />
+              <span class="lic__label">{lic.label}</span>
+              {lic.note && <span class="lic__note">· {lic.note}</span>}
+            </span>
           </li>
         )}
       </ul>
@@ -406,5 +412,40 @@ const reviewLabel = name ? `Lue arvostelu: ${name}` : "Lue arvostelu";
       display: flex;
       width: 100%;
     }
+  }
+
+  /* ---------------- Licence tier badge (license-tier.ts) ---------------- */
+  /* The licence is the most safety-relevant fact on a card; for a Finnish
+     player it also decides whether winnings are taxable, so EEA and non-EEA
+     get clearly different colours instead of identical grey text. */
+  .lic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin: 0.55rem 0 0;
+    padding: 0.22rem 0.55rem;
+    border: 1px solid;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .lic__ico { flex: none; }
+  .lic__note { font-weight: 500; }
+  .lic--eea {
+    color: #0b6b3a;
+    background: #e8f6ee;
+    border-color: #b6e2c7;
+  }
+  .lic--non-eea {
+    color: #8a4b00;
+    background: #fdf1e2;
+    border-color: #f2d2a8;
+  }
+  .lic--unknown {
+    color: var(--ink-3);
+    background: var(--bg-band);
+    border-color: var(--line);
   }
 </style>
