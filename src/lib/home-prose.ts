@@ -87,7 +87,84 @@ export function stripDuplicateVerificationSection(html: string): string {
   return html.replace(dupRe, "");
 }
 
+/* -------------------------------------------------------------------------- *
+ * Redundant <h2> sections (content review 2026-09-22).                         *
+ *                                                                              *
+ * The home prose ran to ~6,900 words across 24 <h2> sections, several of which  *
+ * restate an earlier section in different words — the "wall of near-duplicate   *
+ * sections" pattern Google's helpful-content systems treat as filler, on a site *
+ * recovering from a quality demotion.                                          *
+ *                                                                              *
+ * Each entry below is dropped ONLY while its `keeper` section — the one that    *
+ * covers the same ground better — is still present, so a future WP rewrite can  *
+ * never strip a topic from the page entirely.                                   *
+ *                                                                              *
+ * Deliberately KEPT even though they are partly repetitive:                     *
+ *   - "Uudet nettikasinot…" and "Suomalainen kasino…" carry 9 internal links to *
+ *     casino reviews (link equity we want to keep),                             *
+ *   - "Kuinka arvioimme…" is the E-E-A-T methodology section,                   *
+ *   - the payments / licences / bonuses sections hold the page's unique facts.  *
+ * -------------------------------------------------------------------------- */
+
+interface RedundantSection {
+  /** <h2> text to remove (normalised comparison: entities decoded, case-insensitive). */
+  drop: string;
+  /** <h2> that must still exist for the removal to run. */
+  keeper: string;
+}
+
+const REDUNDANT_SECTIONS: readonly RedundantSection[] = [
+  { drop: "Kuinka pelata kasinolla ilman rekisteröintiä", keeper: "Kuinka kasino ilman rekisteröitymistä toimii?" },
+  { drop: "Turvallisuus Etusijalla", keeper: "Kasinot ilman rekisteröitymistä – Turvallisuus ja lisenssit" },
+  { drop: "Mistä tunnistat kasinot ilman rekisteröitymistä?", keeper: "Kasino ilman rekisteröintiä vs perinteinen nettikasino" },
+  { drop: "Pikakasino Kokemus", keeper: "Kasinot ilman rekisteröitymistä kokemuksia" },
+  { drop: "Tunnistautuminen ja Dokumentit Pikakasinolla", keeper: "Kuinka kasino ilman rekisteröitymistä toimii?" },
+  { drop: "Kuinka nettikasinot ilman rekisteröintiä syntyivät", keeper: "Mikä on kasino ilman rekisteröitymistä?" },
+];
+
+/** Heading text → comparable form: tags out, entities decoded, spaces collapsed. */
+function headingText(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&#8211;|&ndash;/g, "–")
+    .replace(/&#8217;|&rsquo;/g, "’")
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * Drop whole <h2> sections that duplicate a better section elsewhere on the
+ * page. Splitting on <h2> boundaries (rather than regex-matching a section) is
+ * what makes this safe: a section is removed with exactly its own content, and
+ * anything before the first <h2> is always preserved.
+ */
+export function stripRedundantSections(html: string): string {
+  if (!html) return "";
+  const parts = html.split(/(?=<h2\b)/i);
+  if (parts.length < 2) return html;
+
+  const titleOf = (part: string): string | null => {
+    const m = part.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
+    return m ? headingText(m[1]) : null;
+  };
+  const present = new Set(parts.map(titleOf).filter(Boolean) as string[]);
+
+  const dropSet = new Set(
+    REDUNDANT_SECTIONS.filter((s) => present.has(headingText(s.keeper))).map((s) =>
+      headingText(s.drop),
+    ),
+  );
+  if (dropSet.size === 0) return html;
+
+  return parts.filter((p) => { const t = titleOf(p); return !(t && dropSet.has(t)); }).join("");
+}
+
 /** All home-prose transforms, in order. Safe to call on an empty string. */
 export function cleanHomeProse(html: string): string {
-  return stripDuplicateVerificationSection(stripUnverifiedTestimonials(html));
+  return stripRedundantSections(
+    stripDuplicateVerificationSection(stripUnverifiedTestimonials(html)),
+  );
 }
