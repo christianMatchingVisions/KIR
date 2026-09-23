@@ -251,7 +251,11 @@ export function articleAuthorJsonLd(opts: {
       name: "Kasinot ilman rekisteröitymistä",
       url: `${SITE_URL}/`,
     },
-    isPartOf: { "@id": PUBLISHER_ID },
+    // No `isPartOf` here: schema.org ranges it on CreativeWork, and the only
+    // node we could point at is #organization (an Organization), which failed
+    // validation on all 119 article pages (Ahrefs Site Audit 2026-09-22 — the
+    // whole remaining "schema.org validation error" bucket). `publisher`
+    // already states the relationship to the site's Organization.
   };
   if (opts.datePublished) node.datePublished = opts.datePublished;
   if (opts.dateModified) node.dateModified = opts.dateModified;
