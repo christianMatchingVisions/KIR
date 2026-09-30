@@ -47,6 +47,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { loadEngineReviews, type EngineReview } from "./engine-casino-loader";
 import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
+import { isDeadAffiliate } from "./dead-affiliates";
 
 export type { EngineReview } from "./engine-casino-loader";
 
@@ -855,7 +856,9 @@ export function getCasino(slug: string): CasinoReview | null {
     slug,
     name,
     url,
-    ctaSlug: parseCtaSlug(reviewSection),
+    // Dead affiliate destination → no CTA on the review page either
+    // (dead-affiliates.ts); the review itself stays fully readable.
+    ctaSlug: isDeadAffiliate(parseCtaSlug(reviewSection)) ? null : parseCtaSlug(reviewSection),
     logoUrl: parseLogoUrl(reviewSection),
     ratingOverall,
     subRatings,
