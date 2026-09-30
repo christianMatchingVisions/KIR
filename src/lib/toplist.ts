@@ -25,6 +25,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isRetiredPath } from "./static-redirects";
 import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
+import { isDeadAffiliate } from "./dead-affiliates";
 
 /**
  * Root of the captured toplist dumps: `public/rlaaf-data`.
@@ -266,7 +267,10 @@ function mapItem(item: RawItem): ToplistCasino {
     slug,
     logoUrl: decodeLogoUrl(typeof card === "object" ? card.url : undefined),
     logoAlt: str(typeof card === "object" ? card.alt : "") || null,
-    ctaSlug: toRootRelative(meta.cta),
+    // A dead affiliate destination (dead-affiliates.ts) yields no CTA, so the
+    // card renders the same inert button as a casino with no link at all —
+    // better than sending the reader to a DNS error.
+    ctaSlug: isDeadAffiliate(toRootRelative(meta.cta)) ? null : toRootRelative(meta.cta),
     rating: parseRating(meta.rating) ?? MANUAL_RATING_OVERRIDES.get(slug) ?? null,
     bonusText: str(meta.casino_bonus_description),
     noDeposit: str(meta.no_deposit),
