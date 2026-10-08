@@ -26,6 +26,7 @@ import { fileURLToPath } from "node:url";
 import { isRetiredPath } from "./static-redirects";
 import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
 import { isDeadAffiliate } from "./dead-affiliates";
+import { getAllCasinos } from "./casino-data";
 
 /**
  * Root of the captured toplist dumps: `public/rlaaf-data`.
@@ -323,7 +324,65 @@ export function getToplist(config: string, limit?: number): ToplistCasino[] {
       if (limit != null && out.length >= limit) return out;
     }
   }
-  return out;
+  return augmentFromReviews(config, out, limit);
+}
+
+/* -------------------------------------------------------------------------- *
+ * Payment-method augmentation.                                                *
+ *                                                                             *
+ * Some captured toplist configs are far thinner than the payment method they  *
+ * represent. /brite-kasinot/ shipped 8 cards from an 11-row dump while the    *
+ * Trustly and Zimpler dumps carry 53 and 59 — yet 27 casino REVIEWS on this   *
+ * site list Brite under "Maksutavat". The hub therefore looked sparse next to *
+ * its siblings for a 2,100-searches-a-month term.                             *
+ *                                                                             *
+ * So: after the captured rows, append casinos whose own review states this    *
+ * payment method. Nothing is invented — every added row is built from that    *
+ * casino's parsed review (name, logo, rating, bonus text, licence, CTA), and  *
+ * closed/stub casinos and retired brands are skipped by the same rules as     *
+ * everywhere else. Captured rows keep their order and always come first.      *
+ * -------------------------------------------------------------------------- */
+
+/** Toplist config → the payment method its casinos must state in their review. */
+const PAYMENT_AUGMENTED_CONFIGS: Readonly<Record<string, RegExp>> = {
+  "search-two-brite": /\bbrite\b/i,
+};
+
+function augmentFromReviews(
+  config: string,
+  captured: ToplistCasino[],
+  limit?: number,
+): ToplistCasino[] {
+  const method = PAYMENT_AUGMENTED_CONFIGS[config];
+  if (!method) return captured;
+  if (limit != null && captured.length >= limit) return captured;
+
+  const seen = new Set(captured.map((c) => c.slug).filter(Boolean));
+  const extra: ToplistCasino[] = [];
+  for (const review of getAllCasinos()) {
+    if (!review.slug || seen.has(review.slug)) continue;
+    if (review.showNoReview) continue; // closed or empty stub
+    if (isRetiredPath(`/casino/${review.slug}/`)) continue;
+    if (!(review.paymentMethods ?? []).some((p) => method.test(p))) continue;
+    extra.push({
+      name: review.name,
+      slug: review.slug,
+      logoUrl: review.logoUrl,
+      logoAlt: null, // review data has no separate alt; the card falls back to "<name> logo"
+      // casino-data already nulls a dead affiliate destination.
+      ctaSlug: review.ctaSlug ? `/go/${review.ctaSlug}/` : null,
+      rating: review.ratingOverall,
+      bonusText: review.bonusText ?? "",
+      noDeposit: "",
+      wagering: "",
+      license: review.license ?? "",
+      bannerText: null,
+    });
+  }
+  // Best-rated first, unrated last — the captured rows keep their own order.
+  extra.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1) || a.name.localeCompare(b.name));
+  const merged = [...captured, ...extra];
+  return limit != null ? merged.slice(0, limit) : merged;
 }
 
 /**
