@@ -46,6 +46,12 @@ export const DEAD_AFFILIATE_SLUGS: ReadonlySet<string> = new Set([
   "wallacebet",
   "wikibet",
   "wunderwins",
+  // Same ivyaffsolutions.com network as barz / casilime / huikee / lumi-casino
+  // above; its remaining links died after the 2026-09-30 sweep (re-checked
+  // 2026-10-08: still NXDOMAIN). Igni matters most — its review is the site's
+  // biggest by impressions, so a dead button there is the costliest of the set.
+  "igni",
+  "reload-casino",
   // Destination reachable but broken.
   "hejgo", // 404
   "locowin", // 526 (origin/TLS error)
