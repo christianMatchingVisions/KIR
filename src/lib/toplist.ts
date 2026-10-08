@@ -27,6 +27,7 @@ import { isRetiredPath } from "./static-redirects";
 import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
 import { isDeadAffiliate } from "./dead-affiliates";
 import { getAllCasinos } from "./casino-data";
+import { licenseInfo } from "./license-tier";
 
 /**
  * Root of the captured toplist dumps: `public/rlaaf-data`.
@@ -293,6 +294,7 @@ function mapItem(item: RawItem): ToplistCasino {
  */
 export function getToplist(config: string, limit?: number): ToplistCasino[] {
   if (!config) return [];
+  if (config.startsWith("virtual-")) return getVirtualToplist(config, limit);
   const dir = path.join(RLAAF_DIR, config);
   let files: string[];
   try {
@@ -342,6 +344,47 @@ export function getToplist(config: string, limit?: number): ToplistCasino[] {
  * closed/stub casinos and retired brands are skipped by the same rules as     *
  * everywhere else. Captured rows keep their order and always come first.      *
  * -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- *
+ * VIRTUAL toplists.                                                           *
+ *                                                                             *
+ * Some money pages describe a PROPERTY of a casino rather than a captured WP  *
+ * toplist. "Verovapaat kasinot" (4,200 searches/month) is the clearest case:  *
+ * a Finnish player's winnings are tax-free when the operator is licensed in   *
+ * the EEA, and the licence of every captured casino is already known          *
+ * (meta.license_type, classified in license-tier.ts). There is no captured    *
+ * dump for it, so the list is derived instead of scraped — same data, same    *
+ * card shape, just selected by licence.                                       *
+ *                                                                             *
+ * Rows come from every captured config (deduped by slug), minus closed/stub    *
+ * casinos and retired brands. Best-rated first.                               *
+ * -------------------------------------------------------------------------- */
+
+/** Virtual config name → predicate over the mapped row. */
+const VIRTUAL_TOPLISTS: Readonly<Record<string, (c: ToplistCasino) => boolean>> = {
+  // EEA licence ⇒ winnings tax-free for Finnish players (see license-tier.ts).
+  "virtual-eea-licensed": (c) => licenseInfo(c.license).tier === "eea",
+};
+
+function getVirtualToplist(config: string, limit?: number): ToplistCasino[] {
+  const predicate = VIRTUAL_TOPLISTS[config];
+  if (!predicate) return [];
+
+  const bySlug = new Map<string, ToplistCasino>();
+  for (const dirName of listToplistConfigs()) {
+    for (const row of getToplist(dirName)) {
+      if (!row.slug || bySlug.has(row.slug)) continue;
+      if (/\bsuljettu\b/i.test(row.name ?? "")) continue;
+      if (isRetiredPath(`/casino/${row.slug}/`)) continue;
+      if (!predicate(row)) continue;
+      bySlug.set(row.slug, row);
+    }
+  }
+  const rows = [...bySlug.values()].sort(
+    (a, b) => (b.rating ?? -1) - (a.rating ?? -1) || a.name.localeCompare(b.name),
+  );
+  return limit != null ? rows.slice(0, limit) : rows;
+}
 
 /** Toplist config → the payment method its casinos must state in their review. */
 const PAYMENT_AUGMENTED_CONFIGS: Readonly<Record<string, RegExp>> = {

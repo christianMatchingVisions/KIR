@@ -657,6 +657,10 @@ export const SLUG_TO_TOPLIST_CONFIG: Readonly<Record<string, string>> = {
   "uudet-kasinot": "search-two-casino-2025",
   "suomen-parhaat-nettikasinot": "search-two-casino-selected",
   "kaikki-kasinot": "search-service-casino",
+  // No captured dump exists for "tax-free": the list is derived from the
+  // licence of each casino (EEA ⇒ winnings tax-free in Finland). See
+  // VIRTUAL_TOPLISTS in toplist.ts.
+  "verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet": "virtual-eea-licensed",
 };
 
 /** Default toplist config when a slug has no explicit mapping. */
