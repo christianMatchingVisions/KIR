@@ -72,6 +72,17 @@ interface Props {
    * the article/review/engine routes). Schema only — the hero stays crumb-free.
    */
   breadcrumb?: Crumb[];
+  /**
+   * NET-NEW money pages only (no preserved registry head for `seoPath`):
+   * clean-head title/description/self-canonical plus raw head tags (JSON-LD,
+   * OpenGraph) handed to BaseLayout. BaseLayout ignores all of them when a
+   * preserved head exists, so the 14 registry-backed hubs are unaffected.
+   */
+  description?: string;
+  canonical?: string;
+  headJsonLd?: string[];
+  /** <title> override — only used by net-new pages (registry owns the rest). */
+  headTitle?: string;
 }
 
 const {
@@ -81,7 +92,14 @@ const {
   toplistConfig,
   toplistLimit,
   breadcrumb,
+  description,
+  canonical,
+  headJsonLd,
+  headTitle,
 } = Astro.props;
+
+/** Only net-new pages pass a head title; registry pages keep their own. */
+const cleanHeadTitle = headTitle;
 
 /* -------------------------------------------------------------------------- *
  * BreadcrumbList JSON-LD — reflects this page's real position in the site     *
@@ -177,7 +195,14 @@ function firstParagraphText(html: string | undefined): string | null {
 const leadText = firstParagraphText(introHtml);
 ---
 
-<BaseLayout seoPath={seoPath} bodyClass="money-page">
+<BaseLayout
+  seoPath={seoPath}
+  title={cleanHeadTitle}
+  description={description}
+  canonical={canonical}
+  jsonLd={headJsonLd}
+  bodyClass="money-page"
+>
   {/* BreadcrumbList structured data — this category page's place in the site
       hierarchy (Etusivu › <title>). Additive, schema only. */}
   {breadcrumbLd && <Fragment set:html={breadcrumbLd} />}

@@ -364,6 +364,9 @@ export function getToplist(config: string, limit?: number): ToplistCasino[] {
 const VIRTUAL_TOPLISTS: Readonly<Record<string, (c: ToplistCasino) => boolean>> = {
   // EEA licence ⇒ winnings tax-free for Finnish players (see license-tier.ts).
   "virtual-eea-licensed": (c) => licenseInfo(c.license).tier === "eea",
+  // Wagering requirement 0 ⇒ "kierrätysvapaa" bonus. Only an explicit zero
+  // counts; a blank value means the scrape had no figure, not that it is free.
+  "virtual-no-wagering": (c) => /^0x?$/i.test((c.wagering ?? "").trim()),
 };
 
 function getVirtualToplist(config: string, limit?: number): ToplistCasino[] {
