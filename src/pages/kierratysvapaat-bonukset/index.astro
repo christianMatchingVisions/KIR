@@ -1,0 +1,106 @@
+---
+// @custom — hand-written money page; converters/scrapers must not overwrite it.
+//
+// /kierratysvapaat-bonukset/ — the one topic from the 2026-10-08 keyword check
+// with real demand (1,200 searches/month in Finland) and NO page on this site.
+//
+// The casino list is derived, not written: `virtual-no-wagering` in toplist.ts
+// selects casinos whose captured wagering_value is exactly 0 (28 casinos today;
+// closed, stub and retired brands are filtered out by the usual rules). A blank
+// wagering value is NOT treated as zero — it only means the scrape had no
+// figure.
+//
+// NET-NEW URL: no preserved registry head, so MoneyPage forwards a clean head
+// (title, description, self-canonical, Article + Breadcrumb JSON-LD, OG tags).
+// MoneyPage derives FAQPage schema from the FAQ headings below.
+//
+// COMPLIANCE: original copy; no first-hand claims; no affiliate links in the
+// prose (the list's CTAs carry rel="sponsored nofollow" via CasinoRow); 18+ /
+// Peluuri come from the layout chrome.
+import MoneyPage from "../../layouts/MoneyPage.astro";
+import { articleAuthorJsonLd } from "../../lib/related";
+import { getManualArticle } from "../../lib/manual-articles";
+
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+const article = getManualArticle("kierratysvapaat-bonukset");
+const seoPath = `/${article.slug}/`;
+const canonical = `${SITE_ORIGIN}${seoPath}`;
+
+const introHtml = `
+<h2>Mikä on kierrätysvapaa bonus?</h2>
+<p>Kierrätysvapaa bonus tarkoittaa tarjousta, jonka voitot ovat heti nostettavissa. Tavallisessa bonuksessa on kierrätysvaatimus: bonusraha pitää pelata läpi esimerkiksi 35-kertaisesti ennen kuin kotiutus on mahdollista. Kierrätysvaatimus 0 poistaa tämän vaiheen kokonaan.</p>
+<p>Käytännössä ero näkyy heti kotiutuksessa. Jos pelaat 50 euron bonuksella, jossa on 35x kierrätys, sinun on pelattava 1 750 euron edestä ennen nostoa. Kierrätysvapaassa bonuksessa voitto on omaa rahaa saman tien.</p>
+
+<h2>Kierrätysvapaa vai non sticky – mikä on ero?</h2>
+<p>Termit menevät usein sekaisin, mutta ne tarkoittavat eri asiaa:</p>
+<ul>
+  <li><strong>Kierrätysvapaa bonus:</strong> bonuksella pelatut voitot saa nostaa ilman läpipeluuta.</li>
+  <li><strong>Non sticky -bonus:</strong> omat rahasi ja bonusraha pidetään erillään. Pelaat ensin omillasi, ja jos voitat, voit nostaa voitot koskematta bonukseen. Kierrätys koskee vain bonusosuutta, jos otat sen käyttöön.</li>
+</ul>
+<p>Non sticky on siis joustava malli, kierrätysvapaus taas poistaa ehdon kokonaan. Molemmat ovat pelaajalle selvästi tavallista tarttuvaa (sticky) bonusta parempia. Lue tarkemmin <a href="/non-sticky-bonus/">non sticky -bonuksista</a> ja siitä, <a href="/kierratysvaatimus-opas-bonusten-kierratykseen/">miten kierrätysvaatimus lasketaan</a>.</p>
+
+<h2>Mitä ehtoja kannattaa tarkistaa?</h2>
+<p>Kierrätysvapaus ei yksin tee bonuksesta hyvää. Nämä ehdot ratkaisevat loput:</p>
+<ul>
+  <li><strong>Maksimivoitto:</strong> ilmaiskierroksissa voi olla katto, esimerkiksi 100 euroa, vaikka kierrätystä ei olisi.</li>
+  <li><strong>Aikaraja:</strong> kierrokset tai bonus voivat vanheta esimerkiksi 24 tunnissa.</li>
+  <li><strong>Pelirajoitukset:</strong> tarjous voi koskea vain tiettyä kolikkopeliä.</li>
+  <li><strong>Maksimipanos:</strong> bonuksella pelatessa panos on usein rajattu.</li>
+  <li><strong>Talletusvaatimus:</strong> osa kierrätysvapaista tarjouksista vaatii talletuksen, osa ei.</li>
+</ul>
+<p>Ehdot löytyvät kasinon bonussivulta. Jos niitä ei kerrota selkeästi, se on itsessään varoitusmerkki.</p>
+
+<h2>Kenelle kierrätysvapaa bonus sopii?</h2>
+<p>Kierrätysvapaa tarjous sopii pelaajalle, joka haluaa pelata lyhyitä sessioita ja nostaa voitot nopeasti. Jos taas pelaat pitkään ja isolla saldolla, suurempi bonus korkeammalla kierrätyksellä voi tuottaa enemmän peliaikaa – kunhan ymmärrät, että läpipeluu on silloin oikeasti pelattava.</p>
+<p>Kierrätysvapaat tarjoukset ovat tyypillisesti pienempiä kuin suuret tervetuliaisbonukset. Vertaa siis tarjouksen kokoa ja ehtoja yhdessä, älä vain otsikkoprosenttia.</p>
+
+<h2>Usein kysytyt kysymykset</h2>
+<h3>Mitä kierrätysvaatimus 0 tarkoittaa?</h3>
+<p>Se tarkoittaa, ettei bonusta tai sen tuottamia voittoja tarvitse pelata läpi kertaakaan ennen kotiutusta.</p>
+<h3>Onko kierrätysvapaa bonus aina parempi?</h3>
+<p>Ei automaattisesti. Tarjous voi olla pieni tai siinä voi olla maksimivoittoraja. Vertaa bonuksen kokoa, aikarajaa ja pelirajoituksia.</p>
+<h3>Voiko ilmaiskierroksissa olla kierrätysvaatimus?</h3>
+<p>Kyllä. Osa ilmaiskierroksista on kierrätysvapaita, osassa voitot pitää pelata läpi. Tarkista aina kampanjan ehdot.</p>
+<h3>Mistä näen kasinon kierrätysvaatimuksen?</h3>
+<p>Yllä olevassa listassa kierrätys näkyy jokaisen kasinon kohdalla. Tarkka luku kannattaa silti varmistaa kasinon omilta bonussivuilta ennen talletusta.</p>
+
+<p><em>Pelaa vastuullisesti. Rahapelit on tarkoitettu vain täysi-ikäisille (18+). Lue myös <a href="/kuinka-pelaat-vastuullisesti/">vastuullisen pelaamisen oppaamme</a>.</em></p>
+`;
+
+const crumbs = [
+  { label: "Etusivu", href: "/" },
+  { label: article.title, href: seoPath },
+];
+
+const headJsonLd = [
+  articleAuthorJsonLd({
+    title: article.title,
+    url: canonical,
+    datePublished: article.date,
+    dateModified: article.modified,
+  }),
+  // No BreadcrumbList here: MoneyPage already emits one for `breadcrumb`.
+  `<meta property="og:type" content="article" />`,
+  `<meta property="og:title" content="${article.title}" />`,
+  `<meta property="og:description" content="${article.description}" />`,
+  `<meta property="og:url" content="${canonical}" />`,
+  `<meta property="og:image" content="${SITE_ORIGIN}/og/default.png" />`,
+  `<meta name="twitter:card" content="summary_large_image" />`,
+  `<meta name="twitter:title" content="${article.title}" />`,
+  `<meta name="twitter:description" content="${article.description}" />`,
+  `<meta name="twitter:image" content="${SITE_ORIGIN}/og/default.png" />`,
+].filter(Boolean);
+---
+
+<MoneyPage
+  seoPath={seoPath}
+  title="Kierrätysvapaat bonukset"
+  introHtml={introHtml}
+  toplistConfig="virtual-no-wagering"
+  toplistLimit={20}
+  breadcrumb={crumbs}
+  headTitle={article.title}
+  description={article.description}
+  canonical={canonical}
+  headJsonLd={headJsonLd}
+/>

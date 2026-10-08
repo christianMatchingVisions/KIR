@@ -45,6 +45,15 @@ export interface SeoOverride {
 }
 
 export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
+  // --- Keyword check 2026-10-08: "non sticky bonus" is 1,400 searches/month
+  // (difficulty 40) and this page ranks ~61. The scraped title was padded with
+  // "Lue siitä kaikki tästä!" and the description opened with filler about
+  // online casinos in general — neither mentions what a reader is deciding. ---
+  "/non-sticky-bonus/": {
+    title: "Non sticky bonus – mitä se tarkoittaa ja miten se toimii",
+    description:
+      "Non sticky bonus pitää omat rahasi ja bonuksen erillään: voitot voi kotiuttaa koskematta bonukseen. Näin se toimii ja mitä ehtoja kannattaa tarkistaa.",
+  },
   // --- Casino reviews (H1 = casino name; <title> safe to keyword-optimise) ---
   // Closed 2026-09-15 (closed-casinos.ts). The page is noindexed, but the
   // preserved WP head still called it a "stylish new casino" — say it's closed.

@@ -31,6 +31,16 @@ export const MANUAL_ARTICLES: readonly ManualArticle[] = [
     date: "2026-09-16",
     modified: "2026-09-16",
   },
+  {
+    slug: "kierratysvapaat-bonukset",
+    title: "Kierrätysvapaat bonukset 2026 – kasinot ilman kierrätystä",
+    description:
+      "Kierrätysvapaat bonukset 2026: voitot suoraan kotiutettavissa. Vertaa kasinoita, joiden kierrätysvaatimus on 0, ja lue mitä ehtoja kannattaa tarkistaa.",
+    excerpt:
+      "Mitä kierrätysvaatimus 0 tarkoittaa, miten se eroaa non sticky -bonuksesta ja mitkä kasinot tarjoavat bonuksia ilman läpipeluuta.",
+    date: "2026-10-08",
+    modified: "2026-10-08",
+  },
 ];
 
 export function getManualArticle(slug: string): ManualArticle {
