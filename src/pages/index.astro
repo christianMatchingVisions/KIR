@@ -59,16 +59,17 @@ const manualBySlug = new Map(MANUAL_CASINOS.map((c) => [c.slug, c]));
 const anyBySlug = (slug: string): ToplistCasino | undefined =>
   bySlug.get(slug) ?? manualBySlug.get(slug);
 
-// Curated top-5: Titaani/Pelifantti take ranks 1-2, Tikkari holds rank 3
-// (Andromedasino is held back — andromedasino.com has no live data yet, see
-// MANUAL_CASINOS in toplist.ts — until it has a real review/bonus to show).
-// KumoBet/Jackburst keep ranks 4-5.
+// Curated top-5: Betpanda takes rank 1 (added 2026-10-12 at the owner's
+// request), pushing Titaani/Pelifantti to 2-3, Tikkari to 4 and KumoBet to 5.
+// Jackburst drops out of the five and still appears in the top-10 below.
+// (Andromedasino stays held back — andromedasino.com has no live data yet, see
+// MANUAL_CASINOS in toplist.ts — until it has a real review/bonus to show.)
 const TOP5_SLUGS = [
+  "betpanda",
   "titaani",
   "pelifantti",
   "tikkari-casino",
   "kumobet-ccasino",
-  "jackburst-casino",
 ];
 const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
