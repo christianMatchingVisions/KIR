@@ -24,8 +24,8 @@
  * defs (glossy highlights, darker rims, top sheen) rather than flat fills.
  *
  * The headline highlights `accentWord` in --brand. Three trust pills use the
- * shared <Icon> chip pattern. CTA is a yellow .btn-cta that anchors down to the
- * toplist section (#parhaat by default).
+ * shared <Icon> chip pattern. There is no hero button: the toplist starts
+ * directly below the fold, so an extra "jump to the list" click added nothing.
  *
  * All float/parallax/shine motion is CSS @keyframes, fully disabled under
  * prefers-reduced-motion. The visual shrinks then hides on small screens so the
@@ -58,10 +58,6 @@ interface Props {
   accentWord?: string;
   /** Sub-paragraph under the headline. */
   subtext?: string;
-  /** CTA button label. */
-  ctaLabel?: string;
-  /** CTA href (defaults to the on-page toplist anchor). */
-  ctaHref?: string;
 }
 
 const {
@@ -69,8 +65,6 @@ const {
   accentWord = "rekisteröitymistä",
   subtext =
     "Kasino ilman rekisteröitymistä on nettikasino, jolla pelaaminen, talletukset ja kotiutukset hoituvat verkkopankkitunnuksilla (Trustly, Zimpler tai BRITE) ilman erillistä tilin luontia. Vertailemme alta lisensoidut, suomalaisille sopivat pikakasinot.",
-  ctaLabel = "Katso parhaat kasinot",
-  ctaHref = "#parhaat",
 } = Astro.props as Props;
 
 // Trust pills: round --brand-soft icon chip + bold navy label + tiny sublabel.
@@ -104,13 +98,6 @@ const pills = [
           </li>
         ))}
       </ul>
-
-      <div class="hero__cta">
-        <a class="btn-cta btn-lg" href={ctaHref}>
-          {ctaLabel}
-          <Icon name="arrow-right" size={20} />
-        </a>
-      </div>
     </div>
 
     {/* ---------- RIGHT: premium illustration — raster image if present in
@@ -486,10 +473,6 @@ const pills = [
     color: var(--ink-3);
   }
 
-  .hero__cta {
-    display: flex;
-  }
-
   /* ---------- RIGHT visual stage ---------- */
   .hero__visual {
     position: relative;
@@ -694,9 +677,6 @@ const pills = [
     }
     .hero__pills {
       gap: 0.9rem 1.1rem;
-    }
-    .hero__cta .btn-cta {
-      width: 100%;
     }
   }
 
