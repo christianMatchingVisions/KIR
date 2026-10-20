@@ -441,6 +441,25 @@ function augmentFromReviews(
  */
 export const MANUAL_CASINOS: readonly ToplistCasino[] = [
   {
+    // Added 2026-10-12 at the owner's request, fronted at rank 1 on the
+    // homepage. Bonus, wagering, rating and licence are deliberately EMPTY:
+    // betpanda.io blocks automated requests (403), so none of it could be
+    // verified, and the cards never show a figure we have not confirmed. Fill
+    // them in here once the affiliate manager supplies the offer terms — the
+    // bonus line and licence badge then appear automatically.
+    name: "Betpanda",
+    slug: "betpanda",
+    logoUrl: "/wp-content/uploads/betpanda-logo.png",
+    logoAlt: "Betpanda logo",
+    ctaSlug: "/go/betpanda/",
+    rating: null,
+    bonusText: "",
+    noDeposit: "",
+    wagering: "",
+    license: "",
+    bannerText: null,
+  },
+  {
     name: "Titaani",
     slug: "titaani",
     logoUrl: "/wp-content/uploads/titaani-casino-logo.png",
