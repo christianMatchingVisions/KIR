@@ -58,10 +58,18 @@ const consList = engineCons.slice(0, 5);
 
 const items: string[] = [];
 
-// Always true on this no-registration site — guarantees a non-empty column.
-items.push("Rekisteröitymätön pikapelaaminen pankkitunnuksilla");
+// Opt-outs for the two template claims (see CasinoReview.templateClaims).
+// Undefined === true, so every scraped review keeps its current bullets.
+const claimsRegistrationFree = review.templateClaims?.registrationFree !== false;
+const claimsFormalLicense = review.templateClaims?.formalLicense !== false;
 
-if (license && license.trim().length > 0) {
+// True for every casino captured from WordPress, but not for a brand that
+// requires an account — those set templateClaims.registrationFree = false.
+if (claimsRegistrationFree) {
+  items.push("Rekisteröitymätön pikapelaaminen pankkitunnuksilla");
+}
+
+if (license && license.trim().length > 0 && claimsFormalLicense) {
   items.push(`${license}-lisenssi`);
 }
 

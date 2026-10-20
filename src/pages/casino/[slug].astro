@@ -72,6 +72,7 @@ import {
   type RelatedLink,
 } from "../../lib/related";
 import { getSeoHead } from "../../lib/seo-head";
+import { getManualReviewHead } from "../../lib/manual-reviews";
 
 /** One static path per casino fragment slug. */
 export function getStaticPaths() {
@@ -318,6 +319,18 @@ const reviewModifiedDate = review ? getCasinoReviewDate(review.slug) : null;
 const headCasinoJsonLdKeys = new Set(
   (getSeoHead(review?.url ?? "")?.jsonLd ?? []).map((s) => s.replace(/\s+/g, " ").trim()),
 );
+
+/* NET-NEW REVIEWS (manual-reviews.ts): a hand-written review lives at a URL the
+ * old WordPress site never had, so the Phase-1 SEO registry holds no preserved
+ * head for it. Those pages get a clean head built from the hand-written title +
+ * description and a self-canonical. Scraped reviews are untouched: when the
+ * registry has an entry we pass no title/description/canonical at all, so it
+ * keeps owning the head verbatim (penalty-recovery requirement). */
+const SITE_ORIGIN = "https://kasinotilmanrekisteroitymista.com";
+const hasPreservedHead = review != null && getSeoHead(review.url) != null;
+const manualHead = review && !hasPreservedHead ? getManualReviewHead(review.slug) : null;
+const netNewTitle = manualHead?.title;
+const netNewDescription = manualHead?.description;
 const casinoBreadcrumbLd =
   review
     ? breadcrumbJsonLd(
@@ -394,7 +407,13 @@ if (review && !review.showNoReview) {
     </section>
   </BaseLayout>
 ) : (
-  <BaseLayout seoPath={review.url} bodyClass="casino-review">
+  <BaseLayout
+    seoPath={review.url}
+    bodyClass="casino-review"
+    title={hasPreservedHead ? undefined : netNewTitle}
+    description={hasPreservedHead ? undefined : netNewDescription}
+    canonical={hasPreservedHead ? undefined : new URL(review.url, SITE_ORIGIN).href}
+  >
     {/* ---------------- STRUCTURED DATA (B2 + H7) ----------------
         Live Organization (+ Review) JSON-LD restored VERBATIM from body.html,
         plus the additive E-E-A-T publisher/editorial-author block. Emitted once

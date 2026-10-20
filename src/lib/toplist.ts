@@ -442,21 +442,24 @@ function augmentFromReviews(
 export const MANUAL_CASINOS: readonly ToplistCasino[] = [
   {
     // Added 2026-10-12 at the owner's request, fronted at rank 1 on the
-    // homepage. Bonus, wagering, rating and licence are deliberately EMPTY:
-    // betpanda.io blocks automated requests (403), so none of it could be
-    // verified, and the cards never show a figure we have not confirmed. Fill
-    // them in here once the affiliate manager supplies the offer terms — the
-    // bonus line and licence badge then appear automatically.
+    // homepage. Bonus, wagering and licence filled in 2026-10-20 from the
+    // operator's own published "Bounty Welcome Bonus" terms, supplied by the
+    // owner — the same source as the hand-written review in manual-reviews.ts.
+    // The maximum bonus is capped in bitcoin, not euros, so the card quotes the
+    // match and the cap as the terms state them. Costa Rica does not issue
+    // gambling licences, so the licence field says exactly what it is; that
+    // makes license-tier.ts flag it non-EEA (winnings taxable in Finland),
+    // which is the point. `rating` stays null — no basis for a score.
     name: "Betpanda",
     slug: "betpanda",
     logoUrl: "/wp-content/uploads/betpanda-logo.png",
     logoAlt: "Betpanda logo",
     ctaSlug: "/go/betpanda/",
     rating: null,
-    bonusText: "",
+    bonusText: "100 % ensitalletuksesta, jopa 1 BTC",
     noDeposit: "",
-    wagering: "",
-    license: "",
+    wagering: "40x",
+    license: "Costa Rica (ei ETA-pelilisenssiä)",
     bannerText: null,
   },
   {

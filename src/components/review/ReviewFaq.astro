@@ -32,21 +32,29 @@ interface Props {
 const { review, title = "Usein kysytyt kysymykset" } = Astro.props;
 const { name, bonusText, license, minDeposit, paymentMethods } = review;
 
+// Opt-outs for the two template claims (see CasinoReview.templateClaims).
+// Undefined === true, so every scraped review keeps its current Q&As.
+const claimsRegistrationFree = review.templateClaims?.registrationFree !== false;
+const claimsFormalLicense = review.templateClaims?.formalLicense !== false;
+
 type QA = { q: string; a: string };
 const qas: QA[] = [];
 
-// Always true on this no-registration site.
-qas.push({
-  q: `Onko ${name} rekisteröitymisvapaa?`,
-  a: `Kyllä. ${name} on rekisteröitymisvapaa kasino, jolla voit pelata tunnistautumalla pankkitunnuksilla ilman erillisen pelitilin luomista.`,
-});
+// True for every casino captured from WordPress, but not for a brand that
+// requires an account — those set templateClaims.registrationFree = false.
+if (claimsRegistrationFree) {
+  qas.push({
+    q: `Onko ${name} rekisteröitymisvapaa?`,
+    a: `Kyllä. ${name} on rekisteröitymisvapaa kasino, jolla voit pelata tunnistautumalla pankkitunnuksilla ilman erillisen pelitilin luomista.`,
+  });
+}
 if (bonusText && bonusText.trim().length > 0) {
   qas.push({
     q: `Mikä on ${name}:n tervetuliaisbonus?`,
     a: `${name} tarjoaa tervetuliaisbonuksen: ${bonusText}. Tarkista aina voimassa olevat bonusehdot kasinon sivuilta ennen pelaamista.`,
   });
 }
-if (license && license.trim().length > 0) {
+if (license && license.trim().length > 0 && claimsFormalLicense) {
   qas.push({
     q: `Millä lisenssillä ${name} toimii?`,
     a: `${name} toimii ${license}-lisenssillä.`,
