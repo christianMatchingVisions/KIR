@@ -48,6 +48,7 @@ import { dirname, join } from "node:path";
 import { loadEngineReviews, type EngineReview } from "./engine-casino-loader";
 import { MANUALLY_CLOSED_SLUGS } from "./closed-casinos";
 import { isDeadAffiliate } from "./dead-affiliates";
+import { getManualReview, MANUAL_REVIEW_SLUGS } from "./manual-reviews";
 
 export type { EngineReview } from "./engine-casino-loader";
 
@@ -144,6 +145,25 @@ export type CasinoReview = {
   bonusesHtml: string | null;
   /** True when the casino is closed ("Suljettu") or has no real review. */
   showNoReview: boolean;
+
+  /**
+   * Opt-out for the two claims the review template otherwise states for EVERY
+   * casino, because they were true for every casino captured from WordPress:
+   *   - registrationFree: "pelaat pankkitunnuksilla ilman pelitilin luomista"
+   *     (ReviewHighlights bullet + the first ReviewFaq question)
+   *   - formalLicense: phrasing the licence field as "<license>-lisenssi"
+   *     (ReviewHighlights bullet + the licence ReviewFaq question)
+   *
+   * A hand-written review for a brand where either is untrue (a crypto casino
+   * that requires an account, or an operator incorporated somewhere that
+   * issues no gambling licence at all) sets the flag false and the template
+   * omits that claim instead of printing a falsehood. Undefined means true, so
+   * every scraped review renders exactly as before.
+   */
+  templateClaims?: {
+    registrationFree?: boolean;
+    formalLicense?: boolean;
+  };
 
   /* ---- Engine-enrichment fields (ADDITIVE, optional) -------------------- *
    * Populated by initEngineReviews() (build-time fetch of GET /reviews) and
@@ -784,12 +804,16 @@ function parseSubRatings(arviotCard: string): SubRating[] {
  * the live site redirects away — an indexable soft-404. They are handled by a
  * 301 redirect in vercel.json instead. */
 export function listCasinoSlugs(): string[] {
-  if (!existsSync(FRAGMENTS_DIR)) return [];
-  return readdirSync(FRAGMENTS_DIR, { withFileTypes: true })
-    .filter((e) => e.isDirectory() && e.name.startsWith("casino__"))
-    .filter((e) => existsSync(join(FRAGMENTS_DIR, e.name, "body.html")))
-    .map((e) => e.name.slice("casino__".length))
-    .sort();
+  const scraped = existsSync(FRAGMENTS_DIR)
+    ? readdirSync(FRAGMENTS_DIR, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && e.name.startsWith("casino__"))
+        .filter((e) => existsSync(join(FRAGMENTS_DIR, e.name, "body.html")))
+        .map((e) => e.name.slice("casino__".length))
+    : [];
+  // Hand-written reviews for brands with no fragment (manual-reviews.ts). A
+  // fragment of the same slug always wins, so the Set de-dupes rather than
+  // double-emitting a route.
+  return [...new Set([...scraped, ...MANUAL_REVIEW_SLUGS])].sort();
 }
 
 /** Parse a single casino fragment on demand. Returns null if it doesn't exist. */
@@ -797,7 +821,21 @@ export function getCasino(slug: string): CasinoReview | null {
   const dir = join(FRAGMENTS_DIR, `casino__${slug}`);
   const bodyPath = join(dir, "body.html");
   const metaPath = join(dir, "meta.json");
-  if (!existsSync(bodyPath)) return null;
+  // No scraped fragment → fall back to a hand-written review when one exists
+  // (manual-reviews.ts). The fragment is checked FIRST, so real captured
+  // content can never be masked by a manual record.
+  if (!existsSync(bodyPath)) {
+    const manual = getManualReview(slug);
+    if (manual) {
+      return {
+        ...manual,
+        // Dead-affiliate shutoff applies to manual reviews too.
+        ctaSlug: isDeadAffiliate(manual.ctaSlug) ? null : manual.ctaSlug,
+        showNoReview: manual.showNoReview || MANUALLY_CLOSED_SLUGS.has(slug),
+      };
+    }
+    return null;
+  }
 
   const body = readFileSync(bodyPath, "utf8");
 
