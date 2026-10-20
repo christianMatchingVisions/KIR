@@ -30,10 +30,16 @@ import type { CasinoReview } from "./casino-data";
 /**
  * Betpanda — reviewed 2026-10-20.
  *
- * Source for every figure below: Betpanda's own "Bounty Welcome Bonus" terms
- * page, supplied by the owner on 2026-10-20. The operator is Star Bright Media
- * S.R.L (Costa Rica, corporate ID 3-102-880000), stated in the footer of that
- * same page.
+ * Source for every figure below: Betpanda's own promotion terms pages — the
+ * "Bounty Welcome Bonus" and the "Weekly Cashback" — both supplied by the owner
+ * on 2026-10-20. The operator is Star Bright Media S.R.L (Costa Rica, corporate
+ * ID 3-102-880000), stated in the footer of those pages.
+ *
+ * Where the marketing copy and the small print disagree, the review follows the
+ * small print and says so. The cashback page promises money back "guaranteed"
+ * with "no opt-in", while its own terms require at least 50 casino wagers in the
+ * qualifying week and the credit has to be claimed before the next one lands.
+ * Both conditions are stated in the prose.
  *
  * CURRENCY: the terms quote the deposit minimum and the per-round bet cap in
  * euros (10 € / 50 €) and they are reproduced as such. The maximum bonus is
@@ -68,9 +74,11 @@ const BETPANDA: CasinoReview = {
     "Betpandan tervetuliaisbonus on bounty-tyyppinen: bonusta ei makseta ennakkoon, vaan " +
     "kierrätät ensitalletuksesi 40 kertaa ja saat bonuksen vasta sen jälkeen käteisenä ilman " +
     "lisäkierrätystä. Ehdot ovat poikkeuksellisen tiukat ajan osalta — kierrätys on tehtävä " +
-    "seitsemässä päivässä — ja vain kolikkopelit kerryttävät sitä täydellä painolla. Kasino " +
-    "toimii Costa Ricaan rekisteröidyn yhtiön kautta ilman ETA-lisenssiä, joten voitot ovat " +
-    "suomalaiselle pelaajalle veronalaista tuloa.",
+    "seitsemässä päivässä — ja vain kolikkopelit kerryttävät sitä täydellä painolla. Jatkuvana " +
+    "etuna on viikoittainen 10 %:n cashback nettohäviöistä, joka maksetaan rahana ilman " +
+    "kierrätystä; se vaatii vähintään 50 kasinopanosta viikossa. Kasino toimii Costa Ricaan " +
+    "rekisteröidyn yhtiön kautta ilman ETA-lisenssiä, joten voitot ovat suomalaiselle pelaajalle " +
+    "veronalaista tuloa.",
   foundedYear: null,
   minDeposit: "10 €",
   support: { liveChat: true },
@@ -84,23 +92,25 @@ const BETPANDA: CasinoReview = {
    * bonus terms — not an editorial impression. They also put the review into
    * ReviewHighlights' "real points" mode, which replaces the derived bullets. */
   pros: [
+    "Viikoittainen 10 %:n cashback nettohäviöistä, ilman kierrätystä",
     "Bonus maksetaan kierrätyksen jälkeen käteisenä ilman lisäkierrätystä",
     "Vähimmäistalletus vain 10 €",
     "Kolikkopelit kerryttävät kierrätystä täydellä 100 %:n painolla",
-    "Bonuskampanjalla ei ole ilmoitettua päättymispäivää",
+    "Kumpikaan kampanja ei ole määräaikainen",
   ],
   cons: [
     "Kierrätys 40 x talletus, ja aikaa vain 7 vuorokautta",
     "Live-pelit kerryttävät kierrätystä 20 %, urheiluvedot ja pokeri 0 %",
     "Ei ETA-pelilisenssiä — voitot ovat Suomessa veronalaista tuloa",
-    "Kierrätykseen lasketaan enintään 50 € panos kierrosta kohden",
+    "Cashback vaatii vähintään 50 kasinopanosta viikossa",
   ],
   reviewHtml: `
 <p><strong>Betpanda</strong> on kryptopainotteinen nettikasino, joka tarjoaa uudelle pelaajalle
 <strong>100 % ensitalletusbonuksen</strong>. Bonus toimii eri tavalla kuin tavallinen
 tervetuliaisbonus: sitä ei lisätä tilille pelattavaksi bonusrahaksi, vaan se maksetaan käteisenä
-vasta kun kierrätysvaatimus on täytetty. Alla on bonuksen ehdot sellaisina kuin kasino ne itse
-julkaisee, ja mitä ne käytännössä tarkoittavat.</p>
+vasta kun kierrätysvaatimus on täytetty. Vakiotarjouksena on lisäksi <strong>viikoittainen 10 %:n
+cashback</strong> nettohäviöistä ilman kierrätystä. Alla ovat kummankin kampanjan ehdot sellaisina
+kuin kasino ne itse julkaisee, ja mitä ne käytännössä tarkoittavat.</p>
 
 <h2>Tervetuliaisbonus on bounty-tyyppinen</h2>
 <p>Tavallisessa bonuksessa saat bonusrahan heti talletuksen jälkeen ja kierrätät sitä. Betpandalla
@@ -160,6 +170,32 @@ urheiluvetoja, seitsemän vuorokauden aikaraja on hyvin tiukka tai kierrätys ei
       nostot kulkevat kasinon tavallisten nosto- ja compliance-käytäntöjen kautta.</li>
 </ul>
 
+<h2>Viikoittainen cashback: 10 % nettohäviöistä</h2>
+<p>Tervetuliaisbonuksen rinnalla Betpanda maksaa <strong>viikoittaista cashbackia</strong>, joka on
+10 % viikon nettohäviöistä. Palautus maksetaan rahana <strong>joka keskiviikko klo 13.00 UTC</strong>
+eli Suomen aikaa klo 15 talvella ja klo 16 kesällä. Cashbackiin <strong>ei liity kierrätystä</strong>,
+joten se on nostettavissa heti.</p>
+<p>Nettohäviö tarkoittaa viikon häviöitä miinus voitot oikealla rahalla. Laskentajakso on keskiviikosta
+keskiviikkoon klo 12.00 UTC. Kasinon oma esimerkki: <strong>500 euron nettohäviöstä palautuu 50 euroa</strong>.</p>
+<h3>Cashbackin ehdot</h3>
+<ul>
+  <li><strong>Palautus:</strong> 10 % nettohäviöistä, maksetaan rahana ilman kierrätystä</li>
+  <li><strong>Maksupäivä:</strong> keskiviikko klo 13.00 UTC</li>
+  <li><strong>Laskentajakso:</strong> ke klo 12.00 UTC – seuraava ke klo 12.00 UTC</li>
+  <li><strong>Vähimmäisvaatimus:</strong> 50 kasinopanosta jakson aikana — ilmaiskierrokset ja
+      bonuspelit eivät laske mukaan</li>
+  <li><strong>Kerryttävät pelit:</strong> kolikkopelit ja live-kasino. Urheiluvedot eivät kerrytä,
+      eivätkä bonusrahalla pelatut häviöt.</li>
+  <li><strong>Lunastus:</strong> cashback on lunastettavissa siihen asti, kunnes seuraava cashback
+      maksetaan</li>
+</ul>
+<p>Kasino markkinoi cashbackia sanoilla "taatusti" ja "ei erillistä liittymistä", mutta ehdoissa on
+yksi kynnys, joka kannattaa huomata: <strong>jaksolta vaaditaan vähintään 50 kasinopanosta</strong>.
+Satunnaisella parin panoksen viikolla cashbackia ei siis kerry. Toinen huomio on lunastus — palautus
+on otettava käyttöön ennen seuraavan viikon maksua. Kierrätyksen puuttuminen on silti aito etu:
+palautunut raha on heti nostettavissa, toisin kuin useimmilla kasinoilla, joilla cashback tulee
+bonuksena kierrätysvaatimuksen kanssa.</p>
+
 <h2>Lisenssi ja verotus</h2>
 <p>Betpandaa operoi <strong>Star Bright Media S.R.L</strong>, joka on rekisteröity Costa Ricaan
 (yritystunnus 3-102-880000). Costa Rica ei myönnä varsinaisia rahapelilisenssejä, vaan yhtiöt
@@ -176,8 +212,10 @@ listalta</a>.</p>
 piilokierrätystä — kun 40-kertainen kierrätys on tehty, raha on omaa. Tiukkuus on ajassa ja
 pelivalikoimassa: seitsemän vuorokautta on lyhyt aika 40-kertaiseen kierrätykseen, ja vain
 kolikkopelit kerryttävät sitä täysin. Bonuskatto on ilmoitettu bitcoineina, joten sen euroarvo
-vaihtelee. Suurin yksittäinen huomio on lisenssi: ilman ETA-lisenssiä voitot ovat Suomessa
-veronalaisia, mikä syö tuotosta enemmän kuin yksikään bonusehto.</p>
+vaihtelee. Viikoittainen cashback on tarjouksista arkisempi mutta käytännössä arvokkaampi:
+10 % nettohäviöistä rahana ilman kierrätystä on säännöllisesti pelaavalle enemmän kuin kertaluontoinen
+bonus, kunhan 50 panoksen vähimmäisvaatimus täyttyy. Suurin yksittäinen huomio on lisenssi: ilman
+ETA-lisenssiä voitot ovat Suomessa veronalaisia, mikä syö tuotosta enemmän kuin yksikään bonusehto.</p>
 `.trim(),
   bonusesHtml: `
 <ul>
@@ -187,6 +225,13 @@ veronalaisia, mikä syö tuotosta enemmän kuin yksikään bonusehto.</p>
   <li>Kierrätykseen laskettava enimmäispanos 50 € / kierros</li>
   <li>Kolikkopelit kerryttävät 100 %, live-pelit 20 %, muut 0 %</li>
   <li>Bonus maksetaan kierrätyksen jälkeen käteisenä ilman lisäkierrätystä</li>
+</ul>
+<p><strong>Viikoittainen cashback:</strong></p>
+<ul>
+  <li>10 % viikon nettohäviöistä, maksetaan rahana ilman kierrätystä</li>
+  <li>Maksupäivä keskiviikko klo 13.00 UTC, laskentajakso ke–ke klo 12.00 UTC</li>
+  <li>Vaatii vähintään 50 kasinopanosta jakson aikana</li>
+  <li>Kolikkopelit ja live-kasino kerryttävät; urheiluvedot ja bonuspelit eivät</li>
 </ul>
 `.trim(),
   showNoReview: false,
@@ -216,8 +261,8 @@ export const MANUAL_REVIEW_HEADS: Readonly<Record<string, ManualReviewHead>> = {
   betpanda: {
     title: "Betpanda arvostelu – 100 % bonus ja 40x kierrätys",
     description:
-      "Betpandan tervetuliaisbonus on 100 % ensitalletuksesta. Kierrätys 40x, " +
-      "vähimmäistalletus 10 €, aikaa 7 vrk — ja bonus maksetaan käteisenä. Lue ehdot.",
+      "Betpandan tervetuliaisbonus on 100 % ensitalletuksesta: kierrätys 40x, aikaa 7 vrk, " +
+      "bonus käteisenä. Lisäksi 10 % viikkocashback ilman kierrätystä. Lue ehdot.",
   },
 };
 
