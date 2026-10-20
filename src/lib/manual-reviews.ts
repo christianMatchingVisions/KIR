@@ -53,7 +53,12 @@ const BETPANDA: CasinoReview = {
   url: "/casino/betpanda/",
   ctaSlug: "betpanda",
   logoUrl: "/wp-content/uploads/betpanda-logo.png",
-  ratingOverall: null,
+  // 4.5/5 — set by the site owner on 2026-10-20. Editorial score, not derived
+  // from the terms above; it is the owner's assessment of the brand, the same
+  // basis as the scores on the scraped reviews. No sub-ratings: a per-criterion
+  // breakdown would have to be invented, and the rating bars omit themselves
+  // when the list is empty.
+  ratingOverall: 4.5,
   subRatings: [],
   bonusText: "100 % ensitalletuksesta, jopa 1 BTC",
   license: "Costa Rica (yhtiörekisteröinti, ei ETA-pelilisenssiä)",

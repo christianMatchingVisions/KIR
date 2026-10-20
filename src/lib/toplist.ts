@@ -449,13 +449,14 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // match and the cap as the terms state them. Costa Rica does not issue
     // gambling licences, so the licence field says exactly what it is; that
     // makes license-tier.ts flag it non-EEA (winnings taxable in Finland),
-    // which is the point. `rating` stays null — no basis for a score.
+    // which is the point. The 4.5 rating was set by the owner on 2026-10-20 —
+    // an editorial score, on the same basis as the scraped reviews' scores.
     name: "Betpanda",
     slug: "betpanda",
     logoUrl: "/wp-content/uploads/betpanda-logo.png",
     logoAlt: "Betpanda logo",
     ctaSlug: "/go/betpanda/",
-    rating: null,
+    rating: 4.5,
     bonusText: "100 % ensitalletuksesta, jopa 1 BTC",
     noDeposit: "",
     wagering: "40x",
