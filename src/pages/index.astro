@@ -64,12 +64,19 @@ const anyBySlug = (slug: string): ToplistCasino | undefined =>
 // Jackburst drops out of the five and still appears in the top-10 below.
 // (Andromedasino stays held back — andromedasino.com has no live data yet, see
 // MANUAL_CASINOS in toplist.ts — until it has a real review/bonus to show.)
+/* Six brands were added for the top of the homepage but this block holds five,
+ * so the two with an EEA licence are fronted behind Betpanda: on an MGA licence
+ * a Finnish player's winnings are tax-free, which is the one difference between
+ * these brands that is worth real money. Aurakasino is the sixth and sits in
+ * the list below instead — its licence is not stated anywhere in the material
+ * the owner supplied, so we cannot tell a reader how its winnings are taxed.
+ * Reorder freely; nothing else depends on this list. */
 const TOP5_SLUGS = [
   "betpanda",
-  "titaani",
-  "pelifantti",
-  "tikkari-casino",
-  "kumobet-ccasino",
+  "betbay",
+  "kirpee",
+  "tuhti",
+  "lunaloots",
 ];
 const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => anyBySlug(s)).filter(
   (c): c is ToplistCasino => c != null,
@@ -78,7 +85,18 @@ const topCasinos: ToplistCasino[] = TOP5_SLUGS.map((s) => anyBySlug(s)).filter(
 // Top-10 section: Urho/Spinnair (bumped from the top-5 earlier) take ranks
 // 1-2, followed by the previous lead (Pelipeto + the five earlier bumped
 // casinos), backfilled from the pool to reach 10.
+/* Manual brands (MANUAL_CASINOS in toplist.ts) are NOT in the scraped pool, so
+ * the only way one reaches the homepage is by being named in a *_SLUGS list
+ * here. Any manual brand left out of both lists would vanish from the homepage
+ * entirely while still having a live review page — an orphan with a working
+ * affiliate link and no way in. So the top-10 lead list starts with every
+ * manual brand that the top-5 block did not take, in MANUAL_CASINOS order,
+ * and the hand-picked scraped leads follow. */
+const MANUAL_OVERFLOW_SLUGS = MANUAL_CASINOS.map((c) => c.slug).filter(
+  (s) => !TOP5_SLUGS.includes(s),
+);
 const TOP10_LEAD_SLUGS = [
+  ...MANUAL_OVERFLOW_SLUGS,
   "urho-casino",
   "spinnair",
   "pelipeto-kasino",

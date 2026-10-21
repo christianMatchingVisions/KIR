@@ -117,6 +117,13 @@ export type CasinoReview = {
   ctaSlug: string | null;
   /** Decoded, root-relative /wp-content logo URL, or null. */
   logoUrl: string | null;
+  /**
+   * Alt text for the logo. Scraped fragments carry none, so it is optional and
+   * the review template falls back to "<name> logo". A hand-written review
+   * (manual-reviews.ts) supplies a real description of the mark instead, which
+   * is what a screen-reader user actually needs.
+   */
+  logoAlt?: string | null;
   /** Overall score from the "Arviot: X/5" heading, or null when blank. */
   ratingOverall: number | null;
   /** Per-criterion ratings from the "Arviot" card. [] when absent. */

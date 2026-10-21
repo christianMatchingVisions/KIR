@@ -51,8 +51,13 @@ const hasCta = typeof ctaSlug === "string" && ctaSlug.length > 0;
 const ctaHref = hasCta ? `/go/${ctaSlug}/` : null;
 
 const monogram = (name || "?").trim().charAt(0).toUpperCase() || "?";
-// CasinoReview carries no scraped logo alt — derive a neutral one from the name.
-const altText = name ? `${name} logo` : "Kasinon logo";
+// Scraped fragments carry no logo alt, so derive a neutral one from the name.
+// A hand-written review supplies a real description of the mark (logoAlt) and
+// that wins — it is what a screen-reader user actually needs.
+const altText =
+  (typeof review.logoAlt === "string" && review.logoAlt.trim().length > 0
+    ? review.logoAlt.trim()
+    : null) ?? (name ? `${name} logo` : "Kasinon logo");
 const ctaLabel = `Pelaa nyt — ${name}`;
 
 /* Checklist of REAL facts only. */
