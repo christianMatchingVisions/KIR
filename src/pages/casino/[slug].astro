@@ -142,7 +142,11 @@ function backfill(review: CasinoReview): CasinoReview & { logoAlt: string | null
     review.license ??
     (row && row.license.trim().length > 0 ? row.license.trim() : null);
   const logoUrl = review.logoUrl ?? row?.logoUrl ?? null;
-  const logoAlt = row?.logoAlt ?? (review.name ? `${review.name} logo` : null);
+  // A hand-written review carries a real description of the logo; prefer it.
+  // (It has to come first: a manual brand is not in the scraped pool, so
+  // matchToplist() finds no row for it and the fallback would otherwise win.)
+  const logoAlt =
+    review.logoAlt ?? row?.logoAlt ?? (review.name ? `${review.name} logo` : null);
   return { ...review, bonusText, license, logoUrl, logoAlt };
 }
 

@@ -452,8 +452,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // licence makes them taxable in Finland. Identical offer, better licence.
     name: "Betbay Casino",
     slug: "betbay",
-    logoUrl: null, // TODO: set to "/wp-content/uploads/betbay-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
-    logoAlt: "Betbay Casino logo",
+    logoUrl: "/wp-content/uploads/betbay-logo.jpg",
+    logoAlt: "Betbay Casino -logo: punainen b-kirjainmerkki ja BetBay-teksti tummalla taustalla",
     ctaSlug: "/go/betbay/",
     rating: 4.5,
     bonusText: "225 % jopa 1 500 € + 500 IK (1.–3. talletus)",
@@ -475,8 +475,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // read is not a fact we can print.
     name: "Kirpee Casino",
     slug: "kirpee",
-    logoUrl: null, // TODO: set to "/wp-content/uploads/kirpee-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
-    logoAlt: "Kirpee Casino logo",
+    logoUrl: "/wp-content/uploads/kirpee-logo.png",
+    logoAlt: "Kirpee Casino -logo: kirkaanvihreä Kirpee-teksti mustalla taustalla",
     ctaSlug: "/go/kirpee/",
     rating: 4.5,
     bonusText: "Päivittäinen cashback jopa 20 % nettohäviöistä",
@@ -498,8 +498,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // are tax-free when the gaming licence is Curaçao and they are not.
     name: "Tuhti Casino",
     slug: "tuhti",
-    logoUrl: null, // TODO: set to "/wp-content/uploads/tuhti-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
-    logoAlt: "Tuhti Casino logo",
+    logoUrl: "/wp-content/uploads/tuhti-logo.png",
+    logoAlt: "Tuhti Casino -logo: valkoinen Tuhti-teksti tummansinisellä taustalla",
     ctaSlug: "/go/tuhti/",
     rating: 4.5,
     bonusText: "20 x 1 € ilmaiskierrosta (Sugar Rush 1000)",
@@ -524,8 +524,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // rather than guessing a tax treatment.
     name: "Aurakasino",
     slug: "aurakasino",
-    logoUrl: null, // TODO: set to "/wp-content/uploads/aurakasino-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
-    logoAlt: "Aurakasino logo",
+    logoUrl: "/wp-content/uploads/aurakasino-logo.jpg",
+    logoAlt: "Aurakasinon logo: Aura Kasino -teksti neonsinisellä hehkulla mustassa kehyksessä",
     ctaSlug: "/go/aurakasino/",
     rating: 4.5,
     bonusText: "100 % ensitalletusbonus",
@@ -553,8 +553,8 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // the licence is Anjouan and they are not.
     name: "Lunaloots Casino",
     slug: "lunaloots",
-    logoUrl: null, // TODO: set to "/wp-content/uploads/lunaloots-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
-    logoAlt: "Lunaloots Casino logo",
+    logoUrl: "/wp-content/uploads/lunaloots-logo.png",
+    logoAlt: "Lunaloots Casino -logo: sininen Luna Loots -teksti kilvessä, ympärillä tähtiä",
     ctaSlug: "/go/lunaloots/",
     rating: 4.5,
     bonusText: "225 % jopa 1 500 € + 500 IK (1.–3. talletus)",

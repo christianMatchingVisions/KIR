@@ -258,7 +258,8 @@ const KIRPEE: CasinoReview = {
   name: "Kirpee Casino",
   url: "/casino/kirpee/",
   ctaSlug: "kirpee",
-  logoUrl: null, // TODO: set to "/wp-content/uploads/kirpee-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+  logoUrl: "/wp-content/uploads/kirpee-logo.png",
+  logoAlt: "Kirpee Casino -logo: kirkaanvihreä Kirpee-teksti mustalla taustalla",
   ratingOverall: 4.5,
   subRatings: [],
   bonusText: "Päivittäinen cashback jopa 20 % nettohäviöistä",
@@ -385,7 +386,8 @@ const TUHTI: CasinoReview = {
   name: "Tuhti Casino",
   url: "/casino/tuhti/",
   ctaSlug: "tuhti",
-  logoUrl: null, // TODO: set to "/wp-content/uploads/tuhti-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+  logoUrl: "/wp-content/uploads/tuhti-logo.png",
+  logoAlt: "Tuhti Casino -logo: valkoinen Tuhti-teksti tummansinisellä taustalla",
   ratingOverall: 4.5,
   subRatings: [],
   bonusText: "20 x 1 € ilmaiskierrosta (Sugar Rush 1000)",
@@ -524,7 +526,8 @@ const AURAKASINO: CasinoReview = {
   name: "Aurakasino",
   url: "/casino/aurakasino/",
   ctaSlug: "aurakasino",
-  logoUrl: null, // TODO: set to "/wp-content/uploads/aurakasino-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+  logoUrl: "/wp-content/uploads/aurakasino-logo.jpg",
+  logoAlt: "Aurakasinon logo: Aura Kasino -teksti neonsinisellä hehkulla mustassa kehyksessä",
   ratingOverall: 4.5,
   subRatings: [],
   bonusText: "100 % ensitalletusbonus",
@@ -661,7 +664,8 @@ const LUNALOOTS: CasinoReview = {
   name: "Lunaloots Casino",
   url: "/casino/lunaloots/",
   ctaSlug: "lunaloots",
-  logoUrl: null, // TODO: set to "/wp-content/uploads/lunaloots-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+  logoUrl: "/wp-content/uploads/lunaloots-logo.png",
+  logoAlt: "Lunaloots Casino -logo: sininen Luna Loots -teksti kilvessä, ympärillä tähtiä",
   ratingOverall: 4.5,
   subRatings: [],
   bonusText: "225 % jopa 1 500 € + 500 IK (1.–3. talletus)",
@@ -841,7 +845,8 @@ const BETBAY: CasinoReview = {
   name: "Betbay Casino",
   url: "/casino/betbay/",
   ctaSlug: "betbay",
-  logoUrl: null, // TODO: set to "/wp-content/uploads/betbay-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+  logoUrl: "/wp-content/uploads/betbay-logo.jpg",
+  logoAlt: "Betbay Casino -logo: punainen b-kirjainmerkki ja BetBay-teksti tummalla taustalla",
   ratingOverall: 4.5,
   subRatings: [],
   bonusText: "225 % jopa 1 500 € + 500 IK (1.–3. talletus)",
