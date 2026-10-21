@@ -441,6 +441,129 @@ function augmentFromReviews(
  */
 export const MANUAL_CASINOS: readonly ToplistCasino[] = [
   {
+    // Added 2026-10-21 at the owner's request. Source: Betbay's own welcome
+    // package page, its 29-point bonus terms and the site footer.
+    //
+    // SAME PLATFORM AS LUNALOOTS. The two brands publish byte-identical bonus
+    // terms (same three tiers, same Big Bass Splash free spins, same 35x, same
+    // 29 numbered points) — they are the same white-label. The licences are
+    // NOT the same, and that is the whole point: Betbay is MGA-licensed, so
+    // license-tier.ts marks the winnings tax-free, while Lunaloots' Anjouan
+    // licence makes them taxable in Finland. Identical offer, better licence.
+    name: "Betbay Casino",
+    slug: "betbay",
+    logoUrl: null, // TODO: set to "/wp-content/uploads/betbay-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+    logoAlt: "Betbay Casino logo",
+    ctaSlug: "/go/betbay/",
+    rating: 4.5,
+    bonusText: "225 % jopa 1 500 € + 500 IK (1.–3. talletus)",
+    noDeposit: "",
+    wagering: "35x",
+    license: "MGA (Malta) – MGA/B2C/233/2013",
+    bannerText: null,
+  },
+  {
+    // Added 2026-10-21 at the owner's request. Licence and cashback tiers come
+    // from Kirpee's own cashback-campaign page and site footer, supplied by the
+    // owner. MGA (Malta) is an EEA licence, so license-tier.ts marks the
+    // winnings tax-free — the strongest selling point of the four brands added
+    // in this batch. No welcome bonus was supplied, so the card leads with the
+    // daily cashback instead and `bonusText` says exactly that; `wagering` is
+    // the x10 that applies to the cashback credit, since there is no deposit
+    // bonus to quote. Payment methods were omitted: the supplied list was
+    // garbled (bank names mangled in transit) and a payment logo we cannot
+    // read is not a fact we can print.
+    name: "Kirpee Casino",
+    slug: "kirpee",
+    logoUrl: null, // TODO: set to "/wp-content/uploads/kirpee-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+    logoAlt: "Kirpee Casino logo",
+    ctaSlug: "/go/kirpee/",
+    rating: 4.5,
+    bonusText: "Päivittäinen cashback jopa 20 % nettohäviöistä",
+    noDeposit: "",
+    wagering: "10x",
+    license: "MGA (Malta) – MGA/B2C/203/2011",
+    bannerText: null,
+  },
+  {
+    // Added 2026-10-21 at the owner's request. Source: Tuhti's own cashback
+    // page + footer, supplied by the owner.
+    //
+    // LICENCE — DELIBERATELY CURAÇAO-ONLY. The footer names two companies:
+    // Trivico BV (Curaçao, GCB-licensed, the gaming licence) and Fundsflare
+    // Limited (Cyprus), a wholly owned payments subsidiary. Cyprus is NOT the
+    // gaming regulator here. Writing it into this field would be actively
+    // harmful: "cyprus" is an EEA marker in license-tier.ts, so the card would
+    // flip to "Voitot verovapaita" and tell a Finnish reader their winnings
+    // are tax-free when the gaming licence is Curaçao and they are not.
+    name: "Tuhti Casino",
+    slug: "tuhti",
+    logoUrl: null, // TODO: set to "/wp-content/uploads/tuhti-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+    logoAlt: "Tuhti Casino logo",
+    ctaSlug: "/go/tuhti/",
+    rating: 4.5,
+    bonusText: "20 x 1 € ilmaiskierrosta (Sugar Rush 1000)",
+    noDeposit: "",
+    wagering: "10x",
+    license: "Curaçao (GCB)",
+    bannerText: null,
+  },
+  {
+    // Added 2026-10-21 at the owner's request. Source: Aurakasino's own
+    // welcome-offer page and bonus terms, supplied by the owner.
+    //
+    // BONUS FIGURE: the marketing page advertises 100 % up to 500 €, while the
+    // binding bonus terms (§1.1) say 100 % up to 200 €. The card quotes the
+    // match only, with no cap, because the two published figures disagree and
+    // the review explains the conflict rather than picking a side. Resolve it
+    // with the affiliate manager and the cap can go in here.
+    //
+    // LICENCE EMPTY: no regulator is named anywhere in the supplied pages, so
+    // there is nothing to print. The card shows no licence badge, which is the
+    // correct outcome — license-tier.ts returns "unknown" and stays silent
+    // rather than guessing a tax treatment.
+    name: "Aurakasino",
+    slug: "aurakasino",
+    logoUrl: null, // TODO: set to "/wp-content/uploads/aurakasino-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+    logoAlt: "Aurakasino logo",
+    ctaSlug: "/go/aurakasino/",
+    rating: 4.5,
+    bonusText: "100 % ensitalletusbonus",
+    noDeposit: "",
+    wagering: "30x",
+    license: "",
+    bannerText: null,
+  },
+  {
+    // Added 2026-10-21 at the owner's request; bonus terms supplied the same
+    // day, so the card and the review in manual-reviews.ts are both filled in.
+    //
+    // BONUS TEXT: the package is three separate deposit bonuses (100 % / 75 % /
+    // 50 %) whose caps add up to 1 500 €, which the operator markets as "225 %".
+    // The card says "1.–3. talletus" so the reader is not told a single deposit
+    // earns 225 %; the review does the arithmetic in full.
+    //
+    // LICENCE — ANJOUAN ONLY, DELIBERATELY. The footer names three entities:
+    // Green Champions Leader SRL (Costa Rica) as operator, the Government of
+    // Anjouan as the LICENSOR (ALSI-202502014-FI1), and Widoma Trading Co.
+    // Limited (Cyprus) as the PAYMENT PROCESSOR. Only Anjouan is the gaming
+    // regulator. Cyprus must stay out of this field: it is an EEA marker in
+    // license-tier.ts, so including it would flip the badge to "Voitot
+    // verovapaita" and tell a Finnish reader their winnings are tax-free when
+    // the licence is Anjouan and they are not.
+    name: "Lunaloots Casino",
+    slug: "lunaloots",
+    logoUrl: null, // TODO: set to "/wp-content/uploads/lunaloots-logo.png" once the owner supplies the logo; card renders the monogram fallback until then
+    logoAlt: "Lunaloots Casino logo",
+    ctaSlug: "/go/lunaloots/",
+    rating: 4.5,
+    bonusText: "225 % jopa 1 500 € + 500 IK (1.–3. talletus)",
+    noDeposit: "",
+    wagering: "35x",
+    license: "Anjouan (ALSI-202502014-FI1)",
+    bannerText: null,
+  },
+  {
     // Added 2026-10-12 at the owner's request, fronted at rank 1 on the
     // homepage. Bonus, wagering and licence filled in 2026-10-20 from the
     // operator's own published "Bounty Welcome Bonus" terms, supplied by the
