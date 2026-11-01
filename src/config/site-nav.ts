@@ -97,7 +97,7 @@ export const mainNav: NavItem[] = [
       { label: "Apple Pay -kasinot", href: "/apple-pay-casinot/" },
       { label: "Brite-kasinot", href: "/brite-kasinot/" },
       { label: "Kryptokasinot", href: "/kryptokasinot/" },
-      { label: "Euteller-kasinot", href: "/euteller-kasinot/" },
+      { label: "Euteller-kasinot", href: "/euteller-pikakasinot/" },
       { label: "MGA-kasinot", href: "/mga-kasinot/" },
       { label: "Curacao-kasinot", href: "/curacao-kasinot/" },
     ],

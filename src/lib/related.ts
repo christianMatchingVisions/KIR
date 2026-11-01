@@ -78,7 +78,7 @@ const TOPIC_LINKS: TopicLink[] = [
   { label: "Trustly-kasinot", href: "/trustly-kasinot/", triggers: ["trustly"] },
   { label: "Zimpler-pikakasinot", href: "/zimpler-pikakasinot/", triggers: ["zimpler"] },
   { label: "Brite-kasinot", href: "/brite-kasinot/", triggers: ["brite"] },
-  { label: "Euteller-kasinot", href: "/euteller-kasinot/", triggers: ["euteller"] },
+  { label: "Euteller-kasinot", href: "/euteller-pikakasinot/", triggers: ["euteller"] },
   { label: "Apple Pay -kasinot", href: "/apple-pay-casinot/", triggers: ["apple pay", "applepay"] },
   { label: "Kryptokasinot", href: "/kryptokasinot/", triggers: ["krypto", "bitcoin", "kripto"] },
   { label: "MGA-kasinot", href: "/mga-kasinot/", triggers: ["mga", "malta gaming"] },

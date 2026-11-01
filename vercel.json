@@ -1720,6 +1720,16 @@
       "source": "/ilmaiskierrokset-bonukset-ilman/",
       "destination": "/ilmaiskierroksia-ilman-talletusta/",
       "permanent": true
+    },
+    {
+      "source": "/euteller-kasinot",
+      "destination": "/euteller-pikakasinot/",
+      "permanent": true
+    },
+    {
+      "source": "/euteller-kasinot/",
+      "destination": "/euteller-pikakasinot/",
+      "permanent": true
     }
   ],
   "headers": [
