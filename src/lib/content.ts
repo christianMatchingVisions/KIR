@@ -655,6 +655,18 @@ export const SLUG_TO_TOPLIST_CONFIG: Readonly<Record<string, string>> = {
   "brite-kasinot": "search-two-brite",
   "euteller-kasinot": "search-two-casino-euteller",
   "uudet-kasinot": "search-two-casino-2025",
+  /* Seasonal pages (2026-11-01). All four ranked and one of them — Halloween —
+   * produced a 9.3 % CTR at position 17.8, the best on the site since the
+   * demotion. Every one of them was a wall of prose with NO casino list: a
+   * reader arriving on "kasino joulukalenteri" was told what a calendar bonus
+   * is and then given nowhere to go. Promoting them to money pages attaches
+   * the same toplist the other bonus pages use. The two bonus/campaign pages
+   * get the bonus list; the two game pages get the free-spins list, which is
+   * the closer intent match for someone reading about Christmas slots. */
+  "joulu-kasino-bonukset-ja-kalenterit-2025": "search-two-casino-bonus",
+  "halloween-kasino-bonukset": "search-two-casino-bonus",
+  "uudet-jouluslotit-2025": "search-service-free",
+  "parhaat-joulupelit-nettikasinoilla-2024": "search-service-free",
   "suomen-parhaat-nettikasinot": "search-two-casino-selected",
   "kaikki-kasinot": "search-service-casino",
   // No captured dump exists for "tax-free": the list is derived from the
