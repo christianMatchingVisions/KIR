@@ -73,6 +73,19 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Casino Vice -arvostelu: lisenssi, bonusehdot, cashback, kotiutusajat ja maksutavat. Puolueeton katsaus suomalaispelaajille 2026.",
   },
 
+  /* --- EUTELLER CONSOLIDATION (2026-11-01) ------------------------------- *
+   * /euteller-kasinot/ is 301'd into this page, so this one now owns the
+   * keyword outright and its title should say so. It was already the stronger
+   * of the two in search (90 impressions at position 16.0 against 63 at 28.3)
+   * despite having no casino list and no exact-match slug; it has the list as
+   * of this change. "Euteller kasinot" is 1,900 searches/month. */
+  "/euteller-pikakasinot/": {
+    title: "Euteller kasinot 2026 – pikakasinot Euteller-maksulla",
+    description:
+      "Euteller-kasinot 2026: talleta verkkopankkitunnuksilla ilman rekisteröitymistä. " +
+      "Vertaa kasinot, kotiutusajat ja bonukset — ja katso milloin Euteller kannattaa.",
+  },
+
   /* --- INTENT MISMATCH on a commercial query (2026-11-01) ---------------- *
    * "nopeat kotiutukset" is 800 searches/month at KD 20 and the page ranked
    * for none of it — zero impressions in 28 days. The title was the problem:

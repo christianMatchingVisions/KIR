@@ -653,7 +653,24 @@ export const SLUG_TO_TOPLIST_CONFIG: Readonly<Record<string, string>> = {
   "cashback-kasinot": "search-service-cashback",
   "apple-pay-casinot": "search-two-casino-apple-pay",
   "brite-kasinot": "search-two-brite",
-  "euteller-kasinot": "search-two-casino-euteller",
+  /* Euteller moved to /euteller-pikakasinot/ on 2026-11-01. Two pages were
+   * splitting "euteller kasinot" (1,900 searches/mo, KD 34) and the one
+   * WITHOUT a list was winning: 90 impressions at position 16.0 against 63 at
+   * 28.3 for the exact-match slug that did have one. The stronger page keeps
+   * the keyword and gains the list; the weaker is 301'd into it. */
+  "euteller-pikakasinot": "search-two-casino-euteller",
+  /* Three more pages that were long-form prose with no casino list, each
+   * carrying a commercial query it could not answer (measured 2026-11-01):
+   *   pay n play kasinot   1,700/mo KD 35 — page had ZERO impressions
+   *   non sticky bonus     1,400/mo KD 31 — ZERO impressions, 3,430 words
+   *   mobiilikasinot         800/mo KD 41 — ZERO impressions, 2,815 words
+   * Pay-n-play gets the no-account list (it is the same product), non-sticky
+   * gets the bonus list, and mobile gets the hand-picked "selected" list since
+   * there is no mobile-specific config and inventing one would mean inventing
+   * the criterion too. */
+  "parhaat-esimerkit-pay-n-play-kasinoista": "search-service-no-account",
+  "non-sticky-bonus": "search-two-casino-bonus",
+  "parhaat-mobiilikasinot-2026-vertailu-ja-valintaopas": "search-two-casino-selected",
   "uudet-kasinot": "search-two-casino-2025",
   /* Seasonal pages (2026-11-01). All four ranked and one of them — Halloween —
    * produced a 9.3 % CTR at position 17.8, the best on the site since the
