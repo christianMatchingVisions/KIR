@@ -21,6 +21,7 @@
 
 import type { Post } from "./content";
 import type { CasinoReview } from "./casino-data";
+import { rotatePick, rotationRank } from "./link-rotation";
 
 /** A resolved internal link with Finnish anchor text. */
 export interface RelatedLink {
@@ -177,8 +178,18 @@ export function relatedReviews(
     ...current.paymentMethods.flatMap((m) => tokenize(m)),
   ]);
 
-  const scored = all
-    .filter((c) => c.slug !== current.slug && isOpen(c) && c.name.trim().length > 0)
+  const candidates = all.filter(
+    (c) => c.slug !== current.slug && isOpen(c) && c.name.trim().length > 0,
+  );
+  // Tie-break by cyclic rank rather than by name. The overlap score is coarse —
+  // dozens of casinos share "mga" or "trustly" and tie — and an alphabetical
+  // tiebreak handed every one of ~305 reviews the same first few names. Real
+  // overlap still wins; only ties are spread. (link-rotation.ts.)
+  const rank = rotationRank(
+    candidates.map((c) => c.slug),
+    current.slug,
+  );
+  const scored = candidates
     .map((c) => {
       const facts = new Set<string>([
         ...tokenize(c.license ?? ""),
@@ -186,13 +197,24 @@ export function relatedReviews(
       ]);
       return { casino: c, score: overlap(curFacts, facts) };
     })
-    .sort((a, b) => b.score - a.score || a.casino.name.localeCompare(b.casino.name, "fi"));
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        (rank.get(a.casino.slug) ?? 0) - (rank.get(b.casino.slug) ?? 0) ||
+        a.casino.name.localeCompare(b.casino.name, "fi"),
+    );
 
   const picked = scored.filter((s) => s.score > 0).slice(0, limit);
   if (picked.length < limit) {
-    for (const s of scored) {
-      if (picked.length >= limit) break;
-      if (!picked.includes(s)) picked.push(s);
+    // BACKFILL BY ROTATION, NOT ALPHABETICALLY. Most reviews share no licence
+    // or payment token with the current one, so a plain alphabetical fallback
+    // sent every one of them to the same first few names — one of the two
+    // funnels that left 79 reviews with a single incoming link (see
+    // link-rotation.ts). Rotating spreads the backfill evenly instead.
+    const already = new Set(picked.map((s) => s.casino.slug));
+    const pool = scored.filter((s) => !already.has(s.casino.slug)).map((s) => s.casino);
+    for (const casino of rotatePick(pool, (c) => c.slug, current.slug, limit - picked.length)) {
+      picked.push({ casino, score: 0 });
     }
   }
   return picked.slice(0, limit).map(({ casino }) => ({

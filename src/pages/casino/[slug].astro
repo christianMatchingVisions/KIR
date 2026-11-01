@@ -73,6 +73,7 @@ import {
 } from "../../lib/related";
 import { getSeoHead } from "../../lib/seo-head";
 import { getManualReviewHead } from "../../lib/manual-reviews";
+import { rotatePick } from "../../lib/link-rotation";
 
 /** One static path per casino fragment slug. */
 export function getStaticPaths() {
@@ -253,11 +254,20 @@ const review = rawReview
  * -------------------------------------------------------------------------- */
 
 const isOpen = (c: ToplistCasino) => !/\bsuljettu\b/i.test(c.name ?? "");
+/* ROTATED, NOT SLICED. `.slice(0, 4)` meant all ~305 reviews pointed at the
+ * same four casinos — one of the two funnels that left 79 reviews with a
+ * single incoming internal link (measured 2026-11-01; see link-rotation.ts).
+ * Rotating the window by slug walks the whole pool in one cycle, so each
+ * review links to a different four and each receives roughly four in return. */
 const others: ToplistCasino[] = review
-  ? toplistRows
-      .filter(isOpen)
-      .filter((c) => c.slug !== review.slug && normName(c.name) !== normName(review.name))
-      .slice(0, 4)
+  ? rotatePick(
+      toplistRows
+        .filter(isOpen)
+        .filter((c) => c.slug !== review.slug && normName(c.name) !== normName(review.name)),
+      (c) => c.slug,
+      review.slug,
+      4,
+    )
   : [];
 
 const PROSE_ANCHOR = "arvostelu";
