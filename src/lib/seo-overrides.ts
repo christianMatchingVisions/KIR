@@ -73,6 +73,44 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Casino Vice -arvostelu: lisenssi, bonusehdot, cashback, kotiutusajat ja maksutavat. Puolueeton katsaus suomalaispelaajille 2026.",
   },
 
+  /* --- SEASONAL PAGES: stale years (2026-11-01) -------------------------- *
+   * These four pages all carried a year in the <title> AND the description
+   * that had already passed — 2024 on one of them. The evidence that this
+   * matters is the Halloween page itself: in the 12 days to 31 Oct 2026 it
+   * took 4 clicks from 43 impressions at position 17.8, a 9.3 % CTR and the
+   * best this site has produced since the demotion — while telling searchers
+   * it was about Halloween 2025.
+   *
+   * The slug keeps its old year (joulu-...-2025) on purpose: it is the indexed
+   * URL and carries whatever authority these pages have. Only the title and
+   * description move to 2026, which is what a searcher actually reads in the
+   * result.
+   *
+   * Christmas is the live window now (Nov-Dec), and "kasino joulukalenteri"
+   * (150/mo) + "nettikasino joulukalenteri" (80/mo) are annual averages, so
+   * December demand is a multiple of that. Titles are written around the
+   * calendar wording rather than the old generic phrasing. */
+  "/joulu-kasino-bonukset-ja-kalenterit-2025/": {
+    title: "Joulukalenteri kasino 2026 – parhaat joulubonukset",
+    description:
+      "Kasinoiden joulukalenterit ja joulubonukset 2026: päivittäiset luukut, ilmaiskierrokset ja talletusbonukset. Katso mistä parhaat kampanjat löytyvät.",
+  },
+  "/uudet-jouluslotit-2025/": {
+    title: "Uudet jouluslotit 2026 – kauden parhaat joulupelit",
+    description:
+      "Joulun 2026 uutuusslotit: katsaus kauden tuoreimpiin jouluaiheisiin kolikkopeleihin, niiden ominaisuuksiin ja siihen, millä kasinoilla niitä pelataan.",
+  },
+  "/parhaat-joulupelit-nettikasinoilla-2024/": {
+    title: "Parhaat joulupelit nettikasinoilla 2026",
+    description:
+      "Parhaat jouluaiheiset kasinopelit 2026: klassikkoslotit, uutuudet ja niiden ominaisuudet. Katso myös turvalliset kasinot, joilla pelit ovat tarjolla.",
+  },
+  "/halloween-kasino-bonukset/": {
+    title: "Halloween kasino bonukset 2026 – ilmaiskierrokset",
+    description:
+      "Halloween-kasinobonukset 2026: talletusbonukset, ilmaiskierrokset ja kauden kampanjat. Katso mistä parhaat Halloween-tarjoukset kannattaa hakea.",
+  },
+
   // --- Ahrefs Site Audit (2026-09-08), "Title too long" (>60 chars, SERP
   // truncation risk) — title-only, description untouched (not flagged). ---
   "/casino/vegazone/": {
