@@ -73,6 +73,19 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
       "Casino Vice -arvostelu: lisenssi, bonusehdot, cashback, kotiutusajat ja maksutavat. Puolueeton katsaus suomalaispelaajille 2026.",
   },
 
+  /* --- INTENT MISMATCH on a commercial query (2026-11-01) ---------------- *
+   * "nopeat kotiutukset" is 800 searches/month at KD 20 and the page ranked
+   * for none of it — zero impressions in 28 days. The title was the problem:
+   * "Kuinka saada nopeat kotiutukset nettikasinoilta" is a how-to, while the
+   * query is commercial and wants a LIST of fast-paying casinos. The page now
+   * carries that list (content.ts), so the title should promise it. */
+  "/nopeat-kotiutukset-nettikasinoilta/": {
+    title: "Nopeat kotiutukset 2026 – kasinot jotka maksavat heti",
+    description:
+      "Nopeat kotiutukset nettikasinoilla 2026: kasinot, joilla rahat tulevat minuuteissa. " +
+      "Vertaa kotiutusajat, maksutavat ja tunnistautuminen — ja mikä hidastaa nostoa.",
+  },
+
   /* --- SEASONAL PAGES: stale years (2026-11-01) -------------------------- *
    * These four pages all carried a year in the <title> AND the description
    * that had already passed — 2024 on one of them. The evidence that this
@@ -250,10 +263,11 @@ export const SEO_OVERRIDES: Readonly<Record<string, SeoOverride>> = {
     description:
       "Esittelyssä kolme parasta klassikkoslottia: Break Da Bank, Emerald Diamond ja Mega Joker. Katso miksi ne ovat yhä pelaajien suosikkeja.",
   },
-  "/ilmaiskierrokset-bonukset-ilman/": {
-    description:
-      "Ilmaiskierrokset ja bonukset ilman talletusta antavat mahdollisuuden testata kasinoita riskittä. Lue miten tarjoukset toimivat.",
-  },
+  // "/ilmaiskierrokset-bonukset-ilman/" removed 2026-11-01: the page was
+  // consolidated into /ilmaiskierroksia-ilman-talletusta/ (both competed for
+  // "ilmaiskierrokset ilman talletusta"; the keeper holds 57 internal links
+  // and all of the impressions, this one had 7 links and none). An override
+  // for a 301'd URL can never fire.
   "/kuinka-valita-oikea-kolikkopeli/": {
     description:
       "Etsitkö sopivaa kolikkopeliä? Opas parhaan slotin valintaan RTP:n, volatiliteetin, teeman ja bonusominaisuuksien perusteella.",

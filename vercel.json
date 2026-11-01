@@ -1710,6 +1710,16 @@
       "source": "/opas-nopeisiin-nettikasino-bonuksiin-2026/",
       "destination": "/kasinobonukset/",
       "permanent": true
+    },
+    {
+      "source": "/ilmaiskierrokset-bonukset-ilman",
+      "destination": "/ilmaiskierroksia-ilman-talletusta/",
+      "permanent": true
+    },
+    {
+      "source": "/ilmaiskierrokset-bonukset-ilman/",
+      "destination": "/ilmaiskierroksia-ilman-talletusta/",
+      "permanent": true
     }
   ],
   "headers": [

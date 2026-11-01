@@ -663,6 +663,18 @@ export const SLUG_TO_TOPLIST_CONFIG: Readonly<Record<string, string>> = {
    * the same toplist the other bonus pages use. The two bonus/campaign pages
    * get the bonus list; the two game pages get the free-spins list, which is
    * the closer intent match for someone reading about Christmas slots. */
+  /* Two high-demand, low-difficulty pages that were pure prose with no casino
+   * list (2026-11-01). Both are the same failure the seasonal pages had:
+   *   /ilmaiskierroksia-ilman-talletusta/  "ilmaiskierrokset ilman talletusta",
+   *       1,300 searches/mo at KD 0 — and the page took 12 impressions at
+   *       position 39.5 in 28 days.
+   *   /nopeat-kotiutukset-nettikasinoilta/ "nopeat kotiutukset", 800/mo at
+   *       KD 20 — zero impressions; it does not rank at all.
+   * The free-spins list is the obvious match for the first. For the second the
+   * no-account list is the honest one: pay-n-play casinos are the ones that
+   * actually pay out fastest, which is what the query is asking for. */
+  "ilmaiskierroksia-ilman-talletusta": "search-service-free",
+  "nopeat-kotiutukset-nettikasinoilta": "search-service-no-account",
   "joulu-kasino-bonukset-ja-kalenterit-2025": "search-two-casino-bonus",
   "halloween-kasino-bonukset": "search-two-casino-bonus",
   "uudet-jouluslotit-2025": "search-service-free",
