@@ -109,6 +109,30 @@ function normalizePath(p: string): string {
 }
 
 /**
+ * A single-question FAQ stub at /ht-faq/<slug>/ — NOT the /ht-faq/ index.
+ *
+ * WHY (2026-11-01): the site carries 22 of these, one per question, ~455 words
+ * each. They are thin by construction and several restate what the real FAQ
+ * page already answers, so they duplicate it as well as padding the indexed
+ * corpus during penalty recovery. Several are also stale on their face —
+ * "Mitkä ovat vuoden 2024 parhaat kasinopelit?" is still titled 2024.
+ *
+ * They were already incoherent as an index target: 21 of the 22 were missing
+ * from sitemap-0.xml while all 22 served "index, follow", and the /ht-faq/
+ * index does not link to a single one of them. They were the entire remaining
+ * thin-link tail measured in the internal-link work (link-rotation.ts).
+ *
+ * The /ht-faq/ INDEX is deliberately excluded from this rule: it is a real
+ * 1,534-word FAQ page and stays indexed.
+ *
+ * A prefix test rather than 22 literal paths, so a question added later by the
+ * WordPress sync is covered automatically. noindex,follow — reversible, no
+ * deletion and no redirect: drop this test and every page returns exactly as
+ * it was, preserved head and sitemap entry included.
+ */
+const HT_FAQ_ITEM_RE = /^\/ht-faq\/[^/]+\/$/;
+
+/**
  * Extract the casino slug from a normalized "/casino/<slug>/" path, else null.
  * Only single-segment casino review paths qualify (the [slug].astro route);
  * deeper paths (none exist today) are intentionally ignored.
@@ -125,7 +149,9 @@ function casinoSlugFromPath(normalized: string): string | null {
  *   (a) the path is a closed/stub casino review — i.e. getCasino(slug) exists
  *       and has showNoReview === true (covers the 61 Suljettu + 25 empty stubs),
  *       OR
- *   (b) the path is in the explicit NOINDEX_PATHS allowlist.
+ *   (b) the path is in the explicit NOINDEX_PATHS allowlist, OR
+ *   (c) the path is a single-question FAQ stub at /ht-faq/<slug>/ (the
+ *       /ht-faq/ index itself is excluded and stays indexed).
  *
  * Pure + synchronous: safe to call from Astro frontmatter (BaseLayout) and from
  * the node-evaluated astro.config.mjs sitemap filter. Never throws — an unknown
@@ -135,6 +161,9 @@ export function shouldNoindex(path: string): boolean {
   const normalized = normalizePath(path);
 
   if (NOINDEX_PATHS.has(normalized)) return true;
+
+  // Single-question FAQ stubs (the /ht-faq/ index itself stays indexed).
+  if (HT_FAQ_ITEM_RE.test(normalized)) return true;
 
   const slug = casinoSlugFromPath(normalized);
   if (slug) {
