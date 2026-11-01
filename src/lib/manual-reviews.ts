@@ -514,10 +514,16 @@ veronalaisia, mikä syö tuotosta enemmän kuin cashbackin prosentit tuovat.</p>
  * with no cap for the same reason. Get the affiliate manager to confirm and the
  * cap can be stated outright.
  *
- * LICENCE: no regulator is named anywhere in the supplied material, so the
- * licence field is empty and license-tier.ts returns "unknown" — no badge, no
- * guessed tax treatment. The prose says plainly that the licence is unstated,
- * which for a Finnish reader is itself the relevant fact.
+ * LICENCE (supplied 2026-11-01; this review first shipped without one). The
+ * site footer names CCR Enterprise Gaming SRL (Costa Rica, reg. 3-102-879178)
+ * as operator, licensed by the KAHNAWAKE GAMING COMMISSION under licence 00966,
+ * issued 17 January 2024. Kahnawake is outside the EEA, so license-tier.ts
+ * marks it non-EEA and the winnings are taxable income in Finland — the answer
+ * to the open question the first version of this review had to flag.
+ *
+ * The licence NUMBER stays in the prose rather than the `license` field: that
+ * field is interpolated into "<license>-lisenssi" on the card and in the FAQ,
+ * and "…(00966)-lisenssi" reads badly.
  *
  * The terms carry "Last updated: January 17, 2022", noted in the prose.
  */
@@ -531,19 +537,21 @@ const AURAKASINO: CasinoReview = {
   ratingOverall: 4.5,
   subRatings: [],
   bonusText: "100 % ensitalletusbonus",
-  license: "",
+  license: "Kahnawake Gaming Commission",
   paymentMethods: [],
   providers: [],
   verdict:
     "Aurakasinon kiinnostavin piirre ei ole bonuksen koko vaan sen rakenne: kierrätystä ei tarvitse " +
     "viedä loppuun, vaan nostaa voi sen osuuden saldosta, jonka on ehtinyt kierrättää. Kierrätys on " +
-    "30-kertainen bonus ja talletus, ja vain kolikkopelit kerryttävät sitä täysin. Huomioi kaksi " +
-    "asiaa: kasinon oma markkinointi lupaa bonuksen 500 euroon asti, kun bonusehdot puhuvat 200 " +
-    "eurosta, eikä pelilisenssiä kerrota missään toimittamassamme aineistossa.",
+    "30-kertainen bonus ja talletus, ja vain kolikkopelit kerryttävät sitä täysin. Kasino toimii " +
+    "Kahnawaken lisenssillä, joka on ETA-alueen ulkopuolinen — voitot ovat siis Suomessa " +
+    "veronalaista tuloa. Huomioi myös, että kasinon oma markkinointi lupaa bonuksen 500 euroon " +
+    "asti, kun bonusehdot puhuvat 200 eurosta.",
   foundedYear: null,
   minDeposit: "20 €",
   support: { liveChat: true },
-  templateClaims: { registrationFree: false, formalLicense: false },
+  // formalLicense is no longer overridden: there is a real regulator to name.
+  templateClaims: { registrationFree: false },
   pros: [
     "Kierrätystä ei tarvitse tehdä loppuun — voit nostaa kierrättämäsi osuuden",
     "Kierrätys 30x koskee kolikkopeleillä 100 %:n painolla",
@@ -551,7 +559,7 @@ const AURAKASINO: CasinoReview = {
     "Bonusehdot on kirjoitettu poikkeuksellisen selkeästi ja esimerkein",
   ],
   cons: [
-    "Pelilisenssiä ei kerrota — emme voi vahvistaa valvojaa emmekä verokohtelua",
+    "Ei ETA-pelilisenssiä (Kahnawake) — voitot ovat Suomessa veronalaista tuloa",
     "Bonuksen enimmäismäärästä kaksi eri lukua: 500 € mainoksessa, 200 € ehdoissa",
     "Pöytä- ja live-pelit kerryttävät kierrätystä vain 10 %",
     "Bonusehdot päivitetty viimeksi tammikuussa 2022",
@@ -567,9 +575,12 @@ ehdot sellaisina kuin kasino ne itse julkaisee — sekä yksi ristiriita, joka k
 vähintään 20 euron talletuksella. Sitovissa bonusehdoissa kohdassa 1.1 lukee kuitenkin
 <strong>"Tervetuliaisbonus: 100 % ensitalletuksesta, enintään 200 €"</strong>.</p>
 <p>Kyseessä on kaksi eri lukua samalta operaattorilta. Ristiriitatilanteessa sitovat ehdot
-ratkaisevat, eli varmin oletus on 200 euron katto — mutta koska emme voi vahvistaa kumpi luku on
-ajan tasalla, <strong>tarkista bonuksen enimmäismäärä rekisteröitymisen yhteydessä</strong> ennen
-kuin talletat ison summan. Tällä sivulla emme ilmoita kattoa kumpanakaan lukuna.</p>
+ratkaisevat, eli varmin oletus on 200 euron katto. Asiaa mutkistaa kuitenkin se, että
+<strong>bonusehtojen oma päiväys on 17.1.2022</strong>, kun taas 500 euron lupaus on kasinon
+nykyisellä kampanjasivulla — on siis mahdollista, että ehtojen luku on vanhentunut eikä päinvastoin.
+Koska emme voi vahvistaa kumpi on ajan tasalla, <strong>tarkista bonuksen enimmäismäärä
+rekisteröitymisen yhteydessä</strong> ennen kuin talletat ison summan. Tällä sivulla emme ilmoita
+kattoa kumpanakaan lukuna.</p>
 
 <h2>Osittainen nosto — bonuksen paras ominaisuus</h2>
 <p>Useimmilla kasinoilla kesken jäänyt kierrätys tarkoittaa, että bonus ja sillä voitetut rahat
@@ -601,18 +612,18 @@ bonuksen arvoon.</p>
 <p>Kolikkopelaajalle 30-kertainen kierrätys on kohtuullinen. Live-pöydissä se on käytännössä
 kymmenkertainen: 10 %:n painolla 30 x muuttuu 300-kertaiseksi panostukseksi.</p>
 
-<h2>Lisenssiä ei kerrota</h2>
-<p>Toimittamassamme aineistossa — tervetulosivulla eikä bonusehdoissa — <strong>ei mainita
-pelilisenssiä eikä valvovaa viranomaista</strong>. Emme siksi ilmoita kasinolle lisenssiä, emmekä
-voi kertoa, ovatko voitot suomalaiselle pelaajalle verovapaita vai veronalaisia: se riippuu
-täysin siitä, onko lisenssi ETA-alueelta vai sen ulkopuolelta.</p>
-<p>Tämä on olennainen puute. ETA-lisensoidulla kasinolla voitot ovat verovapaita, ETA-alueen
-ulkopuolisella veronalaista tuloa — ero voi olla satoja euroja. <strong>Tarkista lisenssi kasinon
-sivun alatunnisteesta ennen pelaamista.</strong> Varmasti ETA-lisensoituja vaihtoehtoja on
+<h2>Lisenssi ja verotus</h2>
+<p>Aurakasinoa operoi <strong>CCR Enterprise Gaming SRL</strong>, Costa Ricaan rekisteröity yhtiö
+(yritystunnus 3-102-879178, kotipaikka San José, Escazú). Kasinolla on
+<strong>Kahnawake Gaming Commissionin lisenssi numero 00966</strong>, myönnetty 17.1.2024.</p>
+<p>Kahnawake on kanadalainen Mohawk-alueen pelilisenssi, <strong>ei ETA-alueen lisenssi</strong>.
+Suomalaiselle pelaajalle tämä tarkoittaa, että <strong>voitot ovat Suomessa veronalaista
+tuloa</strong> ja ne on ilmoitettava verotuksessa. ETA-alueella lisensoidun kasinon voitot ovat
+vastaavasti verovapaita, ja ero voi olla satoja euroja. ETA-lisensoidut vaihtoehdot löydät
 <a href="/verovapaat-kasinot-2026-lista-vertailu-ja-valinnan-avaimet/">verovapaiden kasinoiden
-vertailussa</a>.</p>
-<p>Huomaa myös, että bonusehtojen oma päiväys on <em>17.1.2022</em>, joten osa yksityiskohdista
-voi olla vanhentunut.</p>
+vertailusta</a>.</p>
+<p>Huomaa myös, että bonusehtojen oma päiväys on <em>17.1.2022</em>, joten osa niiden
+yksityiskohdista — mukaan lukien bonuksen 200 euron katto — voi olla vanhentunut.</p>
 
 <h2>Yhteenveto</h2>
 <p>Aurakasinon bonus on rakenteeltaan alan parhaasta päästä: osittainen nosto poistaa bonusten
