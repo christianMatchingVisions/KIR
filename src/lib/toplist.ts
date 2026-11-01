@@ -518,10 +518,14 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     // the review explains the conflict rather than picking a side. Resolve it
     // with the affiliate manager and the cap can go in here.
     //
-    // LICENCE EMPTY: no regulator is named anywhere in the supplied pages, so
-    // there is nothing to print. The card shows no licence badge, which is the
-    // correct outcome — license-tier.ts returns "unknown" and stays silent
-    // rather than guessing a tax treatment.
+    // LICENCE (supplied 2026-11-01, was previously empty): the site footer
+    // names CCR Enterprise Gaming SRL (Costa Rica, reg. 3-102-879178) as the
+    // operator, licensed by the KAHNAWAKE GAMING COMMISSION under licence
+    // 00966 (issued 17 January 2024). Kahnawake is outside the EEA, so
+    // license-tier.ts flags it non-EEA and the card now carries "Voitot
+    // veronalaisia Suomessa". The licence NUMBER lives in the review prose,
+    // not here: this string is interpolated into "<license>-lisenssi" on the
+    // card and in the FAQ, and "…(00966)-lisenssi" reads badly.
     name: "Aurakasino",
     slug: "aurakasino",
     logoUrl: "/wp-content/uploads/aurakasino-logo.jpg",
@@ -531,7 +535,7 @@ export const MANUAL_CASINOS: readonly ToplistCasino[] = [
     bonusText: "100 % ensitalletusbonus",
     noDeposit: "",
     wagering: "30x",
-    license: "",
+    license: "Kahnawake Gaming Commission",
     bannerText: null,
   },
   {
